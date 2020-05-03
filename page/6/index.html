@@ -301,20 +301,21 @@
             
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2019/03/04/phpmyadmin-4.8.1-yuan-cheng-wen-jian-bao-han-lou-dong/">
+                    <a href="/2019/03/04/xdebug-yuan-cheng-diao-shi-lou-dong/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="phpmyadmin 4.8.1 远程文件包含漏洞（CVE-2018-12613）">
+                            <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="XDebug 远程调试漏洞（代码执行）">
                             
-                            <span class="card-title">phpmyadmin 4.8.1 远程文件包含漏洞（CVE-2018-12613）</span>
+                            <span class="card-title">XDebug 远程调试漏洞（代码执行）</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                phpmyadmin 4.8.1 远程文件包含漏洞（CVE-2018-12613）phpMyAdmin 是一套开源的、基于 Web 的 MySQL 数据库管理工具。其 index.php 中存在一处文件包含逻辑，通过二次编码即可绕过检查，造
+                                XDebug 远程调试漏洞（代码执行）XDebug 是 PHP 的一个扩展，用于调试 PHP 代码。如果目标开启了远程调试模式，并设置 remote_connect_back = 1：
+xdebug.remote_connect_back 
                             
                         </div>
                         <div class="publish-info">
@@ -341,8 +342,8 @@
                             <span class="chip bg-color">vulhub</span>
                         </a>
                         
-                        <a href="/tags/phpmyadmin/">
-                            <span class="chip bg-color">phpmyadmin</span>
+                        <a href="/tags/PHP/">
+                            <span class="chip bg-color">PHP</span>
                         </a>
                         
                     </div>
@@ -394,6 +395,110 @@
                         
                         <a href="/tags/phpunit/">
                             <span class="chip bg-color">phpunit</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2019/03/04/phpmyadmin-scripts-setup.php-fan-xu-lie-hua-lou-dong/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="phpmyadmin scripts/setup.php 反序列化漏洞">
+                            
+                            <span class="card-title">phpmyadmin scripts/setup.php 反序列化漏洞</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                phpmyadmin scripts/setup.php 反序列化漏洞phpmyadmin 2.x 版本中存在一处反序列化漏洞，通过该漏洞，攻击者可以读取任意文件或执行任意代码。
+漏洞复现发送如下数据包，即可读取 /etc/passwd：
+
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-03-04
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/vulhub/" class="post-category">
+                                    vulhub
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/vulhub/">
+                            <span class="chip bg-color">vulhub</span>
+                        </a>
+                        
+                        <a href="/tags/phpmyadmin/">
+                            <span class="chip bg-color">phpmyadmin</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2019/03/04/phpmyadmin-4.8.1-yuan-cheng-wen-jian-bao-han-lou-dong/">
+                        <div class="card-image">
+                            
+                            
+                            <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="phpmyadmin 4.8.1 远程文件包含漏洞（CVE-2018-12613）">
+                            
+                            <span class="card-title">phpmyadmin 4.8.1 远程文件包含漏洞（CVE-2018-12613）</span>
+                        </div>
+                    </a>
+
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                phpmyadmin 4.8.1 远程文件包含漏洞（CVE-2018-12613）phpMyAdmin 是一套开源的、基于 Web 的 MySQL 数据库管理工具。其 index.php 中存在一处文件包含逻辑，通过二次编码即可绕过检查，造
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-03-04
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/vulhub/" class="post-category">
+                                    vulhub
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/vulhub/">
+                            <span class="chip bg-color">vulhub</span>
+                        </a>
+                        
+                        <a href="/tags/phpmyadmin/">
+                            <span class="chip bg-color">phpmyadmin</span>
                         </a>
                         
                     </div>
@@ -805,109 +910,6 @@
                         
                         <a href="/tags/Spring/">
                             <span class="chip bg-color">Spring</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2019/03/03/spring-security-oauth2-yuan-cheng-ming-ling-zhi-xing-lou-dong/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="Spring Security OAuth2 远程命令执行漏洞（CVE-2016-4977）">
-                            
-                            <span class="card-title">Spring Security OAuth2 远程命令执行漏洞（CVE-2016-4977）</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                Spring Security OAuth2 远程命令执行漏洞（CVE-2016-4977）Spring Security OAuth 是为 Spring 框架提供安全认证支持的一个模块。在其使用 whitelabel views 来处理错
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-03-03
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/vulhub/" class="post-category">
-                                    vulhub
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/vulhub/">
-                            <span class="chip bg-color">vulhub</span>
-                        </a>
-                        
-                        <a href="/tags/Spring/">
-                            <span class="chip bg-color">Spring</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2019/03/03/supervisord-yuan-cheng-ming-ling-zhi-xing-lou-dong/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="Supervisord 远程命令执行漏洞（CVE-2017-11610）">
-                            
-                            <span class="card-title">Supervisord 远程命令执行漏洞（CVE-2017-11610）</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                Supervisord 远程命令执行漏洞（CVE-2017-11610）SupervisordSupervisord 是一款 Python 开发，用于管理后台应用（服务）的工具，其角色类似于 Linux 自带的 Systemd。
-比 Sys
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2019-03-03
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/vulhub/" class="post-category">
-                                    vulhub
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/vulhub/">
-                            <span class="chip bg-color">vulhub</span>
-                        </a>
-                        
-                        <a href="/tags/Supervisord/">
-                            <span class="chip bg-color">Supervisord</span>
                         </a>
                         
                     </div>

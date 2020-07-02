@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.geekby.xyz/2020/07/01/apache-dubbo-provider-fan-xu-lie-hua-lou-dong-cve-2020-1948/</loc>
+    
+    <lastmod>2020-07-02T01:11:43.321Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://www.geekby.xyz/2020/07/01/shiro-quan-xian-rao-guo-lou-dong-fu-xian-cve-2020-11989/</loc>
     
     <lastmod>2020-07-01T03:22:40.840Z</lastmod>
@@ -324,14 +331,14 @@
   </url>
   
   <url>
-    <loc>https://www.geekby.xyz/2019/03/02/uwsgi-wei-shou-quan-fang-wen-lou-dong/</loc>
+    <loc>https://www.geekby.xyz/2019/03/02/weblogic-10.3.6-wls-wsat-xmldecoder-fan-xu-lie-hua-lou-dong/</loc>
     
     <lastmod>2020-03-18T02:55:14.201Z</lastmod>
     
   </url>
   
   <url>
-    <loc>https://www.geekby.xyz/2019/03/02/weblogic-10.3.6-wls-wsat-xmldecoder-fan-xu-lie-hua-lou-dong/</loc>
+    <loc>https://www.geekby.xyz/2019/03/02/uwsgi-wei-shou-quan-fang-wen-lou-dong/</loc>
     
     <lastmod>2020-03-18T02:55:14.201Z</lastmod>
     

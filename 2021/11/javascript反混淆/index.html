@@ -1,0 +1,1007 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>JavaScript 反混淆 - Geekby&#39;s Blog</title><meta name="Description" content="JavaScript 反混淆"><meta property="og:title" content="JavaScript 反混淆" />
+<meta property="og:description" content="JavaScript 反混淆" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2021/11/javascript%E5%8F%8D%E6%B7%B7%E6%B7%86/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-11-18T09:09:00+08:00" />
+<meta property="article:modified_time" content="2021-11-18T19:09:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JavaScript 反混淆"/>
+<meta name="twitter:description" content="JavaScript 反混淆"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/11/javascript%E5%8F%8D%E6%B7%B7%E6%B7%86/" /><link rel="prev" href="https://www.geekby.site/2021/11/%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/" /><link rel="next" href="https://www.geekby.site/2021/11/k8s%E5%AE%89%E5%85%A8/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "JavaScript 反混淆",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2021\/11\/javascript%E5%8F%8D%E6%B7%B7%E6%B7%86\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "代码审计, JavaScript","wordcount":  1782 ,
+        "url": "https:\/\/www.geekby.site\/2021\/11\/javascript%E5%8F%8D%E6%B7%B7%E6%B7%86\/","datePublished": "2021-11-18T09:09:00+08:00","dateModified": "2021-11-18T19:09:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "JavaScript 反混淆"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">JavaScript 反混淆</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"><i class="far fa-folder fa-fw"></i>代码审计</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-11-18">2021-11-18</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1782 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 9 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-常量的混淆原理">1 常量的混淆原理</a>
+      <ul>
+        <li><a href="#11-对象属性的两种访问方式">1.1 对象属性的两种访问方式</a></li>
+        <li><a href="#12-常见的混淆方式">1.2 常见的混淆方式</a>
+          <ul>
+            <li><a href="#121-十六进制字符串">1.2.1 十六进制字符串</a></li>
+            <li><a href="#122-unicode-字符串">1.2.2 unicode 字符串</a></li>
+            <li><a href="#123-字符串的-ascii-码">1.2.3 字符串的 ASCII 码</a></li>
+            <li><a href="#124-字符串常量编码或加密">1.2.4 字符串常量编码或加密</a></li>
+            <li><a href="#125-数值常量转换">1.2.5 数值常量转换</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#2-增加逆向工作量">2 增加逆向工作量</a>
+      <ul>
+        <li><a href="#21-数组混淆">2.1 数组混淆</a></li>
+        <li><a href="#22-数组乱序">2.2 数组乱序</a></li>
+        <li><a href="#23-花指令">2.3 花指令</a></li>
+        <li><a href="#24-jsfuck">2.4 jsfuck</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-代码执行流程的防护原理">3 代码执行流程的防护原理</a>
+      <ul>
+        <li><a href="#31-流程平坦化">3.1 流程平坦化</a></li>
+        <li><a href="#32-逗号表达式混淆">3.2 逗号表达式混淆</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-babel-的-api">4 Babel 的 API</a>
+      <ul>
+        <li><a href="#41-ast-的基本结构">4.1 AST 的基本结构</a></li>
+        <li><a href="#42-babel-中的组件">4.2 Babel 中的组件</a>
+          <ul>
+            <li><a href="#421-parser-与-generator">4.2.1 parser 与 generator</a></li>
+            <li><a href="#422-traverse-与-visitor">4.2.2 traverse 与 visitor</a></li>
+            <li><a href="#423-types">4.2.3 types</a></li>
+            <li><a href="#424-path-对象">4.2.4 path 对象</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="javascript-反混淆">JavaScript 反混淆</h1>
+<h2 id="1-常量的混淆原理">1 常量的混淆原理</h2>
+<h3 id="11-对象属性的两种访问方式">1.1 对象属性的两种访问方式</h3>
+<p>JavaScript 中，对象访问属性有两种方式。</p>
+<ul>
+<li>用点访问</li>
+<li>用括号访问</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">People</span><span class="p">(</span><span class="nx">name</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">this</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="nx">name</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">People</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">sayHello</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s1">&#39;Hello&#39;</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">var</span> <span class="nx">p</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">People</span><span class="p">(</span><span class="s1">&#39;pName&#39;</span><span class="p">);</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">p</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span> 	<span class="c1">//pName
+</span><span class="c1"></span><span class="nx">p</span><span class="p">.</span><span class="nx">sayHello</span><span class="p">();</span> 			<span class="c1">//Hello
+</span><span class="c1"></span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">p</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]);</span>	<span class="c1">//pName
+</span><span class="c1"></span><span class="nx">p</span><span class="p">[</span><span class="s1">&#39;sayHello&#39;</span><span class="p">]();</span> 		<span class="c1">//Hello
+</span></code></pre></td></tr></table>
+</div>
+</div><p>用括号访问的方式可以针对其中的字符串做混淆</p>
+<h3 id="12-常见的混淆方式">1.2 常见的混淆方式</h3>
+<h4 id="121-十六进制字符串">1.2.1 十六进制字符串</h4>
+<p>以下面这段代码为例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nb">Date</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">format</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">formatStr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="nx">formatStr</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">Week</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;日&#39;</span><span class="p">,</span> <span class="s1">&#39;一&#39;</span><span class="p">,</span> <span class="s1">&#39;二&#39;</span><span class="p">,</span> <span class="s1">&#39;三&#39;</span><span class="p">,</span> <span class="s1">&#39;四&#39;</span><span class="p">,</span> <span class="s1">&#39;五&#39;</span><span class="p">,</span> <span class="s1">&#39;六&#39;</span><span class="p">];</span>
+    <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/yyyy|YYYY/</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">());</span>
+    <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/MM/</span><span class="p">,</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="o">?</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">toString</span><span class="p">()</span> <span class="o">:</span> <span class="s1">&#39;0&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+    <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/dd|DD/</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getDate</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">getDate</span><span class="p">().</span><span class="nx">toString</span><span class="p">()</span> <span class="o">:</span> <span class="s1">&#39;0&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">getDate</span><span class="p">());</span>
+    <span class="k">return</span> <span class="nx">str</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;yyyy-MM-dd&#39;</span><span class="p">));</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>针对代码中出现的字符串，可以将其转换为 16 进制。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nb">Date</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">format</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">formatStr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">str</span> <span class="o">=</span> <span class="nx">formatStr</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">Week</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;日&#39;</span><span class="p">,</span> <span class="s1">&#39;一&#39;</span><span class="p">,</span> <span class="s1">&#39;二&#39;</span><span class="p">,</span> <span class="s1">&#39;三&#39;</span><span class="p">,</span> <span class="s1">&#39;四&#39;</span><span class="p">,</span> <span class="s1">&#39;五&#39;</span><span class="p">,</span> <span class="s1">&#39;六&#39;</span><span class="p">];</span>
+    <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/yyyy|YYYY/</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getFullYear</span><span class="p">());</span>
+    <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/MM/</span><span class="p">,</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="o">?</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">).</span><span class="nx">toString</span><span class="p">()</span> <span class="o">:</span> <span class="s1">&#39;0&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="nx">getMonth</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+    <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">.</span><span class="nx">replace</span><span class="p">(</span><span class="sr">/dd|DD/</span><span class="p">,</span> <span class="k">this</span><span class="p">.</span><span class="nx">getDate</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="o">?</span> <span class="k">this</span><span class="p">.</span><span class="nx">getDate</span><span class="p">().</span><span class="nx">toString</span><span class="p">()</span> <span class="o">:</span> <span class="s1">&#39;0&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">.</span><span class="nx">getDate</span><span class="p">());</span>
+    <span class="k">return</span> <span class="nx">str</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">format</span><span class="p">(</span><span class="s1">&#39;\x79\x79\x79\x79\x2d\x4d\x4d\x2d\x64\x64&#39;</span><span class="p">));</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="122-unicode-字符串">1.2.2 unicode 字符串</h4>
+<p>在 JS 中，字符串除了可以表示成十六进制的形式外，还支持 unicode 编码。</p>
+<p>以 <code>var Week = ['日', '一', '二', '三', '四', '五', '六'];</code> 为例，可以转换成：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">Week</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;\u65e5&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e00&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e8c&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e09&#39;</span><span class="p">,</span> <span class="s1">&#39;\u56db&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e94&#39;</span><span class="p">,</span> <span class="s1">&#39;\u516d&#39;</span><span class="p">];</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>此外，JS 解析器同样支持 unicode 编码出现在标识符中：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nb">Date</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">\u0066\u006f\u0072\u006d\u0061\u0074</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">formatStr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">\u0073\u0074\u0072</span> <span class="o">=</span> <span class="nx">\u0066\u006f\u0072\u006d\u0061\u0074\u0053\u0074\u0072</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">Week</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;\u65e5&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e00&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e8c&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e09&#39;</span><span class="p">,</span> <span class="s1">&#39;\u56db&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e94&#39;</span><span class="p">,</span> <span class="s1">&#39;\u516d&#39;</span><span class="p">];</span>
+    <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">[</span><span class="s1">&#39;replace&#39;</span><span class="p">](</span><span class="sr">/yyyy|YYYY/</span><span class="p">,</span> <span class="k">this</span><span class="p">[</span><span class="s1">&#39;getFullYear&#39;</span><span class="p">]());</span>
+    <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">[</span><span class="s1">&#39;replace&#39;</span><span class="p">](</span><span class="sr">/MM/</span><span class="p">,</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="s1">&#39;getMonth&#39;</span><span class="p">]()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="o">?</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="s1">&#39;getMonth&#39;</span><span class="p">]()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[</span><span class="s1">&#39;toString&#39;</span><span class="p">]()</span> <span class="o">:</span> <span class="s1">&#39;0&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="s1">&#39;getMonth&#39;</span><span class="p">]()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+    <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">[</span><span class="s1">&#39;replace&#39;</span><span class="p">](</span><span class="sr">/dd|DD/</span><span class="p">,</span> <span class="k">this</span><span class="p">[</span><span class="s1">&#39;getDate&#39;</span><span class="p">]()</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="o">?</span> <span class="k">this</span><span class="p">[</span><span class="s1">&#39;getDate&#39;</span><span class="p">]()[</span><span class="s1">&#39;toString&#39;</span><span class="p">]()</span> <span class="o">:</span> <span class="s1">&#39;0&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">[</span><span class="s1">&#39;getDate&#39;</span><span class="p">]());</span>
+    <span class="k">return</span> <span class="nx">str</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="k">new</span> <span class="nx">\u0077\u0069\u006e\u0064\u006f\u0077</span><span class="p">[</span><span class="s1">&#39;\u0044\u0061\u0074\u0065&#39;</span><span class="p">]()[</span><span class="s1">&#39;format&#39;</span><span class="p">](</span><span class="s1">&#39;\x79\x79\x79\x79\x2d\x4d\x4d\x2d\x64\x64&#39;</span><span class="p">)</span> <span class="p">);</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="123-字符串的-ascii-码">1.2.3 字符串的 ASCII 码</h4>
+<p>为了完成字符串的 ASCII 码混淆，在这里需要使用两个函数，一个是 String 对象下的 charCodeAt 方法，另外一个是 String 类下的 fronCharCode 方法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;G&#34;</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span> <span class="c1">// 71
+</span><span class="c1"></span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;e&#34;</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="mi">0</span><span class="p">));</span> <span class="c1">// 101
+</span><span class="c1"></span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="mi">71</span><span class="p">,</span> <span class="mi">101</span><span class="p">));</span>
+
+
+<span class="kd">function</span> <span class="nx">stringToByte</span><span class="p">(</span><span class="nx">str</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">byteArr</span> <span class="o">=</span> <span class="p">[];</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kd">var</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nx">i</span> <span class="o">&lt;</span> <span class="nx">str</span><span class="p">.</span><span class="nx">length</span><span class="p">;</span> <span class="nx">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">byteArr</span><span class="p">.</span><span class="nx">push</span><span class="p">(</span><span class="nx">str</span><span class="p">.</span><span class="nx">charCodeAt</span><span class="p">(</span><span class="nx">i</span><span class="p">));</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nx">byteArr</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">stringToByte</span><span class="p">(</span><span class="s1">&#39;Geekby&#39;</span><span class="p">));</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>将代码转换成字符串后，利用 eval 函数去执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nb">Date</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">\u0066\u006f\u0072\u006d\u0061\u0074</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">formatStr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">\u0073\u0074\u0072</span> <span class="o">=</span> <span class="nx">\u0066\u006f\u0072\u006d\u0061\u0074\u0053\u0074\u0072</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">Week</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;\u65e5&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e00&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e8c&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e09&#39;</span><span class="p">,</span> <span class="s1">&#39;\u56db&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e94&#39;</span><span class="p">,</span> <span class="s1">&#39;\u516d&#39;</span><span class="p">];</span>
+    <span class="nb">eval</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="mi">115</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">115</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">97</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">93</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">124</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">44</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">104</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">115</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">103</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">117</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">97</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">93</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">59</span><span class="p">));</span>
+    <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">[</span><span class="s1">&#39;replace&#39;</span><span class="p">](</span><span class="sr">/MM/</span><span class="p">,</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="s1">&#39;getMonth&#39;</span><span class="p">]()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="o">?</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="s1">&#39;getMonth&#39;</span><span class="p">]()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[</span><span class="s1">&#39;toString&#39;</span><span class="p">]()</span> <span class="o">:</span> <span class="s1">&#39;0&#39;</span> <span class="o">+</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="s1">&#39;getMonth&#39;</span><span class="p">]()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+    <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">[</span><span class="s1">&#39;replace&#39;</span><span class="p">](</span><span class="sr">/dd|DD/</span><span class="p">,</span> <span class="k">this</span><span class="p">[</span><span class="s1">&#39;getDate&#39;</span><span class="p">]()</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="o">?</span> <span class="k">this</span><span class="p">[</span><span class="s1">&#39;getDate&#39;</span><span class="p">]()[</span><span class="s1">&#39;toString&#39;</span><span class="p">]()</span> <span class="o">:</span> <span class="s1">&#39;0&#39;</span> <span class="o">+</span> <span class="k">this</span><span class="p">[</span><span class="s1">&#39;getDate&#39;</span><span class="p">]());</span>
+    <span class="k">return</span> <span class="nx">str</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="k">new</span> <span class="nx">\u0077\u0069\u006e\u0064\u006f\u0077</span><span class="p">[</span><span class="s1">&#39;\u0044\u0061\u0074\u0065&#39;</span><span class="p">]()[</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="mi">102</span><span class="p">,</span> <span class="mi">111</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">109</span><span class="p">,</span> <span class="mi">97</span><span class="p">,</span> <span class="mi">116</span><span class="p">)](</span><span class="s1">&#39;\x79\x79\x79\x79\x2d\x4d\x4d\x2d\x64\x64&#39;</span><span class="p">)</span> <span class="p">);</span>
+<span class="c1">//输出结果 2020-07-04
+</span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202111181532498.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202111181532498.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202111181532498.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202111181532498.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202111181532498.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202111181532498.png-water_print" /></p>
+<h4 id="124-字符串常量编码或加密">1.2.4 字符串常量编码或加密</h4>
+<p>字符串常量编码或加密的核心思想是，先把字符串编码或加密得到密文，然后在使用之前，调用对应的解码或解密函数去解密，得到明文。</p>
+<p>JS 中自带 Base64 编码解码的函数，<code>btoa</code> 用来编码，<code>atob</code> 用来解码。</p>
+<p>但在实际的混淆应用中，最好还是采用自定义函数的方式，然后加以混淆。在这里就用 atob 来代替 Base64 解码，处理后的代码为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nb">Date</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">\u0066\u006f\u0072\u006d\u0061\u0074</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">formatStr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">\u0073\u0074\u0072</span> <span class="o">=</span> <span class="nx">\u0066\u006f\u0072\u006d\u0061\u0074\u0053\u0074\u0072</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">Week</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;\u65e5&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e00&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e8c&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e09&#39;</span><span class="p">,</span> <span class="s1">&#39;\u56db&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e94&#39;</span><span class="p">,</span> <span class="s1">&#39;\u516d&#39;</span><span class="p">];</span>
+    <span class="nb">eval</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="mi">115</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">115</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">97</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">93</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">124</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">44</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">104</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">115</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">103</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">117</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">97</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">93</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">59</span><span class="p">));</span>
+	<span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">[</span><span class="nx">atob</span><span class="p">(</span><span class="s1">&#39;cmVwbGFjZQ==&#39;</span><span class="p">)](</span><span class="sr">/MM/</span><span class="p">,</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">atob</span><span class="p">(</span><span class="s1">&#39;Z2V0TW9udGg=&#39;</span><span class="p">)]()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="o">?</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">atob</span><span class="p">(</span><span class="s1">&#39;Z2V0TW9udGg=&#39;</span><span class="p">)]()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[</span><span class="nx">atob</span><span class="p">(</span><span class="s1">&#39;dG9TdHJpbmc=&#39;</span><span class="p">)]()</span> <span class="o">:</span> <span class="nx">atob</span><span class="p">(</span><span class="s1">&#39;MA==&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">atob</span><span class="p">(</span><span class="s1">&#39;Z2V0TW9udGg=&#39;</span><span class="p">)]()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+	<span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">[</span><span class="nx">atob</span><span class="p">(</span><span class="s1">&#39;cmVwbGFjZQ==&#39;</span><span class="p">)](</span><span class="sr">/dd|DD/</span><span class="p">,</span> <span class="k">this</span><span class="p">[</span><span class="nx">atob</span><span class="p">(</span><span class="s1">&#39;Z2V0RGF0ZQ==&#39;</span><span class="p">)]()</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="o">?</span> <span class="k">this</span><span class="p">[</span><span class="nx">atob</span><span class="p">(</span><span class="s1">&#39;Z2V0RGF0ZQ==&#39;</span><span class="p">)]()[</span><span class="nx">atob</span><span class="p">(</span><span class="s1">&#39;dG9TdHJpbmc=&#39;</span><span class="p">)]()</span> <span class="o">:</span> <span class="nx">atob</span><span class="p">(</span><span class="s1">&#39;MA==&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="k">this</span><span class="p">[</span><span class="nx">atob</span><span class="p">(</span><span class="s1">&#39;Z2V0RGF0ZQ==&#39;</span><span class="p">)]());</span>
+    <span class="k">return</span> <span class="nx">str</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="k">new</span> <span class="nx">\u0077\u0069\u006e\u0064\u006f\u0077</span><span class="p">[</span><span class="s1">&#39;\u0044\u0061\u0074\u0065&#39;</span><span class="p">]()[</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="mi">102</span><span class="p">,</span> <span class="mi">111</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">109</span><span class="p">,</span> <span class="mi">97</span><span class="p">,</span> <span class="mi">116</span><span class="p">)](</span><span class="s1">&#39;\x79\x79\x79\x79\x2d\x4d\x4d\x2d\x64\x64&#39;</span><span class="p">)</span> <span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="125-数值常量转换">1.2.5 数值常量转换</h4>
+<p>算法加密过程中，会使用到一些固定的数值常量。比如，MD5 中的常量 <code>0x67452301，0xefcdab89，0x98badcfe, 0x10325476</code>。</p>
+<p>SHA1 中的常量 <code>0x67452301，0xefcdab89，0x98badcfe，0x10325476，0xc3d2e1f0</code>。</p>
+<p>因此，在标准算法逆向中，经常会通过搜索这些数值常量，来定位代码关键位置，或者确定使用的是哪个算法。当然，在代码中不一定会写十六进制形式。比如，<code>0x67452301</code>，在代码成可能会写成十进制的 <code>1732584193</code>。安全起见，可以把这些数值常量也简单加密下。</p>
+<p>可以使用位异或的特性来加密。比如，<code>a^b=c</code>，那么 <code>c^b=a</code>。</p>
+<p>以 SHA1 算法中的 <code>0xc3d2e1f0</code> 常量为例，<code>0xc3d2e1f0 ^ 0x12345678 = 0xd1e6b788</code>， 那么在代码中可以用 <code>0xd1e6b788 ^ 0x12345678</code> 来代替 <code>0xc3d2e1f0</code>，其中 <code>0x12345678</code> 可以理解成密钥，可以随机生成。</p>
+<p>总之，混淆方案并不一定是单一使用，各种方案之间也可以结合使用。</p>
+<h2 id="2-增加逆向工作量">2 增加逆向工作量</h2>
+<h3 id="21-数组混淆">2.1 数组混淆</h3>
+<p>把代码中所有的字符串，都提取到一个数组中，然后需要引用字符串的地方，全都以数组下标的方式去访问数组成员。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">bigArr</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Date&#39;</span><span class="p">,</span> <span class="s1">&#39;getTime&#39;</span><span class="p">,</span> <span class="s1">&#39;log&#39;</span><span class="p">];</span>
+<span class="nx">console</span><span class="p">[</span><span class="nx">bigArr</span><span class="p">[</span><span class="mi">2</span><span class="p">]](</span><span class="k">new</span> <span class="nb">window</span><span class="p">[</span><span class="nx">bigArr</span><span class="p">[</span><span class="mi">0</span><span class="p">]]()[</span><span class="nx">bigArr</span><span class="p">[</span><span class="mi">1</span><span class="p">]]());</span>
+
+<span class="nx">console</span><span class="p">[</span><span class="s2">&#34;log&#34;</span><span class="p">](</span><span class="k">new</span> <span class="nb">window</span><span class="p">.</span><span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">())</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">bigArr</span> <span class="o">=</span> <span class="p">[</span>
+	<span class="s1">&#39;\u65e5&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e00&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e8c&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e09&#39;</span><span class="p">,</span> <span class="s1">&#39;\u56db&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e94&#39;</span><span class="p">,</span> 
+	<span class="s1">&#39;\u516d&#39;</span><span class="p">,</span> <span class="s1">&#39;cmVwbGFjZQ==&#39;</span><span class="p">,</span> <span class="s1">&#39;Z2V0TW9udGg=&#39;</span><span class="p">,</span> <span class="s1">&#39;dG9TdHJpbmc=&#39;</span><span class="p">,</span> 
+	<span class="s1">&#39;Z2V0RGF0ZQ==&#39;</span><span class="p">,</span> <span class="s1">&#39;MA==&#39;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">[</span><span class="s1">&#39;constructor&#39;</span><span class="p">][</span><span class="s1">&#39;fromCharCode&#39;</span><span class="p">]</span>
+<span class="p">];</span>
+<span class="nb">Date</span><span class="p">.</span><span class="nx">prototype</span><span class="p">.</span><span class="nx">\u0066\u006f\u0072\u006d\u0061\u0074</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">formatStr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">\u0073\u0074\u0072</span> <span class="o">=</span> <span class="nx">\u0066\u006f\u0072\u006d\u0061\u0074\u0053\u0074\u0072</span><span class="p">;</span>
+    <span class="kd">var</span> <span class="nx">Week</span> <span class="o">=</span> <span class="p">[</span><span class="nx">bigArr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="nx">bigArr</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nx">bigArr</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="nx">bigArr</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="nx">bigArr</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="nx">bigArr</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="nx">bigArr</span><span class="p">[</span><span class="mi">6</span><span class="p">]];</span>
+    <span class="nb">eval</span><span class="p">(</span><span class="nb">String</span><span class="p">.</span><span class="nx">fromCharCode</span><span class="p">(</span><span class="mi">115</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">61</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">115</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">112</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">97</span><span class="p">,</span> <span class="mi">99</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">93</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">121</span><span class="p">,</span> <span class="mi">124</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">47</span><span class="p">,</span> <span class="mi">44</span><span class="p">,</span> <span class="mi">32</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">104</span><span class="p">,</span> <span class="mi">105</span><span class="p">,</span> <span class="mi">115</span><span class="p">,</span> <span class="mi">91</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">103</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">116</span><span class="p">,</span> <span class="mi">70</span><span class="p">,</span> <span class="mi">117</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">108</span><span class="p">,</span> <span class="mi">89</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">97</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">39</span><span class="p">,</span> <span class="mi">93</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">41</span><span class="p">,</span> <span class="mi">59</span><span class="p">));</span>
+    <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">[</span><span class="nx">atob</span><span class="p">(</span><span class="nx">bigArr</span><span class="p">[</span><span class="mi">7</span><span class="p">])](</span><span class="sr">/MM/</span><span class="p">,</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">atob</span><span class="p">(</span><span class="nx">bigArr</span><span class="p">[</span><span class="mi">8</span><span class="p">])]()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="o">?</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">atob</span><span class="p">(</span><span class="nx">bigArr</span><span class="p">[</span><span class="mi">8</span><span class="p">])]()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[</span><span class="nx">atob</span><span class="p">(</span><span class="nx">bigArr</span><span class="p">[</span><span class="mi">9</span><span class="p">])]()</span> <span class="o">:</span> <span class="nx">atob</span><span class="p">(</span><span class="nx">bigArr</span><span class="p">[</span><span class="mi">11</span><span class="p">])</span> <span class="o">+</span> <span class="p">(</span><span class="k">this</span><span class="p">[</span><span class="nx">atob</span><span class="p">(</span><span class="nx">bigArr</span><span class="p">[</span><span class="mi">8</span><span class="p">])]()</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+    <span class="nx">str</span> <span class="o">=</span> <span class="nx">str</span><span class="p">[</span><span class="nx">atob</span><span class="p">(</span><span class="nx">bigArr</span><span class="p">[</span><span class="mi">7</span><span class="p">])](</span><span class="sr">/dd|DD/</span><span class="p">,</span> <span class="k">this</span><span class="p">[</span><span class="nx">atob</span><span class="p">(</span><span class="nx">bigArr</span><span class="p">[</span><span class="mi">10</span><span class="p">])]()</span> <span class="o">&gt;</span> <span class="mi">9</span> <span class="o">?</span> <span class="k">this</span><span class="p">[</span><span class="nx">atob</span><span class="p">(</span><span class="nx">bigArr</span><span class="p">[</span><span class="mi">10</span><span class="p">])]()[</span><span class="nx">atob</span><span class="p">(</span><span class="nx">bigArr</span><span class="p">[</span><span class="mi">9</span><span class="p">])]()</span> <span class="o">:</span> <span class="nx">atob</span><span class="p">(</span><span class="nx">bigArr</span><span class="p">[</span><span class="mi">11</span><span class="p">])</span> <span class="o">+</span> <span class="k">this</span><span class="p">[</span><span class="nx">atob</span><span class="p">(</span><span class="nx">bigArr</span><span class="p">[</span><span class="mi">10</span><span class="p">])]());</span>
+    <span class="k">return</span> <span class="nx">str</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="k">new</span> <span class="nx">\u0077\u0069\u006e\u0064\u006f\u0077</span><span class="p">[</span><span class="s1">&#39;\u0044\u0061\u0074\u0065&#39;</span><span class="p">]()[</span><span class="nx">bigArr</span><span class="p">[</span><span class="mi">12</span><span class="p">](</span><span class="mi">102</span><span class="p">,</span> <span class="mi">111</span><span class="p">,</span> <span class="mi">114</span><span class="p">,</span> <span class="mi">109</span><span class="p">,</span> <span class="mi">97</span><span class="p">,</span> <span class="mi">116</span><span class="p">)](</span><span class="s1">&#39;\x79\x79\x79\x79\x2d\x4d\x4d\x2d\x64\x64&#39;</span><span class="p">)</span> <span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="22-数组乱序">2.2 数组乱序</h3>
+<p>将上述提取出来的数组顺序打乱，在取元素时，进行还原。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">bigArr</span> <span class="o">=</span> <span class="p">[</span>
+	<span class="s1">&#39;\u65e5&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e00&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e8c&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e09&#39;</span><span class="p">,</span> <span class="s1">&#39;\u56db&#39;</span><span class="p">,</span> <span class="s1">&#39;\u4e94&#39;</span><span class="p">,</span> 
+	<span class="s1">&#39;\u516d&#39;</span><span class="p">,</span> <span class="s1">&#39;cmVwbGFjZQ==&#39;</span><span class="p">,</span> <span class="s1">&#39;Z2V0TW9udGg=&#39;</span><span class="p">,</span> <span class="s1">&#39;dG9TdHJpbmc=&#39;</span><span class="p">,</span> 
+	<span class="s1">&#39;Z2V0RGF0ZQ==&#39;</span><span class="p">,</span> <span class="s1">&#39;MA==&#39;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">[</span><span class="s1">&#39;constructor&#39;</span><span class="p">][</span><span class="s1">&#39;fromCharCode&#39;</span><span class="p">]</span>
+<span class="p">];</span>
+<span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">arr</span><span class="p">,</span> <span class="nx">num</span><span class="p">){</span>
+	<span class="kd">var</span> <span class="nx">shuffer</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">nums</span><span class="p">){</span>
+		<span class="k">while</span><span class="p">(</span><span class="o">--</span><span class="nx">nums</span><span class="p">){</span>
+			<span class="nx">arr</span><span class="p">.</span><span class="nx">unshift</span><span class="p">(</span><span class="nx">arr</span><span class="p">.</span><span class="nx">pop</span><span class="p">());</span>
+		<span class="p">}</span>
+	<span class="p">};</span>
+	<span class="nx">shuffer</span><span class="p">(</span><span class="o">++</span><span class="nx">num</span><span class="p">);</span>
+<span class="p">}(</span><span class="nx">bigArr</span><span class="p">,</span> <span class="mh">0x20</span><span class="p">));</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">bigArr</span> <span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="23-花指令">2.3 花指令</h3>
+<p>给代码添加一些没有意义的代码，是花指令的核心。例如：把 <code>this.getMonth() + 1</code> 这个二项式稍作变动：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">_0x20ab1fxe1</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+	<span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="c1">// _0x20ab1fxe1(this.getMonth(), 1);
+</span><span class="c1"></span><span class="nx">_0x20ab1fxe1</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getMonth</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>	<span class="c1">//输出 11
+</span></code></pre></td></tr></table>
+</div>
+</div><p>还可以进一步嵌套：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">_0x20ab1fxe2</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+	<span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">_0x20ab1fxe1</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+	<span class="k">return</span> <span class="nx">_0x20ab1fxe2</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">_0x20ab1fxe1</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getMonth</span><span class="p">(),</span> <span class="mi">1</span><span class="p">);</span>		<span class="c1">//输出 11
+</span></code></pre></td></tr></table>
+</div>
+</div><p>此外，为了进一步增加代码复杂度，可以将相同功能的代码放到不同的函数当中：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">_0x20ab1fxe2</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+	<span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">_0x20ab1fxe1</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+	<span class="k">return</span> <span class="nx">_0x20ab1fxe2</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">_0x20ab1fxe3</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+	<span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">_0x20ab1fxe4</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+	<span class="k">return</span> <span class="nx">_0x20ab1fxe3</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">_0x20ab1fxe4</span><span class="p">(</span><span class="s1">&#39;0&#39;</span><span class="p">,</span> <span class="nx">_0x20ab1fxe1</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getMonth</span><span class="p">(),</span> <span class="mi">1</span><span class="p">));</span>
+<span class="c1">//输出 &#34;11&#34;
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="24-jsfuck">2.4 jsfuck</h3>
+<p>jsfuck 可以算是一种编码。它能把 JS 代码转化成只用 6 个字符就可以表示的代码，且完全可以正常执行。</p>
+<p>这 6 个字符分别是 <code>[]()!+</code>。转换之后的 JS 代码难以阅读，可以作为些简单的混淆措施。</p>
+<p>在线编码的网站：<a href="http://www.jsfuck.com" target="_blank" rel="noopener noreffer">http://www.jsfuck.com</a></p>
+<h2 id="3-代码执行流程的防护原理">3 代码执行流程的防护原理</h2>
+<h3 id="31-流程平坦化">3.1 流程平坦化</h3>
+<p>代码本来是依照逻辑顺序执行的，控制流平坦化是把原来的代码的基本块拆分。</p>
+<p>把本来顺序执行的代码块用 switch case 打乱分发，用分发器和一个变量，把原本代码的逻辑连接起来。</p>
+<p>如下面这段代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">test1</span><span class="p">(){</span>
+	<span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">a</span> <span class="o">+</span> <span class="mi">2000</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">b</span> <span class="o">+</span> <span class="mi">3000</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="nx">c</span> <span class="o">+</span> <span class="mi">4000</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nx">d</span> <span class="o">+</span> <span class="mi">5000</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">e</span> <span class="o">+</span> <span class="mi">6000</span><span class="p">;</span>
+	<span class="k">return</span> <span class="nx">f</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">test1</span><span class="p">()</span> <span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>经过流程平坦化之后，变为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">test2</span><span class="p">(){</span>
+	<span class="kd">var</span> <span class="nx">arrStr</span> <span class="o">=</span> <span class="s1">&#39;7|5|1|3|2|4|6&#39;</span><span class="p">.</span><span class="nx">split</span><span class="p">(</span><span class="s1">&#39;|&#39;</span><span class="p">),</span> <span class="nx">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+	<span class="k">while</span> <span class="p">(</span><span class="o">!!</span><span class="p">[])</span> <span class="p">{</span>
+		<span class="k">switch</span><span class="p">(</span><span class="nx">arrStr</span><span class="p">[</span><span class="nx">i</span><span class="o">++</span><span class="p">]){</span>
+			<span class="k">case</span> <span class="s1">&#39;1&#39;</span><span class="o">:</span>
+				<span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">b</span> <span class="o">+</span> <span class="mi">3000</span><span class="p">;</span>
+				<span class="k">continue</span><span class="p">;</span>
+			<span class="k">case</span> <span class="s1">&#39;2&#39;</span><span class="o">:</span>
+				<span class="kd">var</span> <span class="nx">e</span> <span class="o">=</span> <span class="nx">d</span> <span class="o">+</span> <span class="mi">5000</span><span class="p">;</span>
+				<span class="k">continue</span><span class="p">;</span>
+			<span class="k">case</span> <span class="s1">&#39;3&#39;</span><span class="o">:</span>
+				<span class="kd">var</span> <span class="nx">d</span> <span class="o">=</span> <span class="nx">c</span> <span class="o">+</span> <span class="mi">4000</span><span class="p">;</span>
+				<span class="k">continue</span><span class="p">;</span>
+			<span class="k">case</span> <span class="s1">&#39;4&#39;</span><span class="o">:</span>
+				<span class="kd">var</span> <span class="nx">f</span> <span class="o">=</span> <span class="nx">e</span> <span class="o">+</span> <span class="mi">6000</span><span class="p">;</span>
+				<span class="k">continue</span><span class="p">;</span>
+			<span class="k">case</span> <span class="s1">&#39;5&#39;</span><span class="o">:</span>
+				<span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">a</span> <span class="o">+</span> <span class="mi">2000</span><span class="p">;</span>
+				<span class="k">continue</span><span class="p">;</span>
+			<span class="k">case</span> <span class="s1">&#39;6&#39;</span><span class="o">:</span>
+				<span class="k">return</span> <span class="nx">f</span><span class="p">;</span>
+				<span class="k">continue</span><span class="p">;</span>
+			<span class="k">case</span> <span class="s1">&#39;7&#39;</span><span class="o">:</span>
+				<span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+				<span class="k">continue</span><span class="p">;</span>
+		<span class="p">}</span>
+		<span class="k">break</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">test2</span><span class="p">()</span> <span class="p">);</span>
+<span class="c1">//输出 21000
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="32-逗号表达式混淆">3.2 逗号表达式混淆</h3>
+<p>逗号表达式混淆主要的作用是把多个表达式或语句连接成一个复合语句。上一节的原始代码等价于：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">test1</span><span class="p">(){</span>
+	<span class="kd">var</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">e</span><span class="p">,</span> <span class="nx">f</span><span class="p">;</span>
+	<span class="k">return</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span>
+	<span class="nx">b</span> <span class="o">=</span> <span class="nx">a</span> <span class="o">+</span> <span class="mi">2000</span><span class="p">,</span>
+	<span class="nx">c</span> <span class="o">=</span> <span class="nx">b</span> <span class="o">+</span> <span class="mi">3000</span><span class="p">,</span>
+	<span class="nx">d</span> <span class="o">=</span> <span class="nx">c</span> <span class="o">+</span> <span class="mi">4000</span><span class="p">,</span>
+	<span class="nx">e</span> <span class="o">=</span> <span class="nx">d</span> <span class="o">+</span> <span class="mi">5000</span><span class="p">,</span>
+	<span class="nx">f</span> <span class="o">=</span> <span class="nx">e</span> <span class="o">+</span> <span class="mi">6000</span><span class="p">,</span>
+	<span class="nx">f</span>
+<span class="p">}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">test1</span><span class="p">()</span> <span class="p">);</span>
+<span class="c1">//输出 21000
+</span></code></pre></td></tr></table>
+</div>
+</div><p>return 语句后面，通常只能跟一个表达式，它会返回这个表达式计算之后的结果。但是逗号运算符，可以把多个表达式，连接成一个复合语句。</p>
+<p>因此上述代码中，这么使用 return 语句也是没有问题的，会返回最后一个表达式计算之后的结果，但是前面的表达式依然会执行。</p>
+<p>上述案例只是单纯的连接语句，这种没有混淆力度，再来看一个案例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">function</span> <span class="nx">test2</span><span class="p">(){</span>
+	<span class="kd">var</span> <span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">,</span> <span class="nx">c</span><span class="p">,</span> <span class="nx">d</span><span class="p">,</span> <span class="nx">e</span><span class="p">,</span> <span class="nx">f</span><span class="p">;</span>
+	<span class="k">return</span> <span class="nx">f</span> <span class="o">=</span> <span class="p">(</span><span class="nx">e</span> <span class="o">=</span> <span class="p">(</span><span class="nx">d</span> <span class="o">=</span> <span class="p">(</span><span class="nx">c</span> <span class="o">=</span> <span class="p">(</span><span class="nx">b</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="nx">a</span> <span class="o">+</span> <span class="mi">2000</span><span class="p">),</span> <span class="nx">b</span> <span class="o">+</span> <span class="mi">3000</span><span class="p">),</span> <span class="nx">c</span> <span class="o">+</span> <span class="mi">4000</span><span class="p">),</span> <span class="nx">d</span> <span class="o">+</span> <span class="mi">5000</span><span class="p">),</span> <span class="nx">e</span> <span class="o">+</span> <span class="mi">6000</span><span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span> <span class="nx">test2</span><span class="p">()</span> <span class="p">);</span>
+<span class="c1">//输出 21000
+</span></code></pre></td></tr></table>
+</div>
+</div><p>此外，逗号表达式混淆还可以处理调用表达式、成员表达式等。案例如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Geekby&#39;</span><span class="p">,</span>
+	<span class="nx">add</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+		<span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">sub</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+	<span class="k">return</span> <span class="nx">a</span> <span class="o">-</span> <span class="nx">b</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">test</span><span class="p">(){</span>
+	<span class="kd">var</span> <span class="nx">a</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">b</span> <span class="o">=</span> <span class="nx">sub</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span><span class="mi">3000</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="kd">var</span> <span class="nx">c</span> <span class="o">=</span> <span class="nx">b</span> <span class="o">+</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="mi">2000</span><span class="p">);</span>
+	<span class="k">return</span> <span class="nx">c</span> <span class="o">+</span> <span class="nx">obj</span><span class="p">.</span><span class="nx">name</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>test</code> 函数中有函数调用表达式 <code>sub()</code>，还有成员表达式 <code>obj.add</code> 等。</p>
+<p>可以转换成如下形式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
+	<span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Geekby&#39;</span><span class="p">,</span>
+	<span class="nx">add</span><span class="o">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+		<span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">sub</span><span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">){</span>
+	<span class="k">return</span> <span class="nx">a</span> <span class="o">-</span> <span class="nx">b</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="kd">function</span> <span class="nx">test</span><span class="p">()</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="nx">c</span> <span class="o">=</span> <span class="p">(</span><span class="nx">b</span> <span class="o">=</span> <span class="p">(</span><span class="nx">a</span> <span class="o">=</span> <span class="mi">1000</span><span class="p">,</span> <span class="nx">sub</span><span class="p">)(</span><span class="nx">a</span><span class="p">,</span> <span class="mi">3000</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="nx">b</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">obj</span><span class="p">).</span><span class="nx">add</span><span class="p">(</span><span class="nx">b</span><span class="p">,</span> <span class="mi">2000</span><span class="p">)),</span>
+    <span class="nx">c</span> <span class="o">+</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nx">obj</span><span class="p">).</span><span class="nx">name</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="4-babel-的-api">4 Babel 的 API</h2>
+<p>Javascript 的语法是非常灵活的，如果直接处理 JS 代码来做混淆或者还原，那无疑是很麻烦的，而且容易出错。但是把 JS 代码转换成抽象语法树以后，一切就变得简单了。</p>
+<p>在编译原理里，从源码到机器码的过程，中间还需要经过很多步骤。比如，源码通过词法分析器变为 Token，再通过语法分析器变为 AST，再通过语义分析器，往下编译，最后变成机器码。所以，AST 实际上是一个概念性的东西，当实现了词法分析器和语法分析器，就能把不同的语言解析成 AST</p>
+<p>把 JS 代码转换成 AST，可以使用现成的解析库。当使用的解析库不一样的时候，生成的 AST 会有所区别。本文采用的是 Babel，是一个 nodejs 库。在用 AST 自动化处理 JS 代码前，先对相关 API 进行阐述。</p>
+<h3 id="41-ast-的基本结构">4.1 AST 的基本结构</h3>
+<p>JS 代码解析成 AST 以后，其实就相当于是 json 数据。经过 Babel 解析以后，通常把里
+面的一些元素叫做节点(Node），同时 Babel 也提供了很多方法去操作这些节点。以一个案例来说明 AST 的基本结构，代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">let</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="s1">&#39;Hello World&#39;</span><span class="p">,</span>
+    <span class="nx">add</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">a</span> <span class="o">+</span> <span class="nx">b</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">;</span>
+    <span class="p">},</span>
+    <span class="nx">mul</span><span class="o">:</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">a</span><span class="p">,</span> <span class="nx">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nx">a</span> <span class="o">*</span> <span class="nx">b</span> <span class="o">+</span> <span class="mi">1000</span><span class="p">;</span>
+    <span class="p">},</span>
+<span class="p">};</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Babel 的在线版本：<a href="https://astexplorer.net" target="_blank" rel="noopener noreffer">https://astexplorer.net</a></p>
+<h3 id="42-babel-中的组件">4.2 Babel 中的组件</h3>
+<h4 id="421-parser-与-generator">4.2.1 parser 与 generator</h4>
+<p>parser 组件用来将 JS 代码转换成 AST，generator 用来将 AST 转换成 JS 代码。</p>
+<p>使用 <code>let ast = parser. parse(jscode);</code> 即可完成 JS 代码转换到 AST 的过程。这时候
+把 AST 输出来。输出前通常先使用 <code>JSON.stringify</code> 把对象转 json 数据。比如，<code>console.log (JSON. stringify(ast, null, 2))</code>。另外，parser 的 parse 方法，其实是有第二个參数的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">let</span> <span class="nx">ast</span> <span class="o">=</span> <span class="nx">parser</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">jscode</span><span class="p">,</span> <span class="p">{</span>
+  <span class="nx">sourceType</span><span class="o">:</span> <span class="s2">&#34;module&#34;</span><span class="p">,</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>sourceType</code> 默认是 <code>script</code>。当解析的 JS 代码中含有 <code>import</code>、<code>export</code> 等关键字的时候，需要指定 <code>sourceType</code> 为 <code>module</code>。不然会报错：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-markdown" data-lang="markdown">SyntaxError: &#39;import&#39; and &#39;export&#39; may appear only with &#39;sourceType: &#34;module&#34;&#39; (1:0)
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 <code>let code = generator(ast).code</code>，即可把 AST 转换为 JS 代码。</p>
+<p>generator 返回的是一个对象，其中的 code 属性才是需要的代码。同时，generator 的第二个参数接收一个对象，可以设置一些选项，来影响输出的结果。完整的选项介绍，可参考 Babel 官方文档：<a href="https://babeljs.io/docs/en/babel-generator" target="_blank" rel="noopener noreffer">https://babeljs.io/docs/en/babel-generator</a>。</p>
+<p>如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">// retainLines：表示是否使用与源代码相同的行号，默认为 false
+</span><span class="c1"></span><span class="kd">let</span> <span class="nx">code</span> <span class="o">=</span> <span class="nx">generator</span><span class="p">(</span><span class="nx">ast</span><span class="p">,</span> <span class="p">{</span><span class="nx">retainLines</span><span class="o">:</span> <span class="kc">false</span><span class="p">});</span>
+<span class="c1">// comments：表示是否保留注释，默认为 true
+</span><span class="c1"></span><span class="kd">let</span> <span class="nx">code</span> <span class="o">=</span> <span class="nx">generator</span><span class="p">(</span><span class="nx">ast</span><span class="p">,</span> <span class="p">{</span><span class="nx">comments</span><span class="o">:</span> <span class="kc">false</span><span class="p">});</span>
+<span class="c1">// compact 表示是否压缩代码，与其作用相同的选项还有 minified、concise，压缩程度不同
+</span><span class="c1"></span><span class="kd">let</span> <span class="nx">code</span> <span class="o">=</span> <span class="nx">generator</span><span class="p">(</span><span class="nx">ast</span><span class="p">,</span> <span class="p">{</span><span class="nx">minified</span><span class="o">:</span> <span class="kc">true</span><span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="422-traverse-与-visitor">4.2.2 traverse 与 visitor</h4>
+<p>traverse 组件用来遍历 AST。traverse 一般需要配合 visitor 使用。visitor 是一个对象，里面可以定义一些方法，用来过滤节点。举例如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="c1">// 遍历 FunctionExpression 节点
+</span><span class="c1"></span><span class="kd">let</span> <span class="nx">visitor</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="nx">visitor</span><span class="p">.</span><span class="nx">FunctionExpression</span> <span class="o">=</span> <span class="kd">function</span><span class="p">(</span><span class="nx">path</span><span class="p">){</span>
+	<span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;visitor&#34;</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nx">traverse</span><span class="p">(</span><span class="nx">ast</span><span class="p">,</span> <span class="nx">visitor</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>另外一种遍历方式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kr">const</span> <span class="nx">visitor</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="nx">FunctionExpression</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">enter</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;visitor enter&#34;</span><span class="p">);</span>
+        <span class="p">},</span>
+        <span class="nx">exit</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&#34;visitor exit&#34;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">};</span>
+<span class="nx">traverse</span><span class="p">(</span><span class="nx">ast</span><span class="p">,</span> <span class="nx">visitor</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>正确的选择节点处理时机，有助于提高代码效率。traverse 是一个深度优先的遍历过程。因此，如果存在父子节点，那么 enter 的处理时机是先处理父节点，再处理子节点。而 exit 的处理时机是先处理子节点，再处理父节点。traverse 默认就是在 enter 时候处理，如果要在 exit 时候处理，必须在 visitor 中写明。</p>
+<h4 id="423-types">4.2.3 types</h4>
+<p>该组件主要用来判断节点类型，生成新的节点等。判断节点类型很简单。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">traverse</span><span class="p">(</span><span class="nx">ast</span><span class="p">,</span> <span class="p">{</span>
+	<span class="nx">enter</span><span class="p">(</span><span class="nx">path</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">if</span> <span class="p">(</span>
+			<span class="nx">path</span><span class="p">.</span><span class="nx">node</span><span class="p">.</span><span class="nx">type</span> <span class="o">===</span> <span class="s2">&#34;Identifier&#34;</span> <span class="o">&amp;&amp;</span>
+			<span class="nx">path</span><span class="p">.</span><span class="nx">node</span><span class="p">.</span><span class="nx">name</span> <span class="o">===</span> <span class="s2">&#34;n&#34;</span>
+		<span class="p">){</span>
+			<span class="nx">path</span><span class="p">.</span><span class="nx">node</span><span class="p">.</span><span class="nx">name</span> <span class="o">=</span> <span class="s2">&#34;x&#34;</span><span class="p">;</span>
+		<span class="p">}</span>
+	<span class="p">}</span>
+<span class="p">});</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>构造节点：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="kd">let</span> <span class="nx">obj</span> <span class="o">=</span> <span class="p">{};</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nx">type</span> <span class="o">=</span> <span class="s1">&#39;BinaryExpression&#39;</span><span class="p">;</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nx">left</span> <span class="o">=</span> <span class="p">{</span><span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;NumericLiteral&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">1000</span><span class="p">};</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nx">operator</span> <span class="o">=</span> <span class="s1">&#39;/&#39;</span><span class="p">;</span>
+<span class="nx">obj</span><span class="p">.</span><span class="nx">right</span> <span class="o">=</span> <span class="p">{</span><span class="nx">type</span><span class="o">:</span> <span class="s1">&#39;NumericLiteral&#39;</span><span class="p">,</span> <span class="nx">value</span><span class="o">:</span> <span class="mi">2000</span><span class="p">};</span>
+<span class="kd">let</span> <span class="nx">code</span> <span class="o">=</span> <span class="nx">generator</span><span class="p">(</span><span class="nx">obj</span><span class="p">).</span><span class="nx">code</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="424-path-对象">4.2.4 path 对象</h4>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-11-18</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2021/11/javascript%E5%8F%8D%E6%B7%B7%E6%B7%86/" data-title="JavaScript 反混淆"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2021/11/javascript%E5%8F%8D%E6%B7%B7%E6%B7%86/" data-title="JavaScript 反混淆"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2021/11/javascript%E5%8F%8D%E6%B7%B7%E6%B7%86/" data-title="JavaScript 反混淆"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">代码审计</a>,&nbsp;<a href="/tags/javascript/">JavaScript</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/11/%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/" class="prev" rel="prev" title="容器安全"><i class="fas fa-angle-left fa-fw"></i>容器安全</a>
+            <a href="/2021/11/k8s%E5%AE%89%E5%85%A8/" class="next" rel="next" title="K8s 安全">K8s 安全<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

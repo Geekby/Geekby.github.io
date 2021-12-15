@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>域渗透之 Windows Access Token 攻击 - Geekby&#39;s Blog</title><meta name="Description" content="域渗透之 Windows Access Token 攻击"><meta property="og:title" content="域渗透之 Windows Access Token 攻击" />
+<meta property="og:description" content="域渗透之 Windows Access Token 攻击" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2020/05/%E5%9F%9F%E6%B8%97%E9%80%8F%E4%B9%8B-windows-access-token-%E6%94%BB%E5%87%BB/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-05-11T14:10:00+08:00" />
+<meta property="article:modified_time" content="2020-05-11T14:10:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="域渗透之 Windows Access Token 攻击"/>
+<meta name="twitter:description" content="域渗透之 Windows Access Token 攻击"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2020/05/%E5%9F%9F%E6%B8%97%E9%80%8F%E4%B9%8B-windows-access-token-%E6%94%BB%E5%87%BB/" /><link rel="prev" href="https://www.geekby.site/2020/05/ntlm-%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/" /><link rel="next" href="https://www.geekby.site/2020/05/%E5%B8%B8%E8%A7%81%E6%9C%8D%E5%8A%A1%E7%B1%BB%E6%BC%8F%E6%B4%9E/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "域渗透之 Windows Access Token 攻击",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2020\/05\/%E5%9F%9F%E6%B8%97%E9%80%8F%E4%B9%8B-windows-access-token-%E6%94%BB%E5%87%BB\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "域安全, 内网渗透, Access Token","wordcount":  237 ,
+        "url": "https:\/\/www.geekby.site\/2020\/05\/%E5%9F%9F%E6%B8%97%E9%80%8F%E4%B9%8B-windows-access-token-%E6%94%BB%E5%87%BB\/","datePublished": "2020-05-11T14:10:00+08:00","dateModified": "2020-05-11T14:10:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "域渗透之 Windows Access Token 攻击"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">域渗透之 Windows Access Token 攻击</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"><i class="far fa-folder fa-fw"></i>内网渗透</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-05-11">2020-05-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 237 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#windows-access-token-简介">Windows Access Token 简介</a>
+      <ul>
+        <li><a href="#windows-access-token-概念">Windows Access Token 概念</a></li>
+        <li><a href="#windows-access-token-分类">Windows Access Token 分类</a>
+          <ul>
+            <li><a href="#登录方式">登录方式</a></li>
+          </ul>
+        </li>
+        <li><a href="#windows-access-token-组成">Windows Access Token 组成</a></li>
+        <li><a href="#关于-sid">关于 SID</a></li>
+        <li><a href="#windows-access-token-产生过程">Windows Access Token 产生过程</a></li>
+      </ul>
+    </li>
+    <li><a href="#后渗透中的令牌模拟">后渗透中的令牌模拟</a>
+      <ul>
+        <li><a href="#cobalt-strike-模拟令牌">cobalt strike 模拟令牌</a></li>
+        <li><a href="#metasploit-模拟令牌">metasploit 模拟令牌</a></li>
+      </ul>
+    </li>
+    <li><a href="#获取任意进程的令牌权限">获取任意进程的令牌权限</a>
+      <ul>
+        <li><a href="#手动令牌模拟">手动令牌模拟</a>
+          <ul>
+            <li><a href="#openprocess">openprocess</a></li>
+            <li><a href="#openprocesstoken">openprocesstoken</a></li>
+            <li><a href="#impersonateloggedonuser">impersonateloggedonuser</a></li>
+            <li><a href="#duplicatetokenex">duplicatetokenex</a></li>
+            <li><a href="#createprocesswithtokenw">createprocesswithtokenw</a></li>
+          </ul>
+        </li>
+        <li><a href="#bypass-protect-process">Bypass Protect Process</a></li>
+      </ul>
+    </li>
+    <li><a href="#使用-access-token-进行-bypassuac">使用 Access Token 进行 BypassUAC</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="域渗透之-windows-access-token-攻击">域渗透之 Windows Access Token 攻击</h1>
+<h2 id="windows-access-token-简介">Windows Access Token 简介</h2>
+<h3 id="windows-access-token-概念">Windows Access Token 概念</h3>
+<p>微软官方的定义如下：</p>
+<blockquote>
+<p>An access token is an object that describes the security context of a process or thread.The information in token includes the identity and privileges of the user account associatedwith the process or thread.</p>
+</blockquote>
+<p>Windows Access Token(访问令牌)，它是一个描述进程或者线程安全上下文的一个对象。不同的用户登录计算机后，都会生成一个 Access Token，这个 Token 在用户创建进程或者线程时会被使用，不断的拷贝，这也就解释了 A 用户创建一个进程而该进程没有 B 用户的权限。当用户注销后，系统将会使主令牌切换为模拟令牌，不会将令牌清除，只有在重启机器后才会清除。</p>
+<p>Access Token 分为两种(主令牌、模拟令牌)</p>
+<h3 id="windows-access-token-分类">Windows Access Token 分类</h3>
+<p>1、primary token 这种令牌通常用于本地及远程 RDP 登录</p>
+<p>2、impersonation token 这种则通常用于各种非交互式的登录，比如，netuse，wmi，winrm等等</p>
+<h4 id="登录方式">登录方式</h4>
+<ul>
+<li>交互式登录
+<ul>
+<li>console login (type 2)</li>
+<li>rdp login (type 10)</li>
+<li>psexec (type 2)</li>
+</ul>
+</li>
+<li>网络登录
+<ul>
+<li>wmi (type 3)</li>
+<li>winrm (type 3)</li>
+</ul>
+</li>
+</ul>
+<h3 id="windows-access-token-组成">Windows Access Token 组成</h3>
+<ul>
+<li>用户帐户的安全标识符(SID)</li>
+<li>用户所属的组的 SID</li>
+<li>用于标识当前登录会话的登录 SID</li>
+<li>用户或用户组所拥有的权限列表</li>
+<li>所有者 SID</li>
+<li>主要组的 SID</li>
+<li>访问控制列表</li>
+<li>访问令牌的来源</li>
+<li>令牌是主要令牌还是模拟令牌</li>
+<li>限制 SID 的可选列表</li>
+<li>目前的模拟等级</li>
+<li>其他统计数据</li>
+</ul>
+<h3 id="关于-sid">关于 SID</h3>
+<p>安全标识符(Security identifiers)，简称为 SID，分别是 <code>OwnerSid</code> 和 <code>GroupSid</code>。所谓 SID 就是每次当我们创建一个用户或一个组的时候，系统会分配给该用户或组一个唯一 SID，当你重新安装系统后，也会得到一个唯一的 SID。SID 是唯一的，不随用户的删除而分配到另外的用户使用。请记住，SID 永远都是唯一的。SIF 是由计算机名、当前时间、当前用户态线程的 CPU 耗费时间的总和三个参数决定以保证它的唯一性。</p>
+<p>例：S-1-5-21-1763234323-321265751-1234321321-500(whoami/user)</p>
+<h3 id="windows-access-token-产生过程">Windows Access Token 产生过程</h3>
+<p>用户使用凭据(用户密码)进行认证 &ndash;&gt; 登录 session 创建 &ndash;&gt; windows 返回用户的 sid 和用户所在组的 sid &ndash;&gt; LSA 创建一个 Access token &mdash;&gt; 使用凭据成功认证 &ndash;&gt; 登录 session &mdash;&gt; token &mdash;&gt; 进程、线程</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511155641.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511155641.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511155641.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511155641.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511155641.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511155641.png-water_print" /></p>
+<h2 id="后渗透中的令牌模拟">后渗透中的令牌模拟</h2>
+<h3 id="cobalt-strike-模拟令牌">cobalt strike 模拟令牌</h3>
+<p>使用 <code>steal_token</code> 模拟令牌，<code>rev2self</code> 恢复令牌</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511155846.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511155846.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511155846.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511155846.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511155846.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511155846.png-water_print" /></p>
+<h3 id="metasploit-模拟令牌">metasploit 模拟令牌</h3>
+<p><code>incognito</code> 模块，同样 <code>rev2self</code> 恢复令牌</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511160407.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511160407.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511160407.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511160407.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511160407.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511160407.png-water_print" /></p>
+<h2 id="获取任意进程的令牌权限">获取任意进程的令牌权限</h2>
+<h3 id="手动令牌模拟">手动令牌模拟</h3>
+<p>模拟过程：</p>
+<p>openprocess() &ndash;&gt; openprocesstoken() &ndash;&gt; impersonateloggedonuser() &ndash;&gt; duplicatetokenex() &ndash;&gt; createprocesswithtokenw()</p>
+<h4 id="openprocess">openprocess</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161046.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161046.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161046.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161046.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161046.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161046.png-water_print" /></p>
+<h4 id="openprocesstoken">openprocesstoken</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161136.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161136.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161136.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161136.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161136.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161136.png-water_print" /></p>
+<h4 id="impersonateloggedonuser">impersonateloggedonuser</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161220.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161220.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161220.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161220.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161220.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161220.png-water_print" /></p>
+<h4 id="duplicatetokenex">duplicatetokenex</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161255.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161255.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161255.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161255.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161255.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161255.png-water_print" /></p>
+<h4 id="createprocesswithtokenw">createprocesswithtokenw</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161349.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161349.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161349.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161349.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161349.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161349.png-water_print" /></p>
+<h3 id="bypass-protect-process">Bypass Protect Process</h3>
+<p>并不是所有的进程都是可以被操作的</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161605.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161605.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161605.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161605.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161605.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511161605.png-water_print" /></p>
+<p>只获取 system 权限的进程:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">get-token</span> <span class="nb">where-object</span> <span class="p">{</span><span class="nv">$_</span><span class="p">.</span><span class="nb">username-eq</span> <span class="s1">&#39;NT AUTHORITY\SYSTEM&#39;</span> <span class="o">-and</span> <span class="nv">$_ownername</span> <span class="o">-ne</span> <span class="s1">&#39;NT AUTHORITY\SYSTEM&#39;</span><span class="p">}</span> <span class="p">|</span> <span class="nb">select-object</span> <span class="n">processname</span><span class="p">,</span> <span class="n">processsid</span> <span class="p">|</span> <span class="nb">format-table</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>然后经过测试发现像 csrss、 service、 wininit、smss 等 token 获取失败。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511162053.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511162053.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511162053.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511162053.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511162053.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511162053.png-water_print" /></p>
+<h2 id="使用-access-token-进行-bypassuac">使用 Access Token 进行 BypassUAC</h2>
+<p>Fuzzy Security 利用 Windows 令牌实现 UAC 绕过</p>
+<p><a href="https://github.com/fuzzysecurity/powershell-suit/blob/master/UAC-TokenMagic.ps1" target="_blank" rel="noopener noreffer">https://github.com/fuzzysecurity/powershell-suit/blob/master/UAC-TokenMagic.ps1</a></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511162556.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511162556.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511162556.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511162556.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511162556.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200511162556.png-water_print" /></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-05-11</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2020/05/%E5%9F%9F%E6%B8%97%E9%80%8F%E4%B9%8B-windows-access-token-%E6%94%BB%E5%87%BB/" data-title="域渗透之 Windows Access Token 攻击"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2020/05/%E5%9F%9F%E6%B8%97%E9%80%8F%E4%B9%8B-windows-access-token-%E6%94%BB%E5%87%BB/" data-title="域渗透之 Windows Access Token 攻击"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2020/05/%E5%9F%9F%E6%B8%97%E9%80%8F%E4%B9%8B-windows-access-token-%E6%94%BB%E5%87%BB/" data-title="域渗透之 Windows Access Token 攻击"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%9F%9F%E5%AE%89%E5%85%A8/">域安全</a>,&nbsp;<a href="/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a>,&nbsp;<a href="/tags/access-token/">Access Token</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/05/ntlm-%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/" class="prev" rel="prev" title="NTLM Relay"><i class="fas fa-angle-left fa-fw"></i>NTLM Relay</a>
+            <a href="/2020/05/%E5%B8%B8%E8%A7%81%E6%9C%8D%E5%8A%A1%E7%B1%BB%E6%BC%8F%E6%B4%9E/" class="next" rel="next" title="常见服务类漏洞">常见服务类漏洞<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

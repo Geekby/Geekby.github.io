@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>组策略与ACL - Geekby&#39;s Blog</title><meta name="Description" content="组策略与 ACL 原理及实验"><meta property="og:title" content="组策略与ACL" />
+<meta property="og:description" content="组策略与 ACL 原理及实验" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2019/07/%E7%BB%84%E7%AD%96%E7%95%A5%E4%B8%8Eacl/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-07-24T20:24:00+08:00" />
+<meta property="article:modified_time" content="2019-07-24T20:24:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="组策略与ACL"/>
+<meta name="twitter:description" content="组策略与 ACL 原理及实验"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2019/07/%E7%BB%84%E7%AD%96%E7%95%A5%E4%B8%8Eacl/" /><link rel="prev" href="https://www.geekby.site/2019/07/redis%E5%9F%BA%E4%BA%8E%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E7%9A%84rce%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/" /><link rel="next" href="https://www.geekby.site/2019/07/jackson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "组策略与ACL",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2019\/07\/%E7%BB%84%E7%AD%96%E7%95%A5%E4%B8%8Eacl\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "域安全, 内网渗透","wordcount":  114 ,
+        "url": "https:\/\/www.geekby.site\/2019\/07\/%E7%BB%84%E7%AD%96%E7%95%A5%E4%B8%8Eacl\/","datePublished": "2019-07-24T20:24:00+08:00","dateModified": "2019-07-24T20:24:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "组策略与 ACL 原理及实验"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">组策略与ACL</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"><i class="far fa-folder fa-fw"></i>内网渗透</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-07-24">2019-07-24</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 114 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#server-manager-的组策略管理工具">Server Manager 的组策略管理工具</a></li>
+    <li><a href="#组策略的存储">组策略的存储</a></li>
+    <li><a href="#组策略的更新">组策略的更新</a></li>
+    <li><a href="#组策略的下发和获取">组策略的下发和获取</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#access-control-link">Access Control Link</a></li>
+    <li><a href="#dacl">DACL</a></li>
+    <li><a href="#windows-的访问控制">Windows 的访问控制</a></li>
+    <li><a href="#acl-安全审计">ACL 安全审计</a></li>
+    <li><a href="#利用">利用</a>
+      <ul>
+        <li><a href="#第一种">第一种</a></li>
+        <li><a href="#第二种">第二种</a></li>
+      </ul>
+    </li>
+    <li><a href="#注册表的-acl">注册表的 ACL</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="组策略的部署及下发原理">组策略的部署及下发原理</h1>
+<ul>
+<li>本地组策略和域内组策略</li>
+<li>域服务器如何存储组策略</li>
+<li>组策略的下发和获取</li>
+<li>客户端如何存储组策略</li>
+</ul>
+<h2 id="server-manager-的组策略管理工具">Server Manager 的组策略管理工具</h2>
+<p>更专业的组策略管理工具GPMC，可以管理多个域
+创建并编辑组策略的内容
+组策略分作主机策略和用户策略，machine和users目录；
+脚本类型和非脚本类型, script目录
+管理组策略的应用范围(演示)</p>
+<h2 id="组策略的存储">组策略的存储</h2>
+<p>存储在服务器中，\domain\sysvol\policies，以明文方式存储为xml、ini、inf等文件
+对域内所有用户开放读权限</p>
+<h2 id="组策略的更新">组策略的更新</h2>
+<ul>
+<li>客户端每90分钟主动获取一次组策略，检查组策略是否发生变更</li>
+<li>客户端使用<code>gpupdate /force</code>强制立即检查组策略</li>
+<li>参数可以分为主机和用户，<code>gpupdate /force /target:computer</code></li>
+</ul>
+<h2 id="组策略的下发和获取">组策略的下发和获取</h2>
+<p>组策略的查询原理：
+LDAP检索所有的组策略，那些属于自己的
+查询组策略，服务器决定需要返回哪些策略（版本号是决定的重要因素）</p>
+<h1 id="acl-访问控制链">ACL 访问控制链</h1>
+<h2 id="access-control-link">Access Control Link</h2>
+<ul>
+<li>Windows安全对象的ACL</li>
+<li>所有的Windows对象都称为安全对象，文件、进程、注册表、内存等</li>
+<li>为每个安全对象赋予一个安全描述符(Security descriptor)</li>
+<li>Security identifiers (SIDs)for the owner and primary group of an object</li>
+<li>A DACL that specifies the access rights allowed or denied to particular users or groups</li>
+<li>a SACL that specifies the types of access attempts that generate audit records for the object</li>
+</ul>
+<h2 id="dacl">DACL</h2>
+<p>DACL由多个ACE(Access Control Entry)组成
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213505.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213505.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213505.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213505.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213505.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213505.png-water_print" /></p>
+<h2 id="windows-的访问控制">Windows 的访问控制</h2>
+<ul>
+<li>Windows的访问控制包括三部分:访问令牌、对象安全描述符和访问检查</li>
+<li>访问令牌作为一个容器，通过Token体现</li>
+<li>对象安全描述符表示目标对象的安全属性，通过安全矩阵详细描述该对象赋予不同用户组的权限</li>
+<li>访问检查表示通过比较访问令牌和ACL，以决定该进程是否具有访问时申请的相应权限
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213519.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213519.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213519.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213519.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213519.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213519.png-water_print" /></li>
+</ul>
+<p>Windows中高权限服务、进程所拥有的文件、目录如果存在着ACL设置不当，对低权限用户开放了“写”甚至“执行”权限，低权限用户可以通过修改、替换文件内容来达到执行指定代码的目的。例如Windows的System332目录如果开放了写权限,则可以向目录写入一个DLL,等待系统重新启动是,由 Svchost等程序加载即可实现权限提升(演示)</p>
+<h2 id="acl-安全审计">ACL 安全审计</h2>
+<p>Sysinternalsuit提供的accesschk.exe可以对指定的目录、文件进行ACL检查，命令为accesschk.exe -w -s directory 其中directory为需要检测的目录</p>
+<p>accesschk.exe,可以审计进程对所有用户组开放的权限。采用规则accesschk.exe -ppid可以获取某个进程开放的权限，其中pid可以用‘*’代，表示检测所有进程对不同用户组开放的权限。为了保证正常运行,运行Taccesschk.exe时需要较高的权限</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213529.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213529.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213529.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213529.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213529.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213529.png-water_print" /></p>
+<h2 id="利用">利用</h2>
+<p>进程ACL漏洞的利用方法</p>
+<h3 id="第一种">第一种</h3>
+<p>通过OpenProcess获取进程句柄，并将目标代码写入该进程空间中，以该进程的权限运行这些代码，运行代码权限为该进程权限；</p>
+<h3 id="第二种">第二种</h3>
+<p>通过OpenProcess获取进程句柄，再通过OpenProcessToken获取该进程的Token，并利用该Tokeni通过CreateProcessAsUser新的进程，新的进程权限和目标进程权限一致。
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213426.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213426.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213426.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213426.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213426.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213426.png-water_print" />
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213552.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213552.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213552.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213552.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213552.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190724213552.png-water_print" /></p>
+<h2 id="注册表的-acl">注册表的 ACL</h2>
+<p>注册表中的启动项、服务加载项如果对低权限用户开发了写权限，低权限用户可以向这些表项写入指定的文件，等待系统重新启动后实现权限提升
+使用命令accesschk.exe -w -s -k HKLM，表示递归的扫描HKLM中开放了写权限的表项</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2019-07-24</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2019/07/%E7%BB%84%E7%AD%96%E7%95%A5%E4%B8%8Eacl/" data-title="组策略与ACL"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2019/07/%E7%BB%84%E7%AD%96%E7%95%A5%E4%B8%8Eacl/" data-title="组策略与ACL"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2019/07/%E7%BB%84%E7%AD%96%E7%95%A5%E4%B8%8Eacl/" data-title="组策略与ACL"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%9F%9F%E5%AE%89%E5%85%A8/">域安全</a>,&nbsp;<a href="/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2019/07/redis%E5%9F%BA%E4%BA%8E%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E7%9A%84rce%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/" class="prev" rel="prev" title="Redis 基于主从复制的 RCE 利用方式"><i class="fas fa-angle-left fa-fw"></i>Redis 基于主从复制的 RCE 利用方式</a>
+            <a href="/2019/07/jackson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" class="next" rel="next" title="CVE-2019-12384：Jackson反序列化漏洞复现">CVE-2019-12384：Jackson反序列化漏洞复现<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

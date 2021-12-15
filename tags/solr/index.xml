@@ -1,0 +1,29 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Solr - 标签 - Geekby&#39;s Blog</title>
+        <link>https://www.geekby.site/tags/solr/</link>
+        <description>Solr - 标签 - Geekby&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Thu, 02 Jan 2020 19:39:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/solr/" rel="self" type="application/rss+xml" /><item>
+    <title>Apache Solr模板注入远程代码执行漏洞</title>
+    <link>https://www.geekby.site/2020/01/apache-solr%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</link>
+    <pubDate>Thu, 02 Jan 2020 19:39:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2020/01/apache-solr%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</guid>
+    <description><![CDATA[Apache Solr模板注入远程代码执行漏洞]]></description>
+</item><item>
+    <title>CVE-2019-12409 漏洞复现</title>
+    <link>https://www.geekby.site/2019/11/apache-solr-cve-2019-12409-rce-%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</link>
+    <pubDate>Wed, 20 Nov 2019 10:27:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2019/11/apache-solr-cve-2019-12409-rce-%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</guid>
+    <description><![CDATA[Apache Solr CVE-2019-12409 RCE 漏洞复现]]></description>
+</item><item>
+    <title>Apache Solr 远程命令执行漏洞复现</title>
+    <link>https://www.geekby.site/2019/08/apache-solr-%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</link>
+    <pubDate>Wed, 07 Aug 2019 20:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2019/08/apache-solr-%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</guid>
+    <description><![CDATA[Apache Solr 远程命令执行漏洞复现]]></description>
+</item></channel>
+</rss>

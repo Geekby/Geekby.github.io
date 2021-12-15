@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>LDAP 协议相关 - Geekby&#39;s Blog</title><meta name="Description" content="LDAP 协议相关知识介绍"><meta property="og:title" content="LDAP 协议相关" />
+<meta property="og:description" content="LDAP 协议相关知识介绍" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2020/12/ldap-%E5%8D%8F%E8%AE%AE/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-12-14T10:46:00+08:00" />
+<meta property="article:modified_time" content="2020-12-14T10:46:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="LDAP 协议相关"/>
+<meta name="twitter:description" content="LDAP 协议相关知识介绍"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2020/12/ldap-%E5%8D%8F%E8%AE%AE/" /><link rel="prev" href="https://www.geekby.site/2020/12/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" /><link rel="next" href="https://www.geekby.site/2020/12/cs%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "LDAP 协议相关",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2020\/12\/ldap-%E5%8D%8F%E8%AE%AE\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "LDAP, 协议","wordcount":  397 ,
+        "url": "https:\/\/www.geekby.site\/2020\/12\/ldap-%E5%8D%8F%E8%AE%AE\/","datePublished": "2020-12-14T10:46:00+08:00","dateModified": "2020-12-14T10:46:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "LDAP 协议相关知识介绍"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">LDAP 协议相关</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%8D%8F%E8%AE%AE/"><i class="far fa-folder fa-fw"></i>协议</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-12-14">2020-12-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 397 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-目录服务简介">1 目录服务简介</a></li>
+    <li><a href="#2-ldap-简介">2 LDAP 简介</a></li>
+    <li><a href="#3-ldap-的基本模型">3 LDAP 的基本模型</a></li>
+    <li><a href="#4-ldap-和-ad-的关系">4 LDAP 和 AD 的关系</a></li>
+    <li><a href="#5-利用-ldap-收集域信息">5 利用 LDAP 收集域信息</a>
+      <ul>
+        <li><a href="#51-相关工具">5.1 相关工具</a></li>
+        <li><a href="#52-获取域信息实例">5.2 获取域信息实例</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="1-目录服务简介">1 目录服务简介</h2>
+<p>日常生活中使用的电话薄内记录着亲朋好友的姓名、电话与地址等数据，它就是 telephone directory(电话目录)；计算机中的文件系统(file system)内记录着文件的文件名、大小与日期等数据，它就是 file directory(文件目录)。</p>
+<p>如果这些目录内的数据能够由系统加以整理，用户就能够容易且迅速地查找到所需的数据，而 directory service(目录服务)提供的服务，就是要达到此目的。</p>
+<p>目录服务是一个特殊的非关系型数据库，用来保存描述性的、基于属性的详细信息，支持过滤功能。 这种数据库与我们常⻅的关系型数据库(Mysql、SQL Server、Oracle等)的区别在于目录服务以树状的层次结构来存储数据，就好像 Linux/Unix 系统中的文件目录一样。此外，目录服务是一个专⻔为搜索和浏览而优化的数据库，有着优异的读性能，但写性能差，并且没有事务处理、回滚等复杂功能，不适于存储修改频繁的数据。</p>
+<p>综上所述，目录服务更适用于存储如组织架构之类的信息。</p>
+<h2 id="2-ldap-简介">2 LDAP 简介</h2>
+<p>LDAP(Light Directory Access Portocol)是基于 X.500 标准的轻量级目录访问协议。LDAP 协议之前有一个 X.500 DAP 协议规范，该协议十分复杂，是一个重量级的协议，后来对 X.500 进行了简化，诞生了 LDAP 协议，与 X.500 相比变得较为轻量，其实 LDAP 协议依然复杂。</p>
+<p>LDAP 约定了 Client 与 Server 之间的信息交互格式、使用的端口号、认证方式等内容。而 LDAP 协议的实现，有着众多版本，例如微软的 <code>Active Directory</code> 是 LDAP 在 Windows 上的实现，AD 实现了 LDAP 所需的树形数据库、具体如何解析请求数据并到数据库查询然后返回结果等功能。再例如 <code>OpenLDAP</code> 是可以运行在 Linux 上的 LDAP 协议的开源实现。而我们平常说的 LDAP Server，一般指的是安装并配置了 <code>Active Directory</code>、<code>OpenLDAP</code> 这些程序的服务器。</p>
+<h2 id="3-ldap-的基本模型">3 LDAP 的基本模型</h2>
+<p>每一个系统、协议都会有属于自己的模型，LDAP 也不例外，在了解 LDAP 的基本模型之前我们需要先了解几个 LDAP 的目录树概念:</p>
+<ol>
+<li>
+<p>目录树：在一个目录服务系统中，整个目录信息集可以表示为一个目录信息树，树中的每个节点是 一个条目。</p>
+</li>
+<li>
+<p>条目：每个条目就是一条记录，每个条目有自己的唯一可区别的名称(DN)。</p>
+</li>
+<li>
+<p>对象类：objectClass，与某个实体类型对应的一组属性，对象类是可以继承的，这样父类的必须属</p>
+<p>性也会被继承下来。</p>
+</li>
+<li>
+<p>属性：描述条目的某个方面的信息，一个属性由一个属性类型和一个或多个属性值组成，属性有必须属性和非必须属性。</p>
+</li>
+</ol>
+<p>LDAP 目录以树状的层次结构来存储数据，最顶层即根部称作「基准DN」，形如 <code>dc=geekby,dc=xyz</code> 或者   <code>ou=geekby.xyz</code>，前一种方式更为灵活也是 Windows AD 中使用的方式。在根目录的下面有很多的文件和目录，为了把这些大量的数据从逻辑上分开，LDAP 像其它的目录服务协议一样使用 OU(Organization Unit)，可以用来表示公司内部机构，如部⻔等，也可以用来表示设备、人员等。同时 OU 还可以有子 OU，用来表示更为细致的分类。LDAP 中每一条记录都有一个唯一的区别于其它记录的名字 DN(Distinguished Name)，其处在「叶子」位置的部分称作 RDN；如 <code>dn:cn=tom,ou=animals,dc=geekby,dc=xyz</code> 中 <code>tom</code> 即为 <code>RDN</code>；<code>RDN</code> 在一个 <code>OU</code> 中必须是唯一的。</p>
+<p>因为 LDAP 数据是「树」状的，而且这棵树是可以无限延伸的，假设你要树上的一条记录，如何寻找它的位置呢？当然首先要说明是哪一棵树(dc)，然后是从树根到那个苹果所经过的所有「分叉」(ou)，最后就是这个苹果的名字(cn)。知道了树(dc=geekby,dc=xyz)，分叉 (ou=IT,ou=Worker,ou=Pentester)，苹果(cn=abc)，就可以找到我们想要的苹果了：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">dn:cn=abc,ou=IT,ou=Worker,ou=Pentester,dc=geekby,dc=xyz
+</code></pre></td></tr></table>
+</div>
+</div><p>LDAP 的功能模型中定义了一系列利用 LDAP 协议的操作。它包含了三个部分:</p>
+<ol>
+<li>查询操作(Interrogation Operations)：容许查询目录和取得数据。它包含 Search Operating 和 Compare Operation。</li>
+<li>更新操作(Update Operations)：容许添加(ADD)、删除(Delete)、重命名(Rename)和改变目录(Modify)</li>
+<li>认证和管理操作(Authentication And Control Operations)容许客户端在目录中识别自己，并且能够控制一个 Session 的性质。</li>
+</ol>
+<h2 id="4-ldap-和-ad-的关系">4 LDAP 和 AD 的关系</h2>
+<p>Active Directory 是微软基于 LDAP 协议的一套解决方案(LDAP 服务器 + 应用)， 而 LDAP 是与 AD 交互的协议之一。</p>
+<p>Active Directory 解决了细粒度的权限控制「谁」以 「什么权限」访问「什么」。AD 在 LDAP v3 规范之上还有自定义扩展，例如，帐户锁定，密码到期等。</p>
+<h2 id="5-利用-ldap-收集域信息">5 利用 LDAP 收集域信息</h2>
+<p>通常情况下，任何一名认证用户都可以通过 LDAP 来获取大量有趣的域信息。因此，在信息收集阶段，可以利用 LDAP 查询、整理域环境的相关信息。</p>
+<h3 id="51-相关工具">5.1 相关工具</h3>
+<ul>
+<li>adfind 可以在命令下获取域的详细信息，用法参考：<a href="http://www.joeware.net/freetools/tools/adfind/usage.htm" target="_blank" rel="noopener noreffer">http://www.joeware.net/freetools/tools/adfind/usage.htm</a></li>
+<li>ADExplorer 是独立的可执行软件，无需安装。 除了查询域信息外，ADExplorer 还可以拍摄快照，可以快照保存在本地，并可以使用 ADExplorer 打开进行操作。</li>
+<li>ldapsearch</li>
+<li>LDAPDomainDump 为 python 开发，可以通过 LDAP 收集和解析数据，并将其输出为人类可读的 HTML 格式以及机器可读的 JSON 和 CSV/TSV 格式。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">domain_groups: 目标域的组列表
+domain_users: 目标域的用户列表
+domain_computers: 目标域的计算机账号列表
+domain_policy: 域策略，例如是否需要密码等
+domain_trusts: 传入和传出域属性以及是否受信任
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="52-获取域信息实例">5.2 获取域信息实例</h3>
+<p>环境：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"> 域控:192.168.66.26 (dc.company.com) 
+ 域用户凭证：pentest\win7user:123456aB
+ 使用工具 Adfind.exe
+</code></pre></td></tr></table>
+</div>
+</div><p>下面列出了 Adfind 的一些使用实例，主要是对工具参数进行介绍。我们可以根据需求修改命令，查 询我们所关注的任何信息。比如查询已控凭证所属的组、查询特定组的成员、根据计算机名推测用户可 能有权限的计算机等。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">#查询域内所有用户详细信息
+adfind -h 10.1.26.128 -u company\test -up Geekby -sc u:*
+
+#查询域内特定用户详细信息
+adfind -h 10.1.26.128 -u company\test -up Geekby -sc u:test
+
+#查询域内特定用户特定信息(mail)
+adfind -h 10.1.26.128 -u company\test -up Geekby -sc u:test mail
+
+#查询域内所有用户dn信息
+adfind -h 10.1.26.128 -u company\test -up Geekby -sc u:* -dn
+
+#查询域内用户数量
+adfind -h 10.1.26.128 -u company\test -up Geekby -sc u:* -c
+
+#查询域内所有组详细信息
+adfind -h 10.1.26.128 -u company\test -up Geekby -sc g:*
+
+#查询域内组名内包含“Admin”的所有组详细信息
+adfind -h 10.1.26.128 -u company\test -up Geekby -sc g:*Admin* #查询域内所有OU详细信息
+adfind -h 10.1.26.128 -u company\test -up Geekby -sc o:* #查询域内所有计算机详细信息
+adfind -h 10.1.26.128 -u company\test -up Geekby -sc c:* #查询域内所有站点详细信息
+adfind -h 10.1.26.128 -u company\test -up Geekby -sc site:* #查询域内所有子网详细信息
+adfind -h 10.1.26.128 -u company\test -up Geekby -sc subnet:* #查询域的信任关系
+adfind -h 10.1.26.128 -u company\test -up Geekby -sc trustdmp #查询域内spn的详细信息
+adfind -h 10.1.26.128 -u company\test -up Geekby -sc spn:*
+
+#搜索禁用的用户dn
+adfind -h 10.1.26.128 -u company\test -up Geekby -b DC=company,DC=com -f userAccountControl:AND:=514 -dn
+</code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-12-14</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2020/12/ldap-%E5%8D%8F%E8%AE%AE/" data-title="LDAP 协议相关"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2020/12/ldap-%E5%8D%8F%E8%AE%AE/" data-title="LDAP 协议相关"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2020/12/ldap-%E5%8D%8F%E8%AE%AE/" data-title="LDAP 协议相关"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/ldap/">LDAP</a>,&nbsp;<a href="/tags/%E5%8D%8F%E8%AE%AE/">协议</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/12/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" class="prev" rel="prev" title="权限维持"><i class="fas fa-angle-left fa-fw"></i>权限维持</a>
+            <a href="/2020/12/cs%E4%BA%8C%E6%AC%A1%E5%BC%80%E5%8F%91/" class="next" rel="next" title="CobaltStrike二次开发">CobaltStrike二次开发<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

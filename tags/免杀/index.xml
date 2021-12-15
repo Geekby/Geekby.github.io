@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>免杀 - 标签 - Geekby&#39;s Blog</title>
+        <link>https://www.geekby.site/tags/%E5%85%8D%E6%9D%80/</link>
+        <description>免杀 - 标签 - Geekby&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Thu, 02 Apr 2020 09:00:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/%E5%85%8D%E6%9D%80/" rel="self" type="application/rss+xml" /><item>
+    <title>通过替换 cobaltstrike 中自带 loader 进行免杀</title>
+    <link>https://www.geekby.site/2020/04/%E9%80%9A%E8%BF%87%E6%9B%BF%E6%8D%A2cobaltstrikes%E4%B8%AD%E8%87%AA%E5%B8%A6loader%E8%BF%9B%E8%A1%8C%E5%85%8D%E6%9D%80/</link>
+    <pubDate>Thu, 02 Apr 2020 09:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2020/04/%E9%80%9A%E8%BF%87%E6%9B%BF%E6%8D%A2cobaltstrikes%E4%B8%AD%E8%87%AA%E5%B8%A6loader%E8%BF%9B%E8%A1%8C%E5%85%8D%E6%9D%80/</guid>
+    <description><![CDATA[通过替换 cobaltstrike 中自带 loader 进行免杀]]></description>
+</item></channel>
+</rss>

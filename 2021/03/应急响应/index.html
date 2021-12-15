@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>应急响应 - Geekby&#39;s Blog</title><meta name="Description" content="应急响应"><meta property="og:title" content="应急响应" />
+<meta property="og:description" content="应急响应" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2021/03/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-03-07T08:00:00+08:00" />
+<meta property="article:modified_time" content="2021-03-07T08:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="应急响应"/>
+<meta name="twitter:description" content="应急响应"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/03/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" /><link rel="prev" href="https://www.geekby.site/2021/02/docker%E9%80%83%E9%80%B8%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/" /><link rel="next" href="https://www.geekby.site/2021/03/hackthebox-beep/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "应急响应",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2021\/03\/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试, 应急响应","wordcount":  419 ,
+        "url": "https:\/\/www.geekby.site\/2021\/03\/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94\/","datePublished": "2021-03-07T08:00:00+08:00","dateModified": "2021-03-07T08:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "应急响应"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">应急响应</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-03-07">2021-03-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 419 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-windows-应急响应">1 Windows 应急响应</a>
+      <ul>
+        <li><a href="#11-文件分析">1.1 文件分析</a>
+          <ul>
+            <li><a href="#111-开机启动项">1.1.1 开机启动项</a></li>
+            <li><a href="#112-tmp-临时文件夹">1.1.2 tmp 临时文件夹</a></li>
+            <li><a href="#113-浏览器历史记录">1.1.3 浏览器历史记录</a></li>
+            <li><a href="#114-文件属性分析">1.1.4 文件属性分析</a></li>
+            <li><a href="#115-最近打开文件分析">1.1.5 最近打开文件分析</a></li>
+          </ul>
+        </li>
+        <li><a href="#12-进程分析">1.2 进程分析</a>
+          <ul>
+            <li><a href="#121-可疑进程发现与关闭">1.2.1 可疑进程发现与关闭</a></li>
+            <li><a href="#122-window-计划任务">1.2.2 Window 计划任务</a></li>
+            <li><a href="#123-隐藏账户发现与删除">1.2.3 隐藏账户发现与删除</a></li>
+          </ul>
+        </li>
+        <li><a href="#13-系统信息">1.3 系统信息</a>
+          <ul>
+            <li><a href="#131-补丁查看与更新">1.3.1 补丁查看与更新</a></li>
+          </ul>
+        </li>
+        <li><a href="#14-webshell-查杀">1.4 webshell 查杀</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-linux-分析排查">2 linux 分析排查</a>
+      <ul>
+        <li><a href="#21-文件分析">2.1 文件分析</a>
+          <ul>
+            <li><a href="#211-tmp-目录">2.1.1 tmp 目录</a></li>
+            <li><a href="#212-开机启动项">2.1.2 开机启动项</a></li>
+            <li><a href="#213-文件修改时间搜索">2.1.3 文件修改时间搜索</a></li>
+          </ul>
+        </li>
+        <li><a href="#22-进程分析">2.2 进程分析</a>
+          <ul>
+            <li><a href="#221-网络连接分析">2.2.1 网络连接分析</a></li>
+            <li><a href="#222-进程对应的文件">2.2.2 进程对应的文件</a></li>
+          </ul>
+        </li>
+        <li><a href="#23-登录分析">2.3 登录分析</a></li>
+        <li><a href="#24-异常用户的分析排查">2.4 异常用户的分析排查</a></li>
+        <li><a href="#25-历史命令分析">2.5 历史命令分析</a></li>
+        <li><a href="#26-计划任务排查">2.6 计划任务排查</a></li>
+        <li><a href="#27-异常-paht-环境变量的排查">2.7 异常 $PAHT 环境变量的排查</a></li>
+        <li><a href="#28-后门自动排查---rkhunter">2.8 后门自动排查 - rkhunter</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="应急响应">应急响应</h1>
+<h2 id="1-windows-应急响应">1 Windows 应急响应</h2>
+<h3 id="11-文件分析">1.1 文件分析</h3>
+<h4 id="111-开机启动项">1.1.1 开机启动项</h4>
+<p>利用操作系统中的启动菜单：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103630.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103630.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103630.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103630.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103630.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103630.png-water_print" /></p>
+<p>利用系统配置 msconfig：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103715.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103715.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103715.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103715.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103715.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103715.png-water_print" /></p>
+<p>利用注册表：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">HKCU\software\Microsoft\Windows\CurrentVersion\Run
+HKLM\software\Microsoft\Windows\CurrentVersion\Run
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103813.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103813.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103813.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103813.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103813.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306103813.png-water_print" /></p>
+<h4 id="112-tmp-临时文件夹">1.1.2 tmp 临时文件夹</h4>
+<p>使用 cmd，输入 <code>%tmp%</code>，直接打开临时文件夹</p>
+<p>查看该文件夹下是否有可疑文件（exe、dll、sys）</p>
+<h4 id="113-浏览器历史记录">1.1.3 浏览器历史记录</h4>
+<p>工具地址：<a href="https://launcher.nirsoft.net/downloads/index.html" target="_blank" rel="noopener noreffer">https://launcher.nirsoft.net/downloads/index.html</a></p>
+<p><strong>browsinghistoryview</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306105337.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306105337.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306105337.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306105337.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306105337.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306105337.png-water_print" /></p>
+<p><strong>browserdownloadsview</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306105419.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306105419.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306105419.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306105419.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306105419.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306105419.png-water_print" /></p>
+<h4 id="114-文件属性分析">1.1.4 文件属性分析</h4>
+<p>在 Windows 系统下，文件属性的时间属性具有：创建时间、修改时间、访问时间（默认情况下禁用）默认情况下，计算机是以修改时间作为展示。</p>
+<p>如果修改时间要早于创建时间那么这个文件存在很大可疑。使用中国菜刀等工具修改的修改时间，通过文件属性可以查看到创建时间、修改时间、访问时间。</p>
+<h4 id="115-最近打开文件分析">1.1.5 最近打开文件分析</h4>
+<p>Windows 系统中默认记录系统中最近打开使用的文件信息。</p>
+<p>可以在目录 <code>C:\Documents and Settings\Administrator\Recent</code> 下查看，也可以使用 win+R 打开运行，输入 %UserProfile%\Recent 查看。然后利用 Windows 中的筛选条件查看具体时间范围的文件</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306110124.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306110124.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306110124.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306110124.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306110124.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306110124.png-water_print" /></p>
+<h3 id="12-进程分析">1.2 进程分析</h3>
+<h4 id="121-可疑进程发现与关闭">1.2.1 可疑进程发现与关闭</h4>
+<p>计算机与外部网络通信是建立在 TCP 或 UDP 协议上的，并且每一次通信都是具有不同的端口（0~65535）。如果计算机被木马后，肯定会与外部网络通信，那么此时就可以通过查看网络连接状态，找到对应的进程 ID，然后关闭进程 ID 就可以关闭连接状态。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 查看网络建立连接状态</span>
+netstat -ano <span class="p">|</span> find <span class="s2">&#34;ESTABLISHED&#34;</span>
+<span class="c1"># 查看具体 PID 进程对应的程序</span>
+tasklist /svc <span class="p">|</span> find <span class="s2">&#34;PID&#34;</span>
+taskill /PID pid值 /T 关闭进程
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="122-window-计划任务">1.2.2 Window 计划任务</h4>
+<p>在计算机中可以通过设定计划任务，在固定时间执行固定操作。一般情况下，恶意代码也有可能在固定的时间设置执行。</p>
+<p>使用 at 或 schtasks 命令可以对计划任务进行管理，直接输入 at 可以查看当前计算机中保存的计划任务。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306111805.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306111805.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306111805.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306111805.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306111805.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306111805.png-water_print" /></p>
+<p>也可以在计划任务程序中打开：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306111912.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306111912.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306111912.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306111912.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306111912.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210306111912.png-water_print" /></p>
+<h4 id="123-隐藏账户发现与删除">1.2.3 隐藏账户发现与删除</h4>
+<p>隐藏账号，是指“黑客”入侵之后为了能够持久保持对计算机访问，而在计算机系统中建立的不轻易被发现的计算机账户。</p>
+<p>最为简单的隐藏账户建立：</p>
+<p><code>net user test$ test /add &amp;&amp; net localgroup administrator test$ /add</code> 其中 <code>$</code> 符号可以导致系统管理员在使用 net user 时无法查看到 <code>test$</code> 用户。</p>
+<h3 id="13-系统信息">1.3 系统信息</h3>
+<h4 id="131-补丁查看与更新">1.3.1 补丁查看与更新</h4>
+<p>Windows 系统支持补丁以修补漏洞。可以使用 systeminfo 查看系统信息，并展示对应的系统补丁信息编号。 也可以在卸载软件中查看系统补丁和第三方软件补丁。</p>
+<h3 id="14-webshell-查杀">1.4 webshell 查杀</h3>
+<p>常见工具：D 盾</p>
+<h2 id="2-linux-分析排查">2 linux 分析排查</h2>
+<h3 id="21-文件分析">2.1 文件分析</h3>
+<h4 id="211-tmp-目录">2.1.1 tmp 目录</h4>
+<p>在 Linux 系统下一切都是文件。其中 /tmp 是一个特别的临时目录文件。每个用户都可以对它进行读写操作。因此一个普通用户可以对 /tmp目录执行读写操作。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210308093714.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210308093714.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210308093714.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210308093714.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210308093714.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210308093714.png-water_print" /></p>
+<h4 id="212-开机启动项">2.1.2 开机启动项</h4>
+<p>查看开机启动项内容 <code>/etc/init.d/</code>，恶意代码很有可能设置在开机自启动的位置。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210308094230.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210308094230.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210308094230.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210308094230.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210308094230.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210308094230.png-water_print" /></p>
+<p>查看指定目录下文件时间顺序的排序：<code>Is-alt| head -n 10</code></p>
+<p>查看文件时间属性：<code>stat 文件名</code></p>
+<p>使用 <code>update-rc.d 程序名称 enable</code> 设置开机自启</p>
+<p>使用 <code>update-rc.d 程序名称 disable</code> 禁止开机自启</p>
+<h4 id="213-文件修改时间搜索">2.1.3 文件修改时间搜索</h4>
+<p>新增文件分析：</p>
+<ul>
+<li>
+<p>查找 24 小时内被修改的文件</p>
+<ul>
+<li><code>find ./ -mtime 0 -name &quot;*.php&quot;</code></li>
+</ul>
+</li>
+<li>
+<p>查找 72 小时内新增的文件</p>
+<ul>
+<li><code>find ./ -ctime -2 -name &quot;*.php&quot;</code></li>
+</ul>
+</li>
+<li>
+<p>权限查找</p>
+<ul>
+<li><code>find ./ -iname &quot;*.php&quot; -perm 777</code></li>
+<li><code>-iname</code> 忽略大小写，<code>-perm</code> 筛选文件权限</li>
+</ul>
+</li>
+</ul>
+<h3 id="22-进程分析">2.2 进程分析</h3>
+<h4 id="221-网络连接分析">2.2.1 网络连接分析</h4>
+<p>在 Linux 中可以使用 netstat 进行网络连接查看。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">netstat -Print network connections, routing tables, interface statistics, masquerade connections, and multicast memberships
+</code></pre></td></tr></table>
+</div>
+</div><p>常用命令 <code>netstat -pantl</code> 查看处于 tcp 网络套接字相关信息。</p>
+<p>关闭未知连接 <code>kill -9 PID</code> 即可。</p>
+<h4 id="222-进程对应的文件">2.2.2 进程对应的文件</h4>
+<p>在 linux 中可以使用 ps 查看进程相关信息</p>
+<p>使用 <code>ps aux</code> 查看所有进程信息</p>
+<p>使用 <code>ps -aux| grep PID</code> 筛选出具体 PID 的进程信息，<code>lsof -i：端口号</code>也可以实现类似功能</p>
+<h3 id="23-登录分析">2.3 登录分析</h3>
+<p>在 Linux 做的操作都会被记录到系统日志中，对于登录也可以查看日志信息查看是否有异常登录。last 命令 <code>last -i | grep -v 0.0.0.0</code> 查看登录日志，筛选非本地登录。</p>
+<p><code>w</code> 命令实时查看登录用户</p>
+<h3 id="24-异常用户的分析排查">2.4 异常用户的分析排查</h3>
+<p>在 Linux 中 root 用户是一个无敌的存在，可以在 Linux 上做任何事情。</p>
+<p>新建用户 <code>useradd username</code></p>
+<p>设置密码 <code>passwd username 输出密码</code></p>
+<p>设置用户 uid 和 gid 都为 0。（root 用户 uid 为 0 gid 为 0）修改文件即可 /etc/passwd</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">cat /etc/passwd
+grep <span class="s2">&#34;0:0&#34;</span> /etc/passwd
+ls -l /etc/passwd
+awk -F: <span class="s1">&#39;$3==0 {print $1}&#39;</span> /etc/passwd
+awk -F：<span class="s1">&#39;$2==&#34;！”{print $1}&#39;</span> /etc/shadow 或 
+awk -F：<span class="s1">&#39;length（$2）==0 {print $1}&#39;</span> /etc/shadow
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="25-历史命令分析">2.5 历史命令分析</h3>
+<p>在 Linux 系统中默认会记录之前执行的命令 /root/bash history 文件中。</p>
+<p>用户可以使用 cat /root/.bash_history 进行查看或者使用 history 命令进行查看</p>
+<h3 id="26-计划任务排查">2.6 计划任务排查</h3>
+<p>在 Linux 系统中可以使用命令 crontab 进行计划任务的设定</p>
+<p>其中 -e 可以用来编辑设定计划任务，-l 可以用来查看当前计划任务，-d 用来删除计划任务。特别注意计划任务中未知内容</p>
+<h3 id="27-异常-paht-环境变量的排查">2.7 异常 $PAHT 环境变量的排查</h3>
+<p>环境变量决定了 shell 将到哪些目录中寻找命令或程序，PATH 的值是一系列目录，当您运行一个程序时，Linux 在这些目录下进行搜寻编译链接。</p>
+<p>修改 PATH ：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/locar/new/bin 
+<span class="c1"># 本次终端中有效，重启后无效。</span>
+<span class="c1"># 在 /etc/profile或/home/.bashrc（source ~/.bashrc）才能永久生效。</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="28-后门自动排查---rkhunter">2.8 后门自动排查 - rkhunter</h3>
+<p>Rkhunter 具有以下功能：</p>
+<ol>
+<li>
+<p>系统命令检测，MD5 校验</p>
+</li>
+<li>
+<p>Rookit 检测</p>
+</li>
+<li>
+<p>本机敏感目录、系统配置异常检测</p>
+</li>
+</ol>
+<p>安装：<code>apt install rkhunter</code></p>
+<p>基本使用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">rkhunter -check-sk
+-c,--check <span class="c1"># Check the local system</span>
+-sk --skip-keypress <span class="c1"># Don&#39;t wait for a keypress after each test</span>
+</code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-03-07</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2021/03/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" data-title="应急响应"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2021/03/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" data-title="应急响应"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2021/03/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/" data-title="应急响应"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a>,&nbsp;<a href="/tags/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/">应急响应</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/02/docker%E9%80%83%E9%80%B8%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/" class="prev" rel="prev" title="Docker 逃逸相关总结"><i class="fas fa-angle-left fa-fw"></i>Docker 逃逸相关总结</a>
+            <a href="/2021/03/hackthebox-beep/" class="next" rel="next" title="Hack the box - Beep">Hack the box - Beep<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

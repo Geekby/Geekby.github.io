@@ -1,0 +1,78 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>内网渗透 - 标签 - Geekby&#39;s Blog</title>
+        <link>https://www.geekby.site/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/</link>
+        <description>内网渗透 - 标签 - Geekby&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Sun, 12 Dec 2021 16:31:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/" rel="self" type="application/rss+xml" /><item>
+    <title>sAMAccountName spoofing</title>
+    <link>https://www.geekby.site/2021/12/samaccountname-spoofing/</link>
+    <pubDate>Sun, 12 Dec 2021 16:31:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/12/samaccountname-spoofing/</guid>
+    <description><![CDATA[CVE-2021-42278 and CVE-2021-42287]]></description>
+</item><item>
+    <title>Exchange 漏洞利用</title>
+    <link>https://www.geekby.site/2021/10/exchange%E7%9B%B8%E5%85%B3%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</link>
+    <pubDate>Thu, 14 Oct 2021 22:13:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/10/exchange%E7%9B%B8%E5%85%B3%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</guid>
+    <description><![CDATA[Exchange 相关漏洞复现：CVE-2018-8581 &amp; CVE-2020-0688 &amp; CVE-2021-26858]]></description>
+</item><item>
+    <title>NTLM Relay</title>
+    <link>https://www.geekby.site/2021/09/ntlm-relay/</link>
+    <pubDate>Fri, 24 Sep 2021 22:13:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/09/ntlm-relay/</guid>
+    <description><![CDATA[本文翻译自 hackndo 的 NTLM Relay，之前在学习 NTLM Relay 时参考过，现在拿出来 remark 一下]]></description>
+</item><item>
+    <title>权限维持</title>
+    <link>https://www.geekby.site/2020/12/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/</link>
+    <pubDate>Mon, 07 Dec 2020 14:24:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2020/12/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/</guid>
+    <description><![CDATA[权限维持]]></description>
+</item><item>
+    <title>内网隧道穿透</title>
+    <link>https://www.geekby.site/2020/08/%E5%86%85%E7%BD%91%E9%9A%A7%E9%81%93%E7%A9%BF%E9%80%8F/</link>
+    <pubDate>Sat, 15 Aug 2020 14:30:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2020/08/%E5%86%85%E7%BD%91%E9%9A%A7%E9%81%93%E7%A9%BF%E9%80%8F/</guid>
+    <description><![CDATA[内网隧道穿透]]></description>
+</item><item>
+    <title>域渗透之 Windows Access Token 攻击</title>
+    <link>https://www.geekby.site/2020/05/%E5%9F%9F%E6%B8%97%E9%80%8F%E4%B9%8B-windows-access-token-%E6%94%BB%E5%87%BB/</link>
+    <pubDate>Mon, 11 May 2020 14:10:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2020/05/%E5%9F%9F%E6%B8%97%E9%80%8F%E4%B9%8B-windows-access-token-%E6%94%BB%E5%87%BB/</guid>
+    <description><![CDATA[域渗透之 Windows Access Token 攻击]]></description>
+</item><item>
+    <title>NTLM Relay</title>
+    <link>https://www.geekby.site/2020/05/ntlm-%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</link>
+    <pubDate>Sat, 09 May 2020 10:38:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2020/05/ntlm-%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/</guid>
+    <description><![CDATA[NTLM 中间人攻击原理及实验]]></description>
+</item><item>
+    <title>获取 NTLM</title>
+    <link>https://www.geekby.site/2020/05/%E8%8E%B7%E5%8F%96-ntlm/</link>
+    <pubDate>Sat, 09 May 2020 10:38:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2020/05/%E8%8E%B7%E5%8F%96-ntlm/</guid>
+    <description><![CDATA[获取 NTLM]]></description>
+</item><item>
+    <title>DCShadow 攻击</title>
+    <link>https://www.geekby.site/2020/05/dcshadow-%E6%94%BB%E5%87%BB/</link>
+    <pubDate>Thu, 07 May 2020 10:31:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2020/05/dcshadow-%E6%94%BB%E5%87%BB/</guid>
+    <description><![CDATA[DCShadow 攻击]]></description>
+</item><item>
+    <title>DCSync 攻击</title>
+    <link>https://www.geekby.site/2020/05/dcsync-%E6%94%BB%E5%87%BB/</link>
+    <pubDate>Thu, 07 May 2020 09:50:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2020/05/dcsync-%E6%94%BB%E5%87%BB/</guid>
+    <description><![CDATA[DCSync 攻击]]></description>
+</item></channel>
+</rss>

@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Kerberoasting 攻击 - Geekby&#39;s Blog</title><meta name="Description" content="Kerberoasting 攻击原理及实验"><meta property="og:title" content="Kerberoasting 攻击" />
+<meta property="og:description" content="Kerberoasting 攻击原理及实验" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2019/04/kerberoasting-%E6%94%BB%E5%87%BB/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-04-30T14:30:00+08:00" />
+<meta property="article:modified_time" content="2019-04-30T14:30:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Kerberoasting 攻击"/>
+<meta name="twitter:description" content="Kerberoasting 攻击原理及实验"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2019/04/kerberoasting-%E6%94%BB%E5%87%BB/" /><link rel="prev" href="https://www.geekby.site/2019/04/pthpass-the-hash-%E6%94%BB%E5%87%BB/" /><link rel="next" href="https://www.geekby.site/2019/05/%E5%9F%9F%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%9A%84%E7%BB%84%E7%AD%96%E7%95%A5%E5%AE%89%E5%85%A8%E6%B5%8B%E8%AF%95/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Kerberoasting 攻击",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2019\/04\/kerberoasting-%E6%94%BB%E5%87%BB\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "域安全, 内网渗透","wordcount":  279 ,
+        "url": "https:\/\/www.geekby.site\/2019\/04\/kerberoasting-%E6%94%BB%E5%87%BB\/","datePublished": "2019-04-30T14:30:00+08:00","dateModified": "2019-04-30T14:30:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "Kerberoasting 攻击原理及实验"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Kerberoasting 攻击</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"><i class="far fa-folder fa-fw"></i>内网渗透</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-04-30">2019-04-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 279 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-背景">1 背景</a></li>
+    <li><a href="#2-原理">2 原理</a></li>
+    <li><a href="#3-账号类型">3 账号类型</a>
+      <ul>
+        <li><a href="#31-服务账号的口令存在很大的特殊性">3.1 服务账号的口令存在很大的特殊性</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-spn">4 SPN</a>
+      <ul>
+        <li><a href="#41-spn-相关概念">4.1 SPN 相关概念</a></li>
+        <li><a href="#42-查询-spn">4.2 查询 SPN</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-攻击流程">5 攻击流程</a></li>
+    <li><a href="#6-防御">6 防御</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="kerberoasting-攻击">Kerberoasting 攻击</h1>
+<h2 id="1-背景">1 背景</h2>
+<p>Kerberoasting 攻击是 Tim Medin 在 DerbyCon 2014 上发布的一种域口令攻击方法，Tim Medin 同时发布了配套的攻击工具 kerberoast。此后，不少研究人员对 Kerberoasting 进行了改进和扩展，在 GitHub 上开发发布了大量工具，使得 Kerberoasting 逐渐发展成为域攻击的常用方法之一。</p>
+<h2 id="2-原理">2 原理</h2>
+<p>kerberos 协议的认证授权过程，3 次涉及使用不同账户的 NTLM 作为密钥加密数据</p>
+<ul>
+<li>使用域用户的 NTLM 加密认证请求票据</li>
+<li>KDC 使用 Krbtgt 账号的 NTLM 加密认证后的票据 TGT</li>
+<li>KDC 使用运行服务的服务账号的 NTLM 加密授权票据 TGS</li>
+</ul>
+<p>Kerberos 使用公开的对称加密算法</p>
+<p><em>y = f(x, key)</em> 为已知的对称加密算法，如 rc4_hmac_nt 等。</p>
+<p><em>x</em> 为待加密的数据，包含时间戳，其它为固定格式的内容；</p>
+<p><em>key</em> 为加密密钥，即 NTLM; <em>y</em> 为加密后的密数据。</p>
+<p>如果能从 Kerberos 域网络中获取 <em>y</em>，则根据已知算法，使用不同的 <em>f</em> 可推算出不同的 <em>x</em>。</p>
+<p>由于 <em>x</em> 中包含简单易辨的时间戳，所以通过时间戳可快速判定数据解密是否正确，从而判定使用的 key 是否为要寻找的口令。</p>
+<p><em>key</em> 越简单、加密算法 <em>f</em> 强度越低，被破解的概率越大，因此需要寻找具有简单 <em>key</em> 的账号，以及使用较低强度的加密算法 <em>f</em>。</p>
+<h2 id="3-账号类型">3 账号类型</h2>
+<p>在域内主要有<code>主机账号</code>、<code>用户账号</code>、<code>服务账号</code>(SPN 注册在域用户账号下) 等 <code>3</code> 种主要账号类型</p>
+<p>主机账号的口令由系统随机设置，几乎不能破解，而且每 <code>30</code> 天自动变更一次</p>
+<p>用户账号的口令复杂度由策略而定，在复杂度要求较高的域内，破解难度较大。</p>
+<h3 id="31-服务账号的口令存在很大的特殊性">3.1 服务账号的口令存在很大的特殊性</h3>
+<ul>
+<li>
+<p>口令在应用软件安装时往往自动设定，复杂度往往较为简单</p>
+</li>
+<li>
+<p>口令几乎不会更改，因为大部分应用软件没有提供修改服务账号的功能和接口，例如运行 MS SQL Server 服务的 sqlsvc 账号等</p>
+</li>
+</ul>
+<p>服务账号基本满足口令复杂度较低这个条件，可以作为破解的对象</p>
+<p>要想达成破解条件，还需要获取加密后的数据，则需获取服务账号的密数据</p>
+<p>由于 <code>TGS</code> 由服务账号的 <code>NTLM</code> 加密，因此获取访问服务的 <code>TGS</code> 即可获取密数据，即 <code>Kerberos</code> 协议中的第 4 步。</p>
+<p>根据 Kerberos 协议，任何用户均可以向域服务器申请访问某个服务</p>
+<p>服务可以不在线，只要该服务在域中注册了 <code>SPN(Service Principal Name)</code> 即可。</p>
+<h2 id="4-spn">4 SPN</h2>
+<h3 id="41-spn-相关概念">4.1 SPN 相关概念</h3>
+<blockquote>
+<p>SPN 是服务器上所运行服务的唯一标识，每个使用 Kerberos 的服务都需要一个 SPN</p>
+</blockquote>
+<p>SPN 分为两种，一种注册在 AD 上机器帐户(Computers)下，另一种注册在域用户帐户(Users)下</p>
+<p>当一个服务的权限为 <code>Local System</code> 或 <code>Network Service</code>，则 SPN 注册在机器帐户(Computers)下</p>
+<p>当一个服务的权限为一个域用户，则 SPN 注册在域用户帐户(Users)下</p>
+<blockquote>
+<p>SPN 的格式为 <code>serviceclass/host:port/servicename</code></p>
+</blockquote>
+<ul>
+<li>
+<p>其中 serviceclass 表示服务的种类，例如 www 表示web服务;</p>
+</li>
+<li>
+<p>host 尽量用 FQDN 表示;</p>
+</li>
+<li>
+<p>端口如果是知名端口，可以省略。</p>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105628.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105628.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105628.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105628.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105628.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105628.png-water_print" /></p>
+<h3 id="42-查询-spn">4.2 查询 SPN</h3>
+<p>SPN 存在于账号的属性中，因此可以通过查询所有账号的属性，遍历域内所有 SPN 服务。因为主机账号的口令几乎不能破解，所以只查询用户账号的 SPN。</p>
+<p>系统提供了 PowerShell 模块供查询，PowerViewer 对模块进行了封装，提供 <code>Get-DomainUser -SPN</code> 命令，可遍历域内所有的用户账号的 SPN。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105653.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105653.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105653.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105653.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105653.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105653.png-water_print" /></p>
+<ul>
+<li>Win7 和 Windows Server 2008 自带的工具
+<ul>
+<li><code>setspn.exe -q */*</code></li>
+</ul>
+</li>
+</ul>
+<p>在一些域中，当一些服务不再运行或者停止服务后，这些服务账号可能仍然遗留在域中，由于服务的运行与否不影响我们获取 <code>TGS</code>，因此这些不存在的 <code>SPN</code> 仍然适用于 <code>Kerberoasting</code>。</p>
+<p>服务账号中有些权限较高，例如有些特殊的服务需要具备域管理员权限的服务账号才能运行正常，因此可以在查询 SPN 时加以标记和筛选，作为重点攻击的对象。方法是在使用 <code>Get-DomainUser -SPN</code> 命令时，添加 AdminCount 参数，表示具备高权限。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105711.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105711.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105711.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105711.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105711.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501105711.png-water_print" /></p>
+<h2 id="5-攻击流程">5 攻击流程</h2>
+<p>获取域内的服务账号与所运行的服务进行对应关系</p>
+<p>需要获取访问这些服务的 TGS，从而获取由服务账号 NTLM 加密的加密数据</p>
+<p>Mimikatz 提供了该功能，通过 Kerberos 模块的 <code>ask</code> 命令可以获取。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501110022.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501110022.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501110022.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501110022.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501110022.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501110022.png-water_print" /></p>
+<p>使用 <code>Mimikatz</code> 每次只能申请获取一个 <code>TGS</code>，<code>impacket</code> 工具包提供了批量获取的方法，可一次获取域内所有 <code>SPN</code> 的 <code>TGS</code>，供离线批量破解。</p>
+<p>微软为了解决系统新旧版本兼容性问题，每个 Windows 系统会支持多种加密算法，例如 <code>AES、DES、RC4、MD5</code> 等。在 <code>Windows 2003、Windows 2000</code> 系统中，主要采用 <code>RC4、MD5、HMAC_MD5</code> 等算法，这些算法相对比较容易破解。所以在选择破解重点时尽量选取运行在这些系统上的服务</p>
+<p>有多种方式迫使系统选择使用强度较低的加密算法。现在比较容易破解的算法是 <code>RC4_HMAC_NT</code> 算法，在获取 <code>TGS</code> 时，可以诱使域服务器采用该算法进行加密。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501110712.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501110712.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501110712.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501110712.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501110712.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200501110712.png-water_print" /></p>
+<p>Kerberoasting 攻击的所有条件</p>
+<ul>
+<li>密数据</li>
+<li>算法</li>
+<li>口令字典库</li>
+</ul>
+<p>使用 Tim Medin 的 kerberoast 工具破解获取口令，当然还有算法更快的 HashCat 工具。下载解压 kerberoast 工具后，使用 <code>tgsrepcrack.py wordlist.txt tgs.kirbi</code> 进行破解，其中 wordlist.txt 是字典文件，<code>tgs.kirbi</code> 是前面获取的 <code>TGS</code>。破解的概率和时间依赖于口令复杂度、字典以及机器的性能。</p>
+<p><code>./tgsrepcrack.py wordlist.txt test.kirbi</code></p>
+<h2 id="6-防御">6 防御</h2>
+<p>Kerberoasting 攻击的主要前提是口令复杂度较低、加密算法强度较弱
+对抗 Kerberoasting 攻击也需从这 2 方面开展</p>
+<ul>
+<li>提高服务账号的口令复杂度;</li>
+<li>尽量将域内的服务器系统升级至少至 windows2008 系统，应用 AES256 高难度的加密算法</li>
+</ul>
+<p>检测 Kerberoasting 攻击比较难，因为所有在线操作都是合法正常的操作，不过仍然有迹可循。例如批量获取 TGS 是一个特征，低强度的加密算法是一个特征，可以从这两方面着手进行检测是比较有效的检测思路。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2019-04-30</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2019/04/kerberoasting-%E6%94%BB%E5%87%BB/" data-title="Kerberoasting 攻击"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2019/04/kerberoasting-%E6%94%BB%E5%87%BB/" data-title="Kerberoasting 攻击"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2019/04/kerberoasting-%E6%94%BB%E5%87%BB/" data-title="Kerberoasting 攻击"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%9F%9F%E5%AE%89%E5%85%A8/">域安全</a>,&nbsp;<a href="/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2019/04/pthpass-the-hash-%E6%94%BB%E5%87%BB/" class="prev" rel="prev" title="PTH(Pass The Hash) 攻击分析"><i class="fas fa-angle-left fa-fw"></i>PTH(Pass The Hash) 攻击分析</a>
+            <a href="/2019/05/%E5%9F%9F%E7%8E%AF%E5%A2%83%E4%B8%AD%E7%9A%84%E7%BB%84%E7%AD%96%E7%95%A5%E5%AE%89%E5%85%A8%E6%B5%8B%E8%AF%95/" class="next" rel="next" title="域环境中的组策略安全测试">域环境中的组策略安全测试<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

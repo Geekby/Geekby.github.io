@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>工控安全渗透 - Geekby&#39;s Blog</title><meta name="Description" content="工控安全渗透相关"><meta property="og:title" content="工控安全渗透" />
+<meta property="og:description" content="工控安全渗透相关" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2019/07/%E5%B7%A5%E6%8E%A7%E5%AE%89%E5%85%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-07-28T09:39:00+08:00" />
+<meta property="article:modified_time" content="2019-07-28T09:39:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="工控安全渗透"/>
+<meta name="twitter:description" content="工控安全渗透相关"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2019/07/%E5%B7%A5%E6%8E%A7%E5%AE%89%E5%85%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" /><link rel="prev" href="https://www.geekby.site/2019/07/%E5%AE%9A%E4%BD%8D%E5%9F%9F%E7%AE%A1%E7%90%86%E5%91%98/" /><link rel="next" href="https://www.geekby.site/2019/07/myjsrat%E7%BB%93%E5%90%88chm%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "工控安全渗透",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2019\/07\/%E5%B7%A5%E6%8E%A7%E5%AE%89%E5%85%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试, 工控安全渗透","wordcount":  165 ,
+        "url": "https:\/\/www.geekby.site\/2019\/07\/%E5%B7%A5%E6%8E%A7%E5%AE%89%E5%85%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95\/","datePublished": "2019-07-28T09:39:00+08:00","dateModified": "2019-07-28T09:39:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "工控安全渗透相关"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">工控安全渗透</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-07-28">2019-07-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 165 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#工业控制系统的结构和场景">工业控制系统的结构和场景</a>
+      <ul>
+        <li><a href="#工业控制系统场景啤酒厂">工业控制系统场景——啤酒厂</a></li>
+        <li><a href="#工业控制系统结构">工业控制系统结构</a></li>
+        <li><a href="#工业控制系统应用场景">工业控制系统应用场景</a></li>
+      </ul>
+    </li>
+    <li><a href="#工业控制系统厂商和产品介绍">工业控制系统厂商和产品介绍</a>
+      <ul>
+        <li><a href="#siemens控制系统家族">Siemens——控制系统家族</a></li>
+        <li><a href="#siemens组态家族">Siemens——组态家族</a></li>
+        <li><a href="#siemens通讯协议及端口">Siemens——通讯协议及端口</a></li>
+        <li><a href="#rockwell-automation控制系统家族">Rockwell Automation——控制系统家族</a></li>
+        <li><a href="#rockwell-automation组态家族">Rockwell Automation——组态家族</a></li>
+        <li><a href="#rockwell-automation通讯协议及端口">Rockwell Automation——通讯协议及端口</a></li>
+      </ul>
+    </li>
+    <li><a href="#工业控制系统脆弱性分析">工业控制系统脆弱性分析</a>
+      <ul>
+        <li><a href="#工业控制协议漏洞">工业控制协议漏洞</a></li>
+        <li><a href="#plc-代码逻辑漏洞">PLC 代码逻辑漏洞</a></li>
+        <li><a href="#工业以太网链路漏洞">工业以太网链路漏洞</a></li>
+        <li><a href="#主机安全漏洞">主机安全漏洞</a></li>
+        <li><a href="#组态软件漏洞">组态软件漏洞</a></li>
+        <li><a href="#物理安全漏洞">物理安全漏洞</a></li>
+      </ul>
+    </li>
+    <li><a href="#工业控制系统渗透工具利用">工业控制系统渗透工具利用</a>
+      <ul>
+        <li><a href="#demo-场景">Demo 场景</a></li>
+        <li><a href="#nmap-指纹扫描">nmap 指纹扫描</a></li>
+        <li><a href="#yersinia-二层网络的攻击">Yersinia 二层网络的攻击</a></li>
+        <li><a href="#snap7-协议层的攻击">Snap7 协议层的攻击</a></li>
+        <li><a href="#msf-主机攻击和后渗透">MSF 主机攻击和后渗透</a></li>
+        <li><a href="#isf-工控渗透工具">ISF 工控渗透工具</a></li>
+      </ul>
+    </li>
+    <li><a href="#工业控制系统安全防御">工业控制系统安全防御</a>
+      <ul>
+        <li><a href="#区域边界">区域边界</a></li>
+        <li><a href="#网络安全">网络安全</a></li>
+        <li><a href="#主机安全">主机安全</a></li>
+        <li><a href="#控制器安全">控制器安全</a></li>
+        <li><a href="#物理安全">物理安全</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="工控安全渗透">工控安全渗透</h1>
+<h2 id="工业控制系统的结构和场景">工业控制系统的结构和场景</h2>
+<h3 id="工业控制系统场景啤酒厂">工业控制系统场景——啤酒厂</h3>
+<ul>
+<li>啤酒工厂布局</li>
+<li>监控总控室</li>
+<li>生产线设备</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093119.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093119.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093119.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093119.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093119.png-water_print"
+        title="概况" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093135.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093135.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093135.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093135.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093135.png-water_print"
+        title="主控室" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093148.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093148.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093148.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093148.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093148.png-water_print"
+        title="现场设备" /></p>
+<h3 id="工业控制系统结构">工业控制系统结构</h3>
+<ul>
+<li>传感器和执行器</li>
+<li>可编程控制器(PLC)</li>
+<li>工业网络及现场总线</li>
+<li>工业计算机及工业组态软件</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093158.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093158.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093158.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093158.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093158.png-water_print"
+        title="结构" /></p>
+<h3 id="工业控制系统应用场景">工业控制系统应用场景</h3>
+<ul>
+<li>过程自动化控制系统
+<ul>
+<li>应用在流程行业，比如：石油，化工，医药。冶金，水处理</li>
+<li>对应的控制系统：DCS(集散控制系统)居多，大型 PLC 为主，单台控制器 IO <code>点数</code>(传感器与执行器的数量)多数在<code>2000 点以上</code>，全冗余架构</li>
+</ul>
+</li>
+<li>工厂自动化控制系统
+<ul>
+<li>应用在离散行业，比如：汽车，港口，烟草</li>
+<li>对应控制系统：主要以 PLC 为主，采用和设备捆绑为主，单台控制IO点数<code>少于2000点</code>，单机为主</li>
+</ul>
+</li>
+</ul>
+<h2 id="工业控制系统厂商和产品介绍">工业控制系统厂商和产品介绍</h2>
+<h3 id="siemens控制系统家族">Siemens——控制系统家族</h3>
+<ul>
+<li>s7-1500 控制系统</li>
+<li>S7-1200 控制系统</li>
+<li>S7-300/400 控制系统</li>
+<li>S7-WINAC 控制系统(PC 模拟 PLC，多用于高校研究)</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093215.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093215.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093215.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093215.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093215.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093215.png-water_print" /></p>
+<h3 id="siemens组态家族">Siemens——组态家族</h3>
+<ul>
+<li>TIA 博图/Step7(编程)</li>
+<li>WINCC 组态监控软件(监控)</li>
+<li>PLCSIM 模拟仿真软件(前期模拟仿真)</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093240.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093240.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093240.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093240.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093240.png-water_print"
+        title="TIA 博图" />
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093253.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093253.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093253.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093253.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093253.png-water_print"
+        title="WINCC 组态监控软件" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093308.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093308.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093308.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093308.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093308.png-water_print"
+        title="PLCSIM" /></p>
+<h3 id="siemens通讯协议及端口">Siemens——通讯协议及端口</h3>
+<ul>
+<li>S7 Comm协议(私有协议)</li>
+<li>通讯端口(102)</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093331.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093331.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093331.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093331.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093331.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093331.png-water_print" /></p>
+<h3 id="rockwell-automation控制系统家族">Rockwell Automation——控制系统家族</h3>
+<ul>
+<li>Controllogix 控制系统</li>
+<li>Compactlogix 控制系统</li>
+<li>MicroLogix 控制系统</li>
+<li>Softlogix 控制系统</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093344.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093344.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093344.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093344.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093344.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093344.png-water_print" /></p>
+<h3 id="rockwell-automation组态家族">Rockwell Automation——组态家族</h3>
+<ul>
+<li>Studio5000/RSLogix 5000组态软件</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093355.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093355.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093355.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093355.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093355.png-water_print"
+        title="RSLogix" /></p>
+<ul>
+<li>FactoryTalk SE 组态监控软件</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093407.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093407.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093407.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093407.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093407.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093407.png-water_print" /></p>
+<ul>
+<li>Emulation 模拟仿真软件</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093416.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093416.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093416.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093416.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093416.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093416.png-water_print" /></p>
+<h3 id="rockwell-automation通讯协议及端口">Rockwell Automation——通讯协议及端口</h3>
+<ul>
+<li>Ethernet/IP(公开协议)</li>
+<li>通讯端口 44818/2222</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093426.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093426.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093426.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093426.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093426.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093426.png-water_print" /></p>
+<h2 id="工业控制系统脆弱性分析">工业控制系统脆弱性分析</h2>
+<h3 id="工业控制协议漏洞">工业控制协议漏洞</h3>
+<ul>
+<li>所使用的工业控制协议缺乏身份认证</li>
+<li>工业控制系统所使用的协议缺乏授权机制</li>
+<li>所使用的工业控制协议缺乏加密保护</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093438.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093438.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093438.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093438.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093438.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093438.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093448.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093448.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093448.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093448.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093448.png-water_print"
+        title="S7-300请求通信数据包" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093505.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093505.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093505.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093505.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093505.png-water_print"
+        title="确认ACK" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093515.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093515.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093515.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093515.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093515.png-water_print"
+        title="数据通信" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093525.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093525.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093525.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093525.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093525.png-water_print"
+        title="确认" /></p>
+<h3 id="plc-代码逻辑漏洞">PLC 代码逻辑漏洞</h3>
+<ul>
+<li>计算逻辑漏洞</li>
+<li>看门口超时漏洞</li>
+<li>缓冲区溢出漏洞</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093541.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093541.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093541.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093541.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093541.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093541.png-water_print" /></p>
+<h3 id="工业以太网链路漏洞">工业以太网链路漏洞</h3>
+<ul>
+<li>MAC泛洪攻击</li>
+<li>ARP溢出/中间人攻击</li>
+<li>环网beacon协议攻击</li>
+<li>VLAN跳转攻击</li>
+<li>交换机WEB漏洞攻击</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093617.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093617.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093617.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093617.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093617.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093617.png-water_print" /></p>
+<h3 id="主机安全漏洞">主机安全漏洞</h3>
+<ul>
+<li>防火墙关闭</li>
+<li>没有杀软防护</li>
+<li>缺乏USB准入</li>
+<li>Windows本身漏洞
+<ul>
+<li>SMB v1.0 Port 445</li>
+<li>RDP Port 3389</li>
+<li>AD 域攻击</li>
+<li>DNS 污染攻击</li>
+</ul>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093626.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093626.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093626.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093626.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093626.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093626.png-water_print" /></p>
+<h3 id="组态软件漏洞">组态软件漏洞</h3>
+<ul>
+<li>DoS 拒绝服务攻击</li>
+<li>缓冲区溢出漏洞</li>
+<li>COM 服务组件未授权访问漏洞</li>
+<li>SQL 数据库注入漏洞</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093637.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093637.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093637.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093637.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093637.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093637.png-water_print" /></p>
+<h3 id="物理安全漏洞">物理安全漏洞</h3>
+<ul>
+<li>设备所在地无防护</li>
+<li>机房机柜未上锁</li>
+<li>网络端口未加固</li>
+<li>控制器钥匙未拔出</li>
+<li>供电电源为单路</li>
+<li>接地系统不完善</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093645.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093645.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093645.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093645.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093645.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093645.png-water_print" /></p>
+<h2 id="工业控制系统渗透工具利用">工业控制系统渗透工具利用</h2>
+<h3 id="demo-场景">Demo 场景</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093655.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093655.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093655.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093655.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093655.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190728093655.png-water_print" /></p>
+<h3 id="nmap-指纹扫描">nmap 指纹扫描</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">nmap -p port --script scada protocol ip address
+</code></pre></td></tr></table>
+</div>
+</div><p>参考：<a href="https://github.com/jianshting/NMAP-NSE-SCADA" target="_blank" rel="noopener noreffer">https://github.com/jianshting/NMAP-NSE-SCADA</a></p>
+<h3 id="yersinia-二层网络的攻击">Yersinia 二层网络的攻击</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Yersinia -G
+</code></pre></td></tr></table>
+</div>
+</div><p>参考：<a href="https://github.com/tomcat/yersinia" target="_blank" rel="noopener noreffer">https://github.com/tomcat/yersinia</a></p>
+<h3 id="snap7-协议层的攻击">Snap7 协议层的攻击</h3>
+<ul>
+<li>s7 Client.exe</li>
+</ul>
+<h3 id="msf-主机攻击和后渗透">MSF 主机攻击和后渗透</h3>
+<ul>
+<li>对PC主机的渗透和控制(和传统内网渗透一样)</li>
+</ul>
+<h3 id="isf-工控渗透工具">ISF 工控渗透工具</h3>
+<ul>
+<li>开源的工控渗透框架</li>
+</ul>
+<p>参考：<a href="https://github.com/dark-lbp/isf" target="_blank" rel="noopener noreffer">https://github.com/dark-lbp/isf</a></p>
+<h2 id="工业控制系统安全防御">工业控制系统安全防御</h2>
+<h3 id="区域边界">区域边界</h3>
+<p>工业防火墙、区域防火墙、网闸</p>
+<h3 id="网络安全">网络安全</h3>
+<p>交换机空余端口关闭、native VLAN、禁用 CDP 或：LLDP、握手包报文加密</p>
+<h3 id="主机安全">主机安全</h3>
+<p>杀软、防火墙、基线安全、U口准入、应用白名单</p>
+<h3 id="控制器安全">控制器安全</h3>
+<p>协议加密、注入控制、身份认证</p>
+<h3 id="物理安全">物理安全</h3>
+<p>接地安全、双路供电、电柜上锁</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2019-07-28</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2019/07/%E5%B7%A5%E6%8E%A7%E5%AE%89%E5%85%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" data-title="工控安全渗透"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2019/07/%E5%B7%A5%E6%8E%A7%E5%AE%89%E5%85%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" data-title="工控安全渗透"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2019/07/%E5%B7%A5%E6%8E%A7%E5%AE%89%E5%85%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" data-title="工控安全渗透"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a>,&nbsp;<a href="/tags/%E5%B7%A5%E6%8E%A7%E5%AE%89%E5%85%A8%E6%B8%97%E9%80%8F/">工控安全渗透</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2019/07/%E5%AE%9A%E4%BD%8D%E5%9F%9F%E7%AE%A1%E7%90%86%E5%91%98/" class="prev" rel="prev" title="定位域管理员"><i class="fas fa-angle-left fa-fw"></i>定位域管理员</a>
+            <a href="/2019/07/myjsrat%E7%BB%93%E5%90%88chm%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" class="next" rel="next" title="MyJSRat结合CHM命令执行">MyJSRat结合CHM命令执行<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

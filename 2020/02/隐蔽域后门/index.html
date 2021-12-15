@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>隐蔽域后门 - Geekby&#39;s Blog</title><meta name="Description" content="隐蔽域后门原理及复现"><meta property="og:title" content="隐蔽域后门" />
+<meta property="og:description" content="隐蔽域后门原理及复现" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2020/02/%E9%9A%90%E8%94%BD%E5%9F%9F%E5%90%8E%E9%97%A8/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-02-07T14:24:00+08:00" />
+<meta property="article:modified_time" content="2020-02-07T14:24:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="隐蔽域后门"/>
+<meta name="twitter:description" content="隐蔽域后门原理及复现"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2020/02/%E9%9A%90%E8%94%BD%E5%9F%9F%E5%90%8E%E9%97%A8/" /><link rel="prev" href="https://www.geekby.site/2020/01/apache-solr%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" /><link rel="next" href="https://www.geekby.site/2020/02/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%B5%81%E7%A8%8B/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "隐蔽域后门",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2020\/02\/%E9%9A%90%E8%94%BD%E5%9F%9F%E5%90%8E%E9%97%A8\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "域安全, 内网渗透, 域后门","wordcount":  447 ,
+        "url": "https:\/\/www.geekby.site\/2020\/02\/%E9%9A%90%E8%94%BD%E5%9F%9F%E5%90%8E%E9%97%A8\/","datePublished": "2020-02-07T14:24:00+08:00","dateModified": "2020-02-07T14:24:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "隐蔽域后门原理及复现"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">隐蔽域后门</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"><i class="far fa-folder fa-fw"></i>内网渗透</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-02-07">2020-02-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 447 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#常见后门方式">常见后门方式</a>
+      <ul>
+        <li><a href="#隐藏用户">隐藏用户</a></li>
+        <li><a href="#隐蔽程序">隐蔽程序</a>
+          <ul>
+            <li><a href="#ntgodmode">NtGodMode</a></li>
+            <li><a href="#命名管道">命名管道</a></li>
+          </ul>
+        </li>
+        <li><a href="#粘滞键">粘滞键</a></li>
+      </ul>
+    </li>
+    <li><a href="#域内隐蔽后门">域内隐蔽后门</a>
+      <ul>
+        <li><a href="#目录-acl">目录 ACL</a></li>
+        <li><a href="#白银票据">白银票据</a>
+          <ul>
+            <li><a href="#构造白银票据">构造白银票据</a></li>
+            <li><a href="#创建计划任务">创建计划任务</a></li>
+            <li><a href="#修改主机账号的口令策略制作后门">修改主机账号的口令策略制作后门</a></li>
+            <li><a href="#修改主机账号的委派设置权限制作后门">修改主机账号的委派设置权限制作后门</a></li>
+            <li><a href="#应对此后门的安全策略">应对此后门的安全策略</a></li>
+          </ul>
+        </li>
+        <li><a href="#laps">LAPS</a>
+          <ul>
+            <li><a href="#laps-功能">LAPS 功能</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="隐蔽域后门">隐蔽域后门</h1>
+<ul>
+<li>隐藏用户</li>
+<li>隐蔽程序</li>
+<li>粘滞键</li>
+</ul>
+<h2 id="常见后门方式">常见后门方式</h2>
+<h3 id="隐藏用户">隐藏用户</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net user yincang$ 123456qaq /add
+net localgroup administrators yincang$ /add
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205185519.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205185519.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205185519.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205185519.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205185519.png-water_print"
+        title="net user 隐藏用户无显示" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205185349.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205185349.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205185349.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205185349.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205185349.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205185349.png-water_print" /></p>
+<h3 id="隐蔽程序">隐蔽程序</h3>
+<h4 id="ntgodmode">NtGodMode</h4>
+<p><code>NtGodMode.exe</code> 上帝之门，不管管理员如何更改口令密码，均能以任意口令登录系统</p>
+<p><a href="https://blog.csdn.net/oceanark/article/details/51902042" target="_blank" rel="noopener noreffer">https://blog.csdn.net/oceanark/article/details/51902042</a></p>
+<p><a href="https://www.jb51.net/article/14702.htm" target="_blank" rel="noopener noreffer">https://www.jb51.net/article/14702.htm</a></p>
+<p><a href="https://www.52pojie.cn/forum.php?mod=viewthread&amp;tid=19817&amp;page=1" target="_blank" rel="noopener noreffer">https://www.52pojie.cn/forum.php?mod=viewthread&amp;tid=19817&amp;page=1</a></p>
+<h4 id="命名管道">命名管道</h4>
+<p>命名管道，<code>\Server\PipeName\Path</code></p>
+<p>IP + Port 是常用的远程连接方式命名管道不需要特定的端口，混杂在135端口中。</p>
+<p>实现不开端口的情况下登录</p>
+<h3 id="粘滞键">粘滞键</h3>
+<p>五次连续按下 <code>shift</code> 键，会弹出输入法选择器。可以将 <code>cmd</code> 替换输入法，获取 <code>Shell</code></p>
+<h2 id="域内隐蔽后门">域内隐蔽后门</h2>
+<h3 id="目录-acl">目录 ACL</h3>
+<p>一种基于域内对象 <code>ACL(Access Control Link</code>)访问控制链的深度隐藏后门。</p>
+<p>域网络中，域的组策略和脚本存放在域服务器的 <code>SYSVOL</code> 目录，所有域用户均可自由访问，但只有部分高权限用户才有修改权限。域内账号在登录域时，会查询、 执行(如果有变化)属于自己的域策略、执行脚本。</p>
+<p>一定程度上说，控制了 <code>SYSVOL</code> 目录，就有很大概率控制域网络。</p>
+<p>如果域中部署了登录日志审计软件，则会严格审计域内高权限账号的登录、使用情况。所以使用高权限用户控制域网络的方式，隐蔽性并不高</p>
+<p>一般来说，域策略会强制周期性修改高权限用户的密码，但是对低权限用户来说不一定有这个强制性要求，而且域中往往有很多用户几乎不怎么登录、使用。</p>
+<p>如果低权限用户具备 <code>SYSVOL</code> 目录的修改权限，登录域时，因为权限不高，不会被审计软件发现。现在的防护、监控类软件还没有过多关注目录的ACL，因此这种方式是一种很实用的隐蔽后门方式。</p>
+<p>使用普通用户 <code>eviluser</code> 登录域客户端 <code>Windows 7</code>。通过net use连接域服务器，可查看访问服务器共享的目录，但是没有写权限。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191517.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191517.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191517.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191517.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191517.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191517.png-water_print" /></p>
+<p>通过资源管理工具给 <code>Policies</code> 目录添加了写权限(也可以是完全控制权)，并继承给所有子目录和文件</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191619.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191619.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191619.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191619.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191619.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191619.png-water_print" /></p>
+<p><code>Policies</code> 目录的安全选项卡，<code>eviluser</code> 单独作为权限用户。正常情况下，普通用户都只有 <code>Authenticated users</code> 用户组权限。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191815.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191815.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191815.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191815.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191815.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205191815.png-water_print" /></p>
+<p>服务器中目录的 <code>ACL</code> 权限设置成功后，在原来的 <code>IPC</code> 连接中，普通域用户 <code>eviluser</code> 成功地往 <code>Policies</code> 目录写入 了数据，证明具备了对该目录的写入权限。从而可以修改里面的策略和脚本，一种隐蔽的后门。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205192019.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205192019.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205192019.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205192019.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205192019.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200205192019.png-water_print" /></p>
+<p>这种后门方式，只是演示了 <code>ACL</code> 后门的一种具体形式，因为域中的对象太多，可以操控的 <code>ACL</code>对象也很多。可以根据自己的需要，灵活选择目标的ACL作为目标进行修改，埋藏后门。</p>
+<p>当然关于 <code>ACL</code> 的检测，微软也推出了专门的工具，<code>ACL Scanner</code> ，如果周期性地是用该工具进行检测，还是能检测到这种类型的后门。</p>
+<h3 id="白银票据">白银票据</h3>
+<p>在 <code>windows</code> 系统中，许多服务以主机账号运行，即许多 <code>ServiceAccount</code> 账号为本机的主机账号，格式为 <code>ComputerName$</code>。</p>
+<p>下表是常见的以主机账号运行的服务。右边一栏中有些有多个服务，例如 <code>WMI</code> 服务包括 <code>HOST</code>、<code>RPCSS</code> 这 2 个服务，表示访问 <code>WMI</code> 服务同时需要 2 个 <code>TGS</code> 票据</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">服务名称</th>
+<th style="text-align:center">同时需要的服务</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">WMI</td>
+<td style="text-align:center">HOST、RPCSS</td>
+</tr>
+<tr>
+<td style="text-align:center">PowerShell Remoting</td>
+<td style="text-align:center">HOST、HTTP</td>
+</tr>
+<tr>
+<td style="text-align:center">WinRM</td>
+<td style="text-align:center">HOST、HTTP</td>
+</tr>
+<tr>
+<td style="text-align:center">Scheduled Tasks</td>
+<td style="text-align:center">HOST</td>
+</tr>
+<tr>
+<td style="text-align:center">Windows File Share</td>
+<td style="text-align:center">CIFS</td>
+</tr>
+<tr>
+<td style="text-align:center">LDAP</td>
+<td style="text-align:center">LDAP</td>
+</tr>
+<tr>
+<td style="text-align:center">Windows Remote Server</td>
+<td style="text-align:center">RPCSS、LDAP、CIFS</td>
+</tr>
+</tbody>
+</table>
+<p>已知域服务器主机账号的口令散列值，使用 <code>Mimikatz</code> 的白银票据功能，伪造访问 <code>HOST</code> 服务的<code>TGS</code> ，以域管理员权限运行域服务器的 <code>SCHTASKS</code> 命令，远程创建、查看、删除系统任务</p>
+<h4 id="构造白银票据">构造白银票据</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">kerberos::golden /admin:administrator@testlab.com /domain:testlab.com /sid:S-1-5-21-2390976136-1701108887-179272945 /target:TESTLABDC02.testlab.com /rc4:36788836f262b9409f102baa22b7a6f3 /service:host /ptt
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206110609.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206110609.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206110609.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206110609.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206110609.png-water_print"
+        title="构造HOST白银票据" /></p>
+<h4 id="创建计划任务">创建计划任务</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206110832.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206110832.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206110832.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206110832.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206110832.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206110832.png-water_print" /></p>
+<h4 id="修改主机账号的口令策略制作后门">修改主机账号的口令策略制作后门</h4>
+<ol>
+<li>在主机的注册表中修改策略，具体位置为<code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\services\Netlogon\Parameters</code>，键值为 <code>DisablePasswordChange</code>，设置为 1，即表示禁止修改账号口令;</li>
+<li>在组策略中修改默认的 30 天，修改位置为 &ldquo;<code>Computer Configuration\Windows Settings\Security Settings\Local Policies\Security Options\Domain member: Maximum machine account password age</code>&quot;，设置为 0 时，表示无限长;</li>
+</ol>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206112843.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206112843.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206112843.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206112843.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206112843.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206112843.png-water_print" /></p>
+<ol start="3">
+<li>组策略直接禁止修改主机账号口令，用来支持 <code>VDI(virtual desktops Infrastructure)</code> 等类型的使用，具体位置为 &ldquo;<code>Computer Configuration\Windows Settings\Security Settings\Local Policies\Security Options\Domain member: Disable machine account password changes</code>&rdquo;</li>
+</ol>
+<p>方案 1 较为安全。由于组策略存在快照，因此方案 2、3 风险较大</p>
+<h4 id="修改主机账号的委派设置权限制作后门">修改主机账号的委派设置权限制作后门</h4>
+<p>域委派攻击中，一个主机账号被设置了约束性委派，则可以使用主机账号的口令散列值和约束性委派获取域管理员权限。前提条件为：主机账号的口令散列值和委派(约束性和非约束性均可)</p>
+<p>如果我们在域内有多个稳定的控制点，且获取了当前系统的 <code>SYSTEM</code> 权限，则随时可获取当前主机的主机账号 (演示中的账号为 <code>win7x86cn$</code> )口令散列值，满足了第 1 个条件;</p>
+<p>如果将该 <code>win7x86cn$</code>账号的 <code>SeEnableDelegationPrivilege</code> 权限赋予本机的低权限登录域用户 (eviluser) ，则通过 <code>eviluser</code> 用户随时可更改 <code>win7x86cn$</code> 账号的委派设置，从而可满足第 2 个条件</p>
+<p>并不是拥有一个对象的 <code>GenericAll</code> 权限，就可以修改对象的 <code>msDS-AllowedToDelegateTo</code> 属性，攻击者只有拥有对象的 <code>SeEnableDelegationPrivilege</code> 权限时，才能修改</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206140534.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206140534.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206140534.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206140534.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206140534.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206140534.png-water_print" /></p>
+<p>默认情况下，<code>SeEnableDelegationPrivilege</code> 权限只有域控制器才有，因此我们需要检测应用到这些域控制器上的哪些组策略改变了用户的 <code>SeEnableDelegationPrivilege</code> 权限配置</p>
+<p>一般情况下，都是默认组策略“Default Domain Controllers Policy”</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206140922.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206140922.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206140922.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206140922.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206140922.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206140922.png-water_print" /></p>
+<p><code>SeEnableDelegationPrivilege</code> 权限很特殊，设置方法为修改 <code>GPO</code> 策略文件，位置为域服务器中<code>\SYSVOL\sysvol\testlab.com\Policies\{6AC1786C-016F-11D2-945F-00C04fB984F9}\MACHINE\Microsoft\Windows NT\SecEdit\GptTmpl.inf</code>文件</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141126.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141126.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141126.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141126.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141126.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141126.png-water_print" /></p>
+<p>添加 <code>eviluser</code> 具备 <code>SeEnableDelegationPrivilege</code> 权限，则 <code>eviluser</code> 可修改域内所有用户的委派设置。下图是测试在 <code>eviluser</code> 的登录会话中修改 <code>win7x86cn$</code> 账号的委派设置</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141250.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141250.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141250.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141250.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141250.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141250.png-water_print" /></p>
+<p>查看了 <code>win7x86cn</code> 这个账号的委派设置情况，标红的 <code>useraccountcontrol</code> 表示没有设置委派，中间使用 <code>Set-DomainObject</code> 进行委派设置，16777216 表示设置 <code>TRUS TED_TO_AUTH_FOR_DELEGATION</code>，通过<code>Get-DomainObject</code> 查询设置后的结果，有了 <code>msds-allowedtodelego</code> 选项，且 <code>useraccountcontrol</code> 发生了变更。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141704.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141704.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141704.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141704.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141704.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141704.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141751.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141751.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141751.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141751.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141751.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141751.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141818.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141818.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141818.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141818.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141818.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141818.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141841.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141841.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141841.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141841.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141841.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206141841.png-water_print" /></p>
+<h4 id="应对此后门的安全策略">应对此后门的安全策略</h4>
+<ol>
+<li>
+<p>通过域的组策略强制设置主机账号的最长有效期为 30 天;</p>
+</li>
+<li>
+<p>保护 <code>{6AC1786C-016F-11D2-945F-00C04fB984F9}\MACHINE\Microsoft\Windows NT\SecEdit\GptTmpl.inf</code>文件、即关键组策略的完整性;</p>
+</li>
+<li>
+<p>高权限的用户，设置不能被委派</p>
+</li>
+<li>
+<p>主机账号需设置委派时，只能设置为约束性委派</p>
+</li>
+</ol>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206142027.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206142027.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206142027.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206142027.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206142027.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200206142027.png-water_print" /></p>
+<h3 id="laps">LAPS</h3>
+<p>域网络中，主机的本地管理员很少被使用，但是给网络安全却带来了很大的风险。攻击者如果获取了本地管 理员的 NTLM，不必破解，即可通过 PTH 攻击域内其他主机。为了解决这个问题，微软在2014 年发布了 KB2871997 和 KB2928120 两个补丁，PTH 方式失效。</p>
+<p>如果域内主机的本地管理员的口令比较简单，则可能被破解，口令仍然可被用于口令猜解或爆破的字典库、IPC 或远程桌面登录等。</p>
+<p>微软在 2015 年发布了一个本地管理员口令解决方案 <code>LAPS(Local Administrator Password Solution)</code>，用来集中化管理域内主机本地管理员的口令。通过 <code>LAPS</code> 制作策略，强制管理域内主机的本地管理员口令，防止恶意攻击者利用本地管理员口令进行域内横向攻击。该方案包含客户端和服务器，分别安装于域内主机和域服务器</p>
+<h4 id="laps-功能">LAPS 功能</h4>
+<ul>
+<li>根据策略搜集本地管理员账号<code>(最多管理一个本地管理员账号)</code>，设置符合密码策略的随机口令</li>
+<li>将新的口令上传到域服务器，并储存在域内对应的主机账号的属性中</li>
+<li>将新的过期日期更新到主机账号属性</li>
+<li>检查本地管理员账号的口令是否过期，如果口令过期，会产生新的随机口令，并更新 AD 中主机账号的相关属性。</li>
+</ul>
+<p>LAPS提供了 GUI 和 AdmPwd.PS 脚本模块 2 种管理工具。安装完成 LAPS 后，需要使用 AdmPwd.PS 模块的 <code>Set-AdmPwdComputerSelfPermission</code> 命令，赋予某个 OU 或整个域内的主机具有设置自身属性的权限。</p>
+<p>每个主机对象能自动存储口令明和口令过期时间。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110029.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110029.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110029.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110029.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110029.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110029.png-water_print" /></p>
+<p>在域服务器中，可通过 GUI 直接查看指定主机中本地管理员的口令明文。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110057.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110057.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110057.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110057.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110057.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110057.png-water_print" /></p>
+<p>LAPS 在域内的主机账号属性中增加了 <code>ms-Mcs-AdmPwd</code> 和 <code>ms-Mcs-AdmPwdExpirationTime</code> 两个属性。第 1 个属性存储本地管理员的口令明文，第 2 个属性存储口令的过期时间。这里也许有读者会疑问，为什么会储存明文口令，而不是某种密文形式的口令。</p>
+<p><code>AdmPwd.PS</code> 模块的 <code>Find-AdmPwdExtendedRights</code> 命令，可检测域内哪些账号或组具备读取  <code>ms-Mcs-AdmPwd</code> 属性的权限。</p>
+<p>在检测某个特定的域对象的 AD 权限时，有 2 个事情需要考虑:</p>
+<ol>
+<li>
+<p>是哪些域内主体可以赋予自身或其他域内主体这项 AD 权限;</p>
+</li>
+<li>
+<p>是哪些已有的 ACE 包含了这项 AD 权限 ，这些 ACE 应用在哪些对象上。</p>
+</li>
+</ol>
+<p>在做第 1 个事情的检查时，<code>Find-AdmPwdExtendedRights</code> 没有检测安全描述符的控制权。</p>
+<p>在第 2 个事情的检查中，该接口通过 4 个方面来决定结果:</p>
+<ul>
+<li>
+<p>AD 对象类型</p>
+</li>
+<li>
+<p>ACE 访问掩码</p>
+</li>
+<li>
+<p>ACE 对象类型</p>
+</li>
+<li>
+<p>ACE 继承的对象类型</p>
+</li>
+</ul>
+<p>在 AD 对象类型检测时，<code>Find-AdmPwdExtendedRi ghts</code> 仅仅分析应用到 OU 或计算机的 ACE，所有其他的容器对象都忽略，使用 <code>Set-AdmPwdComputerSelfPermission</code> 进行权限设置时的参数也是 OU 类型。攻击者可以在非 OU 容器对象上赋予自身读取 <code>ms-Mcs-AdmPwd</code> 属性的权限</p>
+<p><code>msImaging-PSPs</code> 类型容器不在检测分析范围，如果将计算机对象放至该类型的容器中，则可以规避被检测</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110928.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110928.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110928.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110928.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110928.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207110928.png-water_print" /></p>
+<p>如果赋予某个低权限用户关于该类型容器的完全权限，则可以控制容器中计算机的属性，包括 <code>ms-Mcs-AdmPwd</code> 属性。</p>
+<p><code>win7x86user</code> 是域内普通用户，<code>NotOu</code> 为一个 <code>msImaging-PSPs</code>类型容器，其中有一台机器win7x86cn，在 <code>NotOu</code>上赋予了 <code>win7x86user</code> 对该容器的全部权限，容器中的对象 <code>win7x86cn</code>继承了所有权限</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207111333.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207111333.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207111333.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207111333.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207111333.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207111333.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207111440.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207111440.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207111440.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207111440.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207111440.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207111440.png-water_print" /></p>
+<p>上面的测试和实验表明，在安装有 LAPS 环境的域网络中，可以有效利用 LAPS 作为一个隐蔽的后门，赋予低权限用户随时读取高权限主机本地管理员口令明文的权限，从而快速获取高权限主机的控制权，进一步通过散列值获取等方式获取域控制权限。当然这一切的前提是已经获取了域控制权限。</p>
+<p>LAPS在客户端仅仅部署了一个 <code>AdmPwd.dll</code> 文件，用于响应来自域服务器的密码更改策略，然后将口令明文以 <code>Kerberos</code> 加密方式存储至服务器中对应的主机账号的 <code>ms-Mcs-AdmPwd</code> 属性</p>
+<p><code>LAPS</code>起源于一个公开项目，通过对公开项目源码的分析，可以使用手动的方式模拟口令修改过程</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207112300.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207112300.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207112300.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207112300.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207112300.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207112300.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207112404.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207112404.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207112404.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207112404.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207112404.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207112404.png-water_print" /></p>
+<p>客户端在使用 <code>AdmPwd.dll</code> 文件时，<code>Windows</code> 并没有对该文件进行完整性校验或者签名验证。因此一个被篡改过的 <code>DLL</code> 一样可以正常使用。所以如果攻击者根据公开源码编译一个功能类似的 <code>DLL</code>，同时在 <code>DLL</code> 中添加部分功能，将修改后的口令明文写到指定位置。这可使攻击者随时都能获取口令明文，从而具备对客户端的完全控制权限</p>
+<p>根据LAPS的安装介绍说明，在客户端上安装有3种方式，</p>
+<ul>
+<li>
+<p>客户端安装 <code>LAPS.x64.msi</code> 或 <code>LAPS.x86.msi</code></p>
+</li>
+<li>
+<p>在客户端使用 <code>regsvr32.exe AdmPwd.dll</code> 安装</p>
+</li>
+</ul>
+<p>如果以第二种方式在客户端安装 <code>LAPS</code> ，且 <code>AdmPwd.dll</code> 的目录为普通用户的可写目录，则普通用户可直接用伪造的 <code>DLL</code> 文件替换原来真实的 <code>DLL</code> 文件。可获取本地管理员的口令明文，获取本机的完全控制权，实现权限提升</p>
+<p><code>LAPS</code> 是微软为了加强本地管理员的口令管理，提高网络安全性而部署的解决方案，但是方案中的一些瑕疵导致 <code>LAPS</code> 可以变成攻击者制作隐蔽后门的工具。不仅 <code>LAPS</code> 如此，许多其他软件亦是如此。随着产品的增多，安全性得到提升的同时，暴露给攻击者的攻击面同时也得到了扩大。安全之路任重道远。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-02-07</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2020/02/%E9%9A%90%E8%94%BD%E5%9F%9F%E5%90%8E%E9%97%A8/" data-title="隐蔽域后门"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2020/02/%E9%9A%90%E8%94%BD%E5%9F%9F%E5%90%8E%E9%97%A8/" data-title="隐蔽域后门"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2020/02/%E9%9A%90%E8%94%BD%E5%9F%9F%E5%90%8E%E9%97%A8/" data-title="隐蔽域后门"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%9F%9F%E5%AE%89%E5%85%A8/">域安全</a>,&nbsp;<a href="/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a>,&nbsp;<a href="/tags/%E5%9F%9F%E5%90%8E%E9%97%A8/">域后门</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/01/apache-solr%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="prev" rel="prev" title="Apache Solr模板注入远程代码执行漏洞"><i class="fas fa-angle-left fa-fw"></i>Apache Solr模板注入远程代码执行漏洞</a>
+            <a href="/2020/02/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F%E6%B5%81%E7%A8%8B/" class="next" rel="next" title="内网渗透流程">内网渗透流程<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

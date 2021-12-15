@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>AD 活动目录管理 - Geekby&#39;s Blog</title><meta name="Description" content="AD 活动目录管理及相关概念"><meta property="og:title" content="AD 活动目录管理" />
+<meta property="og:description" content="AD 活动目录管理及相关概念" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2019/10/ad%E6%B4%BB%E5%8A%A8%E7%9B%AE%E5%BD%95%E7%AE%A1%E7%90%86/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-10-09T11:00:00+08:00" />
+<meta property="article:modified_time" content="2019-10-09T11:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="AD 活动目录管理"/>
+<meta name="twitter:description" content="AD 活动目录管理及相关概念"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2019/10/ad%E6%B4%BB%E5%8A%A8%E7%9B%AE%E5%BD%95%E7%AE%A1%E7%90%86/" /><link rel="prev" href="https://www.geekby.site/2019/09/hacktheboxmirai/" /><link rel="next" href="https://www.geekby.site/2019/10/lin.security%E6%8F%90%E6%9D%83%E9%9D%B6%E5%9C%BA/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "AD 活动目录管理",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2019\/10\/ad%E6%B4%BB%E5%8A%A8%E7%9B%AE%E5%BD%95%E7%AE%A1%E7%90%86\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "域安全, 内网渗透","wordcount":  526 ,
+        "url": "https:\/\/www.geekby.site\/2019\/10\/ad%E6%B4%BB%E5%8A%A8%E7%9B%AE%E5%BD%95%E7%AE%A1%E7%90%86\/","datePublished": "2019-10-09T11:00:00+08:00","dateModified": "2019-10-09T11:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "AD 活动目录管理及相关概念"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">AD 活动目录管理</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"><i class="far fa-folder fa-fw"></i>内网渗透</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-10-09">2019-10-09</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 526 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#域和活动目录的概念">域和活动目录的概念</a>
+      <ul>
+        <li><a href="#域和活动目录的价值">域和活动目录的价值</a></li>
+        <li><a href="#域中的角色">域中的角色</a></li>
+        <li><a href="#域控制器中的-ad-数据库文件">域控制器中的 AD 数据库文件</a></li>
+        <li><a href="#域控制器之间的-ad-数据库同步">域控制器之间的 AD 数据库同步</a></li>
+        <li><a href="#特殊类型的域控制器">特殊类型的域控制器</a>
+          <ul>
+            <li><a href="#rodc">RODC</a></li>
+            <li><a href="#全局编录服务器-gc">全局编录服务器 GC</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#域和活动目录规划">域和活动目录规划</a>
+      <ul>
+        <li><a href="#多域环境的需求">多域环境的需求</a></li>
+        <li><a href="#多域的分布式架构">多域的分布式架构</a></li>
+        <li><a href="#域和域之间的信任关系">域和域之间的信任关系</a>
+          <ul>
+            <li><a href="#信任关系可实现跨域的身份验证和资源访问">信任关系可实现跨域的身份验证和资源访问</a></li>
+          </ul>
+        </li>
+        <li><a href="#站点">站点</a></li>
+      </ul>
+    </li>
+    <li><a href="#活动目录的规划">活动目录的规划</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#图形化管理工具">图形化管理工具</a></li>
+    <li><a href="#命令行管理工具">命令行管理工具</a>
+      <ul>
+        <li><a href="#ds-系列命令集">DS 系列命令集</a></li>
+        <li><a href="#powershell-系列命令">PowerShell 系列命令</a></li>
+      </ul>
+    </li>
+    <li><a href="#活动目录中的对象">活动目录中的对象</a></li>
+    <li><a href="#ou组织单位规划">OU(组织单位)规划</a></li>
+    <li><a href="#对象类型1用户">对象类型1:用户</a>
+      <ul>
+        <li><a href="#域用户的登录">域用户的登录</a></li>
+        <li><a href="#查看-sid">查看 SID</a></li>
+        <li><a href="#用户单个用户的创建和管理方式">用户单个用户的创建和管理方式</a></li>
+        <li><a href="#批量用户的创建和管理方式">批量用户的创建和管理方式</a></li>
+      </ul>
+    </li>
+    <li><a href="#对象类型2组">对象类型2：组</a>
+      <ul>
+        <li><a href="#组的用途">组的用途</a></li>
+        <li><a href="#组的分类">组的分类</a></li>
+      </ul>
+    </li>
+    <li><a href="#对象类型3计算机">对象类型3：计算机</a>
+      <ul>
+        <li><a href="#计算机被动加域">计算机被动加域</a></li>
+        <li><a href="#计算机主动加域">计算机主动加域</a></li>
+      </ul>
+    </li>
+    <li><a href="#计算机账户密码安全通道">计算机账户密码/安全通道</a></li>
+    <li><a href="#对象的查找和筛选">对象的查找和筛选</a>
+      <ul>
+        <li><a href="#ad-用户和计算机">AD 用户和计算机</a></li>
+        <li><a href="#ad-管理中心">AD 管理中心</a></li>
+        <li><a href="#ps-脚本">PS 脚本</a></li>
+      </ul>
+    </li>
+    <li><a href="#ad-管理的权利委派">AD 管理的权利委派</a>
+      <ul>
+        <li><a href="#rsat-工具">RSAT 工具</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#组策略概述">组策略概述</a></li>
+    <li><a href="#组策略的常见用途">组策略的常见用途</a></li>
+    <li><a href="#组策略的分类">组策略的分类</a>
+      <ul>
+        <li><a href="#维度一按配置生效的阶段">维度一：按配置生效的阶段</a></li>
+        <li><a href="#维度二安配置是否可以被更改">维度二：安配置是否可以被更改</a></li>
+        <li><a href="#维度三按配置内容领域">维度三：按配置内容领域</a></li>
+      </ul>
+    </li>
+    <li><a href="#组策略的配置-1">组策略的配置</a></li>
+    <li><a href="#部署的注意事项">部署的注意事项</a></li>
+    <li><a href="#组策略的应用范围">组策略的应用范围</a></li>
+    <li><a href="#组策略的生效时间">组策略的生效时间</a></li>
+    <li><a href="#客户端查看当前应用的-gpo">客户端查看当前应用的 GPO：</a></li>
+    <li><a href="#组策略的其它操作">组策略的其它操作</a>
+      <ul>
+        <li><a href="#组策略的备份与恢复">组策略的备份与恢复</a></li>
+        <li><a href="#组策略的存储">组策略的存储</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#信任关系的概念">信任关系的概念</a>
+      <ul>
+        <li><a href="#信任关系的方向性">信任关系的方向性</a></li>
+        <li><a href="#信任关系的传递性">信任关系的传递性</a></li>
+        <li><a href="#林内的信任关系">林内的信任关系</a></li>
+        <li><a href="#林间的信任关系">林间的信任关系</a></li>
+        <li><a href="#快捷信任">快捷信任</a></li>
+        <li><a href="#信任关系总结">信任关系总结</a></li>
+      </ul>
+    </li>
+    <li><a href="#信任关系的配置">信任关系的配置</a>
+      <ul>
+        <li><a href="#林内的信任关系-1">林内的信任关系</a></li>
+        <li><a href="#林间的信任关系-1">林间的信任关系</a></li>
+        <li><a href="#信任的安全增强">信任的安全增强</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#操作主机概述">操作主机概述</a>
+      <ul>
+        <li><a href="#操作主机的角色">操作主机的角色</a></li>
+        <li><a href="#操作主机的作用">操作主机的作用</a>
+          <ul>
+            <li><a href="#林级别">林级别</a></li>
+            <li><a href="#域级别">域级别</a></li>
+          </ul>
+        </li>
+        <li><a href="#操作主机角色的查看">操作主机角色的查看</a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#站点的概念">站点的概念</a>
+      <ul>
+        <li><a href="#域用户登录过程">域用户登录过程</a></li>
+        <li><a href="#问题与挑战">问题与挑战</a></li>
+        <li><a href="#站点-site">站点-Site</a></li>
+      </ul>
+    </li>
+    <li><a href="#站点内的数据复制">站点内的数据复制</a>
+      <ul>
+        <li><a href="#过程">过程</a></li>
+        <li><a href="#站点链接">站点链接</a></li>
+        <li><a href="#站点与组策略">站点与组策略</a></li>
+        <li><a href="#复制的监视和排错">复制的监视和排错</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="ad-活动目录管理">AD 活动目录管理</h1>
+<h2 id="域和活动目录的概念">域和活动目录的概念</h2>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112729.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112729.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112729.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112729.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112729.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112729.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112743.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112743.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112743.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112743.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112743.png-water_print"
+        title="域控制器的服务管理界面" /></p>
+<h3 id="域和活动目录的价值">域和活动目录的价值</h3>
+<ul>
+<li>强制终端计算机及用户的安全策略及桌面/应用环境,并可实现批量和自动部署，减轻 IT 人员日常的管理难度和工作强度</li>
+<li>域中的各类服务和资源(文件和打印共享等)的访问控制可以灵活的与企业的层次化组织架构相结合，满足复杂的权限分配等管理需求</li>
+<li>统一的身份验证手段，可与多种 Windows 应用服务(如Exchange, Sharepoint等)及第三方软件集成，实现单点登录，改善用户在多业务中切换中的操作体验</li>
+</ul>
+<h3 id="域中的角色">域中的角色</h3>
+<ul>
+<li>DC-域控制器</li>
+<li>成员服务器</li>
+<li>终端计算机</li>
+</ul>
+<h3 id="域控制器中的-ad-数据库文件">域控制器中的 AD 数据库文件</h3>
+<ul>
+<li>AD 数据库文件默认保存在 <code>C:\Windows\NTDS</code> 目录
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112801.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112801.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112801.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112801.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112801.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112801.png-water_print" /></li>
+<li>AD 数据库维护过程中必要时可进行五福启停、文件夹重定向、脱机整理、备份及恢复等操作</li>
+</ul>
+<h3 id="域控制器之间的-ad-数据库同步">域控制器之间的 AD 数据库同步</h3>
+<p>AD 数据库会定时活在发生改变时自动在 DC 之间相互同步复制，同步复制的频率和时间窗口可以配置和定义
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112818.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112818.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112818.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112818.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112818.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112818.png-water_print" /></p>
+<h3 id="特殊类型的域控制器">特殊类型的域控制器</h3>
+<h4 id="rodc">RODC</h4>
+<ul>
+<li>RODC 保存域控制器中 AD 数据库的只读副本</li>
+<li>不允许再 RODC 本地对数据库作出更改操作</li>
+<li>RODC 适合部署在没有管理需求的远程分支机构
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112833.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112833.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112833.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112833.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112833.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112833.png-water_print" /></li>
+</ul>
+<h4 id="全局编录服务器-gc">全局编录服务器 GC</h4>
+<ul>
+<li>GC 是一种特殊的域控制器，一个域至少部署一台</li>
+<li>GC 用于多域环境和其它域进行数据同步（但不是同步全部数据，通常需同步的数据仅占 AD 数据库总量的 5% ～ 10%），以优化 Exchange Server 等应用的全局或跨域搜索的效率
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112842.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112842.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112842.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112842.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112842.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112842.png-water_print" /></li>
+</ul>
+<h2 id="域和活动目录规划">域和活动目录规划</h2>
+<h3 id="多域环境的需求">多域环境的需求</h3>
+<ul>
+<li>一个域可以包含 100 万个对象，绝大多数企业在技术上只需要一个域</li>
+<li>出现以下需求情况时可能需要考虑多域的部署：
+<ul>
+<li>IT 管理政策上需要有分离或独立的 IT 管控边界</li>
+<li>公司重组或合并等原因影响到域的变化</li>
+<li>域的改造和迁徙需要同时新旧域的并存
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112925.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112925.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112925.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112925.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112925.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112925.png-water_print" /></li>
+</ul>
+</li>
+</ul>
+<h3 id="多域的分布式架构">多域的分布式架构</h3>
+<ul>
+<li>一个域林中可以包含多个域，一个域中可以包含多个子域</li>
+<li>父域和子域的命名空间(FQDN 域名后缀)需保持相同和连续
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112939.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112939.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112939.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112939.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112939.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112939.png-water_print" />
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112947.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112947.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112947.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112947.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112947.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112947.png-water_print" /></li>
+</ul>
+<h3 id="域和域之间的信任关系">域和域之间的信任关系</h3>
+<h4 id="信任关系可实现跨域的身份验证和资源访问">信任关系可实现跨域的身份验证和资源访问</h4>
+<ul>
+<li>如果域之间没有信任关系，每个域中的用户只能访问本域中的资源</li>
+<li>根据场景不同，部分信任关系是默认存在的，部分是需要手工配置的
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112958.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112958.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112958.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112958.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112958.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009112958.png-water_print" /></li>
+</ul>
+<h3 id="站点">站点</h3>
+<ul>
+<li>站点(Site)是指同一个域内包含特定 IP 子网并与特定域控制器关联的网络</li>
+<li>部署多个站点的目的是优化站点间 DC 的复制同步，同时使客户端能够和就近的 DC 优先通信，优化登录验证的操作
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113008.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113008.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113008.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113008.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113008.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113008.png-water_print" /></li>
+</ul>
+<h2 id="活动目录的规划">活动目录的规划</h2>
+<ul>
+<li>OU 层次化结构规划</li>
+<li>用户和计算机命名规范</li>
+<li>组的规划</li>
+<li>AD 管理权限的规划</li>
+</ul>
+<h1 id="活动目录中的对象管理">活动目录中的对象管理</h1>
+<h2 id="图形化管理工具">图形化管理工具</h2>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113020.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113020.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113020.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113020.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113020.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113020.png-water_print" /></p>
+<h2 id="命令行管理工具">命令行管理工具</h2>
+<h3 id="ds-系列命令集">DS 系列命令集</h3>
+<blockquote>
+<p>dsquery、dsadd、dsmod、dsmove、dsrm等</p>
+</blockquote>
+<h3 id="powershell-系列命令">PowerShell 系列命令</h3>
+<blockquote>
+<p>Get-ADDomain、New-Aduser、Search-ADAccount等</p>
+</blockquote>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113031.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113031.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113031.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113031.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113031.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113031.png-water_print" /></p>
+<h2 id="活动目录中的对象">活动目录中的对象</h2>
+<ul>
+<li>对象(Object)
+<ul>
+<li>常见的对象包括：用户、组、计算机等</li>
+</ul>
+</li>
+<li>容器(Container)
+<ul>
+<li>系统内置，是部分对象的默认逻辑存放位置</li>
+<li>不能删除或编辑、无法进一步层次化</li>
+</ul>
+</li>
+<li>组织单位(OU)
+<ul>
+<li>用户创建，用于自定义对象的逻辑存放位置</li>
+<li>支持层次化结构、允许编辑</li>
+</ul>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113043.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113043.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113043.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113043.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113043.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113043.png-water_print" /></p>
+<h2 id="ou组织单位规划">OU(组织单位)规划</h2>
+<ul>
+<li>一般需体现企业组织架构或地理特征</li>
+<li>OU 中的对象类型是否混合取决与管理的需要</li>
+<li>OU 的主要作用是控制组策略部署范围和活动目录的管理权限委派</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113054.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113054.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113054.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113054.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113054.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113054.png-water_print" /></p>
+<h2 id="对象类型1用户">对象类型1:用户</h2>
+<h3 id="域用户的登录">域用户的登录</h3>
+<p>域用户名@域名      （如tester@abc.com）
+域名\域用户名      （如abc\tester）</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113114.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113114.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113114.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113114.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113114.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113114.png-water_print" /></p>
+<h3 id="查看-sid">查看 SID</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">get-aduser</span> <span class="n">-Identify</span> <span class="no">[username]</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113130.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113130.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113130.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113130.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113130.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113130.png-water_print" /></p>
+<h3 id="用户单个用户的创建和管理方式">用户单个用户的创建和管理方式</h3>
+<ul>
+<li>AD 用户和计算机</li>
+<li>AD 管理中心</li>
+</ul>
+<h3 id="批量用户的创建和管理方式">批量用户的创建和管理方式</h3>
+<ul>
+<li>服务器内置命令行工具(如 <code>csvde</code> 和 <code>ldifde</code>)</li>
+<li>编写 Powershell 脚本</li>
+</ul>
+<h2 id="对象类型2组">对象类型2：组</h2>
+<h3 id="组的用途">组的用途</h3>
+<blockquote>
+<p>批量设置用户的<code>权限</code>或者<code>权利</code></p>
+</blockquote>
+<h3 id="组的分类">组的分类</h3>
+<ul>
+<li>按是否内置：内置组、自定义组</li>
+<li>按作用范围：本地组、全局组、通用组</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113310.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113310.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113310.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113310.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113310.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113310.png-water_print" /></p>
+<h2 id="对象类型3计算机">对象类型3：计算机</h2>
+<h3 id="计算机被动加域">计算机被动加域</h3>
+<p>活动目录中事先未创建计算机账号，加域后计算机账户自动保存在默认的 Computers 容器中</p>
+<h3 id="计算机主动加域">计算机主动加域</h3>
+<p>活动目录中事先已由管理员在指定的 OU 中创建好计算机账号，加域后将根据对应的计算机名关联实现创建在指定的 OU 中的计算机账号</p>
+<h2 id="计算机账户密码安全通道">计算机账户密码/安全通道</h2>
+<ul>
+<li>加入域的计算机与域控制器之间通讯的安全通道(Secure Channel)建立需要密码，由客户端计算机本地生成后上传到域控制器的活动目录中保存，默认每隔 30 天自动更换该密码</li>
+<li>如果客户端计算机超过 30 天未能和域控制器通信，则域控制器允许使用之前保存在活动目录中上一次已过期的计算机账户密码维系安全通道，但时间最多不能超过两个密码更新周期(默认最长60天)，否则安全通道将被破坏，客户端将自动脱域，导致用户无法登录</li>
+<li>计算机密码的更新周期和有效性等参数可通过组策略调整</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113157.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113157.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113157.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113157.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113157.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113157.png-water_print" /></p>
+<h2 id="对象的查找和筛选">对象的查找和筛选</h2>
+<h3 id="ad-用户和计算机">AD 用户和计算机</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113321.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113321.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113321.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113321.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113321.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113321.png-water_print" /></p>
+<h3 id="ad-管理中心">AD 管理中心</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113337.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113337.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113337.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113337.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113337.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113337.png-water_print" /></p>
+<h3 id="ps-脚本">PS 脚本</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113346.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113346.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113346.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113346.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113346.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113346.png-water_print" />
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113356.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113356.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113356.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113356.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113356.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113356.png-water_print" /></p>
+<h2 id="ad-管理的权利委派">AD 管理的权利委派</h2>
+<p>对 AD 的操作委派可以在 OU 层面配置,以分配对该 OU 内对象的常见管理任务给指定的用户或组，减轻域管理员工作负荷(比如修改部门账的属性,解除帐号锁定,重置账户密码等)
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113407.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113407.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113407.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113407.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113407.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113407.png-water_print" /></p>
+<h3 id="rsat-工具">RSAT 工具</h3>
+<p>RAT(Remote Server Administration Tool)可配合 AD 权利委派，用于在客户端操作系统上进行AD域服务的远程操作(如重置密码，解禁密码等)
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113419.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113419.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113419.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113419.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113419.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113419.png-water_print" /></p>
+<h1 id="组策略的配置">组策略的配置</h1>
+<h2 id="组策略概述">组策略概述</h2>
+<p>组策略的本质是以更友好的方式修改计算机的注册表，组策略中每一项设置都可以和注册表中的键值对应，以实现对操作系统及应用程序的运行控制
+组策略包含本地组策略和域组策略</p>
+<ul>
+<li>本地组策略: gpedit.msc</li>
+<li>域组策略：域控制器上使用 <code>组策略工具</code> 配置并下发</li>
+</ul>
+<p>通过域组策略有助于规范域内终端的统一管理并减少人员的工作量</p>
+<h2 id="组策略的常见用途">组策略的常见用途</h2>
+<ul>
+<li>帐号安全/审计策略</li>
+<li>开机/关机脚本</li>
+<li>文件夹重定向</li>
+<li>部署打印机/共享文件夹映射</li>
+<li>客户端桌面环境设置</li>
+<li>IE 等微软应用程序参数设置</li>
+<li>软件自动安装部署</li>
+<li>限制软件运行</li>
+<li>防火墙安全设置</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113431.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113431.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113431.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113431.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113431.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113431.png-water_print" /></p>
+<h2 id="组策略的分类">组策略的分类</h2>
+<h3 id="维度一按配置生效的阶段">维度一：按配置生效的阶段</h3>
+<ul>
+<li>计算机配置</li>
+<li>用户配置</li>
+</ul>
+<h3 id="维度二安配置是否可以被更改">维度二：安配置是否可以被更改</h3>
+<ul>
+<li>策略</li>
+<li>首选项</li>
+</ul>
+<h3 id="维度三按配置内容领域">维度三：按配置内容领域</h3>
+<ul>
+<li>Windows 设置</li>
+<li>管理模板
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113440.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113440.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113440.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113440.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113440.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113440.png-water_print" /></li>
+</ul>
+<h2 id="组策略的配置-1">组策略的配置</h2>
+<p>系统默认包含两个默认的 GPO</p>
+<ul>
+<li>Default Domain Policy 域级别，影响域中所有的计算机和用户</li>
+<li>Default Domain Controller Policy 容器级别，影响所有域控制器</li>
+</ul>
+<p>其它的 GPO 需要自行创建配置和链接
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113452.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113452.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113452.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113452.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113452.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113452.png-water_print" /></p>
+<h2 id="部署的注意事项">部署的注意事项</h2>
+<ul>
+<li>GPO 需要在域控制器上配置，且会通过 AD 的复制机制向其他域控同步</li>
+<li>GPO 创建编辑后只有链接到域或 OU 才能使该组策略生效</li>
+<li>一条 GPO 可以关联到多个 OU 上，一个 OU 上也可包含多条不同的 GPO</li>
+<li>删除 GPO 链接并不等于删除 GPO，但删除 GPO 会自动删除相关联的 GPO 链接</li>
+<li>如需让 GPO 不生效，可以禁用 GPO 的某个链接，也可以整体不启用该 GPO，不一定需要删除GPO 链接或删除 GPO</li>
+</ul>
+<h2 id="组策略的应用范围">组策略的应用范围</h2>
+<ul>
+<li>GPO 创建后不能直接应用在计算机、用户或用户组上，而是必须要链接到 AD 活动目录中的容器或 OU 上，或直接运用在整个域级别</li>
+<li>GPO 默认会对域或 OU 下所有计算机/用户生效，如要对应用范围做进一步精确控制，可使用<code>安全过滤(Security Filtering)</code> 或 <code>WMI筛选器(WMI Filtering)</code></li>
+<li>GPO 也可以对默认的应用范围设置个别的排除对象
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113509.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113509.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113509.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113509.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113509.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113509.png-water_print" /></li>
+</ul>
+<h2 id="组策略的生效时间">组策略的生效时间</h2>
+<ul>
+<li>计算机启动时自动获取并生效「计算机配置」条目</li>
+<li>用户登录时自动获取并生效「用户配置」条目</li>
+<li>计算机已开机或用户已登录则默认需 <code>90-120</code> 分钟才会生效(90分钟加30分钟随机值，以避免并发高峰，该时间可配)</li>
+<li>客户端可以通过命令 <code>gpupdate/force</code> 强制获取并刷新组策略</li>
+<li>部分设置即使应用后也需要重启计算机或用户注销重新登录才能生效</li>
+</ul>
+<h2 id="客户端查看当前应用的-gpo">客户端查看当前应用的 GPO：</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">gpresult /h d:\gporesult.html
+gpresult /r
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113519.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113519.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113519.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113519.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113519.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113519.png-water_print" /></p>
+<p>##组策略的处理原则</p>
+<ul>
+<li>继承原则
+<ul>
+<li>启用/禁用继承</li>
+</ul>
+</li>
+<li>累加性原则</li>
+<li>优先原则
+<ul>
+<li>子OU &gt; 父OU &gt; 域 &gt; 站点 &gt; 本地策略</li>
+</ul>
+</li>
+<li>顺序原则
+<ul>
+<li>同一个 OU 中多条 GPO 按上下次序</li>
+</ul>
+</li>
+<li>其他原则
+<ul>
+<li>OU中只有计算机则只应用“计算机配置”</li>
+<li>OU中只有用户则只应用优先于“用户配置”</li>
+<li>OU中同时有计算机和用户则两类配置都启用(有冲突时计算机配置优先)</li>
+</ul>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113559.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113559.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113559.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113559.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113559.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113559.png-water_print" /></p>
+<h2 id="组策略的其它操作">组策略的其它操作</h2>
+<h3 id="组策略的备份与恢复">组策略的备份与恢复</h3>
+<ul>
+<li>可以备份单条 GPO，也可以备份所有 GPO</li>
+<li>每次备份会记录时间戳，因此可以基于保存多份历史版本做精确恢复</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113609.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113609.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113609.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113609.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113609.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113609.png-water_print" /></p>
+<h3 id="组策略的存储">组策略的存储</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113619.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113619.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113619.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113619.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113619.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113619.png-water_print" /></p>
+<h1 id="域的信任关系">域的信任关系</h1>
+<h2 id="信任关系的概念">信任关系的概念</h2>
+<ul>
+<li>域是安全边界，如果域之间没有信任关系，每个域中的用户只能访问本域内的资源</li>
+<li>信任关系在两个域之间架起了一座桥梁(信任路径)，使得域用户帐户可以跨域使用，实现了跨域的身份验证和资源访问</li>
+<li>信任关系常用的场景包括公司并购、外部合作、活动目录迁徙等</li>
+<li>根据域类型的不同，有些域之间的信任关系默认存在，有些则需要手工创建
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113628.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113628.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113628.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113628.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113628.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113628.png-water_print" /></li>
+</ul>
+<h3 id="信任关系的方向性">信任关系的方向性</h3>
+<ul>
+<li>
+<p>A 域单向信任 B 域</p>
+<ul>
+<li>A 域中的资源可以被 B 域访问
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113648.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113648.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113648.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113648.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113648.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113648.png-water_print" /></li>
+</ul>
+</li>
+<li>
+<p>A 域和 B 域双向信任</p>
+<ul>
+<li>A 域中的资源可以被 B 域访问</li>
+<li>B 域中的资源可以被 A 域访问
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113656.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113656.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113656.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113656.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113656.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113656.png-water_print" /></li>
+</ul>
+</li>
+</ul>
+<h3 id="信任关系的传递性">信任关系的传递性</h3>
+<ul>
+<li>信任关系如果是可传递的，则多个可传递的信任关系可以自动串接</li>
+<li>信任关系如果是不可传递的，则信任链断裂，无法完成信任关系自动串接
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113709.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113709.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113709.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113709.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113709.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113709.png-water_print" /></li>
+</ul>
+<h3 id="林内的信任关系">林内的信任关系</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113717.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113717.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113717.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113717.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113717.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113717.png-water_print" /></p>
+<h3 id="林间的信任关系">林间的信任关系</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113725.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113725.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113725.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113725.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113725.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113725.png-water_print" /></p>
+<h3 id="快捷信任">快捷信任</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113734.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113734.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113734.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113734.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113734.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113734.png-water_print" /></p>
+<h3 id="信任关系总结">信任关系总结</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113743.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113743.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113743.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113743.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113743.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113743.png-water_print" /></p>
+<h2 id="信任关系的配置">信任关系的配置</h2>
+<h3 id="林内的信任关系-1">林内的信任关系</h3>
+<p>父子信任，树根信任均为默认存在，无需手工创建</p>
+<h3 id="林间的信任关系-1">林间的信任关系</h3>
+<ul>
+<li>森林信任或外部信任需手工创建，配置可以是单向或双向</li>
+<li>本域需要 DNS 查询能够得到对方域控制器的 SRV 记录(条件转发或辅助区域同步)</li>
+<li>「信任方」和「被信任方」两边分别配置信任的「内向」和「外向」
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113752.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113752.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113752.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113752.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113752.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113752.png-water_print" />
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113802.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113802.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113802.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113802.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113802.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113802.png-water_print" />
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113810.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113810.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113810.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113810.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113810.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113810.png-water_print" />
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113819.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113819.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113819.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113819.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113819.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113819.png-water_print" />
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113826.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113826.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113826.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113826.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113826.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113826.png-water_print" />
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113832.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113832.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113832.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113832.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113832.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113832.png-water_print" /></li>
+</ul>
+<h3 id="信任的安全增强">信任的安全增强</h3>
+<ul>
+<li>选择性身份认证</li>
+<li>名称后缀路由</li>
+</ul>
+<h1 id="操作主机-fsmo">操作主机 FSMO</h1>
+<h2 id="操作主机概述">操作主机概述</h2>
+<ul>
+<li>域控制器之间需要同步 AD 的数据库
+<ul>
+<li>大部分的数据同步采用<code>多主机复制机制</code></li>
+<li>少部分的数据同步采用<code>单主机复制机制</code></li>
+</ul>
+</li>
+<li>操作主机即用于这类特殊的单主机复制，以满足特殊场景下更高效可控的数据同步
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113841.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113841.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113841.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113841.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113841.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113841.png-water_print" /></li>
+</ul>
+<h3 id="操作主机的角色">操作主机的角色</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113849.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113849.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113849.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113849.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113849.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113849.png-water_print" />
+默认第一台安装的域控制器承担了所有的角色</p>
+<h3 id="操作主机的作用">操作主机的作用</h3>
+<h4 id="林级别">林级别</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113857.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113857.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113857.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113857.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113857.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113857.png-water_print" /></p>
+<h4 id="域级别">域级别</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113904.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113904.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113904.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113904.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113904.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113904.png-water_print" /></p>
+<h3 id="操作主机角色的查看">操作主机角色的查看</h3>
+<ul>
+<li>命令行方式</li>
+</ul>
+<p>查询所有的 FSMO 角色</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">netdom query fsmo
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113915.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113915.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113915.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113915.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113915.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113915.png-water_print" /></p>
+<ul>
+<li>图形化方式
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113923.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113923.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113923.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113923.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113923.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113923.png-water_print" /></li>
+</ul>
+<h1 id="站点及活动目录复制">站点及活动目录复制</h1>
+<h2 id="站点的概念">站点的概念</h2>
+<h3 id="域用户登录过程">域用户登录过程</h3>
+<ol>
+<li>PC 终端向 DNS 查询 DC 的 SRV 记录，获取域内所有 DC 的IP</li>
+<li>根据 DNS 中配置的优先级和权重等因素，返回提供服务的 DC 域控制器的 IP</li>
+<li>如果所有 DC 的优先级和权重相同，则返回所有的 DC 的IP，此时会导致 PC 终端所选择的 DC 控制器会具有一定的随机性
+<code>注：</code> 可用 <code>set loginserver</code> 查看当前计算机由哪台 DC 服务</li>
+</ol>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113941.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113941.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113941.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113941.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113941.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113941.png-water_print" /></p>
+<h3 id="问题与挑战">问题与挑战</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113950.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113950.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113950.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113950.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113950.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113950.png-water_print" /></p>
+<h3 id="站点-site">站点-Site</h3>
+<blockquote>
+<p>站点由 IP 子网构成，站点内的节点可以相互高速通信</p>
+</blockquote>
+<ul>
+<li>默认情况下所有的域控制器都在一个站点中(Default-first-site-name)</li>
+<li>部署多个站点的目的是优化站点间 DC 的复制同步，同时使客户端能够和就近的 DC 优先通信，优化登录验证的操作</li>
+<li>建议根据地理位置和互通带宽的实际情况，定义「域控制器」、「iP子网」、「站点」三者之间的关系</li>
+<li>IP 终端在登录时会自动根据自身 IP 地址在 DNS 中寻找包含本 IP 子网的站点中的 DC 进行登录
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113958.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113958.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113958.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113958.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113958.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009113958.png-water_print" /></li>
+</ul>
+<h2 id="站点内的数据复制">站点内的数据复制</h2>
+<ul>
+<li>
+<p>同一站点内多个 DC 之间的复制采用多主机复制模式(multimaster replication)</p>
+</li>
+<li>
+<p>KCC算法(Knowledge Consistency Checker)负责自动计算每台 DC 的复制路径，确保从更新的始发 DC 到最远端的 DC 之间的复制关系不超过 3 跳
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114007.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114007.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114007.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114007.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114007.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114007.png-water_print" /></p>
+</li>
+<li>
+<p>当一台 DC 发生数据改变后，默认等待 15 秒后，通知「直接复制伙伴」来获取更新，直接复制伙伴在获取更新后，会以相同的方式通知自己的复制伙伴来获取更新，直到站点内所有的 DC 都获取到该更新</p>
+</li>
+<li>
+<p>当更新数据很重要时(如用户账户锁定，密码变动，策略变动等)，不会等待 15 秒的延迟再发通知，而是用单主复制模式的「紧急通知」的方式，立即通知复制伙伴</p>
+</li>
+<li>
+<p>即使没有数据更新，站点内 DC 也会每隔一定时间进行数据同步(默认 1 小时，可配置调整)，也可随时手工触发立即复制</p>
+</li>
+</ul>
+<h3 id="过程">过程</h3>
+<ul>
+<li>站点间 DC 的数据复制机制不会一有变化就立即触发通知，而是按指定频率定时复制(默认小时),且必须在复制计划允许的时间窗口内(比如下班以后);也可在必要时由管理员手工触发立即更新</li>
+<li>每一个站点内都有一台 DC 作为<code>站点间拓扑生成器(ISTG)</code>，负责计算该站点和其他站点之间的最佳复制路径</li>
+<li><code>ITSG</code> 同时指定站点内的一台 DC 为桥头堡服务器(Bridgehead)，负责域间数据复制的出入口跳板。站点内的 DC 将复制更新统一交给 <code>Bridgehead</code>，由其负责和其他站点的 <code>Bridgehead</code> 通信复制站点间数据，再进一步复制给对方站点内的其他 DC。</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114025.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114025.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114025.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114025.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114025.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114025.png-water_print" /></p>
+<h3 id="站点链接">站点链接</h3>
+<ul>
+<li>站点和站点之间复制的逻辑通道，建立站点链接需确保 DC 间的 IP 可达</li>
+<li>设置站点链接的开销(Cost)将影响路径的选择，默认的开销为100，越小越优先</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114033.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114033.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114033.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114033.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114033.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114033.png-water_print" /></p>
+<h3 id="站点与组策略">站点与组策略</h3>
+<p>部署站点后可以将组策略的应用范围配置为对站点内对象生效
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114042.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114042.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114042.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114042.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114042.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114042.png-water_print" /></p>
+<h3 id="复制的监视和排错">复制的监视和排错</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114051.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114051.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114051.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114051.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114051.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191009114051.png-water_print" /></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2019-10-09</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2019/10/ad%E6%B4%BB%E5%8A%A8%E7%9B%AE%E5%BD%95%E7%AE%A1%E7%90%86/" data-title="AD 活动目录管理"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2019/10/ad%E6%B4%BB%E5%8A%A8%E7%9B%AE%E5%BD%95%E7%AE%A1%E7%90%86/" data-title="AD 活动目录管理"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2019/10/ad%E6%B4%BB%E5%8A%A8%E7%9B%AE%E5%BD%95%E7%AE%A1%E7%90%86/" data-title="AD 活动目录管理"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%9F%9F%E5%AE%89%E5%85%A8/">域安全</a>,&nbsp;<a href="/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2019/09/hacktheboxmirai/" class="prev" rel="prev" title="Hack The Box —— Mirai"><i class="fas fa-angle-left fa-fw"></i>Hack The Box —— Mirai</a>
+            <a href="/2019/10/lin.security%E6%8F%90%E6%9D%83%E9%9D%B6%E5%9C%BA/" class="next" rel="next" title="in.security 提权靶场">in.security 提权靶场<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

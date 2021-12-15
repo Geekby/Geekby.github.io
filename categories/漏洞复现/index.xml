@@ -1,0 +1,78 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>漏洞复现 - 分类 - Geekby&#39;s Blog</title>
+        <link>https://www.geekby.site/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</link>
+        <description>漏洞复现 - 分类 - Geekby&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Mon, 19 Apr 2021 09:49:49 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" rel="self" type="application/rss+xml" /><item>
+    <title>Weblogic T3 反序列化漏洞复现</title>
+    <link>https://www.geekby.site/2021/04/weblogic-t3-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</link>
+    <pubDate>Mon, 19 Apr 2021 09:49:49 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/04/weblogic-t3-%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</guid>
+    <description><![CDATA[Weblogic T3 反序列化漏洞复现]]></description>
+</item><item>
+    <title>Chrome 0Day 复现与思考</title>
+    <link>https://www.geekby.site/2021/04/chrome-0day%E5%A4%8D%E7%8E%B0/</link>
+    <pubDate>Wed, 14 Apr 2021 11:09:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/04/chrome-0day%E5%A4%8D%E7%8E%B0/</guid>
+    <description><![CDATA[Chrome 0Day 复现与思考]]></description>
+</item><item>
+    <title>CVE-2021-25646 - Apache Druid RCE 复现</title>
+    <link>https://www.geekby.site/2021/02/cve-2021-25646-druid%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</link>
+    <pubDate>Tue, 02 Feb 2021 21:09:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/02/cve-2021-25646-druid%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</guid>
+    <description><![CDATA[CVE-2021-25646：Apache Druid RCE复现]]></description>
+</item><item>
+    <title>CVE-2021-3156 sudo 提权漏洞复现</title>
+    <link>https://www.geekby.site/2021/01/cve-2021-3156%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</link>
+    <pubDate>Sat, 30 Jan 2021 11:09:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/01/cve-2021-3156%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</guid>
+    <description><![CDATA[CVE-2021-3156 sudo 提权漏洞复现]]></description>
+</item><item>
+    <title>Apache Dubbo Provider反序列化漏洞(CVE-2020-1948)</title>
+    <link>https://www.geekby.site/2020/07/apache-dubbo-provider%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9Ecve-2020-1948/</link>
+    <pubDate>Wed, 01 Jul 2020 11:09:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2020/07/apache-dubbo-provider%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9Ecve-2020-1948/</guid>
+    <description><![CDATA[Apache Dubbo Provider反序列化漏洞原理及复现]]></description>
+</item><item>
+    <title>Shiro 权限绕过漏洞复现(CVE-2020-11989)</title>
+    <link>https://www.geekby.site/2020/07/shiro%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0cve-2020-11989/</link>
+    <pubDate>Wed, 01 Jul 2020 11:09:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2020/07/shiro%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0cve-2020-11989/</guid>
+    <description><![CDATA[Shiro 权限绕过漏洞复现(CVE-2020-11989)]]></description>
+</item><item>
+    <title>SaltStack 远程命令执行漏洞复现（CVE-2020-11651）</title>
+    <link>https://www.geekby.site/2020/05/saltstack-%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0cve-2020-11651/</link>
+    <pubDate>Wed, 13 May 2020 17:01:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2020/05/saltstack-%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0cve-2020-11651/</guid>
+    <description><![CDATA[SaltStack 远程命令执行漏洞复现（CVE-2020-11651）]]></description>
+</item><item>
+    <title>CVE-2020-1938 Apache Tomcat AJP 文件包含漏洞复现</title>
+    <link>https://www.geekby.site/2020/02/cve-2020-1938-apache-tomcat-ajp-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/</link>
+    <pubDate>Fri, 21 Feb 2020 13:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2020/02/cve-2020-1938-apache-tomcat-ajp-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/</guid>
+    <description><![CDATA[CVE-2020-1938 Apache Tomcat AJP 文件包含漏洞复现]]></description>
+</item><item>
+    <title>Apache Solr模板注入远程代码执行漏洞</title>
+    <link>https://www.geekby.site/2020/01/apache-solr%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</link>
+    <pubDate>Thu, 02 Jan 2020 19:39:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2020/01/apache-solr%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</guid>
+    <description><![CDATA[Apache Solr模板注入远程代码执行漏洞]]></description>
+</item><item>
+    <title>Apache Log4j SocketServer反序列化漏洞复现</title>
+    <link>https://www.geekby.site/2019/12/apache-log4j-socketserver%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9Ecve-2019-17571/</link>
+    <pubDate>Mon, 30 Dec 2019 09:39:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2019/12/apache-log4j-socketserver%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9Ecve-2019-17571/</guid>
+    <description><![CDATA[Apache Log4j SocketServer反序列化漏洞复现]]></description>
+</item></channel>
+</rss>

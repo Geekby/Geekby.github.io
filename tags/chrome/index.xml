@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Chrome - 标签 - Geekby&#39;s Blog</title>
+        <link>https://www.geekby.site/tags/chrome/</link>
+        <description>Chrome - 标签 - Geekby&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Wed, 14 Apr 2021 11:09:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/chrome/" rel="self" type="application/rss+xml" /><item>
+    <title>Chrome 0Day 复现与思考</title>
+    <link>https://www.geekby.site/2021/04/chrome-0day%E5%A4%8D%E7%8E%B0/</link>
+    <pubDate>Wed, 14 Apr 2021 11:09:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/04/chrome-0day%E5%A4%8D%E7%8E%B0/</guid>
+    <description><![CDATA[Chrome 0Day 复现与思考]]></description>
+</item></channel>
+</rss>

@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>SSTI - 标签 - Geekby&#39;s Blog</title>
+        <link>https://www.geekby.site/tags/ssti/</link>
+        <description>SSTI - 标签 - Geekby&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Mon, 22 Jun 2020 16:05:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/ssti/" rel="self" type="application/rss+xml" /><item>
+    <title>Flask SSTI 利用方式探索</title>
+    <link>https://www.geekby.site/2020/06/flask-ssti-%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F%E6%8E%A2%E7%B4%A2/</link>
+    <pubDate>Mon, 22 Jun 2020 16:05:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2020/06/flask-ssti-%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F%E6%8E%A2%E7%B4%A2/</guid>
+    <description><![CDATA[Flask SSTI 利用方式探索]]></description>
+</item></channel>
+</rss>

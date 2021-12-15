@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Windows 认证 - Geekby&#39;s Blog</title><meta name="Description" content="Windows认证相关"><meta property="og:title" content="Windows 认证" />
+<meta property="og:description" content="Windows认证相关" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2019/07/windows-%E8%AE%A4%E8%AF%81/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-07-07T17:24:00+08:00" />
+<meta property="article:modified_time" content="2019-07-07T17:24:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Windows 认证"/>
+<meta name="twitter:description" content="Windows认证相关"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2019/07/windows-%E8%AE%A4%E8%AF%81/" /><link rel="prev" href="https://www.geekby.site/2019/06/hack-the-boxnetmon/" /><link rel="next" href="https://www.geekby.site/2019/07/redis%E5%9F%BA%E4%BA%8E%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E7%9A%84rce%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Windows 认证",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2019\/07\/windows-%E8%AE%A4%E8%AF%81\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "域安全, 内网渗透, 认证","wordcount":  842 ,
+        "url": "https:\/\/www.geekby.site\/2019\/07\/windows-%E8%AE%A4%E8%AF%81\/","datePublished": "2019-07-07T17:24:00+08:00","dateModified": "2019-07-07T17:24:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "Windows认证相关"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Windows 认证</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"><i class="far fa-folder fa-fw"></i>内网渗透</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-07-07">2019-07-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 842 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#windows-本地认证">Windows 本地认证</a>
+      <ul>
+        <li><a href="#本地认证基础">本地认证基础</a></li>
+        <li><a href="#ntlmnt-lan-manager-hash">NTLM(NT LAN Manager) Hash</a>
+          <ul>
+            <li><a href="#ntlm-hash产生">NTLM Hash——产生</a></li>
+            <li><a href="#本地认证流程">本地认证流程</a></li>
+          </ul>
+        </li>
+        <li><a href="#lm-hash">LM Hash</a></li>
+      </ul>
+    </li>
+    <li><a href="#windows网络认证">Windows网络认证</a>
+      <ul>
+        <li><a href="#challengeresponse">Challenge/Response</a></li>
+        <li><a href="#ntlm-v2">NTLM v2</a></li>
+        <li><a href="#pass-the-hash">Pass The Hash</a>
+          <ul>
+            <li><a href="#必要条件">必要条件</a></li>
+            <li><a href="#原理分析">原理分析</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#kerberos域认证">Kerberos域认证</a>
+      <ul>
+        <li><a href="#active-directory活动目录的概念">Active Directory(活动目录)的概念</a></li>
+        <li><a href="#active-directory活动目录的概念-1">Active Directory(活动目录)的概念</a></li>
+        <li><a href="#域认证体系---kerberoes">域认证体系 - Kerberoes</a></li>
+        <li><a href="#域认证所参与的角色">域认证所参与的角色</a></li>
+        <li><a href="#域认证所参与的角色-1">域认证所参与的角色</a></li>
+        <li><a href="#域认证粗略流程">域认证粗略流程</a>
+          <ul>
+            <li><a href="#第一步-session-key-与-ticket-granting-ticket">第一步 Session Key 与 Ticket Granting Ticket</a></li>
+            <li><a href="#第二步-session-key-与-ticket-granting-ticket">第二步 Session Key 与 Ticket Granting Ticket</a></li>
+            <li><a href="#第三步-server-session-key-与-ticket">第三步 Server Session Key 与 Ticket</a></li>
+          </ul>
+        </li>
+        <li><a href="#白银票据">白银票据</a></li>
+        <li><a href="#伪造白银票据">伪造白银票据</a></li>
+        <li><a href="#白银票据silver-tickets防御">白银票据(Silver Tickets)防御</a></li>
+        <li><a href="#黄金票据golden-tickets">黄金票据(Golden Tickets)</a></li>
+        <li><a href="#黄金票据golden-tickets-msf-kiwi">黄金票据(Golden Tickets)-MSF kiwi</a></li>
+        <li><a href="#黄金票据golden-tickets---伪造">黄金票据(Golden Tickets) - 伪造</a></li>
+        <li><a href="#tickets-总结">Tickets 总结</a></li>
+      </ul>
+    </li>
+    <li><a href="#windows-access-token">Windows Access Token</a>
+      <ul>
+        <li><a href="#windows-access-token简介">Windows Access Token简介</a></li>
+        <li><a href="#access-token的组成">Access Token的组成</a></li>
+        <li><a href="#windows-access-token--sid-security-identifiers安全标识符">Windows Access Token – SID (Security Identifiers)安全标识符</a></li>
+        <li><a href="#windows-access-token产生过程">Windows Access Token产生过程</a></li>
+        <li><a href="#windows-access-token令牌假冒实战">Windows Access Token令牌假冒实战</a></li>
+        <li><a href="#windows-access-token令牌假冒防御">Windows Access Token令牌假冒防御</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="windows-认证">Windows 认证</h1>
+<h2 id="windows-本地认证">Windows 本地认证</h2>
+<h3 id="本地认证基础">本地认证基础</h3>
+<p>在本地登录 Windows 的情况下，操作系统会使用用户输入的密码作为凭证去与系统中的密码进行验证，但是操作系统中的密码存储在哪里呢？
+路径：<code>%SystemRoot%\system32\config\sam</code>
+当我们登录系统的时候,系统会自动地读取 SAM 文件中的“密码”与我们输入的“密码”进行比对，如果相同，证明认证成功!</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172545.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172545.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172545.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172545.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172545.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172545.png-water_print" /></p>
+<p>这个 SAM 文件中保留了计算机本地所有用户的凭证信息，可以理解为是一个数据库。</p>
+<h3 id="ntlmnt-lan-manager-hash">NTLM(NT LAN Manager) Hash</h3>
+<p>NTLM Hash 是支持 Net NTLM 认证协议及本地认证过程中的一个重要参与物，其长度为 32 位，由数字与字母组成。
+Windows 本身不存储用户的明文密码，它会将用户的明文密码经过加密算法后存储在 SAM 数据库中。
+当用户登录时,将用户输入的明文密码也加密成 NTLM Hash,与 SAM 数据库中的 NTLM Hash 进行比较。NTLM Hash 的前身是 LM Hash，目前基本淘汰，但是还是存在。</p>
+<h4 id="ntlm-hash产生">NTLM Hash——产生</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172559.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172559.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172559.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172559.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172559.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172559.png-water_print" /></p>
+<p>admin =&gt; 209c6174da490caeb422f3fa5a7ae634</p>
+<ol>
+<li>admin -&gt; hex(16进制编码) = 61646d69e</li>
+<li>61646d69e -&gt; unicode = 610064006d0069006e00</li>
+<li>610064006d0069006e00 -&gt; MD4 = 209c6174da490caeb422f3fa5a7ae634</li>
+</ol>
+<h4 id="本地认证流程">本地认证流程</h4>
+<ul>
+<li>Windows Logon Process(即 winlogon.exe 是 Windows NT 用户登陆程序，用于管理用户登录和退出。</li>
+<li>LSASS 是微软 Windows 系统的安全机制。用于本地安全和登陆策略。
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172612.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172612.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172612.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172612.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172612.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172612.png-water_print" /></li>
+</ul>
+<h3 id="lm-hash">LM Hash</h3>
+<ul>
+<li>将所有小写字母转换为大写字母</li>
+<li>123ABC //未达到7个字符</li>
+<li>将密码转化为 16 进制，分两组，填充为 14 个字符，空余位使用 0x00 字符填补</li>
+<li>31323341424300000000000000 将密码分割为两组 7 个字节的块</li>
+<li>31323341424300 000000000000 //16 进制</li>
+<li>将每组转化为比特流,不足 56Bit 则在左边加 0</li>
+<li>31323341424300 -&gt; (转换为二进制)
+<ul>
+<li>11000100110010001100110100001010000100100001100000000-&gt;(补足 56Bit)</li>
+<li>00110001001100100011001101000001010000100100001100000000</li>
+</ul>
+</li>
+<li>将比特流按照 7 比特一组，分出 8 组，末尾加 0</li>
+</ul>
+<p>由于后者都为 0，结果可想而知，那就都是 0;</p>
+<ul>
+<li>将每组比特流转换为 16 进制作为被加密的值，使用 DES 加密，字符串 <code>KGS!@#$%</code> 为Key(0x4B47532140232425)，得到 8 个结果，每个结果转换为 16 进制。</li>
+<li>-&gt; 00110000100110001000110001101000000101000001001000001100 00000000</li>
+<li>-&gt;30988C6814120C00 -&gt; DES(30988C6814120C00) -&gt; 48-D7-EB-91- 2F-5E-69-7C</li>
+<li>由于我们的密码不超过 7 字节，所以后面的一半是固定的:</li>
+<li>AA-D3-B4-35-B5-14-04-EE</li>
+<li>连接两个 DES 加密字符串。这是 LM 哈希。</li>
+<li>48-D7-EB-91-2F-5E-69-7C-AA-D3-B4-35-B5-14-04-EE</li>
+</ul>
+<h2 id="windows网络认证">Windows网络认证</h2>
+<p>在内网渗透中，经常遇到工作组环境，而工作组环境是一个逻辑上的网络环境(工作区)，隶属于工作组的机器之间无法互相建立一个完美的信任机制，只能点对点，是比较落后的认证方式，没有信托机构。</p>
+<p>假设 A 主机与 B 主机属于同一个工作组环境，A 想访问 B 主机上的资料，需要将一个存在于 B 主机上的账户凭证发送至 B 主机，经过认证才能够访问 B 主机上的资源。</p>
+<p>这是我们接触比较多的 SMB 共享文件的案例，SMB 的默认端口是 445。</p>
+<p>早期 SMB 协议在网络上传输明文口令。后来出现 LAN Manager Challenge/Response 验证机制，简称 LM，它是如此简单以至很容易就被破解，现在又有了 NTLM v2 以及 Kerberos。</p>
+<h3 id="challengeresponse">Challenge/Response</h3>
+<p>第一步：协商</p>
+<ul>
+<li>客户端主要在这一步向服务器确认协议的版本，是 v1 还是 v2。不止者一点点</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172620.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172620.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172620.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172620.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172620.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172620.png-water_print" /></p>
+<p>第二步：质询完整过程：</p>
+<ol>
+<li>客户端向服务器端发送用户信息(用户名)请求</li>
+<li>服务器接受到请求，生成一个 16 位的随机数，被称之为“Challenge”， 使用登录用户名对应的 NTLM Hash 加密 Challenge (16 位随机字符)，生成 Challenge1。同时，生成 Challenge1 后，将 Challenge (16 位随机字符)发送给客户端。<code>//Net NTLM Hash = NTLM Hash(Challenge)</code></li>
+<li>客户端接受到 Challenge 后，使用将要登录到账户对应的 NTLM Hash 加密 Challenge 生成 Response，然后将 Response 发送至服务器端。</li>
+</ol>
+<p>第三步：验证</p>
+<ul>
+<li>服务器端收到客户端的 Response 后，比对 Chanllenge1 与 Response 是否相等，若相等，则认证通过。</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172647.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172647.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172647.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172647.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172647.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172647.png-water_print" /></p>
+<p>使用另外一种方式解读：</p>
+<ol>
+<li>Server 接收到 Client 发送的用户名后，判断本地账户列表是否有用户名 share_user，
+<ul>
+<li>如果没有，返回认证失败；</li>
+<li>如果有，生成 Chanllenge，并且从本地查找 share_user 对应的 NTLM Hash，使用 NTLM Hash 加密 Chanllenge，生成一个 Net-NTLM Hash 存在内存中，并将 Chanllenge 发送给 Client。</li>
+</ul>
+</li>
+<li>Client 接收到 Chanllenge 后，将自己提供的 share_user 的密码转换为 NTLM Hash，使用 NTLM Hash 加密 Chanllenge，这个结果叫 Response，表现形式是 Net-NTLM Hash，最后将 Response 发送给 Server。</li>
+<li>Server 接收到 Client 发送的 Response，将 Response 与之前的 Net-NTLM Hash 进行比较，如果相等，则认证通过。</li>
+</ol>
+<p><code>注意:</code></p>
+<ol>
+<li>Chanllenge 是 Server 产生的一个 16 字节的随机数，每次认证都不同</li>
+<li>Response 的表现形式是 Net-NTLM Hash，它是由客户端提供的密码 Hash 加密 Server 返回的 Chanllenge 产生的结果。</li>
+</ol>
+<h3 id="ntlm-v2">NTLM v2</h3>
+<p>NTLM v1 与 NTLM v2 最显著的区别就是 Challenge 与加密算法不同，共同点就是加密的原料都是 NTLM Hash。</p>
+<p>下面细说一下有什么不同:
+Challenge：NTLM v1 的 Challenge 有 <code>8</code> 位，NTLM v2 的 Challenge 为 <code>16</code> 位
+Net-NTLM Hash：NTLM v1 的主要加密算法是 <code>DES</code>，NTLM v2 的主要加密算法是 <code>HMAC-MD5</code>。
+//Responder、smbexec</p>
+<h3 id="pass-the-hash">Pass The Hash</h3>
+<p>在内网渗透中，我们经常会需要抓取管理员的密码、NTLM Hash，通过搜集这些信息有助于我们扩大战果，<code>尤其是在域环境下</code>。</p>
+<ul>
+<li>
+<p>什么是哈希传递?
+哈希传递是能够在不需要账户明文密码的情况下完成认证的一个技术。</p>
+</li>
+<li>
+<p>哈希传递的作用?
+解决了我们渗透中获取不到明文密码、破解不了 NTLM Hash 而又想扩大战果的问题。</p>
+</li>
+</ul>
+<h4 id="必要条件">必要条件</h4>
+<ul>
+<li>哈希传递需要被认证的主机能够访问到服务器</li>
+<li>哈希传递需要被传递认证的用户名</li>
+<li>哈希传递需要被传递认证用户的 NTLM Hash</li>
+</ul>
+<h4 id="原理分析">原理分析</h4>
+<p>要完成一个 NTLM 认证，第一步需要客户端将自己要参与认证的用户名发送至服务器端，等待服务器端给出的 Challenge
+其实哈希传递就是使用用户名对应的 NTLM Hash 将服务器给出的 Chanllenge 加密，生成一个 Response，来完成认证。
+Pass The Hash 能够完成一个不需要输入密码的 NTLM 协议认证流程，所以不算是一个漏洞，算是一个技巧。</p>
+<p>Pass The Hash的工具：
+Smbmap</p>
+<p>CrackMapExec</p>
+<p>Smbexec</p>
+<p>Metasploit</p>
+<p>使用 CrackMapExec 实现 Hash 传递：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">root@kali:~/cache# cme smb 192.168.3.5 -u administrator -H dab7de8feeb5ecac65faf9fdc6cac3a9 -x whoami
+SMB 192.168.3.5 <span class="m">445</span> LIYINGZHEA30B
+<span class="o">[</span>*<span class="o">]</span> Windows <span class="m">7</span> Ultimate <span class="m">7601</span> Service Pack <span class="m">1</span> x64 <span class="o">(</span>name:LIYINGZHEA30B<span class="o">)</span>
+<span class="o">(</span>domain:PAYLOADS<span class="o">)</span> <span class="o">(</span>signing:False<span class="o">)</span> <span class="o">(</span>SMBv1:True<span class="o">)</span>
+SMB 192.168.3.5 <span class="m">445</span> LIYINGZHEA30B
+<span class="o">[</span>+<span class="o">]</span> PAYLOADS<span class="se">\a</span>dministrator dab7de8feeb5ecac65faf9fdc6cac3a9
+<span class="o">(</span>Pwn3d!<span class="o">)</span>SMB 192.168.3.5 <span class="m">445</span> LIYINGZHEA30B <span class="o">[</span>+<span class="o">]</span> Executed <span class="nb">command</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="kerberos域认证">Kerberos域认证</h2>
+<h3 id="active-directory活动目录的概念">Active Directory(活动目录)的概念</h3>
+<p>Windows 提供了为企业管理资产、服务、网络对象进行组织化的管理，这非常符合企业架构的管理模式。而承载这些管理机制的就是活动目录服务。如果要搭建一个域，就需要安装活动目录服务。</p>
+<p>活动目录服务以域名来划分域的边界，域外就不属于管理范围了，也就是说，一个域对应一个域名，域之间也可以相互信任。</p>
+<p>Active Directory 存储了有关<code>网络对象</code>的信息，并且让管理员和用户能够轻松地查找和使用这些信息。Active Directory 使用了一种 结构化的数据存储方式，并以此作为基础对目录信息进行合乎<code>逻辑的分层组织</code>。</p>
+<p><code>网络对象分为</code>:用户、用户组、计算机、域、组织单位以及安全策略等。</p>
+<h3 id="active-directory活动目录的概念-1">Active Directory(活动目录)的概念</h3>
+<ul>
+<li><code>服务器及客户端计算机管理</code>:管理服务器及客户端计算机账户， 所有服务器及客户端计算机加入域管理并实施组策略。</li>
+<li><code>用户服务</code>:管理用户域账户、用户信息、企业通讯录(与电子邮件系统集成)、用户组管理、用户身份认证、用户授权管理等，按省实施组管理策略。</li>
+<li><code>资源管理</code>:管理打印机、文件共享服务等网络资源。</li>
+<li><code>桌面配置</code>:系统管理员可以集中的配置各种桌面配置策略，如: 用户使用域中资源权限限制、界面功能的限制、应用程序执行特征限制、网络连接限制、安全配置限制等。</li>
+<li><code>应用系统支撑</code>:支持财务、人事、电子邮件、企业信息门户、办公自动化、补丁管理、防病毒系统等各种应用系统。</li>
+</ul>
+<p>在域中，网络对象可以相互访问，但是在真实情况中，需要对某些部门的计算机进行限制，例如：销售部门不能访问技术部门的服务器。</p>
+<p>这个中间就需要 Kerberos 认证协议来验证网络对象间的权限。</p>
+<h3 id="域认证体系---kerberoes">域认证体系 - Kerberoes</h3>
+<p><code>Kerberos 是一种网络认证协议</code>，其设计目标是通过<code>密钥系统</code>为客户机/服务器应用程序提供强大的认证服务。该认证过程的实现不依赖于主机操作系统的认证，无需基于主机地址的信任，不要求网络上所有主机的物理安全，<code>并假定网络上传送的数据包可以被任意地读取、修改和插入数据</code>。在以上情况下，Kerberos作为一种可信任的第三方认证服务，是通过传统的密码技术(如:共享密钥)执行认证服务的。</p>
+<h3 id="域认证所参与的角色">域认证所参与的角色</h3>
+<p>Kerberos的标志是三只狗头，狗头分别代表以下角色：</p>
+<ul>
+<li>Client</li>
+<li>Server</li>
+<li>KDC(Key Distribution Center) = DC(Domain Controller)</li>
+</ul>
+<h3 id="域认证所参与的角色-1">域认证所参与的角色</h3>
+<ul>
+<li>AD(Account database): 存储所有 client 的白名单，只有存在于白名单的 client 才能<code>顺利申请到TGT</code></li>
+<li>Authentication Service: 为 client 生成 TGT 的服务</li>
+<li>Ticket Granting Service: 为 client 生成某个服务的 ticket</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172747.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172747.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172747.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172747.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172747.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172747.png-water_print" />
+从物理层面看，AD 与 KDC 均为域控制器(Domain Controller)。</p>
+<h3 id="域认证粗略流程">域认证粗略流程</h3>
+<ol>
+<li>client 向 kerberos 服务请求，希望获取访问 server 的权限。 kerberos 得到了这个消息，首先得判断 client 是否是可信赖的，也就是白名单黑名单的说法。这就是 AS 服务完成的工作，通过在 AD 中存储黑名单和白名单来区分 client。成功后，返回 AS 返回 TGT 给 client。</li>
+<li>client 得到了 TGT  后，继续向 kerberos 请求，希望获取访问 server 的权限。 kerberos 又得到了这个消息，这时候通过 client 消息中的 TGT，判断出了 client 拥有了这个权限，给了 client 访问 server 的权限 ticket。</li>
+<li>client 得到 ticket 后，终于可以成功访问 server。这个 ticket 只是针对这个 server，其他 server 需要向 TGS 申请。</li>
+</ol>
+<h4 id="第一步-session-key-与-ticket-granting-ticket">第一步 Session Key 与 Ticket Granting Ticket</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172851.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172851.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172851.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172851.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172851.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172851.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172902.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172902.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172902.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172902.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172902.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172902.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172911.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172911.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172911.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172911.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172911.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172911.png-water_print" /></p>
+<h4 id="第二步-session-key-与-ticket-granting-ticket">第二步 Session Key 与 Ticket Granting Ticket</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172918.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172918.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172918.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172918.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172918.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172918.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172930.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172930.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172930.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172930.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172930.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172930.png-water_print" /></p>
+<h4 id="第三步-server-session-key-与-ticket">第三步 Server Session Key 与 Ticket</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172938.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172938.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172938.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172938.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172938.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172938.png-water_print" /></p>
+<h3 id="白银票据">白银票据</h3>
+<p>白银票据的特点：</p>
+<ol>
+<li>不需要与 KDC 进行交互</li>
+<li>需要目标服务的 NTLM Hash</li>
+</ol>
+<p>在第三步认证中的 Ticket 的组成：
+<code>Ticket = Server Hash(Server Session Key + Client info + End Time)</code></p>
+<p>当拥有 Server Hash 时，我们就可以伪造一个不经过 KDC 认证的一个 Ticket。</p>
+<p>PS：Server Session Key 在未发送 Ticket 之前，服务器是不知道 Server Session Key 是什么的。 所以，一切凭据都来源于 Server Hash。</p>
+<h3 id="伪造白银票据">伪造白银票据</h3>
+<p>首先需要导出Server Hash：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">C:\files&gt;mimikatz.exe &#34;privilege::debug” &#34;sekurlsa::logonpasswords&#34; &#34;exit&#34; &gt; log.txt
+</code></pre></td></tr></table>
+</div>
+</div><p>伪造票据:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">mimikatz “kerberos::golden /domain:&lt;域名&gt; /sid:&lt;域 SID&gt; /target:&lt;目标服务器主机名&gt; /service:&lt;服务类型&gt; /rc4:&lt;NTLM Hash&gt; /user:&lt;用户名&gt; /ptt&#34; exit
+</code></pre></td></tr></table>
+</div>
+</div><p>Other：</p>
+<ul>
+<li>kerberos::list #列出票据</li>
+<li>kerberos::purge # 清除票据</li>
+</ul>
+<p>由于白银票据需要目标服务器的Hash，所以没办法生成对应域内所有服务器的票据，也不能通过TGT申请。因此只能针对服务器上的某些服务去伪造，伪造的服务类型列表如下:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">服务注释</th>
+<th style="text-align:center">服务名</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">WMI</td>
+<td style="text-align:center">HOST、RPCSS</td>
+</tr>
+<tr>
+<td style="text-align:center">Powershell Remoteing</td>
+<td style="text-align:center">HOST、HTTP</td>
+</tr>
+<tr>
+<td style="text-align:center">WinRM</td>
+<td style="text-align:center">HOST、HTTP</td>
+</tr>
+<tr>
+<td style="text-align:center">Scheduled Tasks</td>
+<td style="text-align:center">HOST</td>
+</tr>
+<tr>
+<td style="text-align:center">LDAP 、DCSync</td>
+<td style="text-align:center">LDAP</td>
+</tr>
+<tr>
+<td style="text-align:center">Windows File Share (CIFS)</td>
+<td style="text-align:center">CIFS</td>
+</tr>
+<tr>
+<td style="text-align:center">Windows Remote ServerAdministration Tools</td>
+<td style="text-align:center">RPCSS、LDAP、CIFS</td>
+</tr>
+</tbody>
+</table>
+<h3 id="白银票据silver-tickets防御">白银票据(Silver Tickets)防御</h3>
+<ol>
+<li>尽量保证服务器凭证不被窃取</li>
+<li>开启PAC (Privileged Attribute Certificate) 特权属性证书保护 功能，PAC主要是规定服务器将票据发送给kerberos服务，由kerberos服务验证票据是否有效。
+开启方式:
+将注册表中<code>HKEY_LOCAL_MACHINE\SYSTEM \ CurrentControlSet\Control\Lsa\Kerberos\Parameters</code>中的<code>ValidateKdcPacSignature</code>设置为1</li>
+</ol>
+<h3 id="黄金票据golden-tickets">黄金票据(Golden Tickets)</h3>
+<p>黄金票据特点:</p>
+<ol>
+<li>需要与DC通信</li>
+<li>需要krbtgt用户的hash
+PS:这里的krbtgt hash就是之前讲的KDC Hash
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172958.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172958.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172958.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172958.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172958.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707172958.png-water_print" /></li>
+</ol>
+<p><code>注意</code>:这里的krbtgt hash就是之前讲的KDC Hash</p>
+<h3 id="黄金票据golden-tickets-msf-kiwi">黄金票据(Golden Tickets)-MSF kiwi</h3>
+<p>使用meterpreter中的kiwi模块： <code>load kiwi</code>
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173017.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173017.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173017.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173017.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173017.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173017.png-water_print" />
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173026.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173026.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173026.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173026.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173026.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173026.png-water_print" />
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173033.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173033.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173033.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173033.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173033.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173033.png-water_print" /></p>
+<h3 id="黄金票据golden-tickets---伪造">黄金票据(Golden Tickets) - 伪造</h3>
+<p>伪造票据:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">mimikatz “kerberos::golden /domain:&lt;域名&gt; /sid:&lt;域SID&gt; /rc4:&lt;KRBTGT NTLM Hash&gt; /user:&lt;任意用户名&gt; /ptt&#34; exit
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="tickets-总结">Tickets 总结</h3>
+<ul>
+<li>黄金票据:从攻击面来看，获取krbtgt用户的hash后，可以在域中 进行持久性的隐藏，并且日志无法溯源，但是需要拿到DC权限， 使用黄金票据能够在一个域环境中长时间控制整个域。</li>
+<li>从防御角度来看，需要经常更新krbtgt的密码，才能够使得原有的 票据失效。最根本的办法是不允许域管账户登录其他服务器。</li>
+<li>白银票据:从攻击面来看，伪造白银票据的难度比伪造黄金票据的 难度较小，因为一个域中的服务器如果对外的话，非常容易被入侵， 并且容易被转储Server。</li>
+<li>从防御角度来看，需要开启PAC认证，但这会降低认证效率，增加 DC的负担，最根本的还是要加固服务器本身对外的服务。</li>
+</ul>
+<h2 id="windows-access-token">Windows Access Token</h2>
+<h3 id="windows-access-token简介">Windows Access Token简介</h3>
+<p>Windows Token其实叫Access Token(访问令牌)，它是一个描述进程或者线程安全上下文的一个对象。不同的用户登录计算机后，都会生成一个Access Token，这个Token在用户创建进程或者线程 时会被使用，不断的拷贝，这也就解释了A用户创建一个进程而该进程没有B用户的权限。</p>
+<p>Access Token种类：</p>
+<ul>
+<li>主令牌</li>
+<li>模拟令牌</li>
+</ul>
+<p>一般情况下，用户双击运行一个程序，都会拷贝“explorer.exe”的Access Token。
+当用户注销后，系统将会使主令牌切换为模拟令牌，不会将令牌清除，只有在重启机器后才会清除。</p>
+<h3 id="access-token的组成">Access Token的组成</h3>
+<ul>
+<li>用户帐户的安全标识符(SID)</li>
+<li>用户所属的组的SID</li>
+<li>用于标识当前登录会话的登录SID</li>
+<li>用户或用户组所拥有的权限列表</li>
+<li>所有者SID</li>
+<li>主要组的SID</li>
+<li>访问控制列表</li>
+<li>访问令牌的来源</li>
+<li>令牌是主要令牌还是模拟令牌</li>
+<li>限制SID的可选列表</li>
+<li>目前的模拟等级</li>
+<li>其他统计数据</li>
+</ul>
+<h3 id="windows-access-token--sid-security-identifiers安全标识符">Windows Access Token – SID (Security Identifiers)安全标识符</h3>
+<p>安全标识符是一个唯一的字符串，它可以代表一个账户、一个用户 组、或者是一次登录。通常它还有一个SID固定列表，例如 Everyone这种已经内置的账户，默认拥有固定的SID。</p>
+<p>SID的表现形式:</p>
+<ul>
+<li>域SID-用户ID</li>
+<li>计算机SID-用户ID</li>
+<li>SID列表都会存储在域控的AD或者计算机本地账户数据库中。</li>
+</ul>
+<h3 id="windows-access-token产生过程">Windows Access Token产生过程</h3>
+<p>每个进程创建时都会根据登录会话权限由LSA(Local Security Authority)分配一个Token(如果CreaetProcess时自己指定了 Token, LSA会用该Token， 否则就用父进程Token的一份拷贝。</p>
+<h3 id="windows-access-token令牌假冒实战">Windows Access Token令牌假冒实战</h3>
+<p><code>当用户注销后，系统将会使主令牌切换为模拟令牌，不会将令牌清除，只有在重启机器后才会清除。</code>
+可以使用多种工具查看目前系统上存在的模拟令牌:</p>
+<ul>
+<li>Incognito</li>
+<li>Powershell - Invoke-TokenManipulation.ps1</li>
+<li>Cobalt Strike - steal_token</li>
+</ul>
+<p>案例(针对某跨国企业的一次渗透测试 获取DC权限）:
+<a href="http://blog.360ec.net/archives/32/" target="_blank" rel="noopener noreffer">http://blog.360ec.net/archives/32/</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">meterpreter &gt; getsystem
+meterpreter &gt; load incognito meterpreter &gt; list_tokens –u
+Delegation Tokens Available ============================== NT AUTHORITY\LOCAL SERVICENT AUTHORITY\NETWORK SERVICENT AUTHORITY\SYSTEM PAYLOADS\Administrator PAYLOADS\w7
+meterpreter &gt; impersonate_token &#34;PAYLOADS\\Administrator”
+[+] Delegation token available
+[+] Successfully impersonated user PAYLOADS\Administrator
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="windows-access-token令牌假冒防御">Windows Access Token令牌假冒防御</h3>
+<p>禁止Domain Admins登录对外且未做安全加固的服务器，因为一旦服务器被入侵，域管理员的令牌可能会被攻击者假冒，从控制DC。</p>
+<p>如果想清除假冒，重启服务器即可。
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173053.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173053.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173053.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173053.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173053.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190707173053.png-water_print" /></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2019-07-07</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2019/07/windows-%E8%AE%A4%E8%AF%81/" data-title="Windows 认证"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2019/07/windows-%E8%AE%A4%E8%AF%81/" data-title="Windows 认证"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2019/07/windows-%E8%AE%A4%E8%AF%81/" data-title="Windows 认证"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%9F%9F%E5%AE%89%E5%85%A8/">域安全</a>,&nbsp;<a href="/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a>,&nbsp;<a href="/tags/%E8%AE%A4%E8%AF%81/">认证</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2019/06/hack-the-boxnetmon/" class="prev" rel="prev" title="Hack The Box —— Netmon"><i class="fas fa-angle-left fa-fw"></i>Hack The Box —— Netmon</a>
+            <a href="/2019/07/redis%E5%9F%BA%E4%BA%8E%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E7%9A%84rce%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/" class="next" rel="next" title="Redis 基于主从复制的 RCE 利用方式">Redis 基于主从复制的 RCE 利用方式<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

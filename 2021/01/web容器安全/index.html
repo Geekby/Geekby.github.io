@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>WEB 容器安全 - Geekby&#39;s Blog</title><meta name="Description" content="WEB 容器安全相关"><meta property="og:title" content="WEB 容器安全" />
+<meta property="og:description" content="WEB 容器安全相关" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2021/01/web%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-01-12T14:20:00+08:00" />
+<meta property="article:modified_time" content="2021-01-12T14:20:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="WEB 容器安全"/>
+<meta name="twitter:description" content="WEB 容器安全相关"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/01/web%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/" /><link rel="prev" href="https://www.geekby.site/2021/01/ssrf%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" /><link rel="next" href="https://www.geekby.site/2021/01/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "WEB 容器安全",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2021\/01\/web%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "常用, 渗透测试","wordcount":  853 ,
+        "url": "https:\/\/www.geekby.site\/2021\/01\/web%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8\/","datePublished": "2021-01-12T14:20:00+08:00","dateModified": "2021-01-12T14:20:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "WEB 容器安全相关"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">WEB 容器安全</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%B8%B8%E7%94%A8/"><i class="far fa-folder fa-fw"></i>常用</a>&nbsp;<a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-12">2021-01-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 853 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-定义及原理">1 定义及原理</a></li>
+    <li><a href="#2-apache-安全">2 Apache 安全</a>
+      <ul>
+        <li><a href="#21-apache-配置错误">2.1 apache 配置错误</a>
+          <ul>
+            <li><a href="#211-原理">2.1.1 原理</a></li>
+            <li><a href="#212-配置">2.1.2 配置</a>
+              <ul>
+                <li><a href="#2121-修改-conf-文件">2.1.2.1 修改 conf 文件</a></li>
+                <li><a href="#2122-创建-htaccess">2.1.2.2 创建 .htaccess</a></li>
+              </ul>
+            </li>
+            <li><a href="#213-漏洞复现">2.1.3 漏洞复现</a></li>
+          </ul>
+        </li>
+        <li><a href="#22-apache-换行解析漏洞">2.2 apache 换行解析漏洞</a>
+          <ul>
+            <li><a href="#221-原理">2.2.1 原理</a></li>
+            <li><a href="#222-漏洞复现">2.2.2 漏洞复现</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#3-nginx-安全">3 Nginx 安全</a>
+      <ul>
+        <li><a href="#31-nginx-配置错误">3.1 nginx 配置错误</a>
+          <ul>
+            <li><a href="#311-crlf-注入">3.1.1 CRLF 注入</a>
+              <ul>
+                <li><a href="#3111-原理">3.1.1.1 原理</a></li>
+                <li><a href="#3112-漏洞复现">3.1.1.2 漏洞复现</a></li>
+              </ul>
+            </li>
+            <li><a href="#312-目录穿越漏洞">3.1.2 目录穿越漏洞</a></li>
+          </ul>
+        </li>
+        <li><a href="#32-nginx-越界读取缓存漏洞">3.2 Nginx 越界读取缓存漏洞</a>
+          <ul>
+            <li><a href="#321-原理">3.2.1 原理</a>
+              <ul>
+                <li><a href="#3211-http-range">3.2.1.1 HTTP Range</a></li>
+                <li><a href="#3212-http-cache">3.2.1.2 HTTP-Cache</a></li>
+                <li><a href="#3213-原理分析">3.2.1.3 原理分析</a></li>
+              </ul>
+            </li>
+            <li><a href="#322-漏洞复现">3.2.2 漏洞复现</a></li>
+          </ul>
+        </li>
+        <li><a href="#33-nginx-文件名逻辑漏洞">3.3 Nginx 文件名逻辑漏洞</a>
+          <ul>
+            <li><a href="#331-原理">3.3.1 原理</a></li>
+            <li><a href="#332-漏洞复现">3.3.2 漏洞复现</a>
+              <ul>
+                <li><a href="#3321-解析漏洞">3.3.2.1 解析漏洞</a></li>
+                <li><a href="#3322-绕过目录限制">3.3.2.2 绕过目录限制</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#34-nginx-解析漏洞">3.4 Nginx 解析漏洞</a>
+          <ul>
+            <li><a href="#341-原理">3.4.1 原理</a></li>
+            <li><a href="#342-漏洞复现">3.4.2 漏洞复现</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#4-tomcat-安全">4 Tomcat 安全</a>
+      <ul>
+        <li><a href="#41-tomcat-配置错误">4.1 Tomcat 配置错误</a></li>
+        <li><a href="#42-tomcat-弱口令">4.2 Tomcat 弱口令</a>
+          <ul>
+            <li><a href="#421-tomcat-权限">4.2.1 Tomcat 权限</a></li>
+            <li><a href="#422-漏洞复现">4.2.2 漏洞复现</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="web-容器安全">WEB 容器安全</h1>
+<h2 id="1-定义及原理">1 定义及原理</h2>
+<p>Web 服务器：提供 Web 服务器的软件或主机，即 Web 服务器软件或者装有 Web 服务器软件的计算机。</p>
+<p>Web 中间件：提供系统软件与应用软件之间连接的软件，Web 中间件是提供 web 应用软件和系统软件连接的软件的总称。</p>
+<p>Web 容器：容器是中间件的一种，它给处于其中的应用程序组件提供从一个环境，使应用程序直接与容器中的环境变量进行交互而不必关注其他的系统问题。Web 容器用于给处于其中的应用程序组件提供一个环境。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112142412.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112142412.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112142412.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112142412.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112142412.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112142412.png-water_print" /></p>
+<h2 id="2-apache-安全">2 Apache 安全</h2>
+<h3 id="21-apache-配置错误">2.1 apache 配置错误</h3>
+<h4 id="211-原理">2.1.1 原理</h4>
+<p><code>AddHandler application/x-httpd-php .php</code></p>
+<p>AddHandler 为相应的文件扩展名指定处理程序，上述的配置意味着将扩展名为 <code>.php</code> 的文件交给 x-httpd-php 程序处理</p>
+<p>Apache 识别文件扩展名是从后往前的，如果遇到了无法识别的扩展名会接着往前识别，遇到第一个可以识别的扩展名作为该文件的扩展名</p>
+<h4 id="212-配置">2.1.2 配置</h4>
+<h5 id="2121-修改-conf-文件">2.1.2.1 修改 conf 文件</h5>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112144902.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112144902.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112144902.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112144902.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112144902.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112144902.png-water_print" /></p>
+<h5 id="2122-创建-htaccess">2.1.2.2 创建 .htaccess</h5>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112144912.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112144912.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112144912.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112144912.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112144912.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112144912.png-water_print" /></p>
+<h4 id="213-漏洞复现">2.1.3 漏洞复现</h4>
+<p>在有多个后缀的情况下，只要一个文件含有 <code>.php</code> 后缀的文件即将被识别成 PHP 文件，没必要是最后一个后缀。利用这个特性，将会造成一个可以绕过上传白名单的解析漏洞。</p>
+<p>环境运行后，访问 <code>http://your-ip/uploadfiles/apache.php.jpeg</code> 即可发现，phpinfo 被执行了，该文件被解析为 php 脚本。</p>
+<p><code>http://your-ip/index.php</code> 中是一个白名单检查文件后缀的上传组件，上传完成后并未重命名。我们可以通过上传文件名为 xxx.php.jpg 或 xxx.php.jpeg 的文件，利用 Apache 解析漏洞进行 getshell。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190610170640.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190610170640.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190610170640.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190610170640.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190610170640.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190610170640.png-water_print" /></p>
+<h3 id="22-apache-换行解析漏洞">2.2 apache 换行解析漏洞</h3>
+<p>漏洞编号：CVE-2017-15715</p>
+<p>影响版本：Apache 2.4.10 - 2.4.29</p>
+<p>漏洞利用：文件上传</p>
+<p>漏洞名称：换行解析漏洞</p>
+<h4 id="221-原理">2.2.1 原理</h4>
+<p>其 2.4.0~2.4.29 版本中存在一个解析漏洞，在解析 PHP 时，1.php\x0A 将被按照 PHP 后缀进行解析，导致绕过一些服务器的安全策略。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112150433.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112150433.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112150433.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112150433.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112150433.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112150433.png-water_print" /></p>
+<h4 id="222-漏洞复现">2.2.2 漏洞复现</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]))</span> <span class="p">{</span>
+    <span class="nv">$name</span> <span class="o">=</span> <span class="nx">basename</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]);</span>
+    <span class="nv">$ext</span> <span class="o">=</span> <span class="nx">pathinfo</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nx">PATHINFO_EXTENSION</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$ext</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;php&#39;</span><span class="p">,</span> <span class="s1">&#39;php3&#39;</span><span class="p">,</span> <span class="s1">&#39;php4&#39;</span><span class="p">,</span> <span class="s1">&#39;php5&#39;</span><span class="p">,</span> <span class="s1">&#39;phtml&#39;</span><span class="p">,</span> <span class="s1">&#39;pht&#39;</span><span class="p">]))</span> <span class="p">{</span>
+        <span class="k">exit</span><span class="p">(</span><span class="s1">&#39;bad file&#39;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nx">move_uploaded_file</span><span class="p">(</span><span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">][</span><span class="s1">&#39;tmp_name&#39;</span><span class="p">],</span> <span class="s1">&#39;./&#39;</span> <span class="o">.</span> <span class="nv">$name</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在 1.php 后面插入一个 \x0A（注意，不能是\x0D\x0A，只能是一个\x0A），不再拦截：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113152842.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113152842.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113152842.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113152842.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113152842.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113152842.png-water_print" /></p>
+<p>访问刚才上传的 /1.php%0a，发现能够成功解析，但这个文件不是 php 后缀，说明目标存在解析漏洞：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190610170023.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190610170023.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190610170023.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190610170023.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190610170023.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190610170023.png-water_print" /></p>
+<h2 id="3-nginx-安全">3 Nginx 安全</h2>
+<blockquote>
+<p>nginx 是一个高性能的 HTTP 和反向代理 Web 服务器，同时也提供了 IMAP/POP3/SMTP 服务。</p>
+</blockquote>
+<p>中国大陆使用 Nginx 网站用户有：百度、京东、新浪、网易、腾讯等。</p>
+<p>Nginx 可以在大多数 Unix、 Linux 编译运行，也有 Windows 移植版。</p>
+<h3 id="31-nginx-配置错误">3.1 nginx 配置错误</h3>
+<h4 id="311-crlf-注入">3.1.1 CRLF 注入</h4>
+<p>CRLF：就是 CR 和 LF，分别表示回车和换行，CR 命令让打印头回到左边。LF 命令让纸前进一行。</p>
+<p>在 HTTP 报文中，行与行之间使用 CRLF 间隔。</p>
+<p>攻击者一旦向请求行或首部中的字段注入恶意的 CRLF，就能注入一些首部字段或报文主体，并在响应中输出，所以又称为 HTTP 响应分漏洞。</p>
+<hr>
+<p>在 Nginx 中配置文件中，有三个可以接受 URL 的变量：</p>
+<ol>
+<li>
+<p>$URI</p>
+</li>
+<li>
+<p>$DOCUMENT_URI</p>
+</li>
+<li>
+<p>$REQUEST_URI</p>
+</li>
+</ol>
+<p>其中：</p>
+<p>$URI - 获取解码后的请求路径</p>
+<p>$DOCUMENT_URI - 获取解码后的请求路径</p>
+<p>$REQUEST_URI - 没有解码的完整的 URL</p>
+<h5 id="3111-原理">3.1.1.1 原理</h5>
+<p>Nginx会将 <code>$uri</code> 进行解码，导致传入 <code>%0a%0d</code> 即可引入换行符，造成 CRLF 注入漏洞。</p>
+<p>错误的配置文件示例（原本的目的是为了让 http 的请求跳转到 https 上）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">location / {
+    return 302 https://$host$uri;
+}
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="3112-漏洞复现">3.1.1.2 漏洞复现</h5>
+<p>Payload： <code>http://your-ip:8080/%0a%0dSet-Cookie:%20a=1</code>，可注入 Set-Cookie 头。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152239.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152239.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152239.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152239.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152239.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152239.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152304.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152304.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152304.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152304.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152304.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152304.png-water_print" /></p>
+<h4 id="312-目录穿越漏洞">3.1.2 目录穿越漏洞</h4>
+<p>Nginx 在配置别名（Alias）的时候，如果忘记加 <code>/</code>，将造成一个目录穿越漏洞。</p>
+<p>错误的配置文件示例（原本的目的是为了让用户访问到 /home/ 目录下的文件）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">location /files {
+    alias /home/;
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>Payload:：<code>http://your-ip:8081/files../</code> ，成功穿越到根目录：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152506.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152506.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152506.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152506.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152506.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112152506.png-water_print" /></p>
+<h3 id="32-nginx-越界读取缓存漏洞">3.2 Nginx 越界读取缓存漏洞</h3>
+<p>漏洞编号：CVE-2017-7529</p>
+<p>影响版本：Nginx 0.5.6 - 1.13.2</p>
+<p>漏洞危害：敏感信息泄露</p>
+<h4 id="321-原理">3.2.1 原理</h4>
+<h5 id="3211-http-range">3.2.1.1 HTTP Range</h5>
+<p>HTTP 的 Range，允许客户端分批次请求资源的部分，如果服务端资源较大，可以通过 Range 来并发下载；如果访问资源时网络中断，可以断点续传</p>
+<p>Range 设置在 HTTP 请求头中，它是多个 byte-range-spec(或 suffix-range-byte-spec)的集合</p>
+<div class="details admonition example open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ol fa-fw"></i>示例<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>Range：bytes=0-1024 表示访问第 0 到第 1024 字节</p>
+<p>Range：bytes=500-600，601-999，-300 表示分三块访问，分别是 500 到 600 字节，601 到 600 字节，最后的 300 字节;</p>
+</div>
+        </div>
+    </div>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112162711.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112162711.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112162711.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112162711.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112162711.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112162711.png-water_print" /></p>
+<h5 id="3212-http-cache">3.2.1.2 HTTP-Cache</h5>
+<p>Nginx 可以作为缓存服务器，将 Web 应用服务器返回的内容缓存起来。如果客户端请求的内容已经被缓存，那么就可以直接将缓存内容返回，而无需再次请求应用服务器。由此，可降低应用服务器的负载并提高服务的响应性能。</p>
+<p>Cache 文件内容：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112162922.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112162922.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112162922.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112162922.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112162922.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112162922.png-water_print" /></p>
+<h5 id="3213-原理分析">3.2.1.3 原理分析</h5>
+<p>Nginx 对 Range 的支持包括 header 处理和 body 处理，分别用来解析客户端发送过来的 Range header 和裁剪返回给客户端的请求数据 Body</p>
+<p>ngx_http_range_header_filter_module 负责对 header 数据的处理</p>
+<p>ngx_http_range_body_filter_module 负责对 body 数据的处理</p>
+<p>解析过程：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112163149.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112163149.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112163149.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112163149.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112163149.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112163149.png-water_print" /></p>
+<p>在 ngx_http_range_parse 函数中有这样一个循环</p>
+<p>这段代码是要把“-”两边的数字取出分别赋值给 start 和 end 变量，字符串指针 p 中即为 <code>bytes=</code> 后面的内容。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112163344.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112163344.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112163344.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112163344.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112163344.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112163344.png-water_print" /></p>
+<p>在上面这段代码中存在 cutoff 和 cutlim 阈值限定了从字符串中读取时不会让 start 或 end 为负值</p>
+<p>所以这里需要进入 suffix=1 的分支，因此使用 <code>Range: bytes=-xxx</code>，即省略初始 start 值的形式。</p>
+<p>start 等于 content_length 减去 end 值，所以如果传入的 end 比实际长度还要长，就可以使 start 变为负数。最终 end 的值会被设定为 content_length - 1</p>
+<p>通过上面的设定后，这块 range 的总长度就超过了content-length。而 Nginx对 range 总长度会有检查，但是注意到 size 的值是 multipart 的全局 range 长度相加得到</p>
+<p>因此，一个 range 是不够的，至少需要两个 range，其长度之和溢出为负数，就可以绕过总长度的检查了。</p>
+<p>for 循环是一个无条件的循环，有一个退出条件为 =，支持 range 的值为 start1 - end1， start2 - end2 的形式构造 range: bytes=-x, -y。一大一小两个 end 值，只需要控制前面一个 end 值小而后一个 end 值大，从而实现 star t值和 size 值皆为负数，控制 start 值负到一个合适的位置，那么就能成功读到缓存文件头部了。</p>
+<h4 id="322-漏洞复现">3.2.2 漏洞复现</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112164636.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112164636.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112164636.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112164636.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112164636.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112164636.png-water_print" /></p>
+<p>可见，越界读取到了位于「HTTP返回包体」前的「文件头」、「HTTP返回包头」等内容。</p>
+<h3 id="33-nginx-文件名逻辑漏洞">3.3 Nginx 文件名逻辑漏洞</h3>
+<p>漏洞编号：CVE-2013-4547</p>
+<p>漏洞危害：文件上传、绕过目录限制</p>
+<p>影响版本：0.8.41 ~ 1.4.3 / 1.5.0 ~ 1.5.7</p>
+<h4 id="331-原理">3.3.1 原理</h4>
+<p>非法字符空格和截止符 <code>\0</code> 会导致 Nginx 解析 URI 时的有限状态机混乱，危害是允许攻击者通过一个非编码空格绕过后缀名限制。</p>
+<p>举个例子，假设服务器上存在文件：<code>file.aaa[空格]</code>，注意文件名的最后一个字符是空格。则可以通过访问：<code>http://127.0.0.1/file.aaa \0.bbb</code>，让 Nginx 认为文件 <code>file.aaa </code>的后缀为 <code>.bbb</code>。</p>
+<h4 id="332-漏洞复现">3.3.2 漏洞复现</h4>
+<h5 id="3321-解析漏洞">3.3.2.1 解析漏洞</h5>
+<p>Nginx 匹配到 <code>.php</code> 结尾的请求，就发送给 <code>fastcgi</code> 进行解析，常用的写法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">location ~ \.php$ {
+    include        fastcgi_params;
+
+    fastcgi_pass   127.0.0.1:9000;
+    fastcgi_index  index.php;
+    fastcgi_param  SCRIPT_FILENAME  /var/www/html$fastcgi_script_name;
+    fastcgi_param  DOCUMENT_ROOT /var/www/html;
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>正常情况下（关闭 <code>pathinfo</code> 的情况下），只有 <code>.php</code> 后缀的文件才会被发送给 <code>fastcgi</code> 解析。</p>
+<p>而存在 <code>CVE-2013-4547</code> 的情况下，我们请求 <code>1.gif[0x20][0x00].php</code>，这个 URI 可以匹配上正则 <code>\.php$</code>，可以进入这个 Location 块；但进入后，Nginx 却错误地认为请求的文件是 <code>1.gif[0x20]</code>，就设置其为 <code>SCRIPT_FILENAME</code> 的值发送给 <code>fastcgi</code>。</p>
+<p>fastcgi 根据 <code>SCRIPT_FILENAME</code> 的值进行解析，最后造成了解析漏洞。</p>
+<p>所以，我们只需要上传一个空格结尾的文件，即可使 PHP 解析之。</p>
+<p>该漏洞利用条件有两个：</p>
+<ol>
+<li>Nginx 0.8.41 ~ 1.4.3 / 1.5.0 ~ 1.5.7</li>
+<li>php-fpm.conf 中的 security.limit_extensions 为空，也就是说任意后缀名都可以解析为 PHP</li>
+</ol>
+<p>vulhub 环境启动后，访问 <a href="http://your-ip:8080/" target="_blank" rel="noopener noreffer">http://your-ip:8080/</a>即可看到一个上传页面。</p>
+<p>这个环境是黑名单验证，我们无法上传php后缀的文件，需要利用 <code>CVE-2013-4547</code>。我们上传一个 <code>1.gif</code>，注意后面的空格：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113151403.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113151403.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113151403.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113151403.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113151403.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113151403.png-water_print" /></p>
+<p>访问 <a href="http://your-ip:8080/uploadfiles/1.gif[0x20][0x00].php" target="_blank" rel="noopener noreffer">http://your-ip:8080/uploadfiles/1.gif[0x20][0x00].php</a>，即可发现 <code>PHP</code> 已被解析：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113151420.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113151420.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113151420.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113151420.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113151420.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113151420.png-water_print" /></p>
+<p>注意，[0x20]是空格，[0x00]是 <code>\0</code>，这两个字符都不需要编码。</p>
+<h5 id="3322-绕过目录限制">3.3.2.2 绕过目录限制</h5>
+<p>比如很多网站限制了允许访问后台的IP：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">location /admin/ {
+    allow 127.0.0.1;
+    deny all;
+}
+</code></pre></td></tr></table>
+</div>
+</div><p>通过请求如下 URI：<code>/test[0x20]/../admin/index.php</code>，这个 URI 不会匹配上 location 后面的 <code>/admin/</code>，也就绕过了其中的 IP 验证</p>
+<p>但最后请求的是 <code>/test[0x20]/../admin/index.php</code> 文件，也就是 <code>/admin/index.php</code>，成功访问到后台。</p>
+<p>（这个前提是需要有一个目录叫 <code>test</code>：这是 Linux 系统的特点，如果有一个不存在的目录，则即使跳转到上一层，也会报文件不存在的错误， Windows 下没有这个限制）</p>
+<h3 id="34-nginx-解析漏洞">3.4 Nginx 解析漏洞</h3>
+<p>漏洞危害：文件上传</p>
+<p>影响版本：</p>
+<ul>
+<li>Nginx 1.x 最新版</li>
+<li>PHP 7.x 最新版</li>
+</ul>
+<h4 id="341-原理">3.4.1 原理</h4>
+<ol>
+<li>
+<p>nginx 把以 <code>.php</code> 结尾的文件交给 fastcgi 处理,为此可以构造 <code>http://ip/uploadfiles/test.png/.php</code>，其中 test.png 是我们上传的包含 PHP 代码的图片文件。</p>
+</li>
+<li>
+<p>fastcgi 在处理 .php 文件时发现文件并不存在，这时 php.ini 配置文件中 cgi.fix_pathinfo=1 发挥作用，这项配置用于修复路径，如果当前路径不存在则采用上层路径。为此这里交由 fastcgi 处理的文件就变成了 <code>/test.png</code>。</p>
+</li>
+<li>
+<p>最重要的一点是 php-fpm.conf 中的 security.limit_extensions 配置项限制了 fastcgi 解析文件的类型(即指定什么类型的文件当做代码解析)，此项设置为空的时候才允许 fastcgi 将 .png 等文件当做代码解析。</p>
+</li>
+</ol>
+<h4 id="342-漏洞复现">3.4.2 漏洞复现</h4>
+<p>该漏洞与 Nginx、php 版本无关，属于用户配置不当造成的解析漏洞。</p>
+<p>访问 <code>http://your-ip/uploadfiles/nginx.png</code> 和 <code>http://your-ip/uploadfiles/nginx.png/.php</code> 即可查看效果。</p>
+<h2 id="4-tomcat-安全">4 Tomcat 安全</h2>
+<p>Tomcat 是 Apache 软件基金会的 Jakarta 项目中的一个核心项目，由 Apache、Sun 和其他一些公司及个人共同开发而成。</p>
+<p>Tomcat 服务器是一个免费的开放源代码的 Web 应用服务器，属于轻量级应用服务器，在中小型系统和并发访问用户不是很多的场合下被普遍使用。</p>
+<p>实际上 Tomcat 是 Apache 服务器的扩展，但运行时它是独立运行的，所以当你运行 Tomcat 时，它实际上作为一个与 Apache 独立的进程单独运行的。</p>
+<h3 id="41-tomcat-配置错误">4.1 Tomcat 配置错误</h3>
+<p>漏洞编号：CVE-2017-12615</p>
+<p>影响版本：Apahce Tomcat 7.0.0 - 7.0.79</p>
+<p>漏洞说明：当 Tomcat 运行在 Windows 主机上，且启用了 HTTP PUT 请求方法，攻击者将有可能可通过精心构造的攻击请求向服务器上传包含任意代码的 JSP 文件。之后，JSP 文件中的代码将能被服务器执行。</p>
+<p>漏洞本质 Tomcat 配置了可写（readonly=false），导致我们可以往服务器写文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;servlet&gt;
+    &lt;servlet-name&gt;default&lt;/servlet-name&gt;
+    &lt;servlet-class&gt;org.apache.catalina.servlets.DefaultServlet&lt;/servlet-class&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;debug&lt;/param-name&gt;
+        &lt;param-value&gt;0&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;listings&lt;/param-name&gt;
+        &lt;param-value&gt;false&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;init-param&gt;
+        &lt;param-name&gt;readonly&lt;/param-name&gt;
+        &lt;param-value&gt;false&lt;/param-value&gt;
+    &lt;/init-param&gt;
+    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+&lt;/servlet&gt;
+</code></pre></td></tr></table>
+</div>
+</div><p>虽然 Tomcat 对文件后缀有一定检测（不能直接写 jsp），但我们使用一些文件系统的特性（如 Linux 下可用 / ）来绕过了限制。</p>
+<p>直接发送以下数据包即可在 Web 根目录写入 shell：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="nf">PUT</span> <span class="nn">/1.jsp/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="n">Host</span><span class="o">:</span> <span class="l">your-ip:8080</span>
+<span class="n">Accept</span><span class="o">:</span> <span class="l">*/*</span>
+<span class="n">Accept-Language</span><span class="o">:</span> <span class="l">en</span>
+<span class="n">User-Agent</span><span class="o">:</span> <span class="l">Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)</span>
+<span class="n">Connection</span><span class="o">:</span> <span class="l">close</span>
+<span class="n">Content-Type</span><span class="o">:</span> <span class="l">application/x-www-form-urlencoded</span>
+<span class="n">Content-Length</span><span class="o">:</span> <span class="l">5</span>
+
+shell
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="42-tomcat-弱口令">4.2 Tomcat 弱口令</h3>
+<p>Tomcat 支持在后台部署 war 文件，可以直接将 webshell 部署到 web 目录下。其中，欲访问后台，需要对应用户有相应权限。</p>
+<h4 id="421-tomcat-权限">4.2.1 Tomcat 权限</h4>
+<ul>
+<li>
+<p>manager（后台管理）</p>
+<ul>
+<li>manager-gui 拥有 html 页面权限</li>
+<li>manager-status 拥有查看 status 的权限</li>
+<li>manager-script 拥有 text 接口的权限，和 status 权限</li>
+<li>manager-jmx 拥有 jmx 权限，和 status 权限</li>
+</ul>
+</li>
+<li>
+<p>host-manager（虚拟主机管理）</p>
+<ul>
+<li>admin-gui 拥有 html 页面权限</li>
+<li>admin-script 拥有 text 接口权限</li>
+</ul>
+</li>
+</ul>
+<p>在 <code>conf/tomcat-users.xml</code> 文件中配置用户的权限：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+<span class="nt">&lt;tomcat-users</span> <span class="na">xmlns=</span><span class="s">&#34;http://tomcat.apache.org/xml&#34;</span>
+              <span class="na">xmlns:xsi=</span><span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+              <span class="na">xsi:schemaLocation=</span><span class="s">&#34;http://tomcat.apache.org/xml tomcat-users.xsd&#34;</span>
+              <span class="na">version=</span><span class="s">&#34;1.0&#34;</span><span class="nt">&gt;</span>
+
+    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;manager-gui&#34;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;manager-script&#34;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;manager-jmx&#34;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;manager-status&#34;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;admin-gui&#34;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;admin-script&#34;</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;user</span> <span class="na">username=</span><span class="s">&#34;tomcat&#34;</span> <span class="na">password=</span><span class="s">&#34;tomcat&#34;</span> <span class="na">roles=</span><span class="s">&#34;manager-gui,manager-script,manager-jmx,manager-status,admin-gui,admin-script&#34;</span> <span class="nt">/&gt;</span>
+    
+<span class="nt">&lt;/tomcat-users&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>可见，用户 tomcat 拥有上述所有权限，密码是 tomcat。</p>
+<p>正常安装的情况下，tomcat8 中默认没有任何用户，且 manager 页面只允许本地 IP 访问。只有管理员手工修改了这些属性的情况下，才可以进行攻击。</p>
+<h4 id="422-漏洞复现">4.2.2 漏洞复现</h4>
+<p>打开tomcat管理页面 <a href="http://your-ip:8080/manager/html" target="_blank" rel="noopener noreffer">http://your-ip:8080/manager/html</a>，输入弱密码 <code>tomcat:tomcat</code>，即可访问后台：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200321100456.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200321100456.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200321100456.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200321100456.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200321100456.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200321100456.png-water_print" /></p>
+<p>上传 war 包即可直接 getshell。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-01-12</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2021/01/web%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/" data-title="WEB 容器安全"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2021/01/web%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/" data-title="WEB 容器安全"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2021/01/web%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/" data-title="WEB 容器安全"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%B8%B8%E7%94%A8/">常用</a>,&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/01/ssrf%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" class="prev" rel="prev" title="SSRF 漏洞相关"><i class="fas fa-angle-left fa-fw"></i>SSRF 漏洞相关</a>
+            <a href="/2021/01/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="next" rel="next" title="文件上传漏洞相关">文件上传漏洞相关<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

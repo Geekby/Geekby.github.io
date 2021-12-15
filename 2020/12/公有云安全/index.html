@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>公有云安全 - Geekby&#39;s Blog</title><meta name="Description" content="公有云介绍及相关漏洞利用方式"><meta property="og:title" content="公有云安全" />
+<meta property="og:description" content="公有云介绍及相关漏洞利用方式" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2020/12/%E5%85%AC%E6%9C%89%E4%BA%91%E5%AE%89%E5%85%A8/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-12-31T14:00:00+08:00" />
+<meta property="article:modified_time" content="2020-12-31T14:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="公有云安全"/>
+<meta name="twitter:description" content="公有云介绍及相关漏洞利用方式"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2020/12/%E5%85%AC%E6%9C%89%E4%BA%91%E5%AE%89%E5%85%A8/" /><link rel="prev" href="https://www.geekby.site/2020/12/nodejs-%E5%AE%89%E5%85%A8/" /><link rel="next" href="https://www.geekby.site/2021/01/sql%E6%B3%A8%E5%85%A5%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "公有云安全",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2020\/12\/%E5%85%AC%E6%9C%89%E4%BA%91%E5%AE%89%E5%85%A8\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试, 公有云","wordcount":  193 ,
+        "url": "https:\/\/www.geekby.site\/2020\/12\/%E5%85%AC%E6%9C%89%E4%BA%91%E5%AE%89%E5%85%A8\/","datePublished": "2020-12-31T14:00:00+08:00","dateModified": "2020-12-31T14:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "公有云介绍及相关漏洞利用方式"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">公有云安全</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-12-31">2020-12-31</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 193 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-前言">1 前言</a>
+      <ul>
+        <li><a href="#11-为什么要上云">1.1 为什么要上云</a></li>
+        <li><a href="#12-相关资料">1.2 相关资料</a></li>
+        <li><a href="#13-常见的云产品">1.3 常见的云产品</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-常见概念">2 常见概念</a>
+      <ul>
+        <li><a href="#21-元数据---metadata">2.1 元数据 - metadata</a></li>
+        <li><a href="#22-可用区---available-zone-和区域---region">2.2 可用区 - Available Zone 和区域 - Region</a></li>
+        <li><a href="#23-iam---identify-and-access-management">2.3 IAM - Identify and Access Management</a>
+          <ul>
+            <li><a href="#231-用户">2.3.1 用户</a></li>
+            <li><a href="#232-用户组">2.3.2 用户组</a></li>
+            <li><a href="#233-角色">2.3.3 角色</a></li>
+          </ul>
+        </li>
+        <li><a href="#24-vpc---virtual-private-cloud">2.4 VPC - Virtual Private Cloud</a></li>
+        <li><a href="#25-arn---aliyun-resource-name">2.5 ARN - Aliyun Resource Name</a></li>
+        <li><a href="#26-access-key--access-secret-key">2.6 Access Key &amp; Access Secret Key</a></li>
+        <li><a href="#27-架构图">2.7 架构图</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-公有云信息收集">3 公有云信息收集</a>
+      <ul>
+        <li><a href="#31-识别和发现云产品">3.1 识别和发现云产品</a>
+          <ul>
+            <li><a href="#311-关键词整理">3.1.1 关键词整理</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="公有云安全">公有云安全</h1>
+<h2 id="1-前言">1 前言</h2>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Tips<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ol>
+<li>云租户安全不在讨论范围内</li>
+<li>云原生应用漏洞略有涉及</li>
+<li>微服务不在讨论范围内</li>
+<li>云安全配置错误以及不正确的「案例」示范是导致安全问题频发的重要原因</li>
+</ol>
+</div>
+        </div>
+    </div>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231145314.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231145314.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231145314.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231145314.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231145314.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231145314.png-water_print" /></p>
+<h3 id="11-为什么要上云">1.1 为什么要上云</h3>
+<ul>
+<li>安全传统边界模糊</li>
+<li>all in cloud</li>
+<li>公司越来越多</li>
+</ul>
+<h3 id="12-相关资料">1.2 相关资料</h3>
+<p><a href="https://aws.amazon.com/n/training/" target="_blank" rel="noopener noreffer">https://aws.amazon.com/n/training/</a></p>
+<p><a href="https://edu.aliyun.com" target="_blank" rel="noopener noreffer">https://edu.aliyun.com</a></p>
+<p><a href="https://cloud.tencent.com/edu/training" target="_blank" rel="noopener noreffer">https://cloud.tencent.com/edu/training</a></p>
+<p><a href="https://cloud.google.com/certification/" target="_blank" rel="noopener noreffer">https://cloud.google.com/certification/</a></p>
+<p><a href="https://www.microsoft.com/zh-cn/learning/azure-training.aspx" target="_blank" rel="noopener noreffer">https://www.microsoft.com/zh-cn/learning/azure-training.aspx</a></p>
+<h3 id="13-常见的云产品">1.3 常见的云产品</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231150602.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231150602.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231150602.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231150602.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231150602.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231150602.png-water_print" /></p>
+<h2 id="2-常见概念">2 常见概念</h2>
+<h3 id="21-元数据---metadata">2.1 元数据 - metadata</h3>
+<p>在云计算中，Metadata 并不是一个陌生的概念。从字面上看，Metadata 是元数据的意思。而在云计算中，Metadata 服务能够向虚机注入一些额外的信息，这样虚机在创建之后可以有一些定制化的配置。在 OpenStack 中，Metadata 服务能够向虚机提供主机名，ssh 公钥，用户传入的一些定制数据等其他信息。这些数据被分为两类：metadata 和 user data，metadata 主要包括虚机自身的一些数据比如 hostname、ssh 秘钥、网络配置等，而 user data 主要包括一些定制的脚本、命令等。但是不管是哪一种数据，openstack 向虚机提供数据的方式是一致的。</p>
+<div class="details admonition note open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i>Tips<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">可以类比 <strong>docker file</strong></div>
+        </div>
+    </div>
+<h3 id="22-可用区---available-zone-和区域---region">2.2 可用区 - Available Zone 和区域 - Region</h3>
+<p>先来看一下区域（Region）概念。AWS 云服务在全球不同的地方都有数据中心，比如北美、南美、欧洲和亚洲等。与此对应，根据地理位置我们把某个地区的基础设施服务集合称为一个区域。通过 AWS 的区域，一方面可以使得 AWS 云服务在地理位置上更加靠近我们的用户，另一方面使得用户可以选择不同的区域存储他们的数据以满足法规遵循方面的要求</p>
+<p>以阿里云为例：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231151739.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231151739.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231151739.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231151739.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231151739.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231151739.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231151801.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231151801.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231151801.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231151801.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231151801.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231151801.png-water_print" /></p>
+<h3 id="23-iam---identify-and-access-management">2.3 IAM - Identify and Access Management</h3>
+<p>可帮助你安全地控制用户对 AWS 资源的访问权限。通过 IAM 可以控制哪些人可以使用你的 AWS 资源(身份验证)以及他们可以使用的资源和采用的方式(授权)。</p>
+<ul>
+<li>IAM-AWS</li>
+<li>RAM-阿里云</li>
+<li>CAM-腾讯云</li>
+<li>IAM-华为云</li>
+</ul>
+<h4 id="231-用户">2.3.1 用户</h4>
+<p>如果您购买了多台云服务器 ECS 实例，您的组织里有多个用户（如员工、系统或应用程序）需要使用这些实例，您可以创建一个策略允许部分用户使用这些实例。避免了将同一个 AccessKey 泄露给多人的风险。</p>
+<h4 id="232-用户组">2.3.2 用户组</h4>
+<p>您可以创建多个用户组，并授予不同权限策略，起到批量管理的效果。例如：</p>
+<ul>
+<li>为了加强网络安全控制，您可以给某个用户组授权一个权限策略，该策略可以规定：如果用户的 IP 地址不是来自企业网络，则拒绝此类用户请求访问相关 ECS 资源。</li>
+<li>您可以创建以下两个用户组管理不同工作职责的人员，如果某开发人员的工作职责发生转变，成为一名系统管理人员，您可以将其从 Developers 用户组移到 SysAdmins 用户组。
+<ul>
+<li>SysAdmins：该用户组需要创建和管理的权限。您可以给 SysAdmins 组授予一个权限策略，该策略授予用户组成员执行所有 ECS 操作的权限，包括 ECS 实例、镜像、快照和安全组等。</li>
+<li>Developers：该用户组需要使用实例的权限。您可以给 Developers 组授予一个权限策略，该策略授予用户组成员调用 DescribeInstances、StartInstance、StopInstance、RunInstance 和 DeleteInstance 等权限。</li>
+</ul>
+</li>
+</ul>
+<h4 id="233-角色">2.3.3 角色</h4>
+<p>实例 RAM 角色允许您将一个角色关联到 ECS 实例，在实例内部基于STS（Security Token Service）临时凭证访问其他云产品的 API，临时凭证将周期性更新。即可以保证云账号 AccessKey 安全，还可以借助访问控制 RAM 实现精细化控制和权限管理。</p>
+<h3 id="24-vpc---virtual-private-cloud">2.4 VPC - Virtual Private Cloud</h3>
+<p>专有网络 VPC 允许用户在云上构建出一个逻辑隔离分区，让用户在自己定义的虚拟网络中创建并运行新网的资源。用户可以完全掌控您的虚拟网络环境，包括选择 IP 地址范围，创建子网和配置路由表等。</p>
+<h3 id="25-arn---aliyun-resource-name">2.5 ARN - Aliyun Resource Name</h3>
+<p>资源 ARN 的格式为:</p>
+<p>arn:acs:${Service}:${Region}:${Account}:${ResourceType}/${ResourceId}</p>
+<p>各字段含义如下：</p>
+<ul>
+<li>Service：云产品code。</li>
+<li>Region：地域ID。</li>
+<li>Account：阿里云账号ID。</li>
+<li>ResourceType：资源类型。</li>
+<li>ResourceId：资源ID。</li>
+</ul>
+<p><code>arn:acs:ecs:cn-hangzhou:123456789\*\*\*\*:instance/i-xxxxxxxxxxxxxx</code></p>
+<p>参考：</p>
+<p><a href="https://help.aliyun.com/document_detail/172061.html?spm=5176.10695662.1996646101.searchclickresult.b8ae1b9ejjB6pU" target="_blank" rel="noopener noreffer">https://help.aliyun.com/document_detail/172061.html?spm=5176.10695662.1996646101.searchclickresult.b8ae1b9ejjB6pU</a></p>
+<h3 id="26-access-key--access-secret-key">2.6 Access Key &amp; Access Secret Key</h3>
+<p>访问密钥 AccessKey（AK）相当于登录密码，只是使用场景不同。AccessKey 用于程序方式调用云服务 API，而登录密码用于登录控制台。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231164639.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231164639.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231164639.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231164639.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231164639.png-water_print"
+        title="创建 AccessKey" /></p>
+<h3 id="27-架构图">2.7 架构图</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231164830.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231164830.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231164830.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231164830.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231164830.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20201231164830.png-water_print" /></p>
+<h2 id="3-公有云信息收集">3 公有云信息收集</h2>
+<h3 id="31-识别和发现云产品">3.1 识别和发现云产品</h3>
+<ol>
+<li>
+<p>产品的关键字 识别产品区域</p>
+</li>
+<li>
+<p>主动 FUZZ / 被动发现相辅相成</p>
+</li>
+<li>
+<p>甲方视角发现</p>
+<p>原生漏洞还是存在，比如 Hadoop 漏洞还是存在，RDS 弱口令还是有</p>
+</li>
+</ol>
+<h4 id="311-关键词整理">3.1.1 关键词整理</h4>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-12-31</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2020/12/%E5%85%AC%E6%9C%89%E4%BA%91%E5%AE%89%E5%85%A8/" data-title="公有云安全"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2020/12/%E5%85%AC%E6%9C%89%E4%BA%91%E5%AE%89%E5%85%A8/" data-title="公有云安全"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2020/12/%E5%85%AC%E6%9C%89%E4%BA%91%E5%AE%89%E5%85%A8/" data-title="公有云安全"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a>,&nbsp;<a href="/tags/%E5%85%AC%E6%9C%89%E4%BA%91/">公有云</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/12/nodejs-%E5%AE%89%E5%85%A8/" class="prev" rel="prev" title="NodeJS 安全"><i class="fas fa-angle-left fa-fw"></i>NodeJS 安全</a>
+            <a href="/2021/01/sql%E6%B3%A8%E5%85%A5%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="next" rel="next" title="SQL注入相关">SQL注入相关<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

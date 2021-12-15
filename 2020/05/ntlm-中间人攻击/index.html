@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>NTLM Relay - Geekby&#39;s Blog</title><meta name="Description" content="NTLM 中间人攻击原理及实验"><meta property="og:title" content="NTLM Relay" />
+<meta property="og:description" content="NTLM 中间人攻击原理及实验" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2020/05/ntlm-%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2020-05-09T10:38:00+08:00" />
+<meta property="article:modified_time" content="2020-05-09T10:38:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="NTLM Relay"/>
+<meta name="twitter:description" content="NTLM 中间人攻击原理及实验"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2020/05/ntlm-%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/" /><link rel="prev" href="https://www.geekby.site/2020/05/%E8%8E%B7%E5%8F%96-ntlm/" /><link rel="next" href="https://www.geekby.site/2020/05/%E5%9F%9F%E6%B8%97%E9%80%8F%E4%B9%8B-windows-access-token-%E6%94%BB%E5%87%BB/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "NTLM Relay",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2020\/05\/ntlm-%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "域安全, 内网渗透, NTLM","wordcount":  686 ,
+        "url": "https:\/\/www.geekby.site\/2020\/05\/ntlm-%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB\/","datePublished": "2020-05-09T10:38:00+08:00","dateModified": "2020-05-09T10:38:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "NTLM 中间人攻击原理及实验"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">NTLM Relay</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"><i class="far fa-folder fa-fw"></i>内网渗透</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-05-09">2020-05-09</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 686 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-前言">1 前言</a>
+      <ul>
+        <li><a href="#11-背景介绍">1.1 背景介绍</a></li>
+        <li><a href="#12-认证过程">1.2 认证过程</a></li>
+        <li><a href="#13-http---smb-攻击实验">1.3 HTTP -&gt; SMB 攻击实验</a>
+          <ul>
+            <li><a href="#131-nmap-探测-smb-签名">1.3.1 nmap 探测 SMB 签名</a></li>
+            <li><a href="#132-使用-ntmlrelayxpy-测试">1.3.2 使用 ntmlrelayx.py 测试</a></li>
+          </ul>
+        </li>
+        <li><a href="#14-hot-potato">1.4 Hot Potato</a></li>
+        <li><a href="#15-ntlm-relay-防御">1.5 NTLM Relay 防御</a>
+          <ul>
+            <li><a href="#151-smb--ldap-签名">1.5.1 SMB &amp; LDAP 签名</a></li>
+            <li><a href="#152-eap-enhanced-protection-authentication">1.5.2 EAP (Enhanced Protection Authentication)</a></li>
+          </ul>
+        </li>
+        <li><a href="#16-关于-ntlm-协议的一些总结">1.6 关于 NTLM 协议的一些总结</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-cve-2015-0005">2 CVE-2015-0005</a>
+      <ul>
+        <li><a href="#21-原理">2.1 原理</a>
+          <ul>
+            <li><a href="#211-netlogon-步骤">2.1.1 NETLOGON 步骤</a></li>
+            <li><a href="#212-攻击场景">2.1.2 攻击场景</a></li>
+          </ul>
+        </li>
+        <li><a href="#22-实战">2.2 实战</a></li>
+        <li><a href="#23-防御">2.3 防御</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-cve-2019-1019">3 CVE-2019-1019</a>
+      <ul>
+        <li><a href="#31-原理">3.1 原理</a></li>
+        <li><a href="#32-实战">3.2 实战</a></li>
+      </ul>
+    </li>
+    <li><a href="#4-cve-2019-1040">4 CVE-2019-1040</a>
+      <ul>
+        <li><a href="#41-原理">4.1 原理</a></li>
+        <li><a href="#42-实战">4.2 实战</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-epa-bypass">5 EPA-Bypass</a>
+      <ul>
+        <li><a href="#51-原理">5.1 原理</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="ntlm-relay">NTLM Relay</h1>
+<h2 id="1-前言">1 前言</h2>
+<h3 id="11-背景介绍">1.1 背景介绍</h3>
+<p><code>NTLM Relay</code>，中间人攻击或重放攻击是一个意思。</p>
+<p>B 是一个 smb 服务器，A 来进行认证，B 将 A 的认证信息转发到 C 上，如果 A 的凭证在 C 上认证成功就能进行下一步操作，如创建服务执行命令。如果在域中控制了某些常用服务，如：WEB OA 系统、文件共享等服务则可以尝试使用 SMB 中继攻击来引诱域管理员访问达到获取其他机器权限的目的。</p>
+<p>2001 年，最早由 Dystic 实现，SMBRelay</p>
+<p>2004 年，发展为 HTTP -&gt; SMB，BlackHat，未开源</p>
+<p>2007 年，HTTP -&gt; SMB 被集成到 MetaSploit</p>
+<p>2008 年，HTTP -&gt; HTTP的 NTLM 攻击被实现(MS08-067)</p>
+<h3 id="12-认证过程">1.2 认证过程</h3>
+<p><strong>两端模型：</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509090900.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509090900.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509090900.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509090900.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509090900.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509090900.png-water_print" /></p>
+<p><strong>三端模型：</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207143016.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207143016.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207143016.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207143016.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207143016.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207143016.png-water_print" /></p>
+<p><strong>在域环境下的 NTLM Relay 的模型：</strong></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207143306.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207143306.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207143306.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207143306.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207143306.png-water_print"
+        title="流程图" /></p>
+<h3 id="13-http---smb-攻击实验">1.3 HTTP -&gt; SMB 攻击实验</h3>
+<h4 id="131-nmap-探测-smb-签名">1.3.1 nmap 探测 SMB 签名</h4>
+<p>nmap 扫描：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">nmap -p445 --script<span class="o">=</span>smb-security-mode.nse IP --open
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="132-使用-ntmlrelayxpy-测试">1.3.2 使用 ntmlrelayx.py 测试</h4>
+<p>ntmlrelayx.py 脚本在 empire 包中</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ntlmrelayx.py -tf hosts.txt -socks -smb2support
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509100947.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509100947.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509100947.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509100947.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509100947.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509100947.png-water_print" /></p>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>注意<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">发起攻击时，HTTP -&gt; SMB，开启 80 端口，需要保证端口未被占用</div>
+        </div>
+    </div>
+<p>攻击成功后，会在攻击机本地开启 <code>1080</code> socks 端口，通过 <code>proxychain</code> 等代理工具，即可控制目标机器。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># mac 下 proxychain-NG</span>
+proxychains4 /Users/Geekby/opt/anaconda3/bin/python secretsdump.py pentest.com/Administrator@172.16.147.132
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509104954.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509104954.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509104954.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509104954.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509104954.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509104954.png-water_print" /></p>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>注意<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">进行认证时会提示输入密码，留空即可使用 <code>relay</code> 后的凭据进行认证。</div>
+        </div>
+    </div>
+<h3 id="14-hot-potato">1.4 Hot Potato</h3>
+<p>Hot Potato 是一个经典的利用 NTLM Relay 获取高权限用户控制权的例子，可以参考「Potato 家族提权分析」这篇文章。</p>
+<h3 id="15-ntlm-relay-防御">1.5 NTLM Relay 防御</h3>
+<p>目前有许多针对 <code>NTLM</code> 重放攻击的防御措施，主要包括以下几种：</p>
+<ul>
+<li>SMB &amp; LDAP 签名</li>
+<li>EAP (Enhanced Protection Authentication)</li>
+<li>LDAPS Channels</li>
+<li>Server target SPN Validation</li>
+</ul>
+<h4 id="151-smb--ldap-签名">1.5.1 SMB &amp; LDAP 签名</h4>
+<p>完成认证后，应用服务器和客户端之间的所有流量都有签名验证保护；用户签名的会话密钥基于客户端的 NTLM 值生成，应用服务器在 <code>NETLOGON</code> 阶段从 <code>DC</code> 服务器获取；客户端采用和 <code>DC</code> 相同的算法，基于自身的 <code>NTLM</code> 值生成会话密钥，因此中间人攻击没有办法获取会话密钥</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207144728.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207144728.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207144728.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207144728.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207144728.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207144728.png-water_print" /></p>
+<h4 id="152-eap-enhanced-protection-authentication">1.5.2 EAP (Enhanced Protection Authentication)</h4>
+<p><code>NTLM</code> 认证和一个安全通道进行绑定，在 <code>NTLM</code> 认证过程中，最后的 <code>NTLM</code> 认证数据报文包含一个目标应用服务器的证书摘要，这个摘要使用客户端的 <code>NTLM</code> 值进行签名保护，可以防止伪造证书的攻击。</p>
+<h3 id="16-关于-ntlm-协议的一些总结">1.6 关于 NTLM 协议的一些总结</h3>
+<p><strong>NT Hash</strong> = <code>md4(unicode(hex(password)))</code></p>
+<p><strong>NTLMv2 Hash</strong> = <code>HMAC-MD5(unicode(hex(upper(username+domain))), NT Hash)</code></p>
+<p><strong>NTProofStr</strong> = <code>HMAC-MD5(challenge + 数据, NTLMv2 Hash)</code></p>
+<p><strong>Session Key</strong> = <code>HMAC_MD5(HMAC_MD5(NTLMv2 Response + Challenge, NTLMv2 Hash), NTLMv2 Hash)</code></p>
+<p><strong>MIC</strong> = <code>HMAC_MD5(NEGOTIATE_MESSAGE + CHALLENGE_MESSAGE + AUTHENTICATE_MESSAGE, Session key)</code></p>
+<h2 id="2-cve-2015-0005">2 CVE-2015-0005</h2>
+<h3 id="21-原理">2.1 原理</h3>
+<p>应用服务器在收到用户客户端的认证信息后，由于本身没有存储用户的口令信息，所以必须依赖域服务器进行认证，将收到的认证信息发送给域服务器，这个过程基于 <code>NETLOGON</code> 协议。该协议在应用服务器和域服务器之间建立一个安全会话，安全会话共享密钥基于应用服务器主机账号的口令 <code>NTLM</code> 生成。</p>
+<h4 id="211-netlogon-步骤">2.1.1 NETLOGON 步骤</h4>
+<p>均为 RPC 远程向认证服务器调用</p>
+<ol>
+<li>NetrLogonSamLoginEx</li>
+<li><code>NetrLogonSamLogonWithFlags</code></li>
+<li>NetrLogonSamLogon</li>
+<li>NetrLogonSamLogoff</li>
+</ol>
+<h4 id="212-攻击场景">2.1.2 攻击场景</h4>
+<p><code>win10x64en$</code> 上的用户 <code>eviluser</code> ，访问内服务器 <code>win2008R2$</code> 的 <code>SMB</code> 服务，采用 <code>NTLM</code> 认证方式，域服务器为 <code>Win2016-dc01$</code> ，认证过程概括如下:</p>
+<ol>
+<li><code>win10x64en$</code> 首先向 <code>win2008R2$</code> 的 SMB 445 端口发起一个连接 <code>NTLM_NEGOTIATE</code>，协商使用 <code>NTLM</code> 认证方式；</li>
+<li><code>win2008R2$</code> 收到后，发送 <code>NTLM CHALLENGE</code> 返回给 <code>win10x64en$</code>；</li>
+<li><code>win10x64en$</code> 收到 <code>NTLM CHALLENGE</code> 后，向 <code>win2008R2$</code> 发送一个 <code>NTLM</code> 认证报文；</li>
+<li><code>Win2008R2$</code> 和域控服务器之间共享了 <code>Win2008R2$</code> 的口令 NTLM，以此生成会话密钥，创建一个 <code>NETLOGON</code> 安全会话。<code>Win2008R2$</code> 通过 RPC 调用域服务器的 <code>NetrLogonSamLogonWithFlags</code> 函数，并将 <code>win10x64en$</code> 发送过来的认证信息加上此前的<strong>挑战信息</strong>全部填装进入作为参数；</li>
+<li>域服务器收到信息后，验证认证信息，如果认证合法则返回 <code>STATUS_SUCCESS</code>；</li>
+<li>如果 <code>NetrLogonSamLogonWithFlags</code> 调用成功，则应用服务器会返回 <code>NETLOGON_VALIDATION</code> 数据结构，该结构的结尾可能是以下结构中的一种: <code>NETLOGON_VALIDATIN_SA_FO</code> ，<code>NETLOGON_VALIDATION_SAM_INFO2</code>，<code>NETLOGON_VALIDATION_SAM_INFO4</code>。在这个结构中有一个重要的数据，就是 <code>SessionKey</code> ，用于用户客户端和应用服务器之间的签名、加密等；</li>
+</ol>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207151317.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207151317.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207151317.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207151317.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207151317.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207151317.png-water_print" /></p>
+<ol start="7">
+<li><code>SessionKey</code> 基于客户端用户的口令 <code>NTLM</code> 生成，应用服务器从 <code>DC</code> 获取，客户端用户自己采用相同的算法生成，因此应用服务器和客户端不需要交互 <code>SessionKey</code>;</li>
+</ol>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207151646.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207151646.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207151646.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207151646.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207151646.png-water_print"
+        title="NetrLogonSamLogonWithFlags 函数参数定义" /></p>
+<ol start="8">
+<li>第二个参数为主机名(微软的解释 「Computer Name: The Unicode string that contains the NetBIOS name of the client computer calling this method」)，主机名为调用该函数的客户端主机名，也就是应用服务器通过 RPC 远程调用的该函数，因此该主机名理论上应该与应用服务器和域服务器之间安全会话密钥的主机账号应该一致。</li>
+</ol>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207152025.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207152025.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207152025.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207152025.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207152025.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200207152025.png-water_print" /></p>
+<p>所以任何一台域内主机，只要能拿到此前用户和应用服务器的认证信息，就可以向域服务器发起 <code>NETLOGON</code>，从而获取 <code>SessionKey</code>，这样后面可以伪造应用服务器和客户端用户之间的数据签名，满足中间人攻击。</p>
+<h3 id="22-实战">2.2 实战</h3>
+<p>利用 impacket 中的 smbrelayx 进行中间人攻击，如果目标机器强制使用 SMB 签名，该模块会使用 NETLOGON 直接获取签名用的 sessionKey</p>
+<p>环境：</p>
+<p><strong>攻击机（非域内主机）</strong>：192.168.68.24</p>
+<p><strong>客户端服务器（被中间人攻击的服务器）</strong>： SERVER-2008</p>
+<p><strong>目标主机、应用服务器</strong>： Windows Server 2012 - 172.16.147.130</p>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>信息<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">如果是非域主机，需要指定当前域内任意一台主机的 hash，且指定域控的 IP。</div>
+        </div>
+    </div>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python2 smbrelayx.py -h 172.16.147.130 -machine-account pentest-ad/SERVER-2008$ -machine-hashes bab7079288e58b875c46601f274001e6:bab7079288e58b875c46601f274001e6 -domain 172.16.147.130
+</code></pre></td></tr></table>
+</div>
+</div><p>可以使用 -e 参数指定目标机器要执行的文件，不指定的话，默认 dump 下目标机器的 Hash，-c 可以指定要执行的命令。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509154315.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509154315.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509154315.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509154315.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509154315.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509154315.png-water_print" /></p>
+<h3 id="23-防御">2.3 防御</h3>
+<p>影响 Windows Server 2012 及以下，对个人 PC 无影响</p>
+<p>微软发布了补丁 <code>MS15-027</code>，针对这个漏洞进行了修补，对 <code>ComputerName</code> 和 <code>NetBIOS</code> 这 2 个字段进行了校验，并且对这个消息认证块进行了签名校验</p>
+<h2 id="3-cve-2019-1019">3 CVE-2019-1019</h2>
+<p>在 CVE-2015-0005 漏洞被修补后，域服务器会校验 ComputerName 和 NetBIOS 这 2 个字段是否一致。但是如果 ComputerName 字段缺失，则域服务器会接受，而且不会对认证消息进行完整性校验(MIC) 。</p>
+<h3 id="31-原理">3.1 原理</h3>
+<p>由于 <code>NTLM_AUTHENTICATION</code> 报文中的很多信息，包括 <code>ComputerName</code> 字段信息，是从 <code>NTLM-CHALLENGE</code> 中拷贝获取，因此在攻击者可以截获由应用服务器发送给客户端的挑战信息，并将 <code>ComputerName</code> 字段进行删除，客户端收到挑战信息后，由于找不到 <code>ComputerName</code> 字段，会导致随后的 <code>NTLM_AUTHENTICATION</code> 也不包含该字段。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208103534.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208103534.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208103534.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208103534.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208103534.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208103534.png-water_print" /></p>
+<p>通过配置，可以让 NTLM 启用完整性校验，即在认证消息中添加一个字段 <code>MIC(Message Integrity Code)</code>，在新版本中这是默认开启的功能。<code>MIC</code> 是用来保护 NTLM 认证报文的完整性，即 <code>NTLM_CHALLENGE</code>。</p>
+<p><code>MIC</code> 通过基于 <code>SessionKey</code> 会话秘钥的 <code>HMAC_MD5</code> 算法实现完整性保护，而此前的分析中，我们有能力方法获取这个 <code>SessionKey</code>，因此修改后重新计算 <code>MIC</code> 即可。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208103900.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208103900.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208103900.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208103900.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208103900.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208103900.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208104134.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208104134.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208104134.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208104134.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208104134.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208104134.png-water_print" /></p>
+<ol>
+<li>
+<p>客户端发起到应用服务器的 <code>NTLM_NEGOTIATE</code>，被重放攻击者捕获</p>
+</li>
+<li>
+<p>攻击者将 <code>NTLM_NEGOTIATE</code> 转发给真正的应用服务器，也即我们的攻击目标</p>
+</li>
+<li>
+<p>应用服务器返回一个 <code>NTLM_CHALLENGE</code> 给攻击者</p>
+</li>
+<li>
+<p>重放攻击者将 <code>NTLM_CHALLENGE </code>中的 <code>ComputerName</code> 字段去掉，然后转发给客户端</p>
+</li>
+<li>
+<p>客户端收到修改后的 <code>NTLM_CHALLENGE</code> ，基于这些信息构造 <code>NTLM_AUTHENTICATE</code> ，将认证信息发送给重放攻击者，此时认证消息已经包含 <code>MIC</code></p>
+</li>
+<li>
+<p>重放攻击者向域服务器发起一个 <code>NETLOGON</code> 会话请求，由于认证消息中 <code>ComputerName</code> 字段缺失，域服务器不进行完整性校验，认可该认证消息，并返回一个 <code>Sessionkey</code></p>
+</li>
+<li>
+<p>重放攻击者重新计算 <code>MIC</code> ，并将新的 <code>NTLM_AUTHENTICATE</code> 发送给应用服务器</p>
+</li>
+<li>
+<p>应用服务器收到 <code>NTLM_AUTHENTICATE</code> 后，校验 <code>MIC</code>，然后向域服务器发起 <code>NETLOGON</code> 会话请求，域服务器返回认证成功的响应，其中包含会话密钥，这个会话密钥和第 6 步中的会话密钥相同</p>
+</li>
+<li>
+<p>重放攻击者成功地与应用服务器建立了一个带签名的会话，获取了客户端用户在应用服务器上的访问权限，如果客户端用户是管理员，而应用服务器是域服务器，则重放攻击者具备了在域服务器(应用服务器)上的管理员权限(客户端)。</p>
+</li>
+</ol>
+<h3 id="32-实战">3.2 实战</h3>
+<p>利用 impacket 中的 ntlmrelayx.py 进行中间人攻击，使用 <code>-remove-target</code> 参数。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509095846.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509095846.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509095846.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509095846.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509095846.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509095846.png-water_print" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python3 ntlmrelayx.py -h 172.16.147.130 -remove-target --enum-local-admins -smb2support -machine-account pentest-ad/SERVER-2008$ -machine-hashes bab7079288e58b875c46601f274001e6:bab7079288e58b875c46601f274001e6 -domain 172.16.147.130
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="4-cve-2019-1040">4 CVE-2019-1040</h2>
+<h3 id="41-原理">4.1 原理</h3>
+<p>在安装了 <code>CVE-2015-0005</code> 的补丁后，系统会校验 <code>NetBIOS</code> 的名称和 <code>NetrLogonSamLogonWithFlags</code> 函数的 <code>ComputeName</code> 参数是否相同。因此，此前通过修改 <code>ComputerName</code> 来获取 <code>SessionKey</code> 的方法失效。</p>
+<p>但是如果认证信息中的 <code>NetBIOS</code> 被删除或者消失后，认证服务器不会再进行前面的名字校验，也就是说我们再修改 <code>ComputerName</code> 参数，能达成 <code>CVE-2015-0005</code> 漏洞的效果，从而获取会话密钥。</p>
+<p>针对这种情况，可以通过配置“服务器拒绝任何没有 NetBIOS 的请求”来阻止此类攻击。但是在  <code>NTLMv1</code> 中，NTLM 消息块结构体中，本来就没有这个字段，因此这种攻击在 <code>NTLMv1</code> 场景中难以通过策略或者补丁来杜绝，仍然存在很大的脆弱性。</p>
+<p>客户端和服务器在 NTLM 协商时，通过下图中 <code>NegotiatFlags</code> (即 msvAvFlags 字段)来标识是否需要 MIC 来保护会话的完整性，见下图中红色框标识。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208114101.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208114101.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208114101.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208114101.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208114101.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208114101.png-water_print" /></p>
+<p>SMB 客户端在 NTLM 认证时，默认设置需要 MIC 进行完整性校验保护。直观而言，一般会有几种方式对抗 MIC，一是修改 MIC，前提条件是获取会话密钥，在前面我们看到：如果配置了防护策略，通过删除 NetBIOS 不能获取会话密钥；二是直接丢弃 MIC，这时需要将 <code>msVAvFlags</code> 字段中的标志位同样进行修改，以及版本信息，因为有些版本默认是必须要有 MIC。</p>
+<p>msvAvFlags 字段的定义，查看微软知识库，如果为 <code>0x00000002</code> 表示客户端通过 <code>MIC</code> 来保护数据报文的完整性</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208114702.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208114702.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208114702.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208114702.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208114702.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200208114702.png-water_print" /></p>
+<p><code>msvAVFlags</code> 字段由用户的 NTLM 散列值进行签名保护，因此不能修改 <code>msvAVFlag</code> 字段。实际中非常神奇，域服务器并不真正在乎 MIC 和 Version 信息是否存在，如果存在，则校验，如果不存在则不校验。</p>
+<p>上述的攻击方式，可以通过配置进行阻止，即如果 <code>msvAVFlags</code> 字段表明有 MIC 完整性校验，就必须要有 MIC 的存在，而且进行校验。但是在实际应用场景中，仍然存在一些隐患，例如 <code>MacOS</code> 、<code>Linux</code> 系统中的 <code>FireFox</code> 默认情况下，不添加 MIC。</p>
+<h3 id="42-实战">4.2 实战</h3>
+<p>利用 impacket 中的 ntlmrelayx.py 进行中间人攻击，使用 <code>--remove-mic</code> 参数。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509095534.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509095534.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509095534.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509095534.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509095534.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200509095534.png-water_print" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python3 ntlmrelayx.py -h ldap://172.16.147.130 --remove-mic --escalate-user commonuser -smb2support -machine-account pentest-ad/SERVER-2008$ -machine-hashes bab7079288e58b875c46601f274001e6:bab7079288e58b875c46601f274001e6 -domain 172.16.147.130
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="5-epa-bypass">5 EPA-Bypass</h2>
+<h3 id="51-原理">5.1 原理</h3>
+<p>EPA (Enhanced Protection for Authentication)，将认证报文绑定到一个安全通道中，主要用于保护 Windows 集成认证的服务，例如OWA、ADFS、 LDAPS。</p>
+<p>具体的做法是，在认证报文中添加一个字段 <code>Channel Bindings</code>，根据微软的说明，<code>Channel Bindings</code> 为一段 <code>MD5 Hash</code> 值，表示结构体 <code>gss_channel_bindings_struct</code> 的 <code>MD5Hash</code> 值。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209104650.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209104650.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209104650.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209104650.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209104650.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209104650.png-water_print" /></p>
+<p>如果启用了 <code>EPA</code>，在客户端发送的<strong>认证报文</strong>中，会添加一个字段 <code>NTProofStr</code>，这是一段签名，用来保护 <code>Channel Bindings</code>。微软给出 <code>NTProofStr</code> 的计算算法如下:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209105337.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209105337.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209105337.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209105337.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209105337.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209105337.png-water_print" /></p>
+<p>可以得知， <code>NTProofStr</code> 基于用户的 <code>NTLM</code> 值计算得来，因此，在此种攻击场景中不可能计算得出。可以使用 EPA 来保护 <code>ADFS</code>、<code>OWA</code>、 <code>LDAPS</code> 等基于 <code>NTLM</code> 认证的场景。比较悲剧的是，在默认情况下，上述这些服务器都没有强制使用了 <code>EPA</code>。<code>NTProofStr</code> 和 <code>Channel Bindings</code> 在实际的报文中见下图，这是一个客户端发送的认证报文。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209110550.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209110550.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209110550.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209110550.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209110550.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209110550.png-water_print" /></p>
+<p>如果我们在服务器发送挑战信息到客户端时，在挑战报文主动中添加一个 <code>Channel Bindings</code> 到消息块中，类似于下图所示，注意下图是服务器发送的挑战报文，由于 <code>Channel Bindings</code> 是一段 <code>MD5Hash</code> 值，是比较好添加的。</p>
+<p>客户端收到挑战信息后，会将我们事先添加的 <code>Channel Bindings</code> ，并且再次计算一个新的 <code>Channel Bindings</code> 添加到认证报文后面，导致认证报文包含 2 个 <code>Channel Bindings</code>，见下图，注意这是一个客户端发送的认证报文。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209111242.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209111242.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209111242.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209111242.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209111242.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20200209111242.png-water_print" /></p>
+<p>在这种情况下，域服务器会选择第一个 <code>ChannelBindings</code> 进行校验，忽略第二个 <code>Channel Bindings</code>，这样我们就可以规避 <code>EPA</code> 的保护，实现攻击目的。</p>
+<p>如果客户端开启了<code>MIC</code>保护，则和前面一样，直接丢弃 <code>MIC</code></p>
+<p>参考：</p>
+<ul>
+<li><a href="https://cloud.tencent.com/developer/article/1645398" target="_blank" rel="noopener noreffer">https://cloud.tencent.com/developer/article/1645398</a></li>
+<li><a href="https://en.hackndo.com/ntlm-relay/#authentication-signing-mic" target="_blank" rel="noopener noreffer">https://en.hackndo.com/ntlm-relay/#authentication-signing-mic</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2020-05-09</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2020/05/ntlm-%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/" data-title="NTLM Relay"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2020/05/ntlm-%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/" data-title="NTLM Relay"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2020/05/ntlm-%E4%B8%AD%E9%97%B4%E4%BA%BA%E6%94%BB%E5%87%BB/" data-title="NTLM Relay"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%9F%9F%E5%AE%89%E5%85%A8/">域安全</a>,&nbsp;<a href="/tags/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/">内网渗透</a>,&nbsp;<a href="/tags/ntlm/">NTLM</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2020/05/%E8%8E%B7%E5%8F%96-ntlm/" class="prev" rel="prev" title="获取 NTLM"><i class="fas fa-angle-left fa-fw"></i>获取 NTLM</a>
+            <a href="/2020/05/%E5%9F%9F%E6%B8%97%E9%80%8F%E4%B9%8B-windows-access-token-%E6%94%BB%E5%87%BB/" class="next" rel="next" title="域渗透之 Windows Access Token 攻击">域渗透之 Windows Access Token 攻击<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

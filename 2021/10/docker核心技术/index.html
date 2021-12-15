@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Docker 核心技术 - Geekby&#39;s Blog</title><meta name="Description" content="Docker 核心技术"><meta property="og:title" content="Docker 核心技术" />
+<meta property="og:description" content="Docker 核心技术" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2021/10/docker%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-10-21T20:23:00+08:00" />
+<meta property="article:modified_time" content="2021-10-21T20:23:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Docker 核心技术"/>
+<meta name="twitter:description" content="Docker 核心技术"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/10/docker%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF/" /><link rel="prev" href="https://www.geekby.site/2021/10/exchange%E7%9B%B8%E5%85%B3%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" /><link rel="next" href="https://www.geekby.site/2021/11/%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Docker 核心技术",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2021\/10\/docker%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "云原生安全, Docker","wordcount":  1158 ,
+        "url": "https:\/\/www.geekby.site\/2021\/10\/docker%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF\/","datePublished": "2021-10-21T20:23:00+08:00","dateModified": "2021-10-21T20:23:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "Docker 核心技术"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Docker 核心技术</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/"><i class="far fa-folder fa-fw"></i>云原生安全</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-10-21">2021-10-21</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1158 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-背景">1 背景</a>
+      <ul>
+        <li><a href="#11-docker-与虚拟机的区别">1.1 Docker 与虚拟机的区别</a></li>
+        <li><a href="#12-容器操作">1.2 容器操作</a></li>
+        <li><a href="#13-dockerfile">1.3 Dockerfile</a></li>
+        <li><a href="#14-docker-引擎架构">1.4 Docker 引擎架构</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-namespcce">2 Namespcce</a>
+      <ul>
+        <li><a href="#21-背景">2.1 背景</a></li>
+        <li><a href="#22-类别">2.2 类别</a>
+          <ul>
+            <li><a href="#221-进程编号---pid">2.2.1 进程编号 - PID</a></li>
+            <li><a href="#222-网络设备---network">2.2.2 网络设备 - Network</a></li>
+            <li><a href="#223-进程间通信---ipc">2.2.3 进程间通信 - IPC</a></li>
+            <li><a href="#224-文件系统---mount">2.2.4 文件系统 - Mount</a></li>
+            <li><a href="#225-主机域名---uts">2.2.5 主机域名 - UTS</a></li>
+            <li><a href="#226-用户控制---usr">2.2.6 用户控制 - USR</a></li>
+          </ul>
+        </li>
+        <li><a href="#23-linux-对-namespace-的操作方法">2.3 linux 对 namespace 的操作方法</a></li>
+        <li><a href="#24-关于-namespace-的常用操作">2.4 关于 namespace 的常用操作</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-cgroup">3 Cgroup</a>
+      <ul>
+        <li><a href="#31-背景">3.1 背景</a></li>
+        <li><a href="#32-类别">3.2 类别</a>
+          <ul>
+            <li><a href="#321-cpu-子系统">3.2.1 cpu 子系统</a></li>
+            <li><a href="#322-memory-子系统">3.2.2 Memory 子系统</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#4-文件系统">4 文件系统</a>
+      <ul>
+        <li><a href="#41-背景">4.1 背景</a></li>
+        <li><a href="#42-docker-的文件系统">4.2 Docker 的文件系统</a>
+          <ul>
+            <li><a href="#421-启动过程的差异">4.2.1 启动过程的差异</a></li>
+            <li><a href="#423-关于写操作">4.2.3 关于写操作</a></li>
+            <li><a href="#424-容器存储驱动">4.2.4 容器存储驱动</a></li>
+            <li><a href="#245-overlayfs">2.4.5 OverlayFS</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#5-网络">5 网络</a>
+      <ul>
+        <li><a href="#51-默认模式---网桥和-nat">5.1 默认模式 - 网桥和 NAT</a></li>
+        <li><a href="#52-null-模式">5.2 Null 模式</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="docker-核心技术">Docker 核心技术</h1>
+<h2 id="1-背景">1 背景</h2>
+<blockquote>
+<p>Docker 是一个开源的应用容器引擎，基于 Go 语言开发。Docker 可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。容器是完全使用沙箱机制，相互之间不会有任何接口，更重要的是容器性能开销极低。</p>
+</blockquote>
+<ul>
+<li>基于 Linux 内核的 Cgroup，Namespace，以及 Union FS 等技术，对进程进行封装隔离，属于操作系统 层面的虚拟化技术，由于隔离的进程独立于宿主和其它的隔离的进程，因此也称其为容器。</li>
+<li>最初实现是基于 LXC，从 0.7 以后开始去除 LXC，转而使用自行开发的 Libcontainer，从 1.11 开始，则 进一步演进为使用 runC 和 Containerd。</li>
+<li>Docker 在容器的基础上，进行了进一步的封装，从文件系统、网络互联到进程隔离等等，极大的简化了容器的创建和维护，使得 Docker 技术比虚拟机技术更为轻便、快捷。</li>
+</ul>
+<h3 id="11-docker-与虚拟机的区别">1.1 Docker 与虚拟机的区别</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212029044.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212029044.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212029044.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212029044.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212029044.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212029044.png-water_print" /></p>
+<p>Docker 有着比虚拟机更少的抽象层。由于 docker 不需要 Hypervisor 实现硬件资源虚拟化，运行在 docker 容器上的程序直接使用的都是实际物理机的硬件资源。因此在 CPU、内存利用率上 docker 将会在效率上有优势。</p>
+<p>Docker 利用的是宿主机的内核，而不需要 Guest OS。因此，当新建一个容器时，docker 不需要和虚拟机一样重新加载一个操作系统内核。引导、加载操作系统内核是一个比较费时费资源的过程，当新建一个虚拟机时，虚拟机软件需要加载 Guest OS，这个新建过程是分钟级别的。而 docker 由于直接利用宿主机的操作系统，则省略了这个过程，因此新建一个 docker 容器只需要几秒钟。另外，现代操作系统是复杂的系统，在一台物理机上新增加一个操作系统的资源开销是比较大的，因此，docker 对比虚拟机在资源消耗上也占有比较大的优势。事实上，在一台物理机上我们可以很容易建立成百上千的容器，而只能建立几个虚拟机。</p>
+<ul>
+<li>
+<p>性能对比
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212030650.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212030650.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212030650.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212030650.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212030650.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212030650.png-water_print" /></p>
+</li>
+<li>
+<p>容器主要特性</p>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212041255.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212041255.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212041255.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212041255.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212041255.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212041255.png-water_print" /></p>
+<h3 id="12-容器操作">1.2 容器操作</h3>
+<ul>
+<li>
+<p>启动：docker run</p>
+<ul>
+<li>-it 交互</li>
+<li>-d 后台运行</li>
+<li>-p 端口映射</li>
+<li>-v 磁盘挂载</li>
+</ul>
+</li>
+<li>
+<p>启动已终止容器</p>
+<ul>
+<li><code>docker start</code></li>
+</ul>
+</li>
+<li>
+<p>停止容器</p>
+<ul>
+<li><code>docker stop</code></li>
+</ul>
+</li>
+<li>
+<p>查看容器进程</p>
+<ul>
+<li><code>docker ps</code></li>
+</ul>
+</li>
+<li>
+<p>查看容器细节</p>
+<ul>
+<li><code>docker inspect [containerid]</code></li>
+</ul>
+</li>
+<li>
+<p>进入容器</p>
+<ul>
+<li><code>docker attach</code></li>
+<li><code>PID=$(docker inspect --format &quot;{{ .State.Pid }}&quot; [container])</code></li>
+<li><code>nsenter --target $PID --mount --uts --ipc --net --pid</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="13-dockerfile">1.3 Dockerfile</h3>
+<ul>
+<li>cat Dockerfile</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-dockerfile" data-lang="dockerfile"><span class="k">FROM</span><span class="s"> ubuntu</span><span class="err">
+</span><span class="err"></span><span class="k">ENV</span> <span class="nv">MY_SERVICE_PORT</span><span class="o">=</span><span class="m">80</span>
+<span class="k">ADD</span> bin/amd64/httpserver /httpserver ENTRYPOINT /httpserver<span class="err">
+</span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>将 Dockerfile 打包成镜像</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker build -t cncamp/httpserver:<span class="si">${</span><span class="nv">tag</span><span class="si">}</span> . 
+docker push geekby/httpserver:v1.0
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>运行容器</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker run -d geekby/httpserver:v1.0
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="14-docker-引擎架构">1.4 Docker 引擎架构</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221536913.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221536913.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221536913.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221536913.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221536913.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221536913.png-water_print" /></p>
+<h2 id="2-namespcce">2 Namespcce</h2>
+<h3 id="21-背景">2.1 背景</h3>
+<p>Linux Namespace 是一种 Linux Kernel 提供的资源隔离方案。</p>
+<ul>
+<li>系统可以为进程分配不同的 Namespace</li>
+<li>并保证不同的 Namespace 资源独立分配、进程彼此隔离，即不同的 Namespace 下的进程互不干扰</li>
+</ul>
+<p>Linux 内核代码中 Namespace 的实现如下：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212043342.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212043342.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212043342.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212043342.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212043342.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212043342.png-water_print" /></p>
+<h3 id="22-类别">2.2 类别</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212044915.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212044915.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212044915.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212044915.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212044915.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212044915.png-water_print" /></p>
+<h4 id="221-进程编号---pid">2.2.1 进程编号 - PID</h4>
+<p>当启动了多个container，然后在每个 container 内部用 <code>ps</code> 命令看一下，会发现它们都有一个 PID 为 1 的进程。不同用户的进程就是通过 PID namespace 隔离开的，且不同的 namespace 中可以有相同的 PID。有了 PID namespace，每个 namespace 中的 PID 能够相互隔离。</p>
+<h4 id="222-网络设备---network">2.2.2 网络设备 - Network</h4>
+<p>在每个 network space 内部，可以有独立的网络设备（虚拟的或者真实的）、IP 地址、路由表和防火墙规则等。其中的应用所 bind 的端口也是 per-namespace 的，比如 http 默认使用的是 80 端口，使用 network space 后，同一 host 上的各个 container 内部就都可以运行各自的 web server。</p>
+<p>Docker 默认采用 veth 的方式将 container 中的虚拟网卡同 host 上的一个 <code>docker bridge: docker0</code> 连接在一起。</p>
+<h4 id="223-进程间通信---ipc">2.2.3 进程间通信 - IPC</h4>
+<p>利用这个 space，进程间的通信（<strong>I</strong>nter <strong>P</strong>rocess <strong>C</strong>ommunication）就被限定在了同一个 space 内部，即一个 container 中的某个进程只能和同一 container 中的其他进程通信。</p>
+<p>container 的进程间交互实际上还是 host 上具有相同 Pid namespace 中的进程间交互，因此需要在 IPC 资源申请时加入 namespace 信息 - 每个 IPC 资源有一个唯一的 32 位 ID。</p>
+<h4 id="224-文件系统---mount">2.2.4 文件系统 - Mount</h4>
+<p>mnt namespace 允许不同 namespace 的进程看到的文件结构不同，这样每个 namespace 中的进程所看到的文件目录就被隔离开了。</p>
+<h4 id="225-主机域名---uts">2.2.5 主机域名 - UTS</h4>
+<p>由于多个 container  是共享 OS 内核的，因而像 UTS 里的 os type 和 os release 等信息是不可能更改的，但是每个 container 可以有自己独立的 host name 和 domain name，以便于标识和区分（比如可以通过主机名来访问网络中的机器），这就是 UTS namespace 的作用。</p>
+<h4 id="226-用户控制---usr">2.2.6 用户控制 - USR</h4>
+<p>每个 container 可以有不同的 user 和 group id, 也就是说可以在 container 内部用 container 内部的用户执行程序而非 Host 上的用户。</p>
+<h3 id="23-linux-对-namespace-的操作方法">2.3 linux 对 namespace 的操作方法</h3>
+<ul>
+<li>clone</li>
+</ul>
+<p>在创建新进程的系统调用时，可以通过 flags 参数指定需要新建的 Namespace 类型。</p>
+<p>clone 函数原型：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="n">clone</span><span class="p">(</span><span class="kt">int</span> <span class="p">(</span><span class="o">*</span><span class="n">fn</span><span class="p">)(</span><span class="kt">void</span> <span class="o">*</span><span class="p">),</span> <span class="kt">void</span> <span class="o">*</span><span class="n">child_stack</span><span class="p">,</span> <span class="kt">int</span> <span class="n">flags</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">arg</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>sets</li>
+</ul>
+<p>该系统调用可以让调用进程加入某个已经存在的 Namespace 中：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="n">setns</span><span class="p">(</span><span class="kt">int</span> <span class="n">fd</span><span class="p">,</span> <span class="kt">int</span> <span class="n">nstype</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>unshare</li>
+</ul>
+<p>该系统调用可以将调用进程移动到新的 Namespace 下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="kt">int</span> <span class="n">unshare</span><span class="p">(</span><span class="kt">int</span> <span class="n">flags</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="24-关于-namespace-的常用操作">2.4 关于 namespace 的常用操作</h3>
+<ul>
+<li>查看当前系统的 namespace：
+<ul>
+<li><code>lsns -t [type]</code></li>
+</ul>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212104299.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212104299.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212104299.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212104299.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212104299.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212104299.png-water_print" /></p>
+<ul>
+<li>查看进程的 namespace：
+<ul>
+<li><code>ls -la /proc/[pid]/ns/</code></li>
+</ul>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212109003.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212109003.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212109003.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212109003.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212109003.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212109003.png-water_print" /></p>
+<ul>
+<li>进入某 namespace 运行命令：
+<ul>
+<li><code>nsenter -t [pid] -n ip addr</code></li>
+</ul>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212108750.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212108750.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212108750.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212108750.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212108750.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110212108750.png-water_print" /></p>
+<h2 id="3-cgroup">3 Cgroup</h2>
+<h3 id="31-背景">3.1 背景</h3>
+<blockquote>
+<p>Cgroups (Control Groups)是 Linux 下用于对一个或一组进程进行资源控制和监控的机制</p>
+</blockquote>
+<ul>
+<li>可以对诸如 CPU 使用时间、内存、磁盘 I/O 等进程所需的资源进行限制;</li>
+<li>不同资源的具体管理工作由相应的 Cgroup 子系统(Subsystem)来实现 ;</li>
+<li>针对不同类型的资源限制，只要将限制策略在不同的的子系统上进行关联即可 ;</li>
+<li>Cgroups 在不同的系统资源管理子系统中以层级树(Hierarchy)的方式来组织管理：每个 Cgroup 都可以包含其他的子 Cgroup，因此子 Cgroup 能使用的资源除了受本 Cgroup 配置的资源参数限制，还受到父 Cgroup 设置的资源限制 。</li>
+</ul>
+<p>Linux 内核代码中 Cgroups 的实现：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110220926427.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110220926427.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110220926427.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110220926427.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110220926427.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110220926427.png-water_print" /></p>
+<h3 id="32-类别">3.2 类别</h3>
+<p>cgroups 实现了对资源的配额和度量</p>
+<ul>
+<li>blkio：这个子系统设置限制每个块设备的输入输出控制。例如：磁盘，光盘以及 USB 等等</li>
+<li>cpu：这个子系统使用调度程序为 cgroup 任务提供 CPU 的访问</li>
+<li>cpuacct：产生 cgroup 任务的 CPU 资源报告</li>
+<li>cpuset：如果是多核心的 CPU，这个子系统会为 cgroup 任务分配单独的 CPU 和内存</li>
+<li>devices：允许或拒绝 cgroup 任务对设备的访问</li>
+<li>freezer：暂停和恢复 cgroup 任务</li>
+<li>memory：设置每个 cgroup 的内存限制以及产生内存资源报告</li>
+<li>net_cls：标记每个网络包以供 cgroup 方便使用</li>
+<li>ns：名称空间子系统</li>
+<li>pid：进程标识子系统</li>
+</ul>
+<h4 id="321-cpu-子系统">3.2.1 cpu 子系统</h4>
+<ul>
+<li>cpu.shares：可出让的能获得 CPU 使用时间的相对值。</li>
+<li>cpu.cfs_period_us：用来配置时间周期长度，单位为 us(微秒)。</li>
+<li>cpu.cfs_quota_us：用来配置当前 Cgroup 在 cfs_period_us 时间内最多能使用的 CPU 时间数，单位为 us(微秒)。</li>
+<li>cpu.stat：Cgroup 内的进程使用的 CPU 时间统计。</li>
+<li>nr_periods：经过 cpu.cfs_period_us 的时间周期数量。</li>
+<li>nr_throttled：在经过的周期内，有多少次因为进程在指定的时间周期内用光了配额时间而受到限制。</li>
+<li>throttled_time：Cgroup 中的进程被限制使用 CPU 的总用时，单位是 ns(纳秒)。</li>
+</ul>
+<div class="details admonition example open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ol fa-fw"></i>示例<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">利用 cgroup cpu 子系统控制资源访问</div>
+        </div>
+    </div>
+<p>在 cgroup cpu 子系统目录中创建目录结构：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /sys/fs/cgroup/cpu
+mkdir cpudemo
+<span class="nb">cd</span> cpudemo
+</code></pre></td></tr></table>
+</div>
+</div><p>运行如下代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="kn">package</span> <span class="nx">main</span>
+<span class="kd">func</span> <span class="nf">main</span><span class="p">()</span> <span class="p">{</span>
+	<span class="k">go</span> <span class="kd">func</span><span class="p">(){</span>
+		<span class="k">for</span> <span class="p">{</span>
+		<span class="p">}</span>
+	<span class="p">}()</span>
+	<span class="k">for</span> <span class="p">{</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>执行 top 查看 CPU 使用情况，CPU 占用 200%：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221100824.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221100824.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221100824.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221100824.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221100824.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221100824.png-water_print" /></p>
+<p>再通过 cgroup 限制 cpu：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /sys/fs/cgroup/cpu/cpudemo
+
+<span class="c1"># 把进程添加到 cgroup 进程配置组</span>
+<span class="nb">echo</span> ps -ef<span class="p">|</span>grep poc<span class="p">|</span>grep -v grep<span class="p">|</span>awk <span class="s1">&#39;{print $2}&#39;</span> &gt; cgroup.procs
+
+<span class="c1"># 设置 cpuquota</span>
+<span class="nb">echo</span> <span class="m">10000</span> &gt; cpu.cfs_quota_us
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221104034.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221104034.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221104034.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221104034.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221104034.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221104034.png-water_print" /></p>
+<p>执行 top 查看 CPU 使用情况，CPU 占用变为10%：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221104202.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221104202.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221104202.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221104202.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221104202.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221104202.png-water_print" /></p>
+<p>删除分组：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">cgdelete -g cpu:cpudemo
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="322-memory-子系统">3.2.2 Memory 子系统</h4>
+<ul>
+<li>memory.usage_in_bytes：
+<ul>
+<li>cgroup 下进程使用的内存，包含 cgroup 及其子 cgroup 下的进程使用的内存</li>
+</ul>
+</li>
+<li>memory.max_usage_in_bytes：
+<ul>
+<li>cgroup 下进程使用内存的最大值，包含子 cgroup 的内存使用量。</li>
+</ul>
+</li>
+<li>memory.limit_in_bytes
+<ul>
+<li>设置 Cgroup 下进程最多能使用的内存。如果设置为 -1，表示对该 cgroup 的内存使用不做限制。</li>
+</ul>
+</li>
+<li>memory.oom_control
+<ul>
+<li>设置是否在 Cgroup 中使用 OOM(Out of Memory)Killer，默认为使用。当属于该 cgroup 的进程使用的内存超过最大的限定值时，会立刻被 OOM Killer 处理。</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-文件系统">4 文件系统</h2>
+<h3 id="41-背景">4.1 背景</h3>
+<div class="details admonition tips open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-pencil-alt fa-fw"></i><i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">docker 的创新点：Union FS 运用到文件系统中</div>
+        </div>
+    </div>
+<ul>
+<li>
+<p>将不同目录挂载到同一个虚拟文件系统下 (unite several directories into a single virtual filesystem) 的文件系统</p>
+</li>
+<li>
+<p>支持为每一个成员目录(类似Git Branch)设定 readonly、readwrite 和 whiteoutable 权限</p>
+</li>
+<li>
+<p>文件系统分层, 对 readonly 权限的 branch 可以逻辑上进行修改(增量地, 不影响 readonly 部分的)</p>
+</li>
+<li>
+<p>通常 Union FS 有两个用途, 一方面可以将多个 disk 挂到同一个目录下，另一个更常用的就是将一个 readonly 的 branch 和一个 writeable 的 branch 联合在一起。</p>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221445172.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221445172.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221445172.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221445172.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221445172.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221445172.png-water_print" /></p>
+<h3 id="42-docker-的文件系统">4.2 Docker 的文件系统</h3>
+<p>典型的 Linux 文件系统组成：</p>
+<ul>
+<li>
+<p>Bootfs(boot file system)</p>
+<ul>
+<li>Bootloader - 引导加载 kernel，</li>
+<li>Kernel - 当 kernel 被加载到内存中后 umount bootfs。</li>
+</ul>
+</li>
+<li>
+<p>rootfs (root file system)</p>
+<ul>
+<li><code>/dev</code>，<code>/proc</code>，<code>/bin</code>，<code>/etc</code> 等标准目录和文件。</li>
+<li>对于不同的 linux 发行版，bootfs 基本是一致的， 但 rootfs 会有差别。</li>
+</ul>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221453388.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221453388.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221453388.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221453388.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221453388.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221453388.png-water_print" /></p>
+<h4 id="421-启动过程的差异">4.2.1 启动过程的差异</h4>
+<p><strong>Linux 的启动：</strong></p>
+<p>在启动后，首先将 rootfs 设置为 <code>readonly</code>，进行一系列检查，然后将其切换为<code>readwrite</code>供用户使用。</p>
+<p><strong>Docker 的启动：</strong></p>
+<p>初始化时也是将 rootfs 以 readonly 方式加载并检查，然而接下来利用 <code>union mount</code> 的方式将一个 <code>readwrite</code> 文件系统挂载在 <code>readonly</code> 的 rootfs 之上。并且允许再次将下层的 FS 设定为 <code>readonly</code> 并向上叠加。这样一组 <code>readonly</code> 和一个 <code>writeable</code> 的结构构成了一个 container 的运行时态，每一个 FS 被称作为一个 FS 层。</p>
+<h4 id="423-关于写操作">4.2.3 关于写操作</h4>
+<p>由于镜像具有共享特性，所以对容器可写层的操作需要依赖存储驱动提供的写时复制和用时分配机制，以此来支持对容器可写层的修改，进而提高对存储和内存资源的利用率。</p>
+<ul>
+<li>写时复制</li>
+</ul>
+<p>写时复制，即 <code>Copy-on-Write</code>。一个镜像可以被多个容器使用，但是不需要在内存和磁盘上做多个拷贝。在需要对镜像提供的文件进行修改时，该文件会从镜像的文件系统被复制到容器的可写层的文件系统进行修改， 而镜像里面的文件不会改变。不同容器对文件的修改都相互独立、互不影响。</p>
+<ul>
+<li>用时分配</li>
+</ul>
+<p>按需分配空间，而非提前分配，即当一个文件被创建出来后，才会分配空间。</p>
+<h4 id="424-容器存储驱动">4.2.4 容器存储驱动</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221506732.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221506732.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221506732.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221506732.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221506732.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221506732.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221506663.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221506663.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221506663.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221506663.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221506663.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221506663.png-water_print" /></p>
+<h4 id="245-overlayfs">2.4.5 OverlayFS</h4>
+<p>OverlayFS 也是一种与 AUFS 类似的联合文件系统，同样属于文件级的存储驱动，包含了最初的 Overlay 和更新更稳定的 overlay2。</p>
+<p>Overlay 只有两层：<code>upper</code> 层和 <code>lower</code> 层，Lower 层代表镜像层，upper 层代表容器可写层。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221507598.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221507598.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221507598.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221507598.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221507598.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221507598.png-water_print" /></p>
+<div class="details admonition example open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ol fa-fw"></i>示例<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">mkdir upper lower merged work
+<span class="nb">echo</span> <span class="s2">&#34;from lower&#34;</span> &gt; lower/in_lower.txt
+<span class="nb">echo</span> <span class="s2">&#34;from upper&#34;</span> &gt; upper/in_upper.txt
+<span class="nb">echo</span> <span class="s2">&#34;from lower&#34;</span> &gt; lower/in_both.txt
+<span class="nb">echo</span> <span class="s2">&#34;from upper&#34;</span> &gt; upper/in_both.txt
+
+sudo mount -t overlay overlay -o <span class="nv">lowerdir</span><span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>/lower,upperdir<span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>/upper,workdir<span class="o">=</span><span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>/work <span class="sb">`</span><span class="nb">pwd</span><span class="sb">`</span>/merged
+
+cat merged/in_both.txt
+rm merged/in_both.txt
+rm merged/in_lower.txt
+rm merged/in_upper.txt
+</code></pre></td></tr></table>
+</div>
+</div></div>
+        </div>
+    </div>
+<h2 id="5-网络">5 网络</h2>
+<p>在 Docker 中提供了多种网络模式：</p>
+<ul>
+<li>
+<p>Null(&ndash;net=None)</p>
+<ul>
+<li>把容器放入独立的网络空间但不做任何网络配置;</li>
+<li>用户需要通过运行 <code>docker network</code> 命令来完成网络配置。</li>
+</ul>
+</li>
+<li>
+<p>Host</p>
+<ul>
+<li>使用主机网络名空间，复用主机网络。</li>
+</ul>
+</li>
+<li>
+<p>Container</p>
+<ul>
+<li>重用其他容器的网络。</li>
+</ul>
+</li>
+<li>
+<p>Bridge(&ndash;net=bridge)</p>
+<ul>
+<li>使用 Linux 网桥和 iptables 提供容器互联，Docker 在每台主机上创建一个名叫 <code>docker0</code> 的网桥，通过 <code>veth pair</code> 来连接该主机的每一个 EndPoint。</li>
+</ul>
+</li>
+</ul>
+<h3 id="51-默认模式---网桥和-nat">5.1 默认模式 - 网桥和 NAT</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221543698.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221543698.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221543698.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221543698.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221543698.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221543698.png-water_print" /></p>
+<ul>
+<li>创建 nginx 镜像，映射端口 <code>8888:8888</code>
+<ul>
+<li><code>docker run -p 8888:8888 -d nginx</code></li>
+</ul>
+</li>
+<li>显示网桥
+<ul>
+<li><code>brctl show</code></li>
+</ul>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221558147.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221558147.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221558147.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221558147.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221558147.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221558147.png-water_print" /></p>
+<ul>
+<li>nsenter 查看对应容器网络命名空间</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221600760.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221600760.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221600760.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221600760.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221600760.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221600760.png-water_print" /></p>
+<ul>
+<li>主机上的 iptables 配置
+<ul>
+<li><code>iptables-save -t nat</code></li>
+</ul>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221604368.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221604368.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221604368.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221604368.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221604368.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202110221604368.png-water_print" /></p>
+<h3 id="52-null-模式">5.2 Null 模式</h3>
+<p>Null 模式是一个空实现，可以通过 Null 模式启动容器并在宿主机上通过命令为容器配置网络。</p>
+<div class="details admonition example open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-list-ol fa-fw"></i>示例<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">创建 Null 模式容器，手动配置容器网络</div>
+        </div>
+    </div>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1">### create network ns</span>
+<span class="sb">```</span>
+mkdir -p /var/run/netns
+find -L /var/run/netns -type l -delete
+<span class="sb">```</span>
+<span class="c1">### start nginx docker with non network mode</span>
+<span class="sb">```</span>
+docker run --network<span class="o">=</span>none  -d nginx
+<span class="sb">```</span>
+<span class="c1">### check corresponding pid</span>
+<span class="sb">```</span>
+docker ps<span class="p">|</span>grep nginx
+docker inspect &lt;containerid&gt;<span class="p">|</span>grep -i pid
+
+<span class="s2">&#34;Pid&#34;</span>: 876884,
+<span class="s2">&#34;PidMode&#34;</span>: <span class="s2">&#34;&#34;</span>,
+<span class="s2">&#34;PidsLimit&#34;</span>: null,
+<span class="sb">```</span>
+<span class="c1">### check network config for the container</span>
+<span class="sb">```</span>
+nsenter -t <span class="m">876884</span> -n ip a
+<span class="sb">```</span>
+<span class="c1">### link network namespace</span>
+<span class="sb">```</span>
+<span class="nb">export</span> <span class="nv">pid</span><span class="o">=</span><span class="m">876884</span>
+ln -s /proc/<span class="nv">$pid</span>/ns/net /var/run/netns/<span class="nv">$pid</span>
+ip netns list
+<span class="sb">```</span>
+<span class="c1">### check docker bridge on the host </span>
+<span class="sb">```</span>
+brctl show
+ip a
+4: docker0: &lt;BROADCAST,MULTICAST,UP,LOWER_UP&gt; mtu <span class="m">1500</span> qdisc noqueue state UP group default
+    link/ether 02:42:35:40:d3:8b brd ff:ff:ff:ff:ff:ff
+    inet 172.17.0.1/16 brd 172.17.255.255 scope global docker0
+       valid_lft forever preferred_lft forever
+    inet6 fe80::42:35ff:fe40:d38b/64 scope link
+       valid_lft forever preferred_lft forever
+<span class="sb">```</span>
+<span class="c1">### create veth pair</span>
+<span class="sb">```</span>
+ip link add A <span class="nb">type</span> veth peer name B
+<span class="sb">```</span>
+<span class="c1">### config A</span>
+<span class="sb">```</span>
+brctl addif docker0 A
+ip link <span class="nb">set</span> A up
+<span class="sb">```</span>
+<span class="c1">### config B</span>
+<span class="sb">```</span>
+<span class="nv">SETIP</span><span class="o">=</span>172.17.0.10
+<span class="nv">SETMASK</span><span class="o">=</span><span class="m">16</span>
+<span class="nv">GATEWAY</span><span class="o">=</span>172.17.0.1
+
+ip link <span class="nb">set</span> B netns <span class="nv">$pid</span>
+ip netns <span class="nb">exec</span> <span class="nv">$pid</span> ip link <span class="nb">set</span> dev B name eth0
+ip netns <span class="nb">exec</span> <span class="nv">$pid</span> ip link <span class="nb">set</span> eth0 up
+ip netns <span class="nb">exec</span> <span class="nv">$pid</span> ip addr add <span class="nv">$SETIP</span>/<span class="nv">$SETMASK</span> dev eth0
+ip netns <span class="nb">exec</span> <span class="nv">$pid</span> ip route add default via <span class="nv">$GATEWAY</span>
+<span class="sb">```</span>
+<span class="c1">### check connectivity</span>
+<span class="sb">```</span>
+curl 172.17.0.10
+<span class="sb">```</span>
+</code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-10-21</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2021/10/docker%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF/" data-title="Docker 核心技术"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2021/10/docker%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF/" data-title="Docker 核心技术"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2021/10/docker%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF/" data-title="Docker 核心技术"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/">云原生安全</a>,&nbsp;<a href="/tags/docker/">Docker</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/10/exchange%E7%9B%B8%E5%85%B3%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/" class="prev" rel="prev" title="Exchange 漏洞利用"><i class="fas fa-angle-left fa-fw"></i>Exchange 漏洞利用</a>
+            <a href="/2021/11/%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/" class="next" rel="next" title="容器安全">容器安全<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

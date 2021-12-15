@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>sudo - 标签 - Geekby&#39;s Blog</title>
+        <link>https://www.geekby.site/tags/sudo/</link>
+        <description>sudo - 标签 - Geekby&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Sat, 30 Jan 2021 11:09:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/sudo/" rel="self" type="application/rss+xml" /><item>
+    <title>CVE-2021-3156 sudo 提权漏洞复现</title>
+    <link>https://www.geekby.site/2021/01/cve-2021-3156%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</link>
+    <pubDate>Sat, 30 Jan 2021 11:09:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/01/cve-2021-3156%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</guid>
+    <description><![CDATA[CVE-2021-3156 sudo 提权漏洞复现]]></description>
+</item></channel>
+</rss>

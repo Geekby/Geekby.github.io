@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>文件上传漏洞相关 - Geekby&#39;s Blog</title><meta name="Description" content="文件上传漏洞相关"><meta property="og:title" content="文件上传漏洞相关" />
+<meta property="og:description" content="文件上传漏洞相关" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2021/01/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-01-13T09:01:00+08:00" />
+<meta property="article:modified_time" content="2021-01-13T09:01:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="文件上传漏洞相关"/>
+<meta name="twitter:description" content="文件上传漏洞相关"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/01/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" /><link rel="prev" href="https://www.geekby.site/2021/01/web%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/" /><link rel="next" href="https://www.geekby.site/2021/01/mysql%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "文件上传漏洞相关",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2021\/01\/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "常用, 渗透测试","wordcount":  547 ,
+        "url": "https:\/\/www.geekby.site\/2021\/01\/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E\/","datePublished": "2021-01-13T09:01:00+08:00","dateModified": "2021-01-13T09:01:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "文件上传漏洞相关"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">文件上传漏洞相关</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%B8%B8%E7%94%A8/"><i class="far fa-folder fa-fw"></i>常用</a>&nbsp;<a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a>&nbsp;<a href="/categories/%E9%9D%B6%E5%9C%BA/"><i class="far fa-folder fa-fw"></i>靶场</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-13">2021-01-13</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 547 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-前言">1 前言</a>
+      <ul>
+        <li><a href="#11-可解析的后缀">1.1 可解析的后缀</a></li>
+        <li><a href="#12-中间件漏洞">1.2 中间件漏洞</a>
+          <ul>
+            <li><a href="#121-iis">1.2.1 IIS</a></li>
+            <li><a href="#122-apahce">1.2.2 Apahce</a></li>
+            <li><a href="#123-nginx">1.2.3 nginx</a></li>
+            <li><a href="#124-tomcat">1.2.4 tomcat</a></li>
+          </ul>
+        </li>
+        <li><a href="#13-系统特性">1.3 系统特性</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-writeup">2 WriteUP</a>
+      <ul>
+        <li><a href="#21-pass---01">2.1 PASS - 01</a></li>
+        <li><a href="#22-pass---02">2.2 PASS - 02</a></li>
+        <li><a href="#23-pass---03">2.3 PASS - 03</a></li>
+        <li><a href="#24-pass---04">2.4 PASS - 04</a></li>
+        <li><a href="#25-pass---05">2.5 PASS - 05</a></li>
+        <li><a href="#26-pass---06">2.6 PASS - 06</a></li>
+        <li><a href="#27-pass---07">2.7 PASS - 07</a></li>
+        <li><a href="#28-pass---08">2.8 PASS - 08</a></li>
+        <li><a href="#29-pass---09">2.9 PASS - 09</a></li>
+        <li><a href="#210-pass---10">2.10 PASS - 10</a></li>
+        <li><a href="#211-pass---11">2.11 PASS - 11</a></li>
+        <li><a href="#212-pass---12">2.12 PASS - 12</a></li>
+        <li><a href="#213-pass---13">2.13 PASS - 13</a></li>
+        <li><a href="#214-pass---14">2.14 PASS - 14</a></li>
+        <li><a href="#215-pass---15">2.15 PASS - 15</a></li>
+        <li><a href="#216-pass---16">2.16 PASS - 16</a></li>
+        <li><a href="#217-pass---17">2.17 PASS - 17</a></li>
+        <li><a href="#218-pass---18">2.18 PASS - 18</a></li>
+        <li><a href="#219-pass---19">2.19 PASS - 19</a></li>
+        <li><a href="#220-pass---20">2.20 PASS - 20</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="文件上传漏洞">文件上传漏洞</h1>
+<h2 id="1-前言">1 前言</h2>
+<p>靶场环境：<a href="https://github.com/c0ny1/upload-labs" target="_blank" rel="noopener noreffer">https://github.com/c0ny1/upload-labs</a></p>
+<p>环境搭建：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker pull c0ny1/upload-labs
+docker run -d -p 80:80 upload-labs
+</code></pre></td></tr></table>
+</div>
+</div><p>判断上传漏洞的类型：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113094518.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113094518.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113094518.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113094518.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113094518.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113094518.png-water_print" /></p>
+<p>文件上传漏洞主要存在以下几个方面：</p>
+<ol>
+<li>
+<p>可解析的后缀，也就是该语言有多个可解析的后缀，比如 php 语言可解析的后缀为php，php2，php3 等等</p>
+</li>
+<li>
+<p>大小写混合，如果系统过滤不严，可能大小写可以绕过。</p>
+</li>
+<li>
+<p>中间件，每款中间件基本都解析漏洞，比如 iis 就可以把 xxx.asp;.jpg 当 asp 来执行。</p>
+</li>
+<li>
+<p>系统特性，特别是 Windows 的后缀加点，加空格，加 ::$DATA 可以绕过目标系统。</p>
+</li>
+<li>
+<p>语言漏洞，流行的三种脚本语言基本都存在 00 截断漏洞。</p>
+</li>
+<li>
+<p>双后缀，这个与系统和中间件无关，偶尔会存在于代码逻辑之中。</p>
+</li>
+</ol>
+<h3 id="11-可解析的后缀">1.1 可解析的后缀</h3>
+<p>很多语言都有多个可以解析后缀。当目标站点采用黑名单时，往往包含不全。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center"><strong>语言</strong></th>
+<th style="text-align:center"><strong>可解析后缀</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">asp/aspx</td>
+<td style="text-align:center">asp、aspx、asa、asax、ascx、ashx、asmx、cer</td>
+</tr>
+<tr>
+<td style="text-align:center">php</td>
+<td style="text-align:center">php、php5、php4、php3、php2、phtml、pht</td>
+</tr>
+<tr>
+<td style="text-align:center">jsp</td>
+<td style="text-align:center">jsp、jspa、jspx、jsw、jsv、jspf、jhtml</td>
+</tr>
+</tbody>
+</table>
+<h3 id="12-中间件漏洞">1.2 中间件漏洞</h3>
+<h4 id="121-iis">1.2.1 IIS</h4>
+<p>IIS 一共有三个解析漏洞：</p>
+<ol>
+<li>IIS 6.0 文件解析 <code>xx.asp;.jpg</code></li>
+<li>IIS 6.0 目录解析 <code>xx.asp/1.jpg</code></li>
+<li>IIS 7.5 畸形解析 <code>xxx.jpg/x.php</code></li>
+</ol>
+<h4 id="122-apahce">1.2.2 Apahce</h4>
+<p>apache 相关的解析漏洞有两个：</p>
+<ol>
+<li>%0a (CVE-2017-15715)</li>
+<li>未知后缀 test.php.xxx</li>
+</ol>
+<h4 id="123-nginx">1.2.3 nginx</h4>
+<p>nginx 解析漏洞有三个：</p>
+<ol>
+<li>访问链接加 <code>/xxx.php</code>，即 <code>test.jpg/xxx.php</code></li>
+<li>畸形解析漏洞 <code>test.jpg%00xxx.php</code></li>
+<li>CVE-2013-4547 <code>test.jpg(非编码空格)\0x.php</code></li>
+</ol>
+<h4 id="124-tomcat">1.2.4 tomcat</h4>
+<p>tomcat 用于上传绕过的有三种，部分限制在 windows 操作系统下。</p>
+<ol>
+<li>xxx.jsp/</li>
+<li>xxx.jsp%20</li>
+<li>xxx.jsp::$DATA</li>
+</ol>
+<h3 id="13-系统特性">1.3 系统特性</h3>
+<p>经过查资料，目前发现在系统层面，有以下特性可以被上传漏洞所利用。</p>
+<ul>
+<li>Windows 下文件名不区分大小写，Linux下文件名区分大写</li>
+<li>Windows 下 ADS 流特性，导致上传文件 xxx.php::$DATA = xxx.php</li>
+<li>Windows 下文件名结尾加入<code>.</code>、<code>空格</code>、<code>&lt;</code>、<code>&gt;</code>、<code>&gt;&gt;&gt;</code>、<code>0x81-0xff</code>等字符，最终生成的文件均被 windows 忽略。</li>
+</ul>
+<h2 id="2-writeup">2 WriteUP</h2>
+<h3 id="21-pass---01">2.1 PASS - 01</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&#34;text/javascript&#34;</span><span class="o">&gt;</span>
+    <span class="kd">function</span> <span class="nx">checkFile</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">file</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByName</span><span class="p">(</span><span class="s1">&#39;upload_file&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nx">file</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="nx">file</span> <span class="o">==</span> <span class="s2">&#34;&#34;</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">alert</span><span class="p">(</span><span class="s2">&#34;请选择要上传的文件!&#34;</span><span class="p">);</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+        <span class="c1">//定义允许上传的文件类型
+</span><span class="c1"></span>        <span class="kd">var</span> <span class="nx">allow_ext</span> <span class="o">=</span> <span class="s2">&#34;.jpg|.png|.gif&#34;</span><span class="p">;</span>
+        <span class="c1">//提取上传文件的类型
+</span><span class="c1"></span>        <span class="kd">var</span> <span class="nx">ext_name</span> <span class="o">=</span> <span class="nx">file</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="s2">&#34;.&#34;</span><span class="p">));</span>
+        <span class="c1">//判断上传文件类型是否允许上传
+</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="nx">allow_ext</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">ext_name</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">var</span> <span class="nx">errMsg</span> <span class="o">=</span> <span class="s2">&#34;该文件不允许上传，请上传&#34;</span> <span class="o">+</span> <span class="nx">allow_ext</span> <span class="o">+</span> <span class="s2">&#34;类型的文件,当前文件类型为：&#34;</span> <span class="o">+</span> <span class="nx">ext_name</span><span class="p">;</span>
+            <span class="nx">alert</span><span class="p">(</span><span class="nx">errMsg</span><span class="p">);</span>
+            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="o">&lt;</span><span class="err">/script&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>前端禁用JS，直接上传 Webshell</p>
+<h3 id="22-pass---02">2.2 PASS - 02</h3>
+<p>绕过 MIME 检测，通过 BurpSuite 修改 Content-Type 即可</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113095128.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113095128.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113095128.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113095128.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113095128.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113095128.png-water_print" /></p>
+<h3 id="23-pass---03">2.3 PASS - 03</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nv">$deny_ext</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;.asp&#39;</span><span class="p">,</span><span class="s1">&#39;.aspx&#39;</span><span class="p">,</span><span class="s1">&#39;.php&#39;</span><span class="p">,</span><span class="s1">&#39;.jsp&#39;</span><span class="p">);</span>
+<span class="nv">$file_name</span> <span class="o">=</span> <span class="nx">trim</span><span class="p">(</span><span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;upload_file&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]);</span>
+<span class="nv">$file_name</span> <span class="o">=</span> <span class="nx">deldot</span><span class="p">(</span><span class="nv">$file_name</span><span class="p">);</span><span class="c1">//删除文件名末尾的点
+</span><span class="c1"></span><span class="nv">$file_ext</span> <span class="o">=</span> <span class="nx">strrchr</span><span class="p">(</span><span class="nv">$file_name</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">);</span>
+<span class="nv">$file_ext</span> <span class="o">=</span> <span class="nx">strtolower</span><span class="p">(</span><span class="nv">$file_ext</span><span class="p">);</span> <span class="c1">//转换为小写
+</span><span class="c1"></span><span class="nv">$file_ext</span> <span class="o">=</span> <span class="nx">str_ireplace</span><span class="p">(</span><span class="s1">&#39;::$DATA&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$file_ext</span><span class="p">);</span><span class="c1">//去除字符串::$DATA
+</span><span class="c1"></span><span class="nv">$file_ext</span> <span class="o">=</span> <span class="nx">trim</span><span class="p">(</span><span class="nv">$file_ext</span><span class="p">);</span> <span class="c1">//收尾去空
+</span></code></pre></td></tr></table>
+</div>
+</div><p>后端过滤了 <code>.php</code>，通过使用 <code>.php3</code>、<code>php5</code>、<code>php7</code>、<code>phtml</code>、<code>pht</code> 等后缀绕过检测</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113095554.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113095554.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113095554.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113095554.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113095554.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113095554.png-water_print" /></p>
+<h3 id="24-pass---04">2.4 PASS - 04</h3>
+<p>重写文件解析规则绕过。上传先上传一个名为 <code>.htaccess</code> 文件，内容如下</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;FiileMatch</span> <span class="err">&#34;04.jpg&#34;</span><span class="nt">&gt;</span>
+SetHandler application/x-httpd-php
+<span class="nt">&lt;/FiileMatch&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>再上传一个 <code>03.jpg</code> ，访问 03.jpg，即以 PHP 文件进行解析。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100041.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100041.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100041.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100041.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100041.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100041.png-water_print" /></p>
+<h3 id="25-pass---05">2.5 PASS - 05</h3>
+<p>还是黑名单，加上了 <code>.htaccess</code>，但是没有将后缀进行大小写统一，于是可以通过大小写绕过.</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100129.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100129.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100129.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100129.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100129.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100129.png-water_print" /></p>
+<h3 id="26-pass---06">2.6 PASS - 06</h3>
+<p>利用 Windows 系统的文件名特性。文件名最后增加点和空格，写成06.php[空格] ，</p>
+<p>上传后保存在 Windows 系统上的文件名最后的一个 <code>.</code> 会被去掉，实际上保存的文件名就是 06.php</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100337.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100337.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100337.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100337.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100337.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100337.png-water_print" /></p>
+<h3 id="27-pass---07">2.7 PASS - 07</h3>
+<p>原理同 Pass-06，文件名后加点，改成 <code>07.php.</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100438.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100438.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100438.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100438.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100438.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113100438.png-water_print" /></p>
+<h3 id="28-pass---08">2.8 PASS - 08</h3>
+<p>Windows 文件流特性绕过，文件名改成 <code>08.php::$DATA</code>，上传成功后保存的文件名其实是 <code>08.php</code></p>
+<p>php 在 window 环境下，如果文件名 + <code>::$DATA</code> 会把 <code>::$DATA</code> 之后的数据当成文件流处理，不会检测后缀名，且保持 <code>::$DATA</code> 之前的文件名</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103212.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103212.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103212.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103212.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103212.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103212.png-water_print" /></p>
+<h3 id="29-pass---09">2.9 PASS - 09</h3>
+<p>原理同 Pass-06，上传文件名后加上点 + 空格+ 点，改为 09.php. .</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103319.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103319.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103319.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103319.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103319.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103319.png-water_print" /></p>
+<h3 id="210-pass---10">2.10 PASS - 10</h3>
+<p>双写文件名绕过，文件名改成 10.pphphp</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103439.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103439.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103439.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103439.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103439.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103439.png-water_print" /></p>
+<h3 id="211-pass---11">2.11 PASS - 11</h3>
+<p>上传路径名 %00 截断绕过。上传的文件名写成 11.jpg，save_path 改成 <code>../upload/11.php%00</code>，最后保存下来的文件就是 11.php</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103600.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103600.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103600.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103600.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103600.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103600.png-water_print" /></p>
+<h3 id="212-pass---12">2.12 PASS - 12</h3>
+<p>原理同 Pass-11，上传路径 0x00 绕过。这次的 save_path 是通过 post 传进来的，还是利用 00 截断，但这次需要在二进制中进行修改，因为 post 不会像 get 对 %00 进行自动解码</p>
+<p>利用 Burpsuite 的 Hex 功能将 save_path 改成 <code>../upload/12.php[二进制00]</code>形式</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103701.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103701.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103701.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103701.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103701.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113103701.png-water_print" /></p>
+<h3 id="213-pass---13">2.13 PASS - 13</h3>
+<p>绕过文件头检查，添加 GIF 图片的文件头 GIF89a，绕过 GIF 图片检查。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104024.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104024.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104024.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104024.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104024.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104024.png-water_print" /></p>
+<h3 id="214-pass---14">2.14 PASS - 14</h3>
+<p>这里用 getimagesize 获取文件类型，还是直接就可以利用图片马就可进行绕过</p>
+<h3 id="215-pass---15">2.15 PASS - 15</h3>
+<p>这里用到 php_exif 模块来判断文件类型，还是直接就可以利用图片马就可进行绕过</p>
+<h3 id="216-pass---16">2.16 PASS - 16</h3>
+<p>原理：将一个正常显示的图片，上传到服务器。寻找图片被渲染后与原始图片部分对比仍然相同的数据块部分，</p>
+<p>将 Webshell 代码插在该部分，然后上传。具体实现需要自己编写 Python 程序，人工尝试基本是不可能构造出能绕过渲染函数的图片 webshell 的。</p>
+<p>参考：</p>
+<ul>
+<li>
+<p><a href="https://xz.aliyun.com/t/2657#toc-12" target="_blank" rel="noopener noreffer">https://xz.aliyun.com/t/2657#toc-12</a></p>
+</li>
+<li>
+<p><a href="https://www.idontplaydarts.com/2012/06/encoding-web-shells-in-png-idat-chunks/" target="_blank" rel="noopener noreffer">https://www.idontplaydarts.com/2012/06/encoding-web-shells-in-png-idat-chunks/</a></p>
+</li>
+</ul>
+<h3 id="217-pass---17">2.17 PASS - 17</h3>
+<ul>
+<li>利用条件竞争删除文件时间差绕过。</li>
+<li>在脚本运行的时候，访问 Webshell</li>
+</ul>
+<h3 id="218-pass---18">2.18 PASS - 18</h3>
+<ul>
+<li>利用上传重命名竞争 + Apache解析漏洞，成功绕过。</li>
+<li>上传名字为 18.php.7Z 的文件，快速重复提交该数据包，会提示文件已经被上传，但没有被重命名。</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104348.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104348.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104348.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104348.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104348.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104348.png-water_print" /></p>
+<h3 id="219-pass---19">2.19 PASS - 19</h3>
+<p>本关考察 CVE-2015-2348 move_uploaded_file() 00 截断，原理同 Pass-11，上传的文件名用 0x00 绕过。改成 19.php[二进制00].1.jpg</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104506.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104506.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104506.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104506.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104506.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113104506.png-water_print" /></p>
+<h3 id="220-pass---20">2.20 PASS - 20</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nv">$file</span> <span class="o">=</span> <span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;save_name&#39;</span><span class="p">])</span> <span class="o">?</span> <span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;upload_file&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">:</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;save_name&#39;</span><span class="p">];</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">is_array</span><span class="p">(</span><span class="nv">$file</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nv">$file</span> <span class="o">=</span> <span class="nx">explode</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="nx">strtolower</span><span class="p">(</span><span class="nv">$file</span><span class="p">));</span>
+<span class="p">}</span>
+<span class="nv">$ext</span> <span class="o">=</span> <span class="nx">end</span><span class="p">(</span><span class="nv">$file</span><span class="p">);</span>
+<span class="nv">$allow_suffix</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;jpg&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">,</span><span class="s1">&#39;gif&#39;</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$ext</span><span class="p">,</span> <span class="nv">$allow_suffix</span><span class="p">))</span> <span class="p">{</span>
+    <span class="nv">$msg</span> <span class="o">=</span> <span class="s2">&#34;禁止上传该后缀文件!&#34;</span><span class="p">;</span>
+<span class="p">}</span><span class="k">else</span><span class="p">{</span>
+    <span class="nv">$file_name</span> <span class="o">=</span> <span class="nx">reset</span><span class="p">(</span><span class="nv">$file</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;.&#39;</span> <span class="o">.</span> <span class="nv">$file</span><span class="p">[</span><span class="nx">count</span><span class="p">(</span><span class="nv">$file</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+    <span class="nv">$temp_file</span> <span class="o">=</span> <span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;upload_file&#39;</span><span class="p">][</span><span class="s1">&#39;tmp_name&#39;</span><span class="p">];</span>
+    <span class="nv">$img_path</span> <span class="o">=</span> <span class="nx">UPLOAD_PATH</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span> <span class="o">.</span><span class="nv">$file_name</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nx">move_uploaded_file</span><span class="p">(</span><span class="nv">$temp_file</span><span class="p">,</span> <span class="nv">$img_path</span><span class="p">))</span> <span class="p">{</span>
+        <span class="nv">$msg</span> <span class="o">=</span> <span class="s2">&#34;文件上传成功！&#34;</span><span class="p">;</span>
+        <span class="nv">$is_upload</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="nv">$msg</span> <span class="o">=</span> <span class="s2">&#34;文件上传失败！&#34;</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>首先 end 函数取所 post 参数数组中的最后一个值，<code>$file_name = reset($file) . '.' . $file[count($file) - 1]</code>。我们可以 post 一个参数名为一个 [0]一个 [2]，然后 $file[count($file) - 1] 就为空，$file_name 最终就为reset($file) 即 $file[0]，就可以绕过判断</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113105239.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113105239.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113105239.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113105239.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113105239.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210113105239.png-water_print" /></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-01-13</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2021/01/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" data-title="文件上传漏洞相关"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2021/01/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" data-title="文件上传漏洞相关"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2021/01/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/" data-title="文件上传漏洞相关"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%B8%B8%E7%94%A8/">常用</a>,&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/01/web%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/" class="prev" rel="prev" title="WEB 容器安全"><i class="fas fa-angle-left fa-fw"></i>WEB 容器安全</a>
+            <a href="/2021/01/mysql%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/" class="next" rel="next" title="MySQL 提权方法整理">MySQL 提权方法整理<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

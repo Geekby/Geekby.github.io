@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Tomcat - 标签 - Geekby&#39;s Blog</title>
+        <link>https://www.geekby.site/tags/tomcat/</link>
+        <description>Tomcat - 标签 - Geekby&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Fri, 21 Feb 2020 13:00:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/tomcat/" rel="self" type="application/rss+xml" /><item>
+    <title>CVE-2020-1938 Apache Tomcat AJP 文件包含漏洞复现</title>
+    <link>https://www.geekby.site/2020/02/cve-2020-1938-apache-tomcat-ajp-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/</link>
+    <pubDate>Fri, 21 Feb 2020 13:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2020/02/cve-2020-1938-apache-tomcat-ajp-%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E/</guid>
+    <description><![CDATA[CVE-2020-1938 Apache Tomcat AJP 文件包含漏洞复现]]></description>
+</item></channel>
+</rss>

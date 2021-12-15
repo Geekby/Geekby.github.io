@@ -1,0 +1,78 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>Categories - 分类 - Geekby&#39;s Blog</title>
+        <link>https://www.geekby.site/categories/</link>
+        <description>Categories - 分类 - Geekby&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Sun, 12 Dec 2021 16:31:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/categories/" rel="self" type="application/rss+xml" /><item>
+    <title>内网渗透</title>
+    <link>https://www.geekby.site/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/</link>
+    <pubDate>Sun, 12 Dec 2021 16:31:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>云原生安全</title>
+    <link>https://www.geekby.site/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/</link>
+    <pubDate>Sun, 05 Dec 2021 09:55:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>代码审计</title>
+    <link>https://www.geekby.site/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</link>
+    <pubDate>Thu, 18 Nov 2021 09:09:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>渗透测试</title>
+    <link>https://www.geekby.site/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/</link>
+    <pubDate>Wed, 22 Sep 2021 10:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>漏洞复现</title>
+    <link>https://www.geekby.site/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</link>
+    <pubDate>Mon, 19 Apr 2021 09:49:49 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>靶场</title>
+    <link>https://www.geekby.site/categories/%E9%9D%B6%E5%9C%BA/</link>
+    <pubDate>Mon, 22 Mar 2021 16:52:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/categories/%E9%9D%B6%E5%9C%BA/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>提权</title>
+    <link>https://www.geekby.site/categories/%E6%8F%90%E6%9D%83/</link>
+    <pubDate>Tue, 26 Jan 2021 09:05:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/categories/%E6%8F%90%E6%9D%83/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>常用</title>
+    <link>https://www.geekby.site/categories/%E5%B8%B8%E7%94%A8/</link>
+    <pubDate>Wed, 20 Jan 2021 09:53:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/categories/%E5%B8%B8%E7%94%A8/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>协议</title>
+    <link>https://www.geekby.site/categories/%E5%8D%8F%E8%AE%AE/</link>
+    <pubDate>Mon, 14 Dec 2020 10:46:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/categories/%E5%8D%8F%E8%AE%AE/</guid>
+    <description><![CDATA[]]></description>
+</item><item>
+    <title>CTF</title>
+    <link>https://www.geekby.site/categories/ctf/</link>
+    <pubDate>Fri, 31 May 2019 14:02:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/categories/ctf/</guid>
+    <description><![CDATA[]]></description>
+</item></channel>
+</rss>

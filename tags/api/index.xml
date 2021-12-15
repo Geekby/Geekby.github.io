@@ -1,0 +1,15 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>API - 标签 - Geekby&#39;s Blog</title>
+        <link>https://www.geekby.site/tags/api/</link>
+        <description>API - 标签 - Geekby&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Sun, 05 Dec 2021 09:55:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/api/" rel="self" type="application/rss+xml" /><item>
+    <title>API 安全</title>
+    <link>https://www.geekby.site/2021/12/api%E5%AE%89%E5%85%A8/</link>
+    <pubDate>Sun, 05 Dec 2021 09:55:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/12/api%E5%AE%89%E5%85%A8/</guid>
+    <description><![CDATA[API Security]]></description>
+</item></channel>
+</rss>

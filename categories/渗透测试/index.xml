@@ -1,0 +1,78 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>渗透测试 - 分类 - Geekby&#39;s Blog</title>
+        <link>https://www.geekby.site/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/</link>
+        <description>渗透测试 - 分类 - Geekby&#39;s Blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Wed, 22 Sep 2021 10:00:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/" rel="self" type="application/rss+xml" /><item>
+    <title>Webshell 内存马分析</title>
+    <link>https://www.geekby.site/2021/09/webshell%E5%86%85%E5%AD%98%E9%A9%AC%E5%88%86%E6%9E%90/</link>
+    <pubDate>Wed, 22 Sep 2021 10:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/09/webshell%E5%86%85%E5%AD%98%E9%A9%AC%E5%88%86%E6%9E%90/</guid>
+    <description><![CDATA[Webshell 内存马分析]]></description>
+</item><item>
+    <title>常见Bypass Disable Functions方法</title>
+    <link>https://www.geekby.site/2021/08/%E5%B8%B8%E8%A7%81bypass-disable-functions%E6%96%B9%E6%B3%95/</link>
+    <pubDate>Mon, 30 Aug 2021 18:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/08/%E5%B8%B8%E8%A7%81bypass-disable-functions%E6%96%B9%E6%B3%95/</guid>
+    <description><![CDATA[常见 Bypass Disable Functions 方法总结]]></description>
+</item><item>
+    <title>webshell 流量分析</title>
+    <link>https://www.geekby.site/2021/03/webshell%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/</link>
+    <pubDate>Sun, 28 Mar 2021 15:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/03/webshell%E6%B5%81%E9%87%8F%E5%88%86%E6%9E%90/</guid>
+    <description><![CDATA[webshell 流量分析]]></description>
+</item><item>
+    <title>应急响应</title>
+    <link>https://www.geekby.site/2021/03/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/</link>
+    <pubDate>Sun, 07 Mar 2021 08:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/03/%E5%BA%94%E6%80%A5%E5%93%8D%E5%BA%94/</guid>
+    <description><![CDATA[应急响应]]></description>
+</item><item>
+    <title>Windows 提权方式总结</title>
+    <link>https://www.geekby.site/2021/01/windows%E6%8F%90%E6%9D%83%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/</link>
+    <pubDate>Tue, 26 Jan 2021 09:05:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/01/windows%E6%8F%90%E6%9D%83%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/</guid>
+    <description><![CDATA[Windows 提权方式总结]]></description>
+</item><item>
+    <title>红蓝对抗中 RDP 协议的利用</title>
+    <link>https://www.geekby.site/2021/01/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97%E4%B8%ADrdp%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%88%A9%E7%94%A8/</link>
+    <pubDate>Fri, 22 Jan 2021 09:12:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/01/%E7%BA%A2%E8%93%9D%E5%AF%B9%E6%8A%97%E4%B8%ADrdp%E5%8D%8F%E8%AE%AE%E7%9A%84%E5%88%A9%E7%94%A8/</guid>
+    <description><![CDATA[红蓝对抗中 RDP 协议的利用思路整理]]></description>
+</item><item>
+    <title>MSSQL 注入与提权方法整理</title>
+    <link>https://www.geekby.site/2021/01/mssql%E6%B3%A8%E5%85%A5%E4%B8%8E%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/</link>
+    <pubDate>Wed, 20 Jan 2021 09:53:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/01/mssql%E6%B3%A8%E5%85%A5%E4%B8%8E%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/</guid>
+    <description><![CDATA[MSSQL 注入与提权方法整理]]></description>
+</item><item>
+    <title>MySQL 提权方法整理</title>
+    <link>https://www.geekby.site/2021/01/mysql%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/</link>
+    <pubDate>Tue, 19 Jan 2021 13:25:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/01/mysql%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86/</guid>
+    <description><![CDATA[MySQL 提权方法整理]]></description>
+</item><item>
+    <title>文件上传漏洞相关</title>
+    <link>https://www.geekby.site/2021/01/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/</link>
+    <pubDate>Wed, 13 Jan 2021 09:01:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/01/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0%E6%BC%8F%E6%B4%9E/</guid>
+    <description><![CDATA[文件上传漏洞相关知识整理]]></description>
+</item><item>
+    <title>WEB 容器安全</title>
+    <link>https://www.geekby.site/2021/01/web%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/</link>
+    <pubDate>Tue, 12 Jan 2021 14:20:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2021/01/web%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/</guid>
+    <description><![CDATA[WEB 容器安全相关知识整理]]></description>
+</item></channel>
+</rss>

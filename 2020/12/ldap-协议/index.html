@@ -162,8 +162,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">dn:cn=abc,ou=IT,ou=Worker,ou=Pentester,dc=geekby,dc=xyz
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">dn:cn=abc,ou=IT,ou=Worker,ou=Pentester,dc=geekby,dc=xyz
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>LDAP 的功能模型中定义了一系列利用 LDAP 协议的操作。它包含了三个部分:</p>
 <ol>
@@ -192,12 +192,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">domain_groups: 目标域的组列表
-domain_users: 目标域的用户列表
-domain_computers: 目标域的计算机账号列表
-domain_policy: 域策略，例如是否需要密码等
-domain_trusts: 传入和传出域属性以及是否受信任
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">domain_groups: 目标域的组列表
+</span></span><span class="line"><span class="cl">domain_users: 目标域的用户列表
+</span></span><span class="line"><span class="cl">domain_computers: 目标域的计算机账号列表
+</span></span><span class="line"><span class="cl">domain_policy: 域策略，例如是否需要密码等
+</span></span><span class="line"><span class="cl">domain_trusts: 传入和传出域属性以及是否受信任
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="52-获取域信息实例">5.2 获取域信息实例</h3>
 <p>环境：</p>
@@ -208,10 +208,10 @@ domain_trusts: 传入和传出域属性以及是否受信任
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"> 域控:192.168.66.26 (dc.company.com) 
- 域用户凭证：pentest\win7user:123456aB
- 使用工具 Adfind.exe
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"> 域控:192.168.66.26 (dc.company.com) 
+</span></span><span class="line"><span class="cl"> 域用户凭证：pentest\win7user:123456aB
+</span></span><span class="line"><span class="cl"> 使用工具 Adfind.exe
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>下面列出了 Adfind 的一些使用实例，主要是对工具参数进行介绍。我们可以根据需求修改命令，查 询我们所关注的任何信息。比如查询已控凭证所属的组、查询特定组的成员、根据计算机名推测用户可 能有权限的计算机等。</p>
 <div class="highlight"><div class="chroma">
@@ -247,36 +247,36 @@ domain_trusts: 传入和传出域属性以及是否受信任
 </span><span class="lnt">29
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">#查询域内所有用户详细信息
-adfind -h 10.1.26.128 -u company\test -up Geekby -sc u:*
-
-#查询域内特定用户详细信息
-adfind -h 10.1.26.128 -u company\test -up Geekby -sc u:test
-
-#查询域内特定用户特定信息(mail)
-adfind -h 10.1.26.128 -u company\test -up Geekby -sc u:test mail
-
-#查询域内所有用户dn信息
-adfind -h 10.1.26.128 -u company\test -up Geekby -sc u:* -dn
-
-#查询域内用户数量
-adfind -h 10.1.26.128 -u company\test -up Geekby -sc u:* -c
-
-#查询域内所有组详细信息
-adfind -h 10.1.26.128 -u company\test -up Geekby -sc g:*
-
-#查询域内组名内包含“Admin”的所有组详细信息
-adfind -h 10.1.26.128 -u company\test -up Geekby -sc g:*Admin* #查询域内所有OU详细信息
-adfind -h 10.1.26.128 -u company\test -up Geekby -sc o:* #查询域内所有计算机详细信息
-adfind -h 10.1.26.128 -u company\test -up Geekby -sc c:* #查询域内所有站点详细信息
-adfind -h 10.1.26.128 -u company\test -up Geekby -sc site:* #查询域内所有子网详细信息
-adfind -h 10.1.26.128 -u company\test -up Geekby -sc subnet:* #查询域的信任关系
-adfind -h 10.1.26.128 -u company\test -up Geekby -sc trustdmp #查询域内spn的详细信息
-adfind -h 10.1.26.128 -u company\test -up Geekby -sc spn:*
-
-#搜索禁用的用户dn
-adfind -h 10.1.26.128 -u company\test -up Geekby -b DC=company,DC=com -f userAccountControl:AND:=514 -dn
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#查询域内所有用户详细信息
+</span></span><span class="line"><span class="cl">adfind -h 10.1.26.128 -u company\test -up Geekby -sc u:*
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">#查询域内特定用户详细信息
+</span></span><span class="line"><span class="cl">adfind -h 10.1.26.128 -u company\test -up Geekby -sc u:test
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">#查询域内特定用户特定信息(mail)
+</span></span><span class="line"><span class="cl">adfind -h 10.1.26.128 -u company\test -up Geekby -sc u:test mail
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">#查询域内所有用户dn信息
+</span></span><span class="line"><span class="cl">adfind -h 10.1.26.128 -u company\test -up Geekby -sc u:* -dn
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">#查询域内用户数量
+</span></span><span class="line"><span class="cl">adfind -h 10.1.26.128 -u company\test -up Geekby -sc u:* -c
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">#查询域内所有组详细信息
+</span></span><span class="line"><span class="cl">adfind -h 10.1.26.128 -u company\test -up Geekby -sc g:*
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">#查询域内组名内包含“Admin”的所有组详细信息
+</span></span><span class="line"><span class="cl">adfind -h 10.1.26.128 -u company\test -up Geekby -sc g:*Admin* #查询域内所有OU详细信息
+</span></span><span class="line"><span class="cl">adfind -h 10.1.26.128 -u company\test -up Geekby -sc o:* #查询域内所有计算机详细信息
+</span></span><span class="line"><span class="cl">adfind -h 10.1.26.128 -u company\test -up Geekby -sc c:* #查询域内所有站点详细信息
+</span></span><span class="line"><span class="cl">adfind -h 10.1.26.128 -u company\test -up Geekby -sc site:* #查询域内所有子网详细信息
+</span></span><span class="line"><span class="cl">adfind -h 10.1.26.128 -u company\test -up Geekby -sc subnet:* #查询域的信任关系
+</span></span><span class="line"><span class="cl">adfind -h 10.1.26.128 -u company\test -up Geekby -sc trustdmp #查询域内spn的详细信息
+</span></span><span class="line"><span class="cl">adfind -h 10.1.26.128 -u company\test -up Geekby -sc spn:*
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">#搜索禁用的用户dn
+</span></span><span class="line"><span class="cl">adfind -h 10.1.26.128 -u company\test -up Geekby -b DC=company,DC=com -f userAccountControl:AND:=514 -dn
+</span></span></code></pre></td></tr></table>
 </div>
 </div></div><div class="post-footer" id="post-footer">
     <div class="post-info">
@@ -306,7 +306,7 @@ adfind -h 10.1.26.128 -u company\test -up Geekby -b DC=company,DC=com -f userAcc
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

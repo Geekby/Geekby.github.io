@@ -168,9 +168,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker pull c0ny1/upload-labs
-docker run -d -p 80:80 upload-labs
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker pull c0ny1/upload-labs
+</span></span><span class="line"><span class="cl">docker run -d -p 80:80 upload-labs
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>判断上传漏洞的类型：</p>
 <p><img
@@ -286,26 +286,26 @@ docker run -d -p 80:80 upload-labs
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&#34;text/javascript&#34;</span><span class="o">&gt;</span>
-    <span class="kd">function</span> <span class="nx">checkFile</span><span class="p">()</span> <span class="p">{</span>
-        <span class="kd">var</span> <span class="nx">file</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByName</span><span class="p">(</span><span class="s1">&#39;upload_file&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span><span class="p">;</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nx">file</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="nx">file</span> <span class="o">==</span> <span class="s2">&#34;&#34;</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">alert</span><span class="p">(</span><span class="s2">&#34;请选择要上传的文件!&#34;</span><span class="p">);</span>
-            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="c1">//定义允许上传的文件类型
-</span><span class="c1"></span>        <span class="kd">var</span> <span class="nx">allow_ext</span> <span class="o">=</span> <span class="s2">&#34;.jpg|.png|.gif&#34;</span><span class="p">;</span>
-        <span class="c1">//提取上传文件的类型
-</span><span class="c1"></span>        <span class="kd">var</span> <span class="nx">ext_name</span> <span class="o">=</span> <span class="nx">file</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="s2">&#34;.&#34;</span><span class="p">));</span>
-        <span class="c1">//判断上传文件类型是否允许上传
-</span><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="nx">allow_ext</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">ext_name</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-            <span class="kd">var</span> <span class="nx">errMsg</span> <span class="o">=</span> <span class="s2">&#34;该文件不允许上传，请上传&#34;</span> <span class="o">+</span> <span class="nx">allow_ext</span> <span class="o">+</span> <span class="s2">&#34;类型的文件,当前文件类型为：&#34;</span> <span class="o">+</span> <span class="nx">ext_name</span><span class="p">;</span>
-            <span class="nx">alert</span><span class="p">(</span><span class="nx">errMsg</span><span class="p">);</span>
-            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="o">&lt;</span><span class="err">/script&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">&#34;text/javascript&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">function</span> <span class="nx">checkFile</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">var</span> <span class="nx">file</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementsByName</span><span class="p">(</span><span class="s1">&#39;upload_file&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="nx">value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nx">file</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">||</span> <span class="nx">file</span> <span class="o">==</span> <span class="s2">&#34;&#34;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">alert</span><span class="p">(</span><span class="s2">&#34;请选择要上传的文件!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//定义允许上传的文件类型
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kd">var</span> <span class="nx">allow_ext</span> <span class="o">=</span> <span class="s2">&#34;.jpg|.png|.gif&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//提取上传文件的类型
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kd">var</span> <span class="nx">ext_name</span> <span class="o">=</span> <span class="nx">file</span><span class="p">.</span><span class="nx">substring</span><span class="p">(</span><span class="nx">file</span><span class="p">.</span><span class="nx">lastIndexOf</span><span class="p">(</span><span class="s2">&#34;.&#34;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">//判断上传文件类型是否允许上传
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span> <span class="p">(</span><span class="nx">allow_ext</span><span class="p">.</span><span class="nx">indexOf</span><span class="p">(</span><span class="nx">ext_name</span><span class="p">)</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="kd">var</span> <span class="nx">errMsg</span> <span class="o">=</span> <span class="s2">&#34;该文件不允许上传，请上传&#34;</span> <span class="o">+</span> <span class="nx">allow_ext</span> <span class="o">+</span> <span class="s2">&#34;类型的文件,当前文件类型为：&#34;</span> <span class="o">+</span> <span class="nx">ext_name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="nx">alert</span><span class="p">(</span><span class="nx">errMsg</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="err">/script&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>前端禁用JS，直接上传 Webshell</p>
 <h3 id="22-pass---02">2.2 PASS - 02</h3>
@@ -330,14 +330,14 @@ docker run -d -p 80:80 upload-labs
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nv">$deny_ext</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;.asp&#39;</span><span class="p">,</span><span class="s1">&#39;.aspx&#39;</span><span class="p">,</span><span class="s1">&#39;.php&#39;</span><span class="p">,</span><span class="s1">&#39;.jsp&#39;</span><span class="p">);</span>
-<span class="nv">$file_name</span> <span class="o">=</span> <span class="nx">trim</span><span class="p">(</span><span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;upload_file&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]);</span>
-<span class="nv">$file_name</span> <span class="o">=</span> <span class="nx">deldot</span><span class="p">(</span><span class="nv">$file_name</span><span class="p">);</span><span class="c1">//删除文件名末尾的点
-</span><span class="c1"></span><span class="nv">$file_ext</span> <span class="o">=</span> <span class="nx">strrchr</span><span class="p">(</span><span class="nv">$file_name</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">);</span>
-<span class="nv">$file_ext</span> <span class="o">=</span> <span class="nx">strtolower</span><span class="p">(</span><span class="nv">$file_ext</span><span class="p">);</span> <span class="c1">//转换为小写
-</span><span class="c1"></span><span class="nv">$file_ext</span> <span class="o">=</span> <span class="nx">str_ireplace</span><span class="p">(</span><span class="s1">&#39;::$DATA&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$file_ext</span><span class="p">);</span><span class="c1">//去除字符串::$DATA
-</span><span class="c1"></span><span class="nv">$file_ext</span> <span class="o">=</span> <span class="nx">trim</span><span class="p">(</span><span class="nv">$file_ext</span><span class="p">);</span> <span class="c1">//收尾去空
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nv">$deny_ext</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;.asp&#39;</span><span class="p">,</span><span class="s1">&#39;.aspx&#39;</span><span class="p">,</span><span class="s1">&#39;.php&#39;</span><span class="p">,</span><span class="s1">&#39;.jsp&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$file_name</span> <span class="o">=</span> <span class="nx">trim</span><span class="p">(</span><span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;upload_file&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$file_name</span> <span class="o">=</span> <span class="nx">deldot</span><span class="p">(</span><span class="nv">$file_name</span><span class="p">);</span><span class="c1">//删除文件名末尾的点
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nv">$file_ext</span> <span class="o">=</span> <span class="nx">strrchr</span><span class="p">(</span><span class="nv">$file_name</span><span class="p">,</span> <span class="s1">&#39;.&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$file_ext</span> <span class="o">=</span> <span class="nx">strtolower</span><span class="p">(</span><span class="nv">$file_ext</span><span class="p">);</span> <span class="c1">//转换为小写
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nv">$file_ext</span> <span class="o">=</span> <span class="nx">str_ireplace</span><span class="p">(</span><span class="s1">&#39;::$DATA&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$file_ext</span><span class="p">);</span><span class="c1">//去除字符串::$DATA
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nv">$file_ext</span> <span class="o">=</span> <span class="nx">trim</span><span class="p">(</span><span class="nv">$file_ext</span><span class="p">);</span> <span class="c1">//收尾去空
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>后端过滤了 <code>.php</code>，通过使用 <code>.php3</code>、<code>php5</code>、<code>php7</code>、<code>phtml</code>、<code>pht</code> 等后缀绕过检测</p>
 <p><img
@@ -357,10 +357,10 @@ docker run -d -p 80:80 upload-labs
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="nt">&lt;FiileMatch</span> <span class="err">&#34;04.jpg&#34;</span><span class="nt">&gt;</span>
-SetHandler application/x-httpd-php
-<span class="nt">&lt;/FiileMatch&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;FiileMatch</span> <span class="err">&#34;04.jpg&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">SetHandler application/x-httpd-php
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/FiileMatch&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>再上传一个 <code>03.jpg</code> ，访问 03.jpg，即以 PHP 文件进行解析。</p>
 <p><img
@@ -531,25 +531,25 @@ SetHandler application/x-httpd-php
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nv">$file</span> <span class="o">=</span> <span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;save_name&#39;</span><span class="p">])</span> <span class="o">?</span> <span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;upload_file&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">:</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;save_name&#39;</span><span class="p">];</span>
-<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">is_array</span><span class="p">(</span><span class="nv">$file</span><span class="p">))</span> <span class="p">{</span>
-    <span class="nv">$file</span> <span class="o">=</span> <span class="nx">explode</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="nx">strtolower</span><span class="p">(</span><span class="nv">$file</span><span class="p">));</span>
-<span class="p">}</span>
-<span class="nv">$ext</span> <span class="o">=</span> <span class="nx">end</span><span class="p">(</span><span class="nv">$file</span><span class="p">);</span>
-<span class="nv">$allow_suffix</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;jpg&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">,</span><span class="s1">&#39;gif&#39;</span><span class="p">);</span>
-<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$ext</span><span class="p">,</span> <span class="nv">$allow_suffix</span><span class="p">))</span> <span class="p">{</span>
-    <span class="nv">$msg</span> <span class="o">=</span> <span class="s2">&#34;禁止上传该后缀文件!&#34;</span><span class="p">;</span>
-<span class="p">}</span><span class="k">else</span><span class="p">{</span>
-    <span class="nv">$file_name</span> <span class="o">=</span> <span class="nx">reset</span><span class="p">(</span><span class="nv">$file</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;.&#39;</span> <span class="o">.</span> <span class="nv">$file</span><span class="p">[</span><span class="nx">count</span><span class="p">(</span><span class="nv">$file</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
-    <span class="nv">$temp_file</span> <span class="o">=</span> <span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;upload_file&#39;</span><span class="p">][</span><span class="s1">&#39;tmp_name&#39;</span><span class="p">];</span>
-    <span class="nv">$img_path</span> <span class="o">=</span> <span class="nx">UPLOAD_PATH</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span> <span class="o">.</span><span class="nv">$file_name</span><span class="p">;</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nx">move_uploaded_file</span><span class="p">(</span><span class="nv">$temp_file</span><span class="p">,</span> <span class="nv">$img_path</span><span class="p">))</span> <span class="p">{</span>
-        <span class="nv">$msg</span> <span class="o">=</span> <span class="s2">&#34;文件上传成功！&#34;</span><span class="p">;</span>
-        <span class="nv">$is_upload</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
-<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nv">$msg</span> <span class="o">=</span> <span class="s2">&#34;文件上传失败！&#34;</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nv">$file</span> <span class="o">=</span> <span class="k">empty</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;save_name&#39;</span><span class="p">])</span> <span class="o">?</span> <span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;upload_file&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">:</span> <span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;save_name&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">is_array</span><span class="p">(</span><span class="nv">$file</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$file</span> <span class="o">=</span> <span class="nx">explode</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">,</span> <span class="nx">strtolower</span><span class="p">(</span><span class="nv">$file</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$ext</span> <span class="o">=</span> <span class="nx">end</span><span class="p">(</span><span class="nv">$file</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$allow_suffix</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s1">&#39;jpg&#39;</span><span class="p">,</span><span class="s1">&#39;png&#39;</span><span class="p">,</span><span class="s1">&#39;gif&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$ext</span><span class="p">,</span> <span class="nv">$allow_suffix</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$msg</span> <span class="o">=</span> <span class="s2">&#34;禁止上传该后缀文件!&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span><span class="k">else</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$file_name</span> <span class="o">=</span> <span class="nx">reset</span><span class="p">(</span><span class="nv">$file</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;.&#39;</span> <span class="o">.</span> <span class="nv">$file</span><span class="p">[</span><span class="nx">count</span><span class="p">(</span><span class="nv">$file</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$temp_file</span> <span class="o">=</span> <span class="nv">$_FILES</span><span class="p">[</span><span class="s1">&#39;upload_file&#39;</span><span class="p">][</span><span class="s1">&#39;tmp_name&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$img_path</span> <span class="o">=</span> <span class="nx">UPLOAD_PATH</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span> <span class="o">.</span><span class="nv">$file_name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nx">move_uploaded_file</span><span class="p">(</span><span class="nv">$temp_file</span><span class="p">,</span> <span class="nv">$img_path</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$msg</span> <span class="o">=</span> <span class="s2">&#34;文件上传成功！&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$is_upload</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$msg</span> <span class="o">=</span> <span class="s2">&#34;文件上传失败！&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>首先 end 函数取所 post 参数数组中的最后一个值，<code>$file_name = reset($file) . '.' . $file[count($file) - 1]</code>。我们可以 post 一个参数名为一个 [0]一个 [2]，然后 $file[count($file) - 1] 就为空，$file_name 最终就为reset($file) 即 $file[0]，就可以绕过判断</p>
 <p><img
@@ -588,7 +588,7 @@ SetHandler application/x-httpd-php
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

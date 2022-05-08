@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>静态程序分析系列(一) - Geekby&#39;s Blog</title><meta name="Description" content="静态程序分析"><meta property="og:title" content="静态程序分析系列(一)" />
+<meta property="og:description" content="静态程序分析" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%B8%80/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-02-14T15:23:00+08:00" />
+<meta property="article:modified_time" content="2022-02-17T17:28:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="静态程序分析系列(一)"/>
+<meta name="twitter:description" content="静态程序分析"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%B8%80/" /><link rel="prev" href="https://www.geekby.site/2022/02/java%E6%9C%AC%E5%9C%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" /><link rel="next" href="https://www.geekby.site/2022/02/codeql%E5%9F%BA%E7%A1%80/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "静态程序分析系列(一)",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2022\/02\/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%B8%80\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "静态程序分析","wordcount":  929 ,
+        "url": "https:\/\/www.geekby.site\/2022\/02\/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%B8%80\/","datePublished": "2022-02-14T15:23:00+08:00","dateModified": "2022-02-17T17:28:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "静态程序分析"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">静态程序分析系列(一)</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90/"><i class="far fa-folder fa-fw"></i>静态程序分析</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-02-14">2022-02-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 929 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-前言">1 前言</a>
+      <ul>
+        <li><a href="#11-静态程序的定位">1.1 静态程序的定位</a></li>
+        <li><a href="#12-静态程序分析的应用">1.2 静态程序分析的应用</a></li>
+        <li><a href="#13-sound--complete">1.3 Sound &amp; Complete</a></li>
+        <li><a href="#14-静态程序分析的核心">1.4 静态程序分析的核心</a>
+          <ul>
+            <li><a href="#141-抽象abstract">1.4.1 抽象：Abstract</a></li>
+            <li><a href="#142-近似over-approximation">1.4.2 近似：Over-approximation</a>
+              <ul>
+                <li><a href="#1421-转移函数transfer-function">1.4.2.1 转移函数：Transfer function</a></li>
+                <li><a href="#1422-控制流control-flow">1.4.2.2 控制流：Control Flow</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#2-中间表示intermediate-representation">2 中间表示：Intermediate Representation</a>
+      <ul>
+        <li><a href="#21-编译器与静态分析器">2.1 编译器与静态分析器</a></li>
+        <li><a href="#22-ir">2.2 IR</a>
+          <ul>
+            <li><a href="#221-ast-vs-ir">2.2.1 AST vs. IR</a></li>
+          </ul>
+        </li>
+        <li><a href="#23-三地址码">2.3 三地址码</a></li>
+        <li><a href="#24-控制流分析">2.4 控制流分析</a>
+          <ul>
+            <li><a href="#241-控制流图">2.4.1 控制流图</a></li>
+            <li><a href="#242-basic-block">2.4.2 Basic Block</a></li>
+            <li><a href="#243-边的生成">2.4.3 边的生成</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li><a href="#3-数据流分析">3 数据流分析</a>
+      <ul>
+        <li><a href="#31-相关概念">3.1 相关概念</a>
+          <ul>
+            <li><a href="#311-输入输出状态">3.1.1 输入输出状态</a></li>
+            <li><a href="#312-转移函数">3.1.2 转移函数</a></li>
+            <li><a href="#312-控制流约束">3.1.2 控制流约束</a></li>
+          </ul>
+        </li>
+        <li><a href="#32-应用">3.2 应用</a>
+          <ul>
+            <li><a href="#321-到达定值分析reaching-definitions-analysis">3.2.1 到达定值分析：Reaching Definitions Analysis</a>
+              <ul>
+                <li><a href="#基本概念">基本概念</a></li>
+                <li><a href="#理解到达定值分析">理解到达定值分析</a></li>
+                <li><a href="#达定值分析的算法表示">达定值分析的算法表示</a></li>
+              </ul>
+            </li>
+            <li><a href="#322-活跃变量分析live-variables-analysis">3.2.2 活跃变量分析：Live Variables Analysis</a>
+              <ul>
+                <li><a href="#基本概念-1">基本概念</a></li>
+                <li><a href="#活跃变量中分析">活跃变量中分析</a></li>
+                <li><a href="#算法表示">算法表示</a></li>
+              </ul>
+            </li>
+            <li><a href="#323-可用表达式分析available-expression-analysis">3.2.3 可用表达式分析：Available Expression Analysis</a>
+              <ul>
+                <li><a href="#基本概念-2">基本概念</a></li>
+                <li><a href="#可用表达式分析分析">可用表达式分析分析</a></li>
+                <li><a href="#算法表示-1">算法表示</a></li>
+              </ul>
+            </li>
+            <li><a href="#324-常量传播constant-propagation">3.2.4 常量传播：Constant Propagation</a>
+              <ul>
+                <li><a href="#基本概念-3">基本概念</a></li>
+                <li><a href="#常量传播分析">常量传播分析</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#34-work-list-算法">3.4 Work list 算法</a></li>
+        <li><a href="#35-总结">3.5 总结</a></li>
+      </ul>
+    </li>
+    <li><a href="#参考">参考</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="静态程序分析一">静态程序分析(一)</h1>
+<h2 id="1-前言">1 前言</h2>
+<h3 id="11-静态程序的定位">1.1 静态程序的定位</h3>
+<p><strong>静态程序分析</strong>是<strong>编程语言</strong>中<strong>应用</strong>层面下的一个细分领域，它是一个非常重要的核心内容。</p>
+<p>在理论部分，考虑的是如何设计一个语言的语法和语义，如何设计语言的类型系统等等问题；有了语言的语法、语义和类型系统之后，我们需要支撑语言的运行。因此，在环境部分，需要考虑如何为运行中的程序提供运行时环境——如何设计编译器，在运行时需要怎样的支持（如内存的分配管理）等等；应用部分则关注如何保证语言所写出程序的效率、安全性和可靠性，主要考虑如何对程序进行分析，验证和合成（如何自动合成一个程序）。</p>
+<p>一句话概括静态分析：在保证正确性的前提下，在精度和速度上做平衡。</p>
+<h3 id="12-静态程序分析的应用">1.2 静态程序分析的应用</h3>
+<ol>
+<li>提高程序可靠性
+<ol>
+<li>空指针引用与内存泄漏等</li>
+</ol>
+</li>
+<li>提高程序安全性
+<ol>
+<li><a href="https://www.ieee-security.org/TC/SP2012/posters/ScanDal.pdf" target="_blank" rel="noopener noreffer">隐私信息泄漏</a>：多存在于移动应用安全中</li>
+<li>注入攻击</li>
+</ol>
+</li>
+<li>编译优化
+<ol>
+<li><a href="https://en.wikipedia.org/wiki/Dead_code_elimination" target="_blank" rel="noopener noreffer">死代码消除</a>：在编译器的机器无关优化环节，将不会对程序执行结果产生影响的代码（即死代码）删除。</li>
+<li><a href="https://en.wikipedia.org/wiki/Loop-invariant_code_motion" target="_blank" rel="noopener noreffer">循环不变量的代码移动</a>：在编译器的机器无关优化环节，在保证不影响程序执行结果的情况下，将循环中的特定语句移动到循环外，使得程序运行时执行的语句数减少。</li>
+</ol>
+</li>
+<li>有助于程序理解
+<ol>
+<li>为集成开发环境的功能提供帮助：当你使用 VS/Idea/Clion/Eclipse/Android Studio 等等 IDE 时，将鼠标悬停在代码上，IDE 能够动态地分析并提示你所悬停对象的相关信息，背后使用的技术就是静态程序分析。</li>
+</ol>
+</li>
+</ol>
+<h3 id="13-sound--complete">1.3 Sound &amp; Complete</h3>
+<p>以上就是静态程序分析所希望做的一些事情，但是实际上静态分析发展至今，依旧不能完美地解决以上的问题。</p>
+<blockquote>
+<p>Any non-trivial property of the behavior of programs in a r.e. language is undecidable.</p>
+<p>在一个即<strong>递归可枚举</strong>(recursively enumerable)语言中，任何程序行为的 <strong>non-trivial</strong> 属性都是不可解释的。<strong>non-trivial property</strong> 指的是那些与程序运行行为有关的属性。</p>
+<p>—— <strong>Rice&rsquo;s Theorem</strong></p>
+</blockquote>
+<p>也就是说，Rice 理论告诉我们，世界上并不存在一种<strong>完美的静态分析</strong>，可以完美地解决上文提到的那些问题。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202140954018.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202140954018.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202140954018.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202140954018.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202140954018.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202140954018.png-water_print" /></p>
+<p>由上图可以直观地看出，三者成包含关系，而完美的程序分析就是中间的 Truth，一个既 Sound 又 Complete 的状况，而我们正常的程序分析只能获得要么 sound 要么 complete 的结果，一种 useful 的结果。</p>
+<p>简单来说，sound 是一种过多的输出，输出的是全部的真实报错和部分的虚假报错；而 complete 与之相反，输出的是全是真是报错，但是比 truth 少了一部分的报错。</p>
+<p>由上可知，我们在实际使用场景中，自然是希望输出是 sound 的，也就是说可以有误报但不要有漏报。</p>
+<h3 id="14-静态程序分析的核心">1.4 静态程序分析的核心</h3>
+<h4 id="141-抽象abstract">1.4.1 抽象：Abstract</h4>
+<p>以符号分析为例，将待分析的具体的变量取值抽象为：正、负、零、未知和错误。</p>
+<p>unknown 指的是，如果当前数值会因为变量改变而呈现为不同的状态，则全部定义为 unknown。</p>
+<p>undefined 指的是经过判断肯定不符合 int 定义的，例如一个除以 0 的数或者字符等。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141012410.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141012410.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141012410.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141012410.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141012410.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141012410.png-water_print" /></p>
+<h4 id="142-近似over-approximation">1.4.2 近似：Over-approximation</h4>
+<h5 id="1421-转移函数transfer-function">1.4.2.1 转移函数：Transfer function</h5>
+<p>在静态分析中，近似的核心是定义转移函数（transfer function）。</p>
+<ul>
+<li>transfer function 是针对程序中的每一个语句，在抽象值上定义转换规则。</li>
+<li>transfer function 的规则是根据分析的具体问题与程序语义来定义的。</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141022884.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141022884.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141022884.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141022884.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141022884.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141022884.png-water_print" /></p>
+<p>如上图所示：这是针对符号分析定义的部分的转换函数，前五个和第八个一目了然，不做解释。
+第六个因为除数是 0，故结果是 undefined。第七个是由于我们定义的转换函数是抽象的，进行运算的目标也是抽象出来的，因此相加结果是 unknown 的。举个例子，即使我正数是 1000，负数是 -1，经过抽象后再经过转换函数处理，得到的结果仍是 unknown，这也是 sound 的一种体现。</p>
+<p>根据上述的转换函数，可以对程序语句进行分析，最终得到的结果如下。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141026911.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141026911.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141026911.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141026911.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141026911.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141026911.png-water_print" /></p>
+<h5 id="1422-控制流control-flow">1.4.2.2 控制流：Control Flow</h5>
+<p>实际上，在程序分析的过程中，近似的过程中还要考虑程序的控制流。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141030650.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141030650.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141030650.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141030650.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141030650.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141030650.png-water_print" /></p>
+<p>右图是左图的运算流展示，在不同情况下 y 会有值，而根据 sound 原则，在最后一步的 y 值只能是 unknown。</p>
+<p>在程序分析中，不可能与枚举所有的路径，因此 <code>flow merging</code> （控制流的汇聚）作为一种近似，在静态分析中十分常用。</p>
+<h2 id="2-中间表示intermediate-representation">2 中间表示：Intermediate Representation</h2>
+<h3 id="21-编译器与静态分析器">2.1 编译器与静态分析器</h3>
+<p>首先介绍一下编译器与静态分析器的关系：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141045561.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141045561.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141045561.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141045561.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141045561.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141045561.png-water_print" /></p>
+<p>编译器主要目的是为了将程序员写的 Source Code 转换为机器可以理解的 Machine Code，并在转换过程中及时报错。下面以英语的语法规则为例。</p>
+<p>第一步，通过扫描器 (Scanner) 对输入进行扫描，根据正则表达式 (Regular Expression) 进行词法分析 (Lexical Analysis)，主要是分析输入的每个字母及单词是否为合法字母及单词，接着将通过检测的内容转换为 Tokens 传入下一步。</p>
+<p>第二步，通过解析器 (Parser) 对 Tokens 进行扫描，根据上下文无关语法 (Context-Free Grammar) 进行语法分析 (Syntax Analysis)，主要分析几个单词的组合是否符合语法结构规则，接着将通过检测的内容以抽象语法树 (AST) 的形式传入下一步。其中使用上下文无关语法进行分析是为了加快分析效率。</p>
+<p>第三步，通过类型检查 (Type Checker)，根据属性语法 (Attribute Grammar) 进行语义分析 (Semantic Analysis)，理想的目的是为了识别像 apples eat me 这种语法结构正确但是语义错误的情况，但是实际编译器只能识别类如“不可进行 int 除以 string”之类的类型错误，故该步称为类型检测。生成进一步处理后的 AST 传入下一步。</p>
+<p>第四步，为了进行静态分析优化，要将 Decorated AST 转换为中间表示 (IR)，一般转换为三地址码，再进行静态分析。最后通过代码生成器将优化后的代码生成机器码传给机器。</p>
+<h3 id="22-ir">2.2 IR</h3>
+<h4 id="221-ast-vs-ir">2.2.1 AST vs. IR</h4>
+<p>以一个循环为例来阐述 AST 与 IR 的区别。AST 是一个语法树的形式，是一个高层级的形式，更加接近程序的源代码，语言相关的，适合做快速的类型检测，但是<strong>缺少了控制流信息</strong>。</p>
+<p>IR 即为中间表示，图中以三地址码表示，是一个低层级的形式，接近机器编码，语言无关的，结构紧凑，<strong>包含了控制流信息</strong>，因此更加适合用来做静态分析。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141058531.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141058531.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141058531.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141058531.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141058531.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141058531.png-water_print" /></p>
+<ul>
+<li>AST
+<ul>
+<li>high-level and closed to grammar structure</li>
+<li>usually language dependent</li>
+<li>suitable for fast type checking</li>
+<li>lack of control flow information</li>
+</ul>
+</li>
+<li>IR
+<ul>
+<li>low-level and closed to machine code</li>
+<li>usually language independent</li>
+<li>compact and uniform</li>
+<li>contains control flow information</li>
+<li>usually considered as the basis for static analysis</li>
+</ul>
+</li>
+<li>所以 IR 更适合静态分析</li>
+<li>IR 没有固定的定义，常用三地址码</li>
+</ul>
+<h3 id="23-三地址码">2.3 三地址码</h3>
+<p>三地址码没有形式化的定义，通常来说，三地址码就是最多有三个地址 (address) 的表达形式，并且由于这个性质，每个三地址码最多只会有一个运算符。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141105178.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141105178.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141105178.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141105178.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141105178.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141105178.png-water_print" /></p>
+<p>在 Java 中，可以利用 <a href="https://github.com/Sable/soot" target="_blank" rel="noopener noreffer">soot</a> 工具来生成三地址码，在 soot 中，被称之为 Jimple。下面以一个 do-while循环为例，来分析其三地址码。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nn">nju.sa.example</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">DoWhileLoop3AC</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span><span class="o">[]</span> <span class="n">arr</span> <span class="o">=</span> <span class="k">new</span> <span class="kt">int</span><span class="o">[</span><span class="n">10</span><span class="o">];</span>
+</span></span><span class="line"><span class="cl">  	<span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="n">0</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">  	<span class="k">do</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    	<span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="n">1</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">  	<span class="o">}</span> <span class="k">while</span> <span class="o">(</span><span class="n">arr</span><span class="o">[</span><span class="n">i</span><span class="o">]</span> <span class="o">&lt;</span> <span class="n">10</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">  <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>转换后的三地址码形式为：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141113259.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141113259.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141113259.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141113259.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141113259.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141113259.png-water_print" /></p>
+<p>再以 Method Call 为例，介绍下面向对象环境下的三地址码。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nn">nju.sa.example</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MethodCall3AC</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">  <span class="n">String</span> <span class="nf">foo</span><span class="o">(</span><span class="n">String</span> <span class="n">para1</span><span class="o">,</span> <span class="n">String</span> <span class="n">para2</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">para1</span> <span class="o">+</span> <span class="s">&#34; &#34;</span> <span class="o">+</span> <span class="n">para2</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">  <span class="o">}</span>
+</span></span><span class="line"><span class="cl">  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">MethodCall3AC</span> <span class="n">mc</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MethodCall3AC</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">mc</span><span class="o">.</span><span class="na">foo</span><span class="o">(</span><span class="s">&#34;hello&#34;</span><span class="o">,</span> <span class="s">&#34;world&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">  <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141119361.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141119361.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141119361.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141119361.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141119361.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202141119361.png-water_print" /></p>
+<ul>
+<li>Java 中的 invoke 指令对应的方法调用情况：
+<ul>
+<li>invokespecial: call constructor, call superclass methods, call private methods</li>
+<li>invokevirtual: instance method call</li>
+<li>invokeinterface: cannot optimization, checking interface implementation</li>
+<li>invokestatic: call static methods</li>
+</ul>
+</li>
+</ul>
+<h3 id="24-控制流分析">2.4 控制流分析</h3>
+<p>控制流分析（Control Flow Analysis）通常指的是构建控制流图（Control Flow Graph, CFG），并以 CFG 作为基础结构进行静态分析的过程。</p>
+<h4 id="241-控制流图">2.4.1 控制流图</h4>
+<ul>
+<li>通常采用控制流图进行控制流分析的表示</li>
+<li>控制流图可以用来表示控制流的结构</li>
+<li>控制流图的节点可以是单个的三地址码，不过通常是 Basic Block(BB)，如下所示。</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202150948606.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202150948606.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202150948606.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202150948606.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202150948606.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202150948606.png-water_print" /></p>
+<h4 id="242-basic-block">2.4.2 Basic Block</h4>
+<p>Basic Block 是具有<strong>以下属性</strong>的、最大长度的三地址码组成的块单元：</p>
+<ul>
+<li>只能从块的第一条指令进入。</li>
+<li>只能从块的最后一条指令离开。</li>
+</ul>
+<p>如何构建基本块：</p>
+<ul>
+<li>P 的第一条指令就是一个基本块的 leader</li>
+<li>跳转的目标指令是一个基本块的 leader</li>
+<li>跳转指令的后一条指令，也是一个基本块的 leader</li>
+<li>一个基本块就是一个基本块的 leader 及其后续直到下一个基本块的 leader 前的所有指令。</li>
+</ul>
+<h4 id="243-边的生成">2.4.3 边的生成</h4>
+<p>除了基本块，CFG 中还会有块到块的边。块 A 和块 B 之间有一条边，当且仅当：</p>
+<ul>
+<li>A 的末尾有一条指向了 B 开头的跳转指令。</li>
+<li>A 的末尾紧接着 B 的开头，且 A 的末尾不是一条无条件跳转指令。</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151002339.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151002339.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151002339.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151002339.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151002339.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151002339.png-water_print" /></p>
+<p>注意到每个基本块和开头指令的标号唯一对应，因此很自然地，需要将跳转指令的目标改为基本块的标号而非指令标号：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151004659.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151004659.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151004659.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151004659.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151004659.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151004659.png-water_print" /></p>
+<p>有了这些定义，我们就可以了解一些概念：</p>
+<ul>
+<li>若 A -&gt; B，则我们说 A 是 B 的前驱（predecessor），B 是 A 的后继（successor）</li>
+<li>除了构建好的基本块，我们还会额外添加两个结点，「入口（Entry）」和「出口（Exit）」
+<ul>
+<li>这两个结点不对应任何 IR</li>
+<li>入口有一条边指向 IR 中的第一条指令</li>
+<li>如果一个基本块的最后一条指令会让程序离开这段 IR，那么这个基本块就会有一条边指向出口。</li>
+</ul>
+</li>
+</ul>
+<p>这样就完成了一个控制流图的构建。</p>
+<h2 id="3-数据流分析">3 数据流分析</h2>
+<h3 id="31-相关概念">3.1 相关概念</h3>
+<ul>
+<li>近似方案 1：忽略掉程序的条件判断，认为所有的分析都有可能到达
+<ul>
+<li>程序可以看成是**状态（数据）<strong>和</strong>状态之间的转移（控制）**两部分，因为状态转移的条件都被忽略了，核心分析的部分是状态数据在转移过程中的变化，所以叫做数据流分析。</li>
+</ul>
+</li>
+<li>近似方案 2：不在路径末尾做合并，在控制流汇合的所有位置提前做合并</li>
+</ul>
+<p>数据流分析要保证 Safe-approximation，即：</p>
+<ul>
+<li>may analysis: over-approximation</li>
+<li>must analysis: under-approximation</li>
+</ul>
+<p>总之，不同的数据流分析有不同的数据抽象方法（应用不同），有不同的 Safe-approximation 策略，有不同的转移函数与控制流汇聚方式。</p>
+<h4 id="311-输入输出状态">3.1.1 输入输出状态</h4>
+<ul>
+<li>每一条 IR 的执行，都会使状态从<strong>输入状态</strong>变成新的<strong>输出状态</strong></li>
+<li>输入/输出状态与语句前/后的 <strong>program point</strong> 相关联。</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151027498.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151027498.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151027498.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151027498.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151027498.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151027498.png-water_print" /></p>
+<p>在数据流分析中，我们会把每一个 <code>program point</code> 关联一个数据流值，代表在该点中可观察到的抽象的程序状态。数据流分析的目的是为所有语句的输入输出找到一组，基于控制流和转换函数的，安全的近似约束的解决方案。</p>
+<h4 id="312-转移函数">3.1.2 转移函数</h4>
+<p>分析数据流有前向和后向两种：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151033803.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151033803.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151033803.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151033803.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151033803.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151033803.png-water_print" /></p>
+<h4 id="312-控制流约束">3.1.2 控制流约束</h4>
+<p>每条语句 s 都会使程序状态发生改变。B 的输出自然是其输入在经过多次转换后得到的状态。而 B 的输入要根据数据流分析的需求，对其前驱应用合适的 meet operator 进行处理。后向分析时亦然。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151037521.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151037521.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151037521.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151037521.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151037521.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151037521.png-water_print" /></p>
+<h3 id="32-应用">3.2 应用</h3>
+<h4 id="321-到达定值分析reaching-definitions-analysis">3.2.1 到达定值分析：Reaching Definitions Analysis</h4>
+<h5 id="基本概念">基本概念</h5>
+<p>假定 x 有定值 d (<strong>definition</strong>)，如果存在一个路径，从紧随 d 的点到达某点 p，并且此路径上面没有 x 的其他定值点，则称 x 的定值 d 到达 (<strong>reaching</strong>) p。</p>
+<p>如果在这条路径上有对 x 的其它定值，我们说变量 x 的这个定值 d 被杀死 (<strong>killed</strong>) 了</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151042510.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151042510.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151042510.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151042510.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151042510.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151042510.png-water_print" /></p>
+<p>到达定值可以用来分析未定义的变量。例如，我们在程序入口为各变量引入一个 dummy 定值。当程序出口的某变量定值依然为 dummy，则我们可以认为该变量未被定义。</p>
+<p>对于一条赋值语句 <code>D: v = x op y</code>，该语句生成了 v 的一个定值 D，并杀死程序中其它对变量 v 定义的定值。</p>
+<h5 id="理解到达定值分析">理解到达定值分析</h5>
+<p>数据流值：</p>
+<ul>
+<li>程序中所有变量的定值。</li>
+<li>可以用一个 <code>bit vector</code> 来定义，有多少个赋值语句，就有多少个位。</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151051269.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151051269.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151051269.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151051269.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151051269.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151051269.png-water_print" /></p>
+<p>D 即 Definition，可以表示为：<code>D：v = x op y</code></p>
+<p>一个 D 可以视为一行三地址码，做了两件事：</p>
+<ul>
+<li>生成了一个定义 D</li>
+<li>在保持其他传入程序不受影响的同时，kill 了程序中其它对变量 v 的定义</li>
+</ul>
+<p>转移方程与控制流：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151053712.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151053712.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151053712.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151053712.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151053712.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151053712.png-water_print" /></p>
+<p>其中 U 表示 union，结合前文使用 bit 字节表示的 D，可以知道，IN[B] 的输入等于 OUT[P1] 并 OUT[P2]，意味着只要存在一条路径可以 reach，那么就算作可以 reach。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151056283.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151056283.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151056283.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151056283.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151056283.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151056283.png-water_print" /></p>
+<h5 id="达定值分析的算法表示">达定值分析的算法表示</h5>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151100805.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151100805.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151100805.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151100805.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151100805.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202151100805.png-water_print" /></p>
+<p>这是一个经典的迭代算法：</p>
+<ul>
+<li>首先让所有 BB 和入口的 OUT 为空。因为你不知道 BB 中有哪些定值被生成。</li>
+<li>当任意 OUT 发生变化，则分析出的定值可能需要继续往下流动，所需要修改各 BB 的 IN 和 OUT。</li>
+<li>先处理 IN，然后再根据转移完成更新 OUT。</li>
+<li>在 <code>gen U (IN - kill)</code> 中，kill 与 gen 相关的 bit 不会因为 IN 的改变而发生改变，而其它 bit 又是通过对前驱 OUT 取并得到的，因此其它 bit 不会发生 0 -&gt; 1 的情况。所以，OUT 是不断增长的，而且有上界，因此算法最后必然会停止。</li>
+<li>因为 OUT 没有变化，不会导致任何的 IN 发生变化，因此 OUT 不变可以作为终止条件。我们称之为程序到达了不动点（Fixed Point）</li>
+</ul>
+<blockquote>
+<p>该算法为什么会终止？OUT[S] never shrinks 且状态是有限的（到达不动点）</p>
+</blockquote>
+<h4 id="322-活跃变量分析live-variables-analysis">3.2.2 活跃变量分析：Live Variables Analysis</h4>
+<h5 id="基本概念-1">基本概念</h5>
+<blockquote>
+<p>给定程序中的某条语句 s 和变量 v，如果在 s 执行前保存在 v 中的值在后续执行中还会被读取，就称之为活跃变量。</p>
+</blockquote>
+<ul>
+<li>变量 x 在程序点 p 上的值是否会在某条从 p 出发的路径中使用</li>
+<li>变量 x 在 p 上活跃，当且仅存在一条从 p 开始的路径，该路径的末端使用了 x，且路径上没有对 x 进行覆盖。</li>
+<li>隐藏了这样一个含义：在被使用前，v 没有被重新定义过，即没有被 kill 过。</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160923822.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160923822.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160923822.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160923822.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160923822.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160923822.png-water_print" /></p>
+<p>这个算法可以用于寄存器分配，当一个变量不会再被使用，那么此变量就可以从寄存器中腾空，用于新值的存储。</p>
+<h5 id="活跃变量中分析">活跃变量中分析</h5>
+<p>数据流值</p>
+<ul>
+<li>
+<p>程序中的所有变量</p>
+</li>
+<li>
+<p>依然可以用 bit vector 来表示，每个 bit 代表一个变量</p>
+</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160927705.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160927705.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160927705.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160927705.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160927705.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160927705.png-water_print" /></p>
+<p>转移方程和控制流处理</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160929441.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160929441.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160929441.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160929441.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160929441.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160929441.png-water_print" /></p>
+<p>不同于 Reaching Definitions 的前向传播分析，Live Variables Analysis 使用反向传播进行分析效果更好。如果从后往前搜索，只要在某程序点处找到一个变量 v 的使用，就证明在此之前任意可达此点的、定义了 v 的程序点处，v 都是 live 的；而如果使用前向传播的算法，每到一个程序点都要正向搜索一遍后方的路径才能确认变量在此处是否 live，虽然也能进行分析，但是效率较低。</p>
+<ul>
+<li>一个基本块内，若 v = exp, 则 def v。若 exp = exp op v，那么 use v。一个变量要么是 use，要么是 def，根据 def 和 use 的先后顺序来决定。</li>
+<li>考虑基本块 B 及其后继 S。若 S 中，变量 v 被使用，那么我们就把 v 放到 S 的 IN 中，交给 B 来分析。</li>
+<li>因此对于活跃变量分析，其控制流处理是 OUT[B] = IN[S]。</li>
+<li>在一个块中，若变量 v 被使用，那么我们需要添加到我们的 IN 里。而如果 v 被定义，那么在其之上的语句中，v 都是一个非活跃变量，因为没有语句再需要使用它。</li>
+<li>因此对于转移方程，IN 是从 OUT 中删去重新定值的变量，然后并上使用过的变量。需要注意，如果同一个块中，变量 v 的 def 先于 use ，那么实际上效果和没有 use 是一样的。</li>
+</ul>
+<h5 id="算法表示">算法表示</h5>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160942727.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160942727.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160942727.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160942727.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160942727.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202160942727.png-water_print" /></p>
+<h4 id="323-可用表达式分析available-expression-analysis">3.2.3 可用表达式分析：Available Expression Analysis</h4>
+<h5 id="基本概念-2">基本概念</h5>
+<p>x + y 在 p 点可用的条件：从流图入口结点到达 p 的每条路径都对 x + y 求了值，且在最后一次求值之后再没有对 x 或 y 赋值。</p>
+<p>可用表达式可以用于全局公共子表达式的计算。也就是说，如果一个表达式上次计算的值到这次仍然可用，我们就能直接利用其中值，而不用进行再次的计算。</p>
+<h5 id="可用表达式分析分析">可用表达式分析分析</h5>
+<p>数据流值</p>
+<ul>
+<li>程序中的所有表达式</li>
+<li>bit vector 中，一个 bit 就是一个表达式</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161017032.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161017032.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161017032.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161017032.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161017032.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161017032.png-water_print" /></p>
+<p>转换函数与控制流处理</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161029543.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161029543.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161029543.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161029543.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161029543.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161029543.png-water_print" /></p>
+<ul>
+<li>B，表达式都应该已经计算，才能将其视为可用表达式，因此这是一个 <code>must analysis</code>。</li>
+<li>注意到图中，两条不同的路径可能会导致表达式的结果最终不一致。但是我们只关心它的值能不能够再被重复利用，因此可以认为表达式可用。</li>
+<li><code>v = x op y</code>，则 <code>gen x op y</code>。当 <code>x = a op b</code>，则任何包含 x 的表达式都被 kill 掉。若 gen 和 kill 同时存在，那么以最后一个操作为准。</li>
+<li>转移方程很好理解，和到达定值差不多。但是，由于我们是 must analysis，因此控制流处理是取交集，而非到达定值那样取并集。</li>
+</ul>
+<h5 id="算法表示-1">算法表示</h5>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161032879.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161032879.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161032879.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161032879.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161032879.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202161032879.png-water_print" /></p>
+<ul>
+<li>注意此时的初始化：一开始确实无任何表达式可用，因此 OUT[entry] 被初始化为空集是自然的。但是，其它基本块的 OUT 被初始化为全集，这是因为当 CFG 存在环时，一个空的初始化值，会让取交集阶段直接把第一次迭代的 IN 设置成 0，无法进行正确的判定了。</li>
+<li>如果一个表达式从来都不可用，那么 OUT[entry] 的全 0 值会通过交操作将其置为 0，因此不用担心初始化为全 1 会否导致算法不正确。</li>
+</ul>
+<h4 id="324-常量传播constant-propagation">3.2.4 常量传播：Constant Propagation</h4>
+<h5 id="基本概念-3">基本概念</h5>
+<p>在<strong>程序点 p <strong>处给定一个</strong>变量 x</strong>，判断x在程序点 p 处是否<strong>一定</strong>指向一个常量。</p>
+<p>这是一个类似 must 分析，因为必须所有到点 p 的 path 都是这个常量才行；但有和传统的不大一样。在 CFG 中每个节点的输出包括一个对 (x, v)，其中 x 是变量而 v 是在该节点后 x 指向的具体值。</p>
+<h5 id="常量传播分析">常量传播分析</h5>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170931113.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170931113.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170931113.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170931113.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170931113.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170931113.png-water_print" /></p>
+<p>转换函数：</p>
+<p><code>OUT[s] = gen U (IN[s] - {(x, _)})</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170934347.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170934347.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170934347.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170934347.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170934347.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170934347.png-water_print" /></p>
+<h3 id="34-work-list-算法">3.4 Work list 算法</h3>
+<p>最后再提一下 Worklist 算法，这是对之前数据流分析迭代算法一种完全的改进，不影响精度的情况下，有更高的效率。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170948625.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170948625.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170948625.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170948625.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170948625.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170948625.png-water_print" /></p>
+<p>不同于普通迭代算法，一个 OUT 变了所有的都要跑一遍，worklist 的效率高很多，因为 gen 和 kill 是不会变的，OUT 变化只取决于 IN 的变化，因此先把所有节点放进去，然后每个变化的 OUT 都把后继放进去，来回的跑直到结束。</p>
+<h3 id="35-总结">3.5 总结</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170943283.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170943283.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170943283.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170943283.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170943283.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202170943283.png-water_print" /></p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://www.bilibili.com/video/BV1b7411K7P4" target="_blank" rel="noopener noreffer">南京大学《软件分析》Yue Li and Tian Tan</a></li>
+<li><a href="https://liveclass.org.cn/cloudCourse/#/courseDetail/8mI06L2eRqk8GcsW" target="_blank" rel="noopener noreffer">北京大学《软件分析技术》Xiong Yingfei</a></li>
+<li><a href="https://pascal-group.bitbucket.io/teaching.html" target="_blank" rel="noopener noreffer">pascal-group.bitbucket.io</a></li>
+<li><a href="https://fancypei.github.io/SA/" target="_blank" rel="noopener noreffer">https://fancypei.github.io/SA/</a></li>
+<li><a href="https://blog.csdn.net/zhang971105/article/details/109074766" target="_blank" rel="noopener noreffer">https://blog.csdn.net/zhang971105/article/details/109074766</a></li>
+<li><a href="https://spa-book.pblo.gq/ch1/2intermediaterepresentation" target="_blank" rel="noopener noreffer">https://spa-book.pblo.gq/ch1/2intermediaterepresentation</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2022-02-17</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%B8%80/" data-title="静态程序分析系列(一)"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%B8%80/" data-title="静态程序分析系列(一)"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%B8%80/" data-title="静态程序分析系列(一)"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90/">静态程序分析</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2022/02/java%E6%9C%AC%E5%9C%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="prev" rel="prev" title="Java 本地命令执行漏洞"><i class="fas fa-angle-left fa-fw"></i>Java 本地命令执行漏洞</a>
+            <a href="/2022/02/codeql%E5%9F%BA%E7%A1%80/" class="next" rel="next" title="CodeQL 基础">CodeQL 基础<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

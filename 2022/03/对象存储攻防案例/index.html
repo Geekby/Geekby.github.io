@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>对象存储攻防案例 - Geekby&#39;s Blog</title><meta name="Description" content="对象存储攻防案例"><meta property="og:title" content="对象存储攻防案例" />
+<meta property="og:description" content="对象存储攻防案例" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2022/03/%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E6%94%BB%E9%98%B2%E6%A1%88%E4%BE%8B/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-03-17T15:23:00+08:00" />
+<meta property="article:modified_time" content="2022-03-17T17:05:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="对象存储攻防案例"/>
+<meta name="twitter:description" content="对象存储攻防案例"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2022/03/%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E6%94%BB%E9%98%B2%E6%A1%88%E4%BE%8B/" /><link rel="prev" href="https://www.geekby.site/2022/03/waf-bypass/" /><link rel="next" href="https://www.geekby.site/2022/03/zabbix%E6%BC%8F%E6%B4%9E%E6%B7%B1%E5%85%A5%E5%88%A9%E7%94%A8/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "对象存储攻防案例",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2022\/03\/%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E6%94%BB%E9%98%B2%E6%A1%88%E4%BE%8B\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试","wordcount":  142 ,
+        "url": "https:\/\/www.geekby.site\/2022\/03\/%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E6%94%BB%E9%98%B2%E6%A1%88%E4%BE%8B\/","datePublished": "2022-03-17T15:23:00+08:00","dateModified": "2022-03-17T17:05:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "对象存储攻防案例"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">对象存储攻防案例</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-03-17">2022-03-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 142 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-对象存储">1 对象存储</a>
+      <ul>
+        <li><a href="#11-bucket">1.1 Bucket</a></li>
+        <li><a href="#12-object">1.2 Object</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-对象存储的利用方式">2 对象存储的利用方式</a>
+      <ul>
+        <li><a href="#21-object-遍历">2.1 Object 遍历</a>
+          <ul>
+            <li><a href="#211-阿里云">2.1.1 阿里云</a></li>
+          </ul>
+        </li>
+        <li><a href="#22-bucket-桶爆破">2.2 Bucket 桶爆破</a>
+          <ul>
+            <li><a href="#221-阿里云">2.2.1 阿里云</a></li>
+          </ul>
+        </li>
+        <li><a href="#23-特定的-bucket-策略配置">2.3 特定的 Bucket 策略配置</a>
+          <ul>
+            <li><a href="#231-阿里云">2.3.1 阿里云</a></li>
+          </ul>
+        </li>
+        <li><a href="#24-任意文件上传与覆盖">2.4 任意文件上传与覆盖</a>
+          <ul>
+            <li><a href="#241-阿里云">2.4.1 阿里云</a></li>
+          </ul>
+        </li>
+        <li><a href="#26-bucket-接管">2.6 Bucket 接管</a>
+          <ul>
+            <li><a href="#261-阿里云">2.6.1 阿里云</a></li>
+          </ul>
+        </li>
+        <li><a href="#27-bucket-可修改">2.7 Bucket 可修改</a>
+          <ul>
+            <li><a href="#271-阿里云">2.7.1 阿里云</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="对象存储攻防案例">对象存储攻防案例</h1>
+<p>云上存储己经是企业中常见的一款云上产品，伴随着云上业务的发展，对象存储作为云原生一项重要的能力，暴露出一系列的安全问题，其中的权限配置是管理人员不可忽视的，从攻击者的视角来看几大云存储的攻击方法与利用。</p>
+<h2 id="1-对象存储">1 对象存储</h2>
+<p>对象存储中可以有多个桶（Bucket），然后把对象（Object）放在桶里，对象又包含了三个部分：Key、Data 和 Metadata。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171716980.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171716980.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171716980.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171716980.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171716980.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171716980.png-water_print" /></p>
+<h3 id="11-bucket">1.1 Bucket</h3>
+<p>存储空间（Bucket）是用户用于存储对象（Object）的容器，所有的对象都必须隶属于某个存储空间。存储空间具有各种配置属性，包括地域、访问权限、存储类型等。用户可以根据实际需求，创建不同类型的存储空间来存储不同的数据。</p>
+<ul>
+<li>同一个存储空间的内部是扁平的，没有文件系统的目录等概念，所有的对象都直接隶属于其对应的存储空间。</li>
+<li>每个用户可以拥有多个存储空间。</li>
+<li>存储空间的名称在 OSS 范围内必须是全局唯一的，一旦创建之后无法修改名称。</li>
+<li>存储空间内部的对象数目没有限制。</li>
+</ul>
+<h3 id="12-object">1.2 Object</h3>
+<p>对象（Object）是 OSS 存储数据的基本单元，也被称为 OSS 的文件。和传统的文件系统不同，对象没有文件目录层级结构的关系。对象由元信息（Object Meta），用户数据（Data）和文件名（Key）组成，并且由存储空间内部唯一的 Key 来标识。</p>
+<p>Key 是指存储桶中的唯一标识符，例如一个 URL 为：<code>https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171716980.png</code>，这里的 <code>geekby</code> 是存储桶 Bucket 的名称，<code>/MarkDown/202203171716980.png</code> 就是 Key。</p>
+<p>对象元信息是一组键值对，表示了对象的一些属性，比如最后修改时间、大小等信息，同时用户也可以在元信息中存储一些自定义的信息。可以简单的理解成数据的标签、描述之类的信息，这点不同于传统的文件存储，在传统的文件存储中这类信息是直接封装在文件里的，有了元数据的存在，可以大大的加快对象的排序、分类和查找。</p>
+<p>Data 就是存储的数据本体。</p>
+<h2 id="2-对象存储的利用方式">2 对象存储的利用方式</h2>
+<h3 id="21-object-遍历">2.1 Object 遍历</h3>
+<p>在创建 Bucket 时，可以选择是否公开，默认是 private 的权限，如果在错误的配置下，给了 <code>Listobject</code> 权限，就会导致可遍历存储桶。</p>
+<h4 id="211-阿里云">2.1.1 阿里云</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171739847.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171739847.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171739847.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171739847.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171739847.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171739847.png-water_print" /></p>
+<p>在此时如果选择公有读的话，会出现两种情况：</p>
+<ul>
+<li>在只配置读写权限设置为公有读或公共读写的情况下，无法列出对象，但能够直接读取对应的文件（正常情况）</li>
+<li>如果想列出 Object 对象，需要在 Bucket 授权策略中设置 ListObject 即可</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171742467.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171742467.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171742467.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171742467.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171742467.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171742467.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171743563.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171743563.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171743563.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171743563.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171743563.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203171743563.png-water_print" /></p>
+<h3 id="22-bucket-桶爆破">2.2 Bucket 桶爆破</h3>
+<p>当不知道 Bucket 名称的时候，可以通过爆破获得 Bucket 名称，这有些类似于目录爆破，只不过目录爆破一般通过状态码判断，而这个通过页面的内容判断。</p>
+<h4 id="221-阿里云">2.2.1 阿里云</h4>
+<ul>
+<li>AccessDenied：存在存储桶，但无权限访问</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172044379.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172044379.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172044379.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172044379.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172044379.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172044379.png-water_print" /></p>
+<ul>
+<li>InvalidBucketName：表示存储桶的名称不符合规范，属于无效的存储桶名称</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172045958.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172045958.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172045958.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172045958.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172045958.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172045958.png-water_print" /></p>
+<ul>
+<li>NoSuchBucket：表示不存在这个存储桶</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172046165.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172046165.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172046165.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172046165.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172046165.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203172046165.png-water_print" /></p>
+<h3 id="23-特定的-bucket-策略配置">2.3 特定的 Bucket 策略配置</h3>
+<p>特定的策略配置的指的是，如果管理员设置了某些 IP，UA 才可以请求该存储桶的话，此时如果错误的配置了 <code>GetBucketPolicy</code>，可导致攻击者获取策略配置</p>
+<h4 id="231-阿里云">2.3.1 阿里云</h4>
+<p>通过直接访问：<code>http(s)://url/?policy</code> 来确定是否对 Bucket 具有读取权限</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181613228.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181613228.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181613228.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181613228.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181613228.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181613228.png-water_print" /></p>
+<p>可以看到，管理员配置了对于任意认证主主体开放了所有 Action 的权限。</p>
+<h3 id="24-任意文件上传与覆盖">2.4 任意文件上传与覆盖</h3>
+<p>如果在配置存储桶时，管理员错误的将存储桶权限，配置为可写，这将会导致攻击者可上传任意文件到存储桶中，或覆盖已经存在的文件</p>
+<h4 id="241-阿里云">2.4.1 阿里云</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181622847.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181622847.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181622847.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181622847.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181622847.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181622847.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181622397.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181622397.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181622397.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181622397.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181622397.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181622397.png-water_print" /></p>
+<p>如果目标的对象存储支持 html 解析，那就可以利用任意文件上传进行 XSS 钓鱼、挂暗链、挂黑页、供应链投毒等操作。</p>
+<h3 id="26-bucket-接管">2.6 Bucket 接管</h3>
+<p>假设管理员通过域名解析并绑定了一个存储桶，但是管理员将存储桶删除后，没有将域名解析的 CNAME 删除，这时会访问域名就会出现 <strong>NoSuchBucket</strong>。因此可以登录自己的阿里云账号，创建同样的 Bucket 即可。</p>
+<h4 id="261-阿里云">2.6.1 阿里云</h4>
+<p>在阿里云下，当 Bucket 显示 NoSuchBucket 说明是可以接管的，如果显示 AccessDenied 则不行。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181625733.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181625733.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181625733.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181625733.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181625733.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202203181625733.png-water_print" /></p>
+<h3 id="27-bucket-可修改">2.7 Bucket 可修改</h3>
+<p>如果拥有 Bucket Policy 的编辑权限，可以通过上传或修改一个新的配置，进而实现攻击（拒绝服务或者修改访问策略）</p>
+<h4 id="271-阿里云">2.7.1 阿里云</h4>
+<p>可以通过直接 PUT 一个配置，达到攻击的目的。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">aliyun oss bucket-policy oss://securitytest-geekby --method put ./oss.json
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="参考">参考</h1>
+<ul>
+<li><a href="https://www.bilibili.com/video/BV1Z44y1J7Rs" target="_blank" rel="noopener noreffer">火线沙龙——浅析云存储的攻击利用方式</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2022-03-17</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2022/03/%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E6%94%BB%E9%98%B2%E6%A1%88%E4%BE%8B/" data-title="对象存储攻防案例"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2022/03/%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E6%94%BB%E9%98%B2%E6%A1%88%E4%BE%8B/" data-title="对象存储攻防案例"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2022/03/%E5%AF%B9%E8%B1%A1%E5%AD%98%E5%82%A8%E6%94%BB%E9%98%B2%E6%A1%88%E4%BE%8B/" data-title="对象存储攻防案例"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2022/03/waf-bypass/" class="prev" rel="prev" title="WAF Bypass"><i class="fas fa-angle-left fa-fw"></i>WAF Bypass</a>
+            <a href="/2022/03/zabbix%E6%BC%8F%E6%B4%9E%E6%B7%B1%E5%85%A5%E5%88%A9%E7%94%A8/" class="next" rel="next" title="Zabbix 漏洞深入利用">Zabbix 漏洞深入利用<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

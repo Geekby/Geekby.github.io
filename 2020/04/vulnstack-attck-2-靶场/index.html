@@ -254,92 +254,92 @@
 </span><span class="lnt">85
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">PORT      STATE SERVICE       VERSION
-80/tcp    open  http          Microsoft IIS httpd 7.5
-| http-methods:
-|   Supported Methods: OPTIONS TRACE GET HEAD POST
-|_  Potentially risky methods: TRACE
-|_http-server-header: Microsoft-IIS/7.5
-|_http-title: Site doesn&#39;t have a title.
-135/tcp   open  msrpc         Microsoft Windows RPC
-139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
-445/tcp   open  microsoft-ds  Windows Server 2008 R2 Standard 7601 Service Pack 1 microsoft-ds
-1433/tcp  open  ms-sql-s      Microsoft SQL Server 2008 R2 10.50.4000.00; SP2
-| ms-sql-ntlm-info:
-|   Target_Name: DE1AY
-|   NetBIOS_Domain_Name: DE1AY
-|   NetBIOS_Computer_Name: WEB
-|   DNS_Domain_Name: de1ay.com
-|   DNS_Computer_Name: WEB.de1ay.com
-|   DNS_Tree_Name: de1ay.com
-|_  Product_Version: 6.1.7601
-| ssl-cert: Subject: commonName=SSL_Self_Signed_Fallback
-| Issuer: commonName=SSL_Self_Signed_Fallback
-| Public Key type: rsa
-| Public Key bits: 1024
-| Signature Algorithm: sha1WithRSAEncryption
-| Not valid before: 2020-04-18T03:37:19
-| Not valid after:  2050-04-18T03:37:19
-| MD5:   83a6 3f23 de4f e053 4224 f66c a547 3223
-|_SHA-1: 0aad 0382 de96 c9da 3990 3014 360c 7f31 bf78 a3df
-|_ssl-date: 2020-04-18T06:12:57+00:00; -2s from scanner time.
-3389/tcp  open  ms-wbt-server Microsoft Terminal Services
-| rdp-ntlm-info:
-|   Target_Name: DESKTOP-DUNPKQ9
-|   NetBIOS_Domain_Name: DESKTOP-DUNPKQ9
-|   NetBIOS_Computer_Name: DESKTOP-DUNPKQ9
-|   DNS_Domain_Name: DESKTOP-DUNPKQ9
-|   DNS_Computer_Name: DESKTOP-DUNPKQ9
-|   Product_Version: 10.0.17763
-|_  System_Time: 2020-04-18T06:12:19+00:00
-| ssl-cert: Subject: commonName=DESKTOP-DUNPKQ9
-| Issuer: commonName=DESKTOP-DUNPKQ9
-| Public Key type: rsa
-| Public Key bits: 2048
-| Signature Algorithm: sha256WithRSAEncryption
-| Not valid before: 2020-02-23T21:21:14
-| Not valid after:  2020-08-24T21:21:14
-| MD5:   5cb3 a3dd 4a5e eb67 80d5 8f39 633f d11b
-|_SHA-1: 9694 4630 239e d821 3658 976c 40a1 6d3b d9b4 e80f
-|_ssl-date: 2020-04-18T06:12:57+00:00; -2s from scanner time.
-7001/tcp  open  http          Oracle WebLogic Server (Servlet 2.5; JSP 2.1)
-|_http-title: Error 404--Not Found
-49152/tcp open  msrpc         Microsoft Windows RPC
-49153/tcp open  msrpc         Microsoft Windows RPC
-Service Info: OSs: Windows, Windows Server 2008 R2 - 2012; CPE: cpe:/o:microsoft:windows
-
-Host script results:
-|_clock-skew: mean: -1h08m35s, deviation: 3h01m23s, median: -2s
-| ms-sql-info:
-|   192.168.3.242:1433:
-|     Version:
-|       name: Microsoft SQL Server 2008 R2 SP2
-|       number: 10.50.4000.00
-|       Product: Microsoft SQL Server 2008 R2
-|       Service pack level: SP2
-|       Post-SP patches applied: false
-|_    TCP port: 1433
-| smb-os-discovery:
-|   OS: Windows Server 2008 R2 Standard 7601 Service Pack 1 (Windows Server 2008 R2 Standard 6.1)
-|   OS CPE: cpe:/o:microsoft:windows_server_2008::sp1
-|   Computer name: WEB
-|   NetBIOS computer name: WEB\x00
-|   Domain name: de1ay.com
-|   Forest name: de1ay.com
-|   FQDN: WEB.de1ay.com
-|_  System time: 2020-04-18T14:12:22+08:00
-| smb-security-mode:
-|   account_used: guest
-|   authentication_level: user
-|   challenge_response: supported
-|_  message_signing: disabled (dangerous, but default)
-| smb2-security-mode:
-|   2.02:
-|_    Message signing enabled but not required
-| smb2-time:
-|   date: 2020-04-18T06:12:20
-|_  start_date: 2020-04-18T03:37:46
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">PORT      STATE SERVICE       VERSION
+</span></span><span class="line"><span class="cl">80/tcp    open  http          Microsoft IIS httpd 7.5
+</span></span><span class="line"><span class="cl">| http-methods:
+</span></span><span class="line"><span class="cl">|   Supported Methods: OPTIONS TRACE GET HEAD POST
+</span></span><span class="line"><span class="cl">|_  Potentially risky methods: TRACE
+</span></span><span class="line"><span class="cl">|_http-server-header: Microsoft-IIS/7.5
+</span></span><span class="line"><span class="cl">|_http-title: Site doesn&#39;t have a title.
+</span></span><span class="line"><span class="cl">135/tcp   open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">139/tcp   open  netbios-ssn   Microsoft Windows netbios-ssn
+</span></span><span class="line"><span class="cl">445/tcp   open  microsoft-ds  Windows Server 2008 R2 Standard 7601 Service Pack 1 microsoft-ds
+</span></span><span class="line"><span class="cl">1433/tcp  open  ms-sql-s      Microsoft SQL Server 2008 R2 10.50.4000.00; SP2
+</span></span><span class="line"><span class="cl">| ms-sql-ntlm-info:
+</span></span><span class="line"><span class="cl">|   Target_Name: DE1AY
+</span></span><span class="line"><span class="cl">|   NetBIOS_Domain_Name: DE1AY
+</span></span><span class="line"><span class="cl">|   NetBIOS_Computer_Name: WEB
+</span></span><span class="line"><span class="cl">|   DNS_Domain_Name: de1ay.com
+</span></span><span class="line"><span class="cl">|   DNS_Computer_Name: WEB.de1ay.com
+</span></span><span class="line"><span class="cl">|   DNS_Tree_Name: de1ay.com
+</span></span><span class="line"><span class="cl">|_  Product_Version: 6.1.7601
+</span></span><span class="line"><span class="cl">| ssl-cert: Subject: commonName=SSL_Self_Signed_Fallback
+</span></span><span class="line"><span class="cl">| Issuer: commonName=SSL_Self_Signed_Fallback
+</span></span><span class="line"><span class="cl">| Public Key type: rsa
+</span></span><span class="line"><span class="cl">| Public Key bits: 1024
+</span></span><span class="line"><span class="cl">| Signature Algorithm: sha1WithRSAEncryption
+</span></span><span class="line"><span class="cl">| Not valid before: 2020-04-18T03:37:19
+</span></span><span class="line"><span class="cl">| Not valid after:  2050-04-18T03:37:19
+</span></span><span class="line"><span class="cl">| MD5:   83a6 3f23 de4f e053 4224 f66c a547 3223
+</span></span><span class="line"><span class="cl">|_SHA-1: 0aad 0382 de96 c9da 3990 3014 360c 7f31 bf78 a3df
+</span></span><span class="line"><span class="cl">|_ssl-date: 2020-04-18T06:12:57+00:00; -2s from scanner time.
+</span></span><span class="line"><span class="cl">3389/tcp  open  ms-wbt-server Microsoft Terminal Services
+</span></span><span class="line"><span class="cl">| rdp-ntlm-info:
+</span></span><span class="line"><span class="cl">|   Target_Name: DESKTOP-DUNPKQ9
+</span></span><span class="line"><span class="cl">|   NetBIOS_Domain_Name: DESKTOP-DUNPKQ9
+</span></span><span class="line"><span class="cl">|   NetBIOS_Computer_Name: DESKTOP-DUNPKQ9
+</span></span><span class="line"><span class="cl">|   DNS_Domain_Name: DESKTOP-DUNPKQ9
+</span></span><span class="line"><span class="cl">|   DNS_Computer_Name: DESKTOP-DUNPKQ9
+</span></span><span class="line"><span class="cl">|   Product_Version: 10.0.17763
+</span></span><span class="line"><span class="cl">|_  System_Time: 2020-04-18T06:12:19+00:00
+</span></span><span class="line"><span class="cl">| ssl-cert: Subject: commonName=DESKTOP-DUNPKQ9
+</span></span><span class="line"><span class="cl">| Issuer: commonName=DESKTOP-DUNPKQ9
+</span></span><span class="line"><span class="cl">| Public Key type: rsa
+</span></span><span class="line"><span class="cl">| Public Key bits: 2048
+</span></span><span class="line"><span class="cl">| Signature Algorithm: sha256WithRSAEncryption
+</span></span><span class="line"><span class="cl">| Not valid before: 2020-02-23T21:21:14
+</span></span><span class="line"><span class="cl">| Not valid after:  2020-08-24T21:21:14
+</span></span><span class="line"><span class="cl">| MD5:   5cb3 a3dd 4a5e eb67 80d5 8f39 633f d11b
+</span></span><span class="line"><span class="cl">|_SHA-1: 9694 4630 239e d821 3658 976c 40a1 6d3b d9b4 e80f
+</span></span><span class="line"><span class="cl">|_ssl-date: 2020-04-18T06:12:57+00:00; -2s from scanner time.
+</span></span><span class="line"><span class="cl">7001/tcp  open  http          Oracle WebLogic Server (Servlet 2.5; JSP 2.1)
+</span></span><span class="line"><span class="cl">|_http-title: Error 404--Not Found
+</span></span><span class="line"><span class="cl">49152/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">49153/tcp open  msrpc         Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">Service Info: OSs: Windows, Windows Server 2008 R2 - 2012; CPE: cpe:/o:microsoft:windows
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Host script results:
+</span></span><span class="line"><span class="cl">|_clock-skew: mean: -1h08m35s, deviation: 3h01m23s, median: -2s
+</span></span><span class="line"><span class="cl">| ms-sql-info:
+</span></span><span class="line"><span class="cl">|   192.168.3.242:1433:
+</span></span><span class="line"><span class="cl">|     Version:
+</span></span><span class="line"><span class="cl">|       name: Microsoft SQL Server 2008 R2 SP2
+</span></span><span class="line"><span class="cl">|       number: 10.50.4000.00
+</span></span><span class="line"><span class="cl">|       Product: Microsoft SQL Server 2008 R2
+</span></span><span class="line"><span class="cl">|       Service pack level: SP2
+</span></span><span class="line"><span class="cl">|       Post-SP patches applied: false
+</span></span><span class="line"><span class="cl">|_    TCP port: 1433
+</span></span><span class="line"><span class="cl">| smb-os-discovery:
+</span></span><span class="line"><span class="cl">|   OS: Windows Server 2008 R2 Standard 7601 Service Pack 1 (Windows Server 2008 R2 Standard 6.1)
+</span></span><span class="line"><span class="cl">|   OS CPE: cpe:/o:microsoft:windows_server_2008::sp1
+</span></span><span class="line"><span class="cl">|   Computer name: WEB
+</span></span><span class="line"><span class="cl">|   NetBIOS computer name: WEB\x00
+</span></span><span class="line"><span class="cl">|   Domain name: de1ay.com
+</span></span><span class="line"><span class="cl">|   Forest name: de1ay.com
+</span></span><span class="line"><span class="cl">|   FQDN: WEB.de1ay.com
+</span></span><span class="line"><span class="cl">|_  System time: 2020-04-18T14:12:22+08:00
+</span></span><span class="line"><span class="cl">| smb-security-mode:
+</span></span><span class="line"><span class="cl">|   account_used: guest
+</span></span><span class="line"><span class="cl">|   authentication_level: user
+</span></span><span class="line"><span class="cl">|   challenge_response: supported
+</span></span><span class="line"><span class="cl">|_  message_signing: disabled (dangerous, but default)
+</span></span><span class="line"><span class="cl">| smb2-security-mode:
+</span></span><span class="line"><span class="cl">|   2.02:
+</span></span><span class="line"><span class="cl">|_    Message signing enabled but not required
+</span></span><span class="line"><span class="cl">| smb2-time:
+</span></span><span class="line"><span class="cl">|   date: 2020-04-18T06:12:20
+</span></span><span class="line"><span class="cl">|_  start_date: 2020-04-18T03:37:46
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>发现 <code>7001</code> 端口的 <code>weblogic</code>，访问 <code>http://192.168.3.242:7001/console</code>，版本号为：<code>10.3.6.0</code></p>
 <p><img
@@ -582,7 +582,7 @@ Host script results:
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

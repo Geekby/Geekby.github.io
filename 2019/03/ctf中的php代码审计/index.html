@@ -27,7 +27,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/www.geekby.site\/2019\/03\/ctf%E4%B8%AD%E7%9A%84php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1\/"
-        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "常用, 渗透测试, CTF","wordcount":  1596 ,
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "常用, 渗透测试, CTF","wordcount":  1594 ,
         "url": "https:\/\/www.geekby.site\/2019\/03\/ctf%E4%B8%AD%E7%9A%84php%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1\/","datePublished": "2019-03-17T19:15:00+08:00","dateModified": "2019-03-17T19:15:00+08:00","publisher": {
             "@type": "Organization",
             "name": "Geekby","logo": {
@@ -109,7 +109,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">CTF 中的 PHP 代码审计</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%B8%B8%E7%94%A8/"><i class="far fa-folder fa-fw"></i>常用</a>&nbsp;<a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a>&nbsp;<a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"><i class="far fa-folder fa-fw"></i>代码审计</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-03-17">2019-03-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1596 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-03-17">2019-03-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1594 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 8 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -197,16 +197,16 @@
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&#39;&#39; == 0 == false
-&#39;123&#39; == 123
-&#39;abc&#39; == 0
-&#39;123a&#39; == 123
-&#39;0x01&#39; == 1
-&#39;0e123456789&#39; == &#39;0e987654321&#39;
-false == 0 == NULL == &#39;&#39;
-NULL == false == 0
-true == 1
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&#39;&#39; == 0 == false
+</span></span><span class="line"><span class="cl">&#39;123&#39; == 123
+</span></span><span class="line"><span class="cl">&#39;abc&#39; == 0
+</span></span><span class="line"><span class="cl">&#39;123a&#39; == 123
+</span></span><span class="line"><span class="cl">&#39;0x01&#39; == 1
+</span></span><span class="line"><span class="cl">&#39;0e123456789&#39; == &#39;0e987654321&#39;
+</span></span><span class="line"><span class="cl">false == 0 == NULL == &#39;&#39;
+</span></span><span class="line"><span class="cl">NULL == false == 0
+</span></span><span class="line"><span class="cl">true == 1
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="12-实例">1.2 实例</h3>
 <h4 id="121-md5-等-hash-函数相关题目">1.2.1 MD5 等 hash 函数相关题目</h4>
@@ -299,23 +299,23 @@ true == 1
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-<span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
-<span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]))</span> <span class="p">{</span>
-    <span class="nv">$message</span> <span class="o">=</span> <span class="nx">json_decode</span><span class="p">(</span><span class="nx">_</span><span class="nv">$POST</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]);</span>
-    <span class="k">if</span><span class="p">(</span><span class="nv">$message</span><span class="o">-&gt;</span><span class="na">key</span> <span class="o">==</span> <span class="nv">$key</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">echo</span> <span class="nv">$flag</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span> <span class="p">{</span>
-        <span class="k">echo</span> <span class="s2">&#34;fail&#34;</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="k">else</span> <span class="p">{</span>
-    <span class="k">echo</span> <span class="s2">&#34;~~~~&#34;</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="cp">?&gt;</span><span class="err"> 
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$message</span> <span class="o">=</span> <span class="nx">json_decode</span><span class="p">(</span><span class="nx">_</span><span class="nv">$POST</span><span class="p">[</span><span class="s1">&#39;message&#39;</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="nv">$message</span><span class="o">-&gt;</span><span class="na">key</span> <span class="o">==</span> <span class="nv">$key</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="nv">$flag</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s2">&#34;fail&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">echo</span> <span class="s2">&#34;~~~~&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err"> 
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>原理：字符串 <code>flag{xxx}</code> 和数字 <code>0</code> 比较，结果为 True</p>
 <p>Payload：<code>url?message={&quot;key&quot;:0}</code></p>
@@ -339,21 +339,21 @@ true == 1
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-<span class="nv">$i</span> <span class="o">=</span> <span class="s2">&#34;3nanme&#34;</span><span class="p">;</span>
-<span class="k">switch</span> <span class="p">(</span><span class="nv">$i</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">case</span> <span class="mi">0</span><span class="o">:</span>
-    <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
-    <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
-        <span class="k">echo</span> <span class="s2">&#34;this is two&#34;</span><span class="p">;</span>
-        <span class="k">break</span><span class="p">;</span>
-    <span class="k">case</span> <span class="mi">3</span><span class="o">:</span>
-        <span class="k">echo</span> <span class="s2">&#34;flag&#34;</span><span class="p">;</span>
-        <span class="k">break</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$i</span> <span class="o">=</span> <span class="s2">&#34;3nanme&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">switch</span> <span class="p">(</span><span class="nv">$i</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="mi">0</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s2">&#34;this is two&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">case</span> <span class="mi">3</span><span class="o">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s2">&#34;flag&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">break</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="124-strcmp-相关题目">1.2.4 STRCMP 相关题目</h4>
 <p>原理：利用 strcmp 中的参数为数组，返回值为 NULL，在非严格比较的情况下与 0 相等。</p>
@@ -374,20 +374,20 @@ true == 1
 </span><span class="lnt">13
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-<span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
-<span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">]))</span> <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">strcmp</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">],</span> <span class="nv">$password</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">echo</span> <span class="s2">&#34;Right!!!login success&#34;</span><span class="p">;</span>
-        <span class="k">echo</span> <span class="nv">$flag</span><span class="p">;</span>
-        <span class="k">exit</span><span class="p">();</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="k">echo</span> <span class="s2">&#34;Wrong password..&#34;</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="nx">strcmp</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s1">&#39;password&#39;</span><span class="p">],</span> <span class="nv">$password</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s2">&#34;Right!!!login success&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="nv">$flag</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">exit</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s2">&#34;Wrong password..&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>Payload：<code>url?password[]=</code></p>
 <h4 id="125-in_array-函数">1.2.5 in_array 函数</h4>
@@ -401,13 +401,13 @@ true == 1
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-<span class="nv">$array</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">];</span>
-<span class="nx">var_dump</span><span class="p">(</span><span class="nx">in_array</span><span class="p">(</span><span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="nv">$array</span><span class="p">));</span>
-<span class="nx">var_dump</span><span class="p">(</span><span class="nx">in_array</span><span class="p">(</span><span class="s1">&#39;1bc&#39;</span><span class="p">,</span> <span class="nv">$array</span><span class="p">));</span>
-<span class="nx">var_dump</span><span class="p">(</span><span class="nx">in_array</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nv">$array</span><span class="p">));</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$array</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="nx">var_dump</span><span class="p">(</span><span class="nx">in_array</span><span class="p">(</span><span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="nv">$array</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="nx">var_dump</span><span class="p">(</span><span class="nx">in_array</span><span class="p">(</span><span class="s1">&#39;1bc&#39;</span><span class="p">,</span> <span class="nv">$array</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="nx">var_dump</span><span class="p">(</span><span class="nx">in_array</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nv">$array</span><span class="p">));</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>返回结果为：<code>true、true、true</code></p>
 <h4 id="126-array_search-函数">1.2.6 array_search 函数</h4>
@@ -423,14 +423,14 @@ true == 1
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-<span class="nv">$array</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">];</span>
-<span class="nx">var_dump</span><span class="p">(</span><span class="nx">array_search</span><span class="p">(</span><span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="nv">$array</span><span class="p">));</span>
-<span class="nx">var_dump</span><span class="p">(</span><span class="nx">array_search</span><span class="p">(</span><span class="s1">&#39;1bc&#39;</span><span class="p">,</span> <span class="nv">$array</span><span class="p">));</span>
-<span class="nx">var_dump</span><span class="p">(</span><span class="nx">array_search</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nv">$array</span><span class="p">));</span>
-<span class="nx">var_dump</span><span class="p">(</span><span class="nx">array_search</span><span class="p">(</span><span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="nv">$array</span><span class="p">));</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$array</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="nx">var_dump</span><span class="p">(</span><span class="nx">array_search</span><span class="p">(</span><span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="nv">$array</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="nx">var_dump</span><span class="p">(</span><span class="nx">array_search</span><span class="p">(</span><span class="s1">&#39;1bc&#39;</span><span class="p">,</span> <span class="nv">$array</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="nx">var_dump</span><span class="p">(</span><span class="nx">array_search</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="nv">$array</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="nx">var_dump</span><span class="p">(</span><span class="nx">array_search</span><span class="p">(</span><span class="s1">&#39;3&#39;</span><span class="p">,</span> <span class="nv">$array</span><span class="p">));</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>返回结果为：<code>0、1、3、3</code></p>
 <div class="highlight"><div class="chroma">
@@ -452,28 +452,26 @@ true == 1
 </span><span class="lnt">15
 </span><span class="lnt">16
 </span><span class="lnt">17
-</span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">is_array</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">]))</span> <span class="p">{</span>
-    <span class="k">exit</span><span class="p">();</span>
-<span class="p">}</span>
-<span class="nv">$test</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">];</span>
-<span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nx">count</span><span class="p">(</span><span class="nv">$test</span><span class="p">);</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span> <span class="p">(</span><span class="nv">$test</span><span class="p">[</span><span class="nv">$i</span><span class="p">]</span> <span class="o">===</span> <span class="s2">&#34;admin&#34;</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">echo</span> <span class="s2">&#34;error&#34;</span><span class="p">;</span>
-        <span class="k">exit</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="nv">$test</span><span class="p">[</span><span class="nv">$i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">intval</span><span class="p">(</span><span class="nv">$test</span><span class="p">[</span><span class="nv">$i</span><span class="p">]);</span>
-<span class="p">}</span>
-<span class="k">if</span> <span class="p">(</span><span class="nx">array_search</span><span class="p">(</span><span class="s2">&#34;admin&#34;</span><span class="p">,</span> <span class="nv">$test</span><span class="p">)</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">echo</span> <span class="s2">&#34;flag&#34;</span><span class="p">;</span>
-<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="k">echo</span> <span class="s2">&#34;false&#34;</span><span class="p">;</span>
-<span class="p">}</span>
-
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">is_array</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">exit</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$test</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;test&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nx">count</span><span class="p">(</span><span class="nv">$test</span><span class="p">);</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nv">$test</span><span class="p">[</span><span class="nv">$i</span><span class="p">]</span> <span class="o">===</span> <span class="s2">&#34;admin&#34;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s2">&#34;error&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">exit</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$test</span><span class="p">[</span><span class="nv">$i</span><span class="p">]</span> <span class="o">=</span> <span class="nx">intval</span><span class="p">(</span><span class="nv">$test</span><span class="p">[</span><span class="nv">$i</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">array_search</span><span class="p">(</span><span class="s2">&#34;admin&#34;</span><span class="p">,</span> <span class="nv">$test</span><span class="p">)</span> <span class="o">===</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">echo</span> <span class="s2">&#34;flag&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">echo</span> <span class="s2">&#34;false&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>Payload：<code>url?test[0]=0</code></p>
 <h4 id="127-strpos-函数">1.2.7 strpos 函数</h4>
@@ -486,12 +484,12 @@ true == 1
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-	<span class="nx">var_dump</span><span class="p">(</span><span class="nx">strpos</span><span class="p">(</span><span class="s1">&#39;abcd&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">));</span>
-	<span class="c1">// int(0)
-</span><span class="c1"></span>	<span class="nx">var_dump</span><span class="p">(</span><span class="nx">strpos</span><span class="p">(</span><span class="s1">&#39;abcd&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="k">false</span><span class="p">);</span>
-	<span class="c1">// bool(true)
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">var_dump</span><span class="p">(</span><span class="nx">strpos</span><span class="p">(</span><span class="s1">&#39;abcd&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// int(0)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nx">var_dump</span><span class="p">(</span><span class="nx">strpos</span><span class="p">(</span><span class="s1">&#39;abcd&#39;</span><span class="p">,</span> <span class="s1">&#39;a&#39;</span><span class="p">)</span> <span class="o">==</span> <span class="k">false</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// bool(true)
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="2-变量覆盖问题">2 变量覆盖问题</h2>
 <h3 id="21-extract-函数">2.1 extract 函数</h3>
@@ -522,21 +520,21 @@ true == 1
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-<span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
-<span class="nx">extract</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">);</span>
-<span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$gift</span><span class="p">))</span> <span class="p">{</span>
-    <span class="nv">$content</span> <span class="o">=</span> <span class="nx">trim</span><span class="p">(</span><span class="nx">file_get_contents</span><span class="p">(</span><span class="nv">$flag</span><span class="p">));</span>
-    <span class="k">if</span><span class="p">(</span><span class="nv">$gift</span> <span class="o">==</span> <span class="nv">$content</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">echo</span> <span class="nv">$trueflag</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span> <span class="p">{</span>
-        <span class="k">echo</span> <span class="s2">&#34;Oh...&#34;</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">extract</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$gift</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$content</span> <span class="o">=</span> <span class="nx">trim</span><span class="p">(</span><span class="nx">file_get_contents</span><span class="p">(</span><span class="nv">$flag</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="nv">$gift</span> <span class="o">==</span> <span class="nv">$content</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="nv">$trueflag</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s2">&#34;Oh...&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>让 file_get_content()  返回值为空，即可绕过。</p>
 <p>Payload：<code>?gift=&amp;flag=</code></p>
@@ -557,18 +555,18 @@ true == 1
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-<span class="nv">$a</span> <span class="o">=</span> <span class="s2">&#34;helloworld&#34;</span><span class="p">;</span>
-<span class="k">echo</span> <span class="nv">$a</span><span class="p">;</span>
-<span class="k">echo</span> <span class="s2">&#34;</span><span class="si">$a</span><span class="s2">&#34;</span><span class="p">;</span>
-<span class="k">echo</span> <span class="s2">&#34;&lt;br /&gt;&#34;</span>
-<span class="k">foreach</span><span class="p">(</span><span class="nv">$_GET</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nv">$$key</span> <span class="o">=</span> <span class="nv">$value</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="k">echo</span> <span class="s2">&#34;</span><span class="si">$a</span><span class="s2">&#34;</span><span class="p">;</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$a</span> <span class="o">=</span> <span class="s2">&#34;helloworld&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="nv">$a</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="s2">&#34;</span><span class="si">$a</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="s2">&#34;&lt;br /&gt;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="k">foreach</span><span class="p">(</span><span class="nv">$_GET</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$$key</span> <span class="o">=</span> <span class="nv">$value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="s2">&#34;</span><span class="si">$a</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>$key 与 $value 都可控，因此修改 $a 变量的点在代码第 8 行处，让 $key=a，$$key=$a，$value 为想要修改的值</p>
 <p>Payload：<code>url?a=afterChange</code></p>
@@ -600,30 +598,30 @@ true == 1
 </span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span> 
-<span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-<span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
-<span class="nv">$_403</span> <span class="o">=</span> <span class="s2">&#34;Access Denied&#34;</span><span class="p">;</span>
-<span class="nv">$_200</span> <span class="o">=</span> <span class="s2">&#34;Welcome Admin&#34;</span><span class="p">;</span>
-<span class="k">if</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s2">&#34;REQUEST_METHOD&#34;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&#34;POST&#34;</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">die</span><span class="p">(</span><span class="s2">&#34;BugsBunnyCTF is here:p...&#34;</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&#34;flag&#34;</span><span class="p">]))</span> <span class="p">{</span>
-	<span class="k">die</span><span class="p">(</span><span class="nv">$_403</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="k">foreach</span> <span class="p">(</span><span class="nv">$_GET</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nv">$$key</span> <span class="o">=</span> <span class="nv">$$value</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="k">foreach</span> <span class="p">(</span><span class="nv">$_POST</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nv">$$key</span> <span class="o">=</span> <span class="nv">$value</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="k">if</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&#34;flag&#34;</span><span class="p">]</span> <span class="o">!==</span> <span class="nv">$flag</span><span class="p">)</span> <span class="p">{</span>
-	<span class="k">die</span><span class="p">(</span><span class="nv">$_403</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="k">echo</span> <span class="s2">&#34;This is your flag : &#34;</span><span class="o">.</span> <span class="nv">$flag</span> <span class="o">.</span> <span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
-<span class="k">die</span><span class="p">(</span><span class="nv">$_200</span><span class="p">);</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span> 
+</span></span><span class="line"><span class="cl"><span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$_403</span> <span class="o">=</span> <span class="s2">&#34;Access Denied&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$_200</span> <span class="o">=</span> <span class="s2">&#34;Welcome Admin&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s2">&#34;REQUEST_METHOD&#34;</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&#34;POST&#34;</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">die</span><span class="p">(</span><span class="s2">&#34;BugsBunnyCTF is here:p...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&#34;flag&#34;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">die</span><span class="p">(</span><span class="nv">$_403</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">foreach</span> <span class="p">(</span><span class="nv">$_GET</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nv">$$key</span> <span class="o">=</span> <span class="nv">$$value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">foreach</span> <span class="p">(</span><span class="nv">$_POST</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nv">$$key</span> <span class="o">=</span> <span class="nv">$value</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">[</span><span class="s2">&#34;flag&#34;</span><span class="p">]</span> <span class="o">!==</span> <span class="nv">$flag</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">die</span><span class="p">(</span><span class="nv">$_403</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="s2">&#34;This is your flag : &#34;</span><span class="o">.</span> <span class="nv">$flag</span> <span class="o">.</span> <span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">die</span><span class="p">(</span><span class="nv">$_200</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>Payload：<code>url?_200=flag</code> + post：<code>flag=123</code></p>
 <h3 id="23-parse_str-函数">2.3 parse_str 函数</h3>
@@ -665,24 +663,24 @@ true == 1
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
-<span class="k">if</span><span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]))</span> <span class="p">{</span>
-    <span class="nx">show_source</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-    <span class="k">die</span><span class="p">();</span>
-<span class="p">}</span> <span class="k">else</span> <span class="p">{</span> 
-    <span class="k">include</span><span class="p">(</span><span class="s2">&#34;flag.php&#34;</span><span class="p">);</span>
-    <span class="nv">$a</span> <span class="o">=</span> <span class="s2">&#34;www.OPENCTF.com&#34;</span><span class="p">;</span>
-    <span class="nv">$id</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">];</span>
-    <span class="o">@</span><span class="nx">parse_str</span><span class="p">(</span><span class="nv">$id</span><span class="p">);</span>
-    <span class="k">if</span><span class="p">(</span><span class="nv">$a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&#34;QNKCDZO&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">md5</span><span class="p">(</span><span class="nv">$a</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="nx">md5</span><span class="p">(</span><span class="s2">&#34;QNKCDZO&#34;</span><span class="p">))</span> <span class="p">{</span>
-        <span class="k">echo</span> <span class="nv">$flag</span><span class="p">;</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="k">exit</span><span class="p">(</span><span class="s2">&#34;其实很简单并不难!&#34;</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">show_source</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">die</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">    <span class="k">include</span><span class="p">(</span><span class="s2">&#34;flag.php&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$a</span> <span class="o">=</span> <span class="s2">&#34;www.OPENCTF.com&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$id</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="o">@</span><span class="nx">parse_str</span><span class="p">(</span><span class="nv">$id</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="nv">$a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="s2">&#34;QNKCDZO&#34;</span> <span class="o">&amp;&amp;</span> <span class="nx">md5</span><span class="p">(</span><span class="nv">$a</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">==</span> <span class="nx">md5</span><span class="p">(</span><span class="s2">&#34;QNKCDZO&#34;</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="nv">$flag</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">exit</span><span class="p">(</span><span class="s2">&#34;其实很简单并不难!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>Payload：<code>url?id=a[0]=s878926199a</code></p>
 <div class="details admonition tip open">
@@ -700,10 +698,10 @@ true == 1
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nv">$a</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s2">&#34;a_a&#34;</span><span class="p">];</span>
-<span class="k">echo</span> <span class="nv">$a</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$a</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s2">&#34;a_a&#34;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="nv">$a</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>当传入的参数名为：<code>url?a.a=123</code> 时，会被转化成 <code>a_a</code>，因此可以正常输出内容</p>
 <h2 id="3-空白符相关">3 空白符相关</h2>
@@ -767,63 +765,63 @@ true == 1
 </span><span class="lnt">56
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-<span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
-<span class="nv">$info</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span><span class="p">;</span>
-<span class="nv">$req</span> <span class="o">=</span> <span class="p">[];</span>
-<span class="nx">ini_set</span><span class="p">(</span><span class="s2">&#34;display_error&#34;</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
-<span class="nx">error_report</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s2">&#34;number&#34;</span><span class="p">]))</span> <span class="p">{</span>
-    <span class="k">die</span><span class="p">(</span><span class="s2">&#34;have a fun!&#34;</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="k">foreach</span><span class="p">([</span><span class="nv">$_GET</span><span class="p">,</span> <span class="nv">$_POST</span><span class="p">]</span> <span class="k">as</span> <span class="nv">$global_var</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">foreach</span><span class="p">(</span><span class="nv">$global_var</span> <span class="k">as</span> <span class="nx">key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nv">$value</span> <span class="o">=</span> <span class="nx">trim</span><span class="p">(</span><span class="nv">$value</span><span class="p">);</span>
-        <span class="nx">is_string</span><span class="p">(</span><span class="nv">$value</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nv">$req</span><span class="p">[</span><span class="nv">$key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">addslashes</span><span class="p">(</span><span class="nv">$value</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="k">function</span> <span class="nf">is_palindrome_number</span><span class="p">(</span><span class="nv">$number</span><span class="p">)</span> <span class="p">{</span>
-    <span class="nv">$number</span> <span class="o">=</span> <span class="nx">strval</span><span class="p">(</span><span class="nv">$number</span><span class="p">);</span>
-    <span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-    <span class="nv">$j</span> <span class="o">=</span> <span class="nx">strlen</span><span class="p">(</span><span class="nv">$number</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
-    <span class="k">while</span><span class="p">(</span><span class="nv">$i</span> <span class="o">&lt;</span> <span class="nv">$j</span><span class="p">)</span> <span class="p">{</span>
-        <span class="k">if</span><span class="p">(</span><span class="nv">$number</span><span class="p">[</span><span class="nv">$i</span><span class="p">]</span> <span class="o">!==</span> <span class="nv">$number</span><span class="p">[</span><span class="nv">$j</span><span class="p">])</span> <span class="p">{</span>
-            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="nv">$i</span><span class="o">++</span><span class="p">;</span>
-        <span class="nv">$j</span><span class="o">--</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="k">if</span><span class="p">(</span><span class="nx">is_numeric</span><span class="p">(</span><span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">&#39;number&#39;</span><span class="p">]))</span> <span class="p">{</span>
-    <span class="nv">$info</span> <span class="o">=</span> <span class="s2">&#34;Sorry, you can not input a number!&#34;</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nv">$req</span><span class="p">[</span><span class="s1">&#39;number&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="nx">strval</span><span class="p">(</span><span class="nx">intval</span><span class="p">(</span><span class="nv">$req</span><span class="p">[</span><span class="s1">&#39;number&#39;</span><span class="p">])))</span>
-<span class="p">{</span>
-    <span class="nv">$info</span> <span class="o">=</span> <span class="s2">&#34;number must be equal to it\&#39;s integer!!&#34;</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="k">else</span>
-<span class="p">{</span>
-    <span class="nv">$value1</span> <span class="o">=</span> <span class="nx">intval</span><span class="p">(</span><span class="nv">$req</span><span class="p">[</span><span class="s2">&#34;number&#34;</span><span class="p">]);</span>
-    <span class="nv">$value2</span> <span class="o">=</span> <span class="nx">intval</span><span class="p">(</span><span class="nx">strrev</span><span class="p">(</span><span class="nv">$req</span><span class="p">[</span><span class="s2">&#34;number&#34;</span><span class="p">]));</span>
-    <span class="k">if</span><span class="p">(</span><span class="nv">$value1</span> <span class="o">!=</span> <span class="nv">$value2</span><span class="p">)</span>
-    <span class="p">{</span>
-        <span class="nv">$info</span> <span class="o">=</span> <span class="s2">&#34;no, this is not a palindrome number&#34;</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">is_palindrome_number</span><span class="p">(</span><span class="nv">$req</span><span class="p">[</span><span class="s2">&#34;number&#34;</span><span class="p">]))</span> <span class="p">{</span>
-            <span class="nv">$info</span> <span class="o">=</span> <span class="s2">&#34;nice! </span><span class="si">{</span><span class="nv">$value1</span><span class="si">}</span><span class="s2"> is a palindrome number!&#34;</span>
-        <span class="p">}</span>
-        <span class="k">else</span> <span class="p">{</span>
-            <span class="nv">$info</span> <span class="o">=</span> <span class="nv">$flag</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="k">echo</span> <span class="nv">$info</span><span class="p">;</span>
-<span class="cp">?&gt;</span><span class="err"> 
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$info</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$req</span> <span class="o">=</span> <span class="p">[];</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ini_set</span><span class="p">(</span><span class="s2">&#34;display_error&#34;</span><span class="p">,</span> <span class="k">false</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">error_report</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s2">&#34;number&#34;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">die</span><span class="p">(</span><span class="s2">&#34;have a fun!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">foreach</span><span class="p">([</span><span class="nv">$_GET</span><span class="p">,</span> <span class="nv">$_POST</span><span class="p">]</span> <span class="k">as</span> <span class="nv">$global_var</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">foreach</span><span class="p">(</span><span class="nv">$global_var</span> <span class="k">as</span> <span class="nx">key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$value</span> <span class="o">=</span> <span class="nx">trim</span><span class="p">(</span><span class="nv">$value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">is_string</span><span class="p">(</span><span class="nv">$value</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nv">$req</span><span class="p">[</span><span class="nv">$key</span><span class="p">]</span> <span class="o">=</span> <span class="nx">addslashes</span><span class="p">(</span><span class="nv">$value</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">is_palindrome_number</span><span class="p">(</span><span class="nv">$number</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$number</span> <span class="o">=</span> <span class="nx">strval</span><span class="p">(</span><span class="nv">$number</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$j</span> <span class="o">=</span> <span class="nx">strlen</span><span class="p">(</span><span class="nv">$number</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">while</span><span class="p">(</span><span class="nv">$i</span> <span class="o">&lt;</span> <span class="nv">$j</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="nv">$number</span><span class="p">[</span><span class="nv">$i</span><span class="p">]</span> <span class="o">!==</span> <span class="nv">$number</span><span class="p">[</span><span class="nv">$j</span><span class="p">])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$i</span><span class="o">++</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$j</span><span class="o">--</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="k">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nx">is_numeric</span><span class="p">(</span><span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">&#39;number&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$info</span> <span class="o">=</span> <span class="s2">&#34;Sorry, you can not input a number!&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">else</span> <span class="k">if</span><span class="p">(</span><span class="nv">$req</span><span class="p">[</span><span class="s1">&#39;number&#39;</span><span class="p">]</span> <span class="o">!=</span> <span class="nx">strval</span><span class="p">(</span><span class="nx">intval</span><span class="p">(</span><span class="nv">$req</span><span class="p">[</span><span class="s1">&#39;number&#39;</span><span class="p">])))</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$info</span> <span class="o">=</span> <span class="s2">&#34;number must be equal to it\&#39;s integer!!&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">else</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$value1</span> <span class="o">=</span> <span class="nx">intval</span><span class="p">(</span><span class="nv">$req</span><span class="p">[</span><span class="s2">&#34;number&#34;</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$value2</span> <span class="o">=</span> <span class="nx">intval</span><span class="p">(</span><span class="nx">strrev</span><span class="p">(</span><span class="nv">$req</span><span class="p">[</span><span class="s2">&#34;number&#34;</span><span class="p">]));</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="nv">$value1</span> <span class="o">!=</span> <span class="nv">$value2</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$info</span> <span class="o">=</span> <span class="s2">&#34;no, this is not a palindrome number&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="nx">is_palindrome_number</span><span class="p">(</span><span class="nv">$req</span><span class="p">[</span><span class="s2">&#34;number&#34;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$info</span> <span class="o">=</span> <span class="s2">&#34;nice! </span><span class="si">{</span><span class="nv">$value1</span><span class="si">}</span><span class="s2"> is a palindrome number!&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$info</span> <span class="o">=</span> <span class="nv">$flag</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="nv">$info</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err"> 
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="31-intval-函数">3.1 intval 函数</h3>
 <blockquote>
@@ -855,26 +853,26 @@ true == 1
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span>                      <span class="c1">// 42
-</span><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="mf">4.2</span><span class="p">);</span>                     <span class="c1">// 4
-</span><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="s1">&#39;42&#39;</span><span class="p">);</span>                    <span class="c1">// 42
-</span><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="s1">&#39;+42&#39;</span><span class="p">);</span>                   <span class="c1">// 42
-</span><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="s1">&#39;-42&#39;</span><span class="p">);</span>                   <span class="c1">// -42
-</span><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="mo">042</span><span class="p">);</span>                     <span class="c1">// 34
-</span><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="s1">&#39;042&#39;</span><span class="p">);</span>                   <span class="c1">// 42
-</span><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="mf">1e10</span><span class="p">);</span>                    <span class="c1">// 1000000000
-</span><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="s1">&#39;1e10&#39;</span><span class="p">);</span>                  <span class="c1">// 1
-</span><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="mh">0x1A</span><span class="p">);</span>                    <span class="c1">// 26
-</span><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="mi">42000000</span><span class="p">);</span>                <span class="c1">// 42000000
-</span><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="mi">420000000000000000000</span><span class="p">);</span>   <span class="c1">// 0
-</span><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="s1">&#39;420000000000000000000&#39;</span><span class="p">);</span> <span class="c1">// 2147483647
-</span><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>                   <span class="c1">// 42
-</span><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="s1">&#39;42&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>                 <span class="c1">// 34
-</span><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="k">array</span><span class="p">());</span>                 <span class="c1">// 0
-</span><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">));</span>     <span class="c1">// 1
-</span><span class="c1"></span><span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="mi">42</span><span class="p">);</span>                      <span class="c1">// 42
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="mf">4.2</span><span class="p">);</span>                     <span class="c1">// 4
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="s1">&#39;42&#39;</span><span class="p">);</span>                    <span class="c1">// 42
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="s1">&#39;+42&#39;</span><span class="p">);</span>                   <span class="c1">// 42
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="s1">&#39;-42&#39;</span><span class="p">);</span>                   <span class="c1">// -42
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="mo">042</span><span class="p">);</span>                     <span class="c1">// 34
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="s1">&#39;042&#39;</span><span class="p">);</span>                   <span class="c1">// 42
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="mf">1e10</span><span class="p">);</span>                    <span class="c1">// 1000000000
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="s1">&#39;1e10&#39;</span><span class="p">);</span>                  <span class="c1">// 1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="mh">0x1A</span><span class="p">);</span>                    <span class="c1">// 26
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="mi">42000000</span><span class="p">);</span>                <span class="c1">// 42000000
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="mi">420000000000000000000</span><span class="p">);</span>   <span class="c1">// 0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="s1">&#39;420000000000000000000&#39;</span><span class="p">);</span> <span class="c1">// 2147483647
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="mi">42</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>                   <span class="c1">// 42
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="s1">&#39;42&#39;</span><span class="p">,</span> <span class="mi">8</span><span class="p">);</span>                 <span class="c1">// 34
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="k">array</span><span class="p">());</span>                 <span class="c1">// 0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">echo</span> <span class="nx">intval</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;foo&#39;</span><span class="p">,</span> <span class="s1">&#39;bar&#39;</span><span class="p">));</span>     <span class="c1">// 1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="32-浮点数精度">3.2 浮点数精度</h3>
 <p><img
@@ -993,42 +991,42 @@ true == 1
 </span><span class="lnt">35
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-<span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
-<span class="nx">error_reporting</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-<span class="k">echo</span> <span class="s2">&#34;please input a rand num!&#34;</span><span class="p">;</span>
-<span class="k">function</span> <span class="nf">create_password</span><span class="p">(</span><span class="nv">$pw_length</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span>
-<span class="p">{</span>
-    <span class="nv">$randpwd</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span><span class="p">;</span>
-    <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nv">$pw_length</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nv">$randpwd</span> <span class="o">.=</span> <span class="nx">mt_rand</span><span class="p">();</span>
-    <span class="p">}</span>
-    <span class="k">return</span> <span class="nv">$randpwd</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="nx">session_start</span><span class="p">();</span>
-<span class="c1">// var_dump($_SESSION);
-</span><span class="c1"></span><span class="nv">$time</span> <span class="o">=</span> <span class="nx">time</span><span class="p">();</span>
-<span class="nx">mt_srand</span><span class="p">(</span><span class="nv">$time</span><span class="p">);</span>
-
-<span class="nv">$pwd</span> <span class="o">=</span> <span class="nx">create_password</span><span class="p">();</span>
-<span class="c1">// var_dump(($_SESSION[&#39;userLogin&#39;] == $_GET[&#39;login&#39;]));
-</span><span class="c1"></span>
-<span class="c1">// echo $pwd . &#39;||&#39;;
-</span><span class="c1">// echo $_GET[&#39;pwd&#39;];
-</span><span class="c1">// var_dump($pwd == $_GET[&#39;pwd&#39;]);
-</span><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="nv">$pwd</span> <span class="o">==</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;pwd&#39;</span><span class="p">])</span> <span class="p">{</span>
-    <span class="k">echo</span> <span class="s2">&#34;first&#34;</span><span class="p">;</span>
-    <span class="c1">//NULL == NULL 即可绕过，即保持第一次登录
-</span><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;userLogin&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;login&#39;</span><span class="p">])</span> <span class="p">{</span>
-        <span class="k">echo</span> <span class="s2">&#34;Nice, you get the flag it is&#34;</span> <span class="o">.</span> <span class="nv">$flag</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="k">echo</span> <span class="s2">&#34;Wrong!&#34;</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;userLogin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">create_password</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span> <span class="o">.</span> <span class="nx">rand</span><span class="p">();</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">error_reporting</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="s2">&#34;please input a rand num!&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">create_password</span><span class="p">(</span><span class="nv">$pw_length</span> <span class="o">=</span> <span class="mi">4</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$randpwd</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nv">$pw_length</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$randpwd</span> <span class="o">.=</span> <span class="nx">mt_rand</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="nv">$randpwd</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nx">session_start</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// var_dump($_SESSION);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nv">$time</span> <span class="o">=</span> <span class="nx">time</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nx">mt_srand</span><span class="p">(</span><span class="nv">$time</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$pwd</span> <span class="o">=</span> <span class="nx">create_password</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// var_dump(($_SESSION[&#39;userLogin&#39;] == $_GET[&#39;login&#39;]));
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="c1">// echo $pwd . &#39;||&#39;;
+</span></span></span><span class="line"><span class="cl"><span class="c1">// echo $_GET[&#39;pwd&#39;];
+</span></span></span><span class="line"><span class="cl"><span class="c1">// var_dump($pwd == $_GET[&#39;pwd&#39;]);
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="nv">$pwd</span> <span class="o">==</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;pwd&#39;</span><span class="p">])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">echo</span> <span class="s2">&#34;first&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">//NULL == NULL 即可绕过，即保持第一次登录
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span> <span class="p">(</span><span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;userLogin&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;login&#39;</span><span class="p">])</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s2">&#34;Nice, you get the flag it is&#34;</span> <span class="o">.</span> <span class="nv">$flag</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">echo</span> <span class="s2">&#34;Wrong!&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$_SESSION</span><span class="p">[</span><span class="s1">&#39;userLogin&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">create_password</span><span class="p">(</span><span class="mi">32</span><span class="p">)</span> <span class="o">.</span> <span class="nx">rand</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>Payload：</p>
 <div class="highlight"><div class="chroma">
@@ -1049,21 +1047,21 @@ true == 1
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="k">function</span> <span class="nf">create_password</span><span class="p">(</span><span class="nv">$pw_length</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
-	<span class="nv">$randpwd</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span><span class="p">;</span>
-	<span class="k">for</span> <span class="p">(</span><span class="nv">$i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nv">$pw_length</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> 
-		<span class="nv">$randpwd</span> <span class="o">.=</span> <span class="nx">mt_rand</span><span class="p">();</span>
-	<span class="p">}</span>
-	<span class="k">return</span> <span class="nv">$randpwd</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="nx">mt_srand</span><span class="p">(</span><span class="nx">time</span><span class="p">());</span>
-<span class="nv">$pwd</span> <span class="o">=</span> <span class="nx">create_password</span><span class="p">();</span>
-<span class="nv">$url</span> <span class="o">=</span> <span class="s2">&#34;http://xxx/mt_rand.php?pwd=&#34;</span><span class="o">.</span> <span class="nv">$pwd</span><span class="p">;</span>
-<span class="nx">system</span><span class="p">(</span><span class="s1">&#39;curl&#39;</span><span class="o">.</span> <span class="nv">$url</span><span class="p">);</span>
-<span class="k">echo</span> <span class="nv">$pwd</span><span class="p">;</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">create_password</span><span class="p">(</span><span class="nv">$pw_length</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nv">$randpwd</span> <span class="o">=</span> <span class="s2">&#34;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span> <span class="p">(</span><span class="nv">$i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">&lt;</span> <span class="nv">$pw_length</span><span class="p">;</span> <span class="nv">$i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">		<span class="nv">$randpwd</span> <span class="o">.=</span> <span class="nx">mt_rand</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nv">$randpwd</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nx">mt_srand</span><span class="p">(</span><span class="nx">time</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$pwd</span> <span class="o">=</span> <span class="nx">create_password</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$url</span> <span class="o">=</span> <span class="s2">&#34;http://xxx/mt_rand.php?pwd=&#34;</span><span class="o">.</span> <span class="nv">$pwd</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">system</span><span class="p">(</span><span class="s1">&#39;curl&#39;</span><span class="o">.</span> <span class="nv">$url</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="nv">$pwd</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="5-其它函数">5 其它函数</h2>
 <h3 id="51-运算符优先级">5.1 运算符优先级</h3>
@@ -1094,30 +1092,30 @@ true == 1
 </span><span class="lnt">23
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>  
-<span class="nx">highlight_file</span><span class="p">(</span><span class="nx">__FILE</span><span class="p">);</span>
-<span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
-<span class="nv">$a</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span><span class="p">;</span>
-<span class="nv">$b</span> <span class="o">=</span> <span class="s1">&#39;test2&#39;</span><span class="p">;</span>
-<span class="nv">$a</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">];</span>
-<span class="nv">$b</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">];</span>
-<span class="c1">// 运算符优先级，= 号 &gt; and 号，即($c = is_numeric($a)) and is_numeric($b)
-</span><span class="c1"></span><span class="nv">$c</span> <span class="o">=</span> <span class="nx">is_numeric</span><span class="p">(</span><span class="nv">$a</span><span class="p">)</span> <span class="k">and</span> <span class="nx">is_numeric</span><span class="p">(</span><span class="nv">$b</span><span class="p">);</span>
-<span class="k">if</span><span class="p">(</span><span class="nv">$c</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">is_numeric</span><span class="p">(</span><span class="nv">$a</span><span class="p">))</span> <span class="p">{</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">is_numeric</span><span class="p">(</span><span class="nv">$b</span><span class="p">))</span> <span class="p">{</span>
-            <span class="k">echo</span> <span class="s2">&#34;is_numeric(b)&#34;</span><span class="p">;</span>
-        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-            <span class="k">echo</span> <span class="nv">$flag</span><span class="p">;</span>
-        <span class="p">}</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="k">echo</span> <span class="s2">&#34;is_numeric(a) error&#34;</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="k">print</span> <span class="s2">&#34;is_numeric(a) and is_numeric(b) error !&#34;</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>  
+</span></span><span class="line"><span class="cl"><span class="nx">highlight_file</span><span class="p">(</span><span class="nx">__FILE</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$a</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$b</span> <span class="o">=</span> <span class="s1">&#39;test2&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$a</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$b</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;b&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 运算符优先级，= 号 &gt; and 号，即($c = is_numeric($a)) and is_numeric($b)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nv">$c</span> <span class="o">=</span> <span class="nx">is_numeric</span><span class="p">(</span><span class="nv">$a</span><span class="p">)</span> <span class="k">and</span> <span class="nx">is_numeric</span><span class="p">(</span><span class="nv">$b</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nv">$c</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="nx">is_numeric</span><span class="p">(</span><span class="nv">$a</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="nx">is_numeric</span><span class="p">(</span><span class="nv">$b</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">echo</span> <span class="s2">&#34;is_numeric(b)&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">echo</span> <span class="nv">$flag</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s2">&#34;is_numeric(a) error&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">print</span> <span class="s2">&#34;is_numeric(a) and is_numeric(b) error !&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>payload：<code>url?a=123</code></p>
 <h3 id="52-parase_url">5.2 parase_url</h3>
@@ -1198,44 +1196,42 @@ true == 1
 </span><span class="lnt">31
 </span><span class="lnt">32
 </span><span class="lnt">33
-</span><span class="lnt">34
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span> 
-<span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
-<span class="nv">$number1</span> <span class="o">=</span> <span class="nx">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100000000000000</span><span class="p">);</span>
-<span class="nv">$number2</span> <span class="o">=</span> <span class="nx">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100000000000</span><span class="p">);</span>
-<span class="nv">$number3</span> <span class="o">=</span> <span class="nx">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100000000</span><span class="p">);</span>
-<span class="nv">$url</span> <span class="o">=</span> <span class="nx">urldecode</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;REQUEST_URI&#39;</span><span class="p">]);</span>
-<span class="c1">// 利用 http:/// 使得 parse_url 返回 false，绕过正则表达式。
-</span><span class="c1"></span><span class="nv">$url</span> <span class="o">=</span> <span class="nx">parse_url</span><span class="p">(</span><span class="nv">$url</span><span class="p">,</span> <span class="nx">PHP_URL_QUERY</span><span class="p">);</span>
-<span class="k">if</span> <span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s2">&#34;/_/i&#34;</span><span class="p">,</span> <span class="nv">$url</span><span class="p">))</span> <span class="p">{</span>
-	<span class="k">die</span><span class="p">(</span><span class="s2">&#34;..1&#34;</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="k">if</span> <span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s2">&#34;/0/i&#34;</span><span class="p">,</span> <span class="nv">$url</span><span class="p">))</span> <span class="p">{</span>
-	<span class="k">die</span><span class="p">(</span><span class="s2">&#34;..2&#34;</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="k">if</span> <span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s2">&#34;/\w+/i&#34;</span><span class="p">,</span> <span class="nv">$url</span><span class="p">))</span> <span class="p">{</span>
-	<span class="k">die</span><span class="p">(</span><span class="s2">&#34;..3&#34;</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;_&#39;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;_&#39;</span><span class="p">]))</span> <span class="p">{</span>
-	<span class="nv">$control</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;_&#39;</span><span class="p">];</span>
-	<span class="c1">// in_array()函数漏洞：var_dump(0 == &#34;a&#34;) =&gt; true
-</span><span class="c1"></span>	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$control</span><span class="p">,</span> <span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nv">$number1</span><span class="p">)))</span> <span class="p">{</span>
-		<span class="k">die</span><span class="p">(</span><span class="s2">&#34;fail1&#34;</span><span class="p">);</span>
-	<span class="p">}</span>
-	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$control</span><span class="p">,</span> <span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nv">$number2</span><span class="p">)))</span> <span class="p">{</span>
-		<span class="k">die</span><span class="p">(</span><span class="s2">&#34;fail2&#34;</span><span class="p">);</span>
-	<span class="p">}</span>
-	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$control</span><span class="p">,</span> <span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nv">$number3</span><span class="p">)))</span> <span class="p">{</span>
-		<span class="k">die</span><span class="p">(</span><span class="s2">&#34;fail3&#34;</span><span class="p">);</span>
-	<span class="p">}</span>
-	<span class="k">echo</span> <span class="nv">$flag</span><span class="p">;</span>
-<span class="p">}</span>
-<span class="nx">show_source</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-<span class="cp">?&gt;</span><span class="err">
-</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span> 
+</span></span><span class="line"><span class="cl"><span class="k">include</span> <span class="s2">&#34;flag.php&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$number1</span> <span class="o">=</span> <span class="nx">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100000000000000</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$number2</span> <span class="o">=</span> <span class="nx">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100000000000</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$number3</span> <span class="o">=</span> <span class="nx">rand</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">100000000</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$url</span> <span class="o">=</span> <span class="nx">urldecode</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;REQUEST_URI&#39;</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// 利用 http:/// 使得 parse_url 返回 false，绕过正则表达式。
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nv">$url</span> <span class="o">=</span> <span class="nx">parse_url</span><span class="p">(</span><span class="nv">$url</span><span class="p">,</span> <span class="nx">PHP_URL_QUERY</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s2">&#34;/_/i&#34;</span><span class="p">,</span> <span class="nv">$url</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">die</span><span class="p">(</span><span class="s2">&#34;..1&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s2">&#34;/0/i&#34;</span><span class="p">,</span> <span class="nv">$url</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">die</span><span class="p">(</span><span class="s2">&#34;..2&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s2">&#34;/\w+/i&#34;</span><span class="p">,</span> <span class="nv">$url</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="k">die</span><span class="p">(</span><span class="s2">&#34;..3&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;_&#39;</span><span class="p">])</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;_&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">	<span class="nv">$control</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;_&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">	<span class="c1">// in_array()函数漏洞：var_dump(0 == &#34;a&#34;) =&gt; true
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$control</span><span class="p">,</span> <span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nv">$number1</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">die</span><span class="p">(</span><span class="s2">&#34;fail1&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$control</span><span class="p">,</span> <span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nv">$number2</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">die</span><span class="p">(</span><span class="s2">&#34;fail2&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">in_array</span><span class="p">(</span><span class="nv">$control</span><span class="p">,</span> <span class="p">,</span> <span class="k">array</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nv">$number3</span><span class="p">)))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">		<span class="k">die</span><span class="p">(</span><span class="s2">&#34;fail3&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="k">echo</span> <span class="nv">$flag</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nx">show_source</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>Payload：<code>http:///url?_=a</code> 或 <code>http:///url?.=a</code></p>
 <h2 id="6-escapeshellarg-和-escapeshellcmd">6 escapeshellarg 和 escapeshellcmd</h2>
@@ -1320,50 +1316,50 @@ true == 1
 </span><span class="lnt">43
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-<span class="k">function</span> <span class="nf">waf</span><span class="p">(</span><span class="nv">$a</span><span class="p">){</span>
-    <span class="k">foreach</span><span class="p">(</span><span class="nv">$a</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">){</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s1">&#39;/flag/i&#39;</span><span class="p">,</span><span class="nv">$key</span><span class="p">)){</span>
-            <span class="k">exit</span><span class="p">(</span><span class="s1">&#39;are you a hacker&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="k">foreach</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;_POST&#39;</span><span class="p">,</span> <span class="s1">&#39;_GET&#39;</span><span class="p">,</span> <span class="s1">&#39;_COOKIE&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="nv">$__R</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">if</span><span class="p">(</span><span class="nv">$$__R</span><span class="p">)</span> <span class="p">{</span> 
-        <span class="k">foreach</span><span class="p">(</span><span class="nv">$$__R</span> <span class="k">as</span> <span class="nv">$__k</span> <span class="o">=&gt;</span> <span class="nv">$__v</span><span class="p">)</span> <span class="p">{</span> 
-            <span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$$__k</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nv">$$__k</span> <span class="o">==</span> <span class="nv">$__v</span><span class="p">)</span> <span class="nx">unset</span><span class="p">(</span><span class="nv">$$__k</span><span class="p">);</span> 
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="k">if</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">)</span> <span class="p">{</span> <span class="nx">waf</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">);}</span>
-<span class="k">if</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">)</span> <span class="p">{</span> <span class="nx">waf</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">);</span> <span class="p">}</span>
-<span class="k">if</span><span class="p">(</span><span class="nv">$_COOKIE</span><span class="p">)</span> <span class="p">{</span> <span class="nx">waf</span><span class="p">(</span><span class="nv">$_COOKIE</span><span class="p">);}</span>
-
-<span class="k">if</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">)</span> <span class="nx">extract</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">,</span> <span class="nx">EXTR_SKIP</span><span class="p">);</span>
-<span class="k">if</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">)</span> <span class="nx">extract</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">,</span> <span class="nx">EXTR_SKIP</span><span class="p">);</span>
-<span class="c1">// var_dump($_GET);
-</span><span class="c1">// echo &#39;&lt;br&gt;&lt;/br&gt;&#39;;
-</span><span class="c1"></span><span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;flag&#39;</span><span class="p">])){</span>
-    <span class="k">if</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;flag&#39;</span><span class="p">]</span> <span class="o">===</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;hongri&#39;</span><span class="p">]){</span>
-        <span class="k">exit</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">md5</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;flag&#39;</span><span class="p">]</span> <span class="p">)</span> <span class="o">==</span> <span class="nx">md5</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;hongri&#39;</span><span class="p">])){</span>
-        <span class="nv">$url</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">];</span>
-        <span class="nv">$urlInfo</span> <span class="o">=</span> <span class="nx">parse_url</span><span class="p">(</span><span class="nv">$url</span><span class="p">);</span>
-    <span class="nx">var_dump</span><span class="p">(</span><span class="nv">$urlInfo</span><span class="p">);</span>
-    <span class="c1">// echo &#39;&lt;br&gt;&lt;/br&gt;&#39;;
-</span><span class="c1"></span>        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="s2">&#34;http&#34;</span> <span class="o">===</span> <span class="nx">strtolower</span><span class="p">(</span><span class="nv">$urlInfo</span><span class="p">[</span><span class="s2">&#34;scheme&#34;</span><span class="p">])</span> <span class="o">||</span> <span class="s2">&#34;https&#34;</span><span class="o">===</span><span class="nx">strtolower</span><span class="p">(</span><span class="nv">$urlInfo</span><span class="p">[</span><span class="s2">&#34;scheme&#34;</span><span class="p">]))){</span>
-            <span class="k">die</span><span class="p">(</span> <span class="s2">&#34;scheme error!&#34;</span><span class="p">);</span>
-        <span class="p">}</span>
-        <span class="nv">$url</span> <span class="o">=</span> <span class="nx">escapeshellarg</span><span class="p">(</span><span class="nv">$url</span><span class="p">);</span>
-        <span class="nv">$url</span> <span class="o">=</span> <span class="nx">escapeshellcmd</span><span class="p">(</span><span class="nv">$url</span><span class="p">);</span>
-        <span class="k">echo</span> <span class="nv">$url</span><span class="p">;</span>
-        <span class="nx">system</span><span class="p">(</span><span class="s2">&#34;curl &#34;</span><span class="o">.</span><span class="nv">$url</span><span class="p">);</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">function</span> <span class="nf">waf</span><span class="p">(</span><span class="nv">$a</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    <span class="k">foreach</span><span class="p">(</span><span class="nv">$a</span> <span class="k">as</span> <span class="nv">$key</span> <span class="o">=&gt;</span> <span class="nv">$value</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="nx">preg_match</span><span class="p">(</span><span class="s1">&#39;/flag/i&#39;</span><span class="p">,</span><span class="nv">$key</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">            <span class="k">exit</span><span class="p">(</span><span class="s1">&#39;are you a hacker&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">foreach</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s1">&#39;_POST&#39;</span><span class="p">,</span> <span class="s1">&#39;_GET&#39;</span><span class="p">,</span> <span class="s1">&#39;_COOKIE&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="nv">$__R</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="nv">$$__R</span><span class="p">)</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">        <span class="k">foreach</span><span class="p">(</span><span class="nv">$$__R</span> <span class="k">as</span> <span class="nv">$__k</span> <span class="o">=&gt;</span> <span class="nv">$__v</span><span class="p">)</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">            <span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$$__k</span><span class="p">)</span> <span class="o">&amp;&amp;</span> <span class="nv">$$__k</span> <span class="o">==</span> <span class="nv">$__v</span><span class="p">)</span> <span class="nx">unset</span><span class="p">(</span><span class="nv">$$__k</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">)</span> <span class="p">{</span> <span class="nx">waf</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">);}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">)</span> <span class="p">{</span> <span class="nx">waf</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">);</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nv">$_COOKIE</span><span class="p">)</span> <span class="p">{</span> <span class="nx">waf</span><span class="p">(</span><span class="nv">$_COOKIE</span><span class="p">);}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">)</span> <span class="nx">extract</span><span class="p">(</span><span class="nv">$_POST</span><span class="p">,</span> <span class="nx">EXTR_SKIP</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">)</span> <span class="nx">extract</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">,</span> <span class="nx">EXTR_SKIP</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="c1">// var_dump($_GET);
+</span></span></span><span class="line"><span class="cl"><span class="c1">// echo &#39;&lt;br&gt;&lt;/br&gt;&#39;;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;flag&#39;</span><span class="p">])){</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;flag&#39;</span><span class="p">]</span> <span class="o">===</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;hongri&#39;</span><span class="p">]){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">exit</span><span class="p">(</span><span class="s1">&#39;error&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="nx">md5</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;flag&#39;</span><span class="p">]</span> <span class="p">)</span> <span class="o">==</span> <span class="nx">md5</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;hongri&#39;</span><span class="p">])){</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$url</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;url&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$urlInfo</span> <span class="o">=</span> <span class="nx">parse_url</span><span class="p">(</span><span class="nv">$url</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">var_dump</span><span class="p">(</span><span class="nv">$urlInfo</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">// echo &#39;&lt;br&gt;&lt;/br&gt;&#39;;
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="s2">&#34;http&#34;</span> <span class="o">===</span> <span class="nx">strtolower</span><span class="p">(</span><span class="nv">$urlInfo</span><span class="p">[</span><span class="s2">&#34;scheme&#34;</span><span class="p">])</span> <span class="o">||</span> <span class="s2">&#34;https&#34;</span><span class="o">===</span><span class="nx">strtolower</span><span class="p">(</span><span class="nv">$urlInfo</span><span class="p">[</span><span class="s2">&#34;scheme&#34;</span><span class="p">]))){</span>
+</span></span><span class="line"><span class="cl">            <span class="k">die</span><span class="p">(</span> <span class="s2">&#34;scheme error!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$url</span> <span class="o">=</span> <span class="nx">escapeshellarg</span><span class="p">(</span><span class="nv">$url</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$url</span> <span class="o">=</span> <span class="nx">escapeshellcmd</span><span class="p">(</span><span class="nv">$url</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="nv">$url</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nx">system</span><span class="p">(</span><span class="s2">&#34;curl &#34;</span><span class="o">.</span><span class="nv">$url</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -1401,7 +1397,7 @@ true == 1
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

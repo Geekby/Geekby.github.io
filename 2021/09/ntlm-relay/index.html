@@ -266,8 +266,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">python2</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import hashlib,binascii; print binascii.hexlify(hashlib.new(&#34;md4&#34;, &#34;p@Assword!123&#34;.encode(&#34;utf-16le&#34;)).digest())&#39;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">python2</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;import hashlib,binascii; print binascii.hexlify(hashlib.new(&#34;md4&#34;, &#34;p@Assword!123&#34;.encode(&#34;utf-16le&#34;)).digest())&#39;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如前文所述，NTLM 认证有两种不同的场景。</p>
 <h4 id="131-本地账户">1.3.1 本地账户</h4>
@@ -278,8 +278,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">psexec.exe -i -s regedit.exe
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">psexec.exe -i -s regedit.exe
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -315,14 +315,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_NETLOGON_NETWORK_INFO</span> <span class="p">{</span>
-   <span class="n">NETLOGON_LOGON_IDENTITY_INFO</span> <span class="n">Identity</span><span class="p">;</span>
-   <span class="n">LM_CHALLENGE</span> <span class="n">LmChallenge</span><span class="p">;</span>
-   <span class="n">STRING</span> <span class="n">NtChallengeResponse</span><span class="p">;</span>
-   <span class="n">STRING</span> <span class="n">LmChallengeResponse</span><span class="p">;</span>
- <span class="p">}</span> <span class="n">NETLOGON_NETWORK_INFO</span><span class="p">,</span>
-  <span class="o">*</span><span class="n">PNETLOGON_NETWORK_INFO</span><span class="p">;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="n">_NETLOGON_NETWORK_INFO</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">   <span class="n">NETLOGON_LOGON_IDENTITY_INFO</span> <span class="n">Identity</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">   <span class="n">LM_CHALLENGE</span> <span class="n">LmChallenge</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">   <span class="n">STRING</span> <span class="n">NtChallengeResponse</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">   <span class="n">STRING</span> <span class="n">LmChallengeResponse</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">}</span> <span class="n">NETLOGON_NETWORK_INFO</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="o">*</span><span class="n">PNETLOGON_NETWORK_INFO</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>客户端用户名 (Identity)</li>
@@ -397,8 +397,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="n">python</span> <span class="n">ntlmrelayx</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">t</span> <span class="mf">192.168.56.221</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">python</span> <span class="n">ntlmrelayx</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">t</span> <span class="mf">192.168.56.221</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>网络流量如下：</p>
 <p><img
@@ -491,12 +491,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="nf">GET</span> <span class="nn">/index.html</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
-<span class="n">Host</span><span class="o">:</span> <span class="l">www.geekby.site</span>
-<span class="n">User-Agent</span><span class="o">:</span> <span class="l">Mozilla/5.0</span>
-<span class="n">Accept</span><span class="o">:</span> <span class="l">text/html</span>
-<span class="n">Accept-Language</span><span class="o">:</span> <span class="l">zh-cn</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="nf">GET</span> <span class="nn">/index.html</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span></span><span class="line"><span class="cl"><span class="n">Host</span><span class="o">:</span> <span class="l">www.geekby.site</span>
+</span></span><span class="line"><span class="cl"><span class="n">User-Agent</span><span class="o">:</span> <span class="l">Mozilla/5.0</span>
+</span></span><span class="line"><span class="cl"><span class="n">Accept</span><span class="o">:</span> <span class="l">text/html</span>
+</span></span><span class="line"><span class="cl"><span class="n">Accept-Language</span><span class="o">:</span> <span class="l">zh-cn</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>此示例中的必需元素是 HTTP 动词 (<strong>GET</strong>)、请求页面的路径 (<strong>/index.html</strong>)、协议版本 (<strong>HTTP/1.1</strong>) 或主机标头 (<strong>Host: beta.hackndo.com</strong>)。</p>
 <p>但是可以还添加其它的 HTTP 头。最好的情况是，服务器知道这些标头会存在，并且知道如何处理。最坏的情况是直接忽略。</p>
@@ -541,42 +541,42 @@
 </span><span class="lnt">35
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">&gt; GET /index.html HTTP/1.1
-&gt; Host: www.geekby.site
-&gt; User-Agent: Mozilla/5.0
-&gt; Accept: text/html
-&gt; Accept-Language: en
-
-  &lt; HTTP/1.1 401 Unauthorized
-  &lt; WWW-Authenticate: NTLM
-  &lt; Content type: text/html
-  &lt; Content-Length: 0
-
-&gt; GET /index.html HTTP/1.1
-&gt; Host: www.geekby.site
-&gt; User-Agent: Mozilla/5.0
-&gt; Accept: text/html
-&gt; Accept-Language: zh-ch
-=&gt; Authorization: NTLM &lt;NEGOTIATE in base64&gt;
-
-  &lt; HTTP/1.1 401 Unauthorized
-  =&gt; WWW-Authenticate: NTLM &lt;CHALLENGE in base64&gt;
-  &lt; Content type: text/html
-  &lt; Content-Length: 0
-
-&gt; GET /index.html HTTP/1.1
-&gt; Host: www.geekby.site
-&gt; User-Agent: Mozilla/5.0
-&gt; Accept: text/html
-&gt; Accept-Language: zh-cn
-=&gt; Authorization: NTLM &lt;RESPONSE in base64&gt;
-
-  &lt; HTTP/1,200 OKAY.
-  &lt; WWW-Authenticate: NTLM
-  &lt; Content type: text/html
-  &lt; Content-Length: 0
-  &lt; Connection: close
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&gt; GET /index.html HTTP/1.1
+</span></span><span class="line"><span class="cl">&gt; Host: www.geekby.site
+</span></span><span class="line"><span class="cl">&gt; User-Agent: Mozilla/5.0
+</span></span><span class="line"><span class="cl">&gt; Accept: text/html
+</span></span><span class="line"><span class="cl">&gt; Accept-Language: en
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  &lt; HTTP/1.1 401 Unauthorized
+</span></span><span class="line"><span class="cl">  &lt; WWW-Authenticate: NTLM
+</span></span><span class="line"><span class="cl">  &lt; Content type: text/html
+</span></span><span class="line"><span class="cl">  &lt; Content-Length: 0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&gt; GET /index.html HTTP/1.1
+</span></span><span class="line"><span class="cl">&gt; Host: www.geekby.site
+</span></span><span class="line"><span class="cl">&gt; User-Agent: Mozilla/5.0
+</span></span><span class="line"><span class="cl">&gt; Accept: text/html
+</span></span><span class="line"><span class="cl">&gt; Accept-Language: zh-ch
+</span></span><span class="line"><span class="cl">=&gt; Authorization: NTLM &lt;NEGOTIATE in base64&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  &lt; HTTP/1.1 401 Unauthorized
+</span></span><span class="line"><span class="cl">  =&gt; WWW-Authenticate: NTLM &lt;CHALLENGE in base64&gt;
+</span></span><span class="line"><span class="cl">  &lt; Content type: text/html
+</span></span><span class="line"><span class="cl">  &lt; Content-Length: 0
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&gt; GET /index.html HTTP/1.1
+</span></span><span class="line"><span class="cl">&gt; Host: www.geekby.site
+</span></span><span class="line"><span class="cl">&gt; User-Agent: Mozilla/5.0
+</span></span><span class="line"><span class="cl">&gt; Accept: text/html
+</span></span><span class="line"><span class="cl">&gt; Accept-Language: zh-cn
+</span></span><span class="line"><span class="cl">=&gt; Authorization: NTLM &lt;RESPONSE in base64&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  &lt; HTTP/1,200 OKAY.
+</span></span><span class="line"><span class="cl">  &lt; WWW-Authenticate: NTLM
+</span></span><span class="line"><span class="cl">  &lt; Content type: text/html
+</span></span><span class="line"><span class="cl">  &lt; Content-Length: 0
+</span></span><span class="line"><span class="cl">  &lt; Connection: close
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>只要 TCP 会话处于打开状态，身份验证就会有效。然而，一旦会话关闭，服务器将不再拥有客户端的安全上下文，并且必须进行新的身份验证。由于 Microsoft 的 SSO（单点登录）机制，整个过程对用户是透明的。</p>
 <h3 id="43-smb--ntlm">4.3 SMB &amp; NTLM</h3>
@@ -834,8 +834,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">HMAC_MD5(Session key, NEGOTIATE_MESSAGE + CHALLENGE_MESSAGE + AUTHENTICATE_MESSAGE)
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">HMAC_MD5(Session key, NEGOTIATE_MESSAGE + CHALLENGE_MESSAGE + AUTHENTICATE_MESSAGE)
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>重要的是会话密钥取决于用户的密钥，因此攻击者无法重新计算 MIC。</p>
 <p>下图为 MIC 的样例：</p>
@@ -893,13 +893,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"># For NTLMv1
-Key = MD4(NT Hash)
-
-# For NTLMv2
-NTLMv2 Hash = HMAC_MD5(NT Hash, Uppercase(Username) + UserDomain)
-Key = HMAC_MD5(NTLMv2 Hash, HMAC_MD5(NTLMv2 Hash, NTLMv2 Response + Challenge))
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl"># For NTLMv1
+</span></span><span class="line"><span class="cl">Key = MD4(NT Hash)
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"># For NTLMv2
+</span></span><span class="line"><span class="cl">NTLMv2 Hash = HMAC_MD5(NT Hash, Uppercase(Username) + UserDomain)
+</span></span><span class="line"><span class="cl">Key = HMAC_MD5(NTLMv2 Hash, HMAC_MD5(NTLMv2 Hash, NTLMv2 Response + Challenge))
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>有了这些算法，客户端可以完成 Session Key 的计算。但是，在域环境中，服务器由于没有用户密钥不能独立完成。对于本地身份验证，是没有问题的。</p>
 <p>因此，对于域帐户的身份验证，服务器会让域控制器为它计算 Session Key，然后将其返回。服务器以 <code>NETLOGON_NETWORK_INFO</code> 结构向域控制器发送请求，域控制器以 <code>NETLOGON_VALIDATION_SAM_INFO4</code> 结构响应。如果身份验证成功，会话密钥将在域控制器的此响应中发送。</p>
@@ -1036,7 +1036,7 @@ Key = HMAC_MD5(NTLMv2 Hash, HMAC_MD5(NTLMv2 Hash, NTLMv2 Response + Challenge))
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

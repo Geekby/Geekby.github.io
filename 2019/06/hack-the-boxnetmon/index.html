@@ -27,7 +27,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/www.geekby.site\/2019\/06\/hack-the-boxnetmon\/"
-        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "HTB靶场","wordcount":  740 ,
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "HTB靶场","wordcount":  739 ,
         "url": "https:\/\/www.geekby.site\/2019\/06\/hack-the-boxnetmon\/","datePublished": "2019-06-10T09:25:00+08:00","dateModified": "2019-06-10T09:25:00+08:00","publisher": {
             "@type": "Organization",
             "name": "Geekby","logo": {
@@ -109,7 +109,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Hack The Box —— Netmon</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E9%9D%B6%E5%9C%BA/"><i class="far fa-folder fa-fw"></i>靶场</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-06-10">2019-06-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 740 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-06-10">2019-06-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 739 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -225,107 +225,105 @@ IP: 10.10.10.152</p>
 </span><span class="lnt">94
 </span><span class="lnt">95
 </span><span class="lnt">96
-</span><span class="lnt">97
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">Starting Nmap 7.70 ( https://nmap.org ) at 2019-06-10 19:45 CST
-NSE: Loaded 148 scripts for scanning.
-NSE: Script Pre-scanning.
-Initiating NSE at 19:45
-Completed NSE at 19:45, 0.00s elapsed
-Initiating NSE at 19:45
-Completed NSE at 19:45, 0.00s elapsed
-Initiating Ping Scan at 19:45
-Scanning 10.10.10.152 [4 ports]
-Completed Ping Scan at 19:45, 0.32s elapsed (1 total hosts)
-Initiating Parallel DNS resolution of 1 host. at 19:45
-Completed Parallel DNS resolution of 1 host. at 19:45, 0.03s elapsed
-Initiating SYN Stealth Scan at 19:45
-Scanning 10.10.10.152 [1000 ports]
-Discovered open port 135/tcp on 10.10.10.152
-Discovered open port 139/tcp on 10.10.10.152
-Discovered open port 445/tcp on 10.10.10.152
-Discovered open port 80/tcp on 10.10.10.152
-Discovered open port 21/tcp on 10.10.10.152
-Increasing send delay for 10.10.10.152 from 0 to 5 due to 23 out of 56 dropped probes since last increase.
-Completed SYN Stealth Scan at 19:46, 51.60s elapsed (1000 total ports)
-Initiating Service scan at 19:46
-Scanning 5 services on 10.10.10.152
-Completed Service scan at 19:46, 11.53s elapsed (5 services on 1 host)
-Initiating OS detection (try #1) against 10.10.10.152
-Retrying OS detection (try #2) against 10.10.10.152
-Retrying OS detection (try #3) against 10.10.10.152
-Retrying OS detection (try #4) against 10.10.10.152
-Retrying OS detection (try #5) against 10.10.10.152
-Initiating Traceroute at 19:46
-Completed Traceroute at 19:46, 0.36s elapsed
-Initiating Parallel DNS resolution of 2 hosts. at 19:46
-Completed Parallel DNS resolution of 2 hosts. at 19:46, 0.04s elapsed
-NSE: Script scanning 10.10.10.152.
-Initiating NSE at 19:46
-NSE: [ftp-bounce] PORT response: 501 Server cannot accept argument.
-Completed NSE at 19:46, 11.52s elapsed
-Initiating NSE at 19:46
-Completed NSE at 19:46, 0.00s elapsed
-Nmap scan report for 10.10.10.152
-Host is up (0.30s latency).
-Not shown: 995 closed ports
-PORT    STATE SERVICE      VERSION
-21/tcp  open  ftp          Microsoft ftpd
-| ftp-anon: Anonymous FTP login allowed (FTP code 230)
-| 02-03-19  12:18AM                 1024 .rnd
-| 02-25-19  10:15PM       &lt;DIR&gt;          inetpub
-| 07-16-16  09:18AM       &lt;DIR&gt;          PerfLogs
-| 02-25-19  10:56PM       &lt;DIR&gt;          Program Files
-| 02-03-19  12:28AM       &lt;DIR&gt;          Program Files (x86)
-| 02-03-19  08:08AM       &lt;DIR&gt;          Users
-|_02-25-19  11:49PM       &lt;DIR&gt;          Windows
-| ftp-syst: 
-|_  SYST: Windows_NT
-80/tcp  open  http         Indy httpd 18.1.37.13946 (Paessler PRTG bandwidth monitor)
-|_http-favicon: Unknown favicon MD5: 36B3EF286FA4BEFBB797A0966B456479
-| http-methods: 
-|_  Supported Methods: GET HEAD
-|_http-server-header: PRTG/18.1.37.13946
-| http-title: Welcome | PRTG Network Monitor (NETMON)
-|_Requested resource was /index.htm
-|_http-trane-info: Problem with XML parsing of /evox/about
-135/tcp open  msrpc        Microsoft Windows RPC
-139/tcp open  netbios-ssn  Microsoft Windows netbios-ssn
-445/tcp open  microsoft-ds Microsoft Windows Server 2008 R2 - 2012 microsoft-ds
-
-Service Info: OSs: Windows, Windows Server 2008 R2 - 2012; CPE: cpe:/o:microsoft:windows
-
-Host script results:
-|_clock-skew: mean: 15s, deviation: 0s, median: 15s
-| smb-security-mode: 
-|   account_used: guest
-|   authentication_level: user
-|   challenge_response: supported
-|_  message_signing: disabled (dangerous, but default)
-| smb2-security-mode: 
-|   2.02: 
-|_    Message signing enabled but not required
-| smb2-time: 
-|   date: 2019-06-10 19:47:00
-|_  start_date: 2019-06-10 18:23:19
-
-TRACEROUTE (using port 25/tcp)
-HOP RTT       ADDRESS
-1   341.39 ms 10.10.14.1
-2   341.99 ms 10.10.10.152
-
-NSE: Script Post-scanning.
-Initiating NSE at 19:46
-Completed NSE at 19:46, 0.00s elapsed
-Initiating NSE at 19:46
-Completed NSE at 19:46, 0.00s elapsed
-Read data files from: /usr/local/bin/../share/nmap
-OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
-Nmap done: 1 IP address (1 host up) scanned in 93.12 seconds
-           Raw packets sent: 1275 (60.374KB) | Rcvd: 1540 (139.830KB)
-
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Starting Nmap 7.70 ( https://nmap.org ) at 2019-06-10 19:45 CST
+</span></span><span class="line"><span class="cl">NSE: Loaded 148 scripts for scanning.
+</span></span><span class="line"><span class="cl">NSE: Script Pre-scanning.
+</span></span><span class="line"><span class="cl">Initiating NSE at 19:45
+</span></span><span class="line"><span class="cl">Completed NSE at 19:45, 0.00s elapsed
+</span></span><span class="line"><span class="cl">Initiating NSE at 19:45
+</span></span><span class="line"><span class="cl">Completed NSE at 19:45, 0.00s elapsed
+</span></span><span class="line"><span class="cl">Initiating Ping Scan at 19:45
+</span></span><span class="line"><span class="cl">Scanning 10.10.10.152 [4 ports]
+</span></span><span class="line"><span class="cl">Completed Ping Scan at 19:45, 0.32s elapsed (1 total hosts)
+</span></span><span class="line"><span class="cl">Initiating Parallel DNS resolution of 1 host. at 19:45
+</span></span><span class="line"><span class="cl">Completed Parallel DNS resolution of 1 host. at 19:45, 0.03s elapsed
+</span></span><span class="line"><span class="cl">Initiating SYN Stealth Scan at 19:45
+</span></span><span class="line"><span class="cl">Scanning 10.10.10.152 [1000 ports]
+</span></span><span class="line"><span class="cl">Discovered open port 135/tcp on 10.10.10.152
+</span></span><span class="line"><span class="cl">Discovered open port 139/tcp on 10.10.10.152
+</span></span><span class="line"><span class="cl">Discovered open port 445/tcp on 10.10.10.152
+</span></span><span class="line"><span class="cl">Discovered open port 80/tcp on 10.10.10.152
+</span></span><span class="line"><span class="cl">Discovered open port 21/tcp on 10.10.10.152
+</span></span><span class="line"><span class="cl">Increasing send delay for 10.10.10.152 from 0 to 5 due to 23 out of 56 dropped probes since last increase.
+</span></span><span class="line"><span class="cl">Completed SYN Stealth Scan at 19:46, 51.60s elapsed (1000 total ports)
+</span></span><span class="line"><span class="cl">Initiating Service scan at 19:46
+</span></span><span class="line"><span class="cl">Scanning 5 services on 10.10.10.152
+</span></span><span class="line"><span class="cl">Completed Service scan at 19:46, 11.53s elapsed (5 services on 1 host)
+</span></span><span class="line"><span class="cl">Initiating OS detection (try #1) against 10.10.10.152
+</span></span><span class="line"><span class="cl">Retrying OS detection (try #2) against 10.10.10.152
+</span></span><span class="line"><span class="cl">Retrying OS detection (try #3) against 10.10.10.152
+</span></span><span class="line"><span class="cl">Retrying OS detection (try #4) against 10.10.10.152
+</span></span><span class="line"><span class="cl">Retrying OS detection (try #5) against 10.10.10.152
+</span></span><span class="line"><span class="cl">Initiating Traceroute at 19:46
+</span></span><span class="line"><span class="cl">Completed Traceroute at 19:46, 0.36s elapsed
+</span></span><span class="line"><span class="cl">Initiating Parallel DNS resolution of 2 hosts. at 19:46
+</span></span><span class="line"><span class="cl">Completed Parallel DNS resolution of 2 hosts. at 19:46, 0.04s elapsed
+</span></span><span class="line"><span class="cl">NSE: Script scanning 10.10.10.152.
+</span></span><span class="line"><span class="cl">Initiating NSE at 19:46
+</span></span><span class="line"><span class="cl">NSE: [ftp-bounce] PORT response: 501 Server cannot accept argument.
+</span></span><span class="line"><span class="cl">Completed NSE at 19:46, 11.52s elapsed
+</span></span><span class="line"><span class="cl">Initiating NSE at 19:46
+</span></span><span class="line"><span class="cl">Completed NSE at 19:46, 0.00s elapsed
+</span></span><span class="line"><span class="cl">Nmap scan report for 10.10.10.152
+</span></span><span class="line"><span class="cl">Host is up (0.30s latency).
+</span></span><span class="line"><span class="cl">Not shown: 995 closed ports
+</span></span><span class="line"><span class="cl">PORT    STATE SERVICE      VERSION
+</span></span><span class="line"><span class="cl">21/tcp  open  ftp          Microsoft ftpd
+</span></span><span class="line"><span class="cl">| ftp-anon: Anonymous FTP login allowed (FTP code 230)
+</span></span><span class="line"><span class="cl">| 02-03-19  12:18AM                 1024 .rnd
+</span></span><span class="line"><span class="cl">| 02-25-19  10:15PM       &lt;DIR&gt;          inetpub
+</span></span><span class="line"><span class="cl">| 07-16-16  09:18AM       &lt;DIR&gt;          PerfLogs
+</span></span><span class="line"><span class="cl">| 02-25-19  10:56PM       &lt;DIR&gt;          Program Files
+</span></span><span class="line"><span class="cl">| 02-03-19  12:28AM       &lt;DIR&gt;          Program Files (x86)
+</span></span><span class="line"><span class="cl">| 02-03-19  08:08AM       &lt;DIR&gt;          Users
+</span></span><span class="line"><span class="cl">|_02-25-19  11:49PM       &lt;DIR&gt;          Windows
+</span></span><span class="line"><span class="cl">| ftp-syst: 
+</span></span><span class="line"><span class="cl">|_  SYST: Windows_NT
+</span></span><span class="line"><span class="cl">80/tcp  open  http         Indy httpd 18.1.37.13946 (Paessler PRTG bandwidth monitor)
+</span></span><span class="line"><span class="cl">|_http-favicon: Unknown favicon MD5: 36B3EF286FA4BEFBB797A0966B456479
+</span></span><span class="line"><span class="cl">| http-methods: 
+</span></span><span class="line"><span class="cl">|_  Supported Methods: GET HEAD
+</span></span><span class="line"><span class="cl">|_http-server-header: PRTG/18.1.37.13946
+</span></span><span class="line"><span class="cl">| http-title: Welcome | PRTG Network Monitor (NETMON)
+</span></span><span class="line"><span class="cl">|_Requested resource was /index.htm
+</span></span><span class="line"><span class="cl">|_http-trane-info: Problem with XML parsing of /evox/about
+</span></span><span class="line"><span class="cl">135/tcp open  msrpc        Microsoft Windows RPC
+</span></span><span class="line"><span class="cl">139/tcp open  netbios-ssn  Microsoft Windows netbios-ssn
+</span></span><span class="line"><span class="cl">445/tcp open  microsoft-ds Microsoft Windows Server 2008 R2 - 2012 microsoft-ds
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Service Info: OSs: Windows, Windows Server 2008 R2 - 2012; CPE: cpe:/o:microsoft:windows
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Host script results:
+</span></span><span class="line"><span class="cl">|_clock-skew: mean: 15s, deviation: 0s, median: 15s
+</span></span><span class="line"><span class="cl">| smb-security-mode: 
+</span></span><span class="line"><span class="cl">|   account_used: guest
+</span></span><span class="line"><span class="cl">|   authentication_level: user
+</span></span><span class="line"><span class="cl">|   challenge_response: supported
+</span></span><span class="line"><span class="cl">|_  message_signing: disabled (dangerous, but default)
+</span></span><span class="line"><span class="cl">| smb2-security-mode: 
+</span></span><span class="line"><span class="cl">|   2.02: 
+</span></span><span class="line"><span class="cl">|_    Message signing enabled but not required
+</span></span><span class="line"><span class="cl">| smb2-time: 
+</span></span><span class="line"><span class="cl">|   date: 2019-06-10 19:47:00
+</span></span><span class="line"><span class="cl">|_  start_date: 2019-06-10 18:23:19
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">TRACEROUTE (using port 25/tcp)
+</span></span><span class="line"><span class="cl">HOP RTT       ADDRESS
+</span></span><span class="line"><span class="cl">1   341.39 ms 10.10.14.1
+</span></span><span class="line"><span class="cl">2   341.99 ms 10.10.10.152
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">NSE: Script Post-scanning.
+</span></span><span class="line"><span class="cl">Initiating NSE at 19:46
+</span></span><span class="line"><span class="cl">Completed NSE at 19:46, 0.00s elapsed
+</span></span><span class="line"><span class="cl">Initiating NSE at 19:46
+</span></span><span class="line"><span class="cl">Completed NSE at 19:46, 0.00s elapsed
+</span></span><span class="line"><span class="cl">Read data files from: /usr/local/bin/../share/nmap
+</span></span><span class="line"><span class="cl">OS and Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+</span></span><span class="line"><span class="cl">Nmap done: 1 IP address (1 host up) scanned in 93.12 seconds
+</span></span><span class="line"><span class="cl">           Raw packets sent: 1275 (60.374KB) | Rcvd: 1540 (139.830KB)
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>!<img
         class="lazyload"
@@ -363,10 +361,10 @@ Nmap done: 1 IP address (1 host up) scanned in 93.12 seconds
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat">net stop PRTGCoreService
-<span class="k">copy</span> <span class="s2">&#34;c:\Windows\PRTG Configuration.dat&#34;</span> <span class="s2">&#34;C:\ProgramData\Paessler\PRTG Network Monitor&#34;</span>
-net start PRTGCoreService
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bat" data-lang="bat"><span class="line"><span class="cl">net stop PRTGCoreService
+</span></span><span class="line"><span class="cl"><span class="k">copy</span> <span class="s2">&#34;c:\Windows\PRTG Configuration.dat&#34;</span> <span class="s2">&#34;C:\ProgramData\Paessler\PRTG Network Monitor&#34;</span>
+</span></span><span class="line"><span class="cl">net start PRTGCoreService
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 C:\ProgramData\Paessler\PRTG Network Monitor 目录中发现备份文件 PRTG Configuration.old.bak。</p>
 <p><img
@@ -488,7 +486,7 @@ net start PRTGCoreService
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

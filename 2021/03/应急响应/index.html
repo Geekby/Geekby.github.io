@@ -179,8 +179,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">C:\Users\Administrator\AppData\Roaming\Microsoft\Windows\Start Menu\Programs\Startup
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -206,9 +206,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">HKCU\software\Microsoft\Windows\CurrentVersion\Run
-HKLM\software\Microsoft\Windows\CurrentVersion\Run
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">HKCU\software\Microsoft\Windows\CurrentVersion\Run
+</span></span><span class="line"><span class="cl">HKLM\software\Microsoft\Windows\CurrentVersion\Run
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -267,12 +267,12 @@ HKLM\software\Microsoft\Windows\CurrentVersion\Run
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 查看网络建立连接状态</span>
-netstat -ano <span class="p">|</span> find <span class="s2">&#34;ESTABLISHED&#34;</span>
-<span class="c1"># 查看具体 PID 进程对应的程序</span>
-tasklist /svc <span class="p">|</span> find <span class="s2">&#34;PID&#34;</span>
-taskill /PID pid值 /T 关闭进程
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 查看网络建立连接状态</span>
+</span></span><span class="line"><span class="cl">netstat -ano <span class="p">|</span> find <span class="s2">&#34;ESTABLISHED&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 查看具体 PID 进程对应的程序</span>
+</span></span><span class="line"><span class="cl">tasklist /svc <span class="p">|</span> find <span class="s2">&#34;PID&#34;</span>
+</span></span><span class="line"><span class="cl">taskill /PID pid值 /T 关闭进程
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="122-window-计划任务">1.2.2 Window 计划任务</h4>
 <p>在计算机中可以通过设定计划任务，在固定时间执行固定操作。一般情况下，恶意代码也有可能在固定的时间设置执行。</p>
@@ -360,8 +360,8 @@ taskill /PID pid值 /T 关闭进程
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">netstat -Print network connections, routing tables, interface statistics, masquerade connections, and multicast memberships
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">netstat -Print network connections, routing tables, interface statistics, masquerade connections, and multicast memberships
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>常用命令 <code>netstat -pantl</code> 查看处于 tcp 网络套接字相关信息。</p>
 <p>关闭未知连接 <code>kill -9 PID</code> 即可。</p>
@@ -387,13 +387,13 @@ taskill /PID pid值 /T 关闭进程
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">cat /etc/passwd
-grep <span class="s2">&#34;0:0&#34;</span> /etc/passwd
-ls -l /etc/passwd
-awk -F: <span class="s1">&#39;$3==0 {print $1}&#39;</span> /etc/passwd
-awk -F：<span class="s1">&#39;$2==&#34;！”{print $1}&#39;</span> /etc/shadow 或 
-awk -F：<span class="s1">&#39;length（$2）==0 {print $1}&#39;</span> /etc/shadow
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat /etc/passwd
+</span></span><span class="line"><span class="cl">grep <span class="s2">&#34;0:0&#34;</span> /etc/passwd
+</span></span><span class="line"><span class="cl">ls -l /etc/passwd
+</span></span><span class="line"><span class="cl">awk -F: <span class="s1">&#39;$3==0 {print $1}&#39;</span> /etc/passwd
+</span></span><span class="line"><span class="cl">awk -F：<span class="s1">&#39;$2==&#34;！”{print $1}&#39;</span> /etc/shadow 或 
+</span></span><span class="line"><span class="cl">awk -F：<span class="s1">&#39;length（$2）==0 {print $1}&#39;</span> /etc/shadow
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="25-历史命令分析">2.5 历史命令分析</h3>
 <p>在 Linux 系统中默认会记录之前执行的命令 /root/bash history 文件中。</p>
@@ -411,10 +411,10 @@ awk -F：<span class="s1">&#39;length（$2）==0 {print $1}&#39;</span> /etc/sha
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/locar/new/bin 
-<span class="c1"># 本次终端中有效，重启后无效。</span>
-<span class="c1"># 在 /etc/profile或/home/.bashrc（source ~/.bashrc）才能永久生效。</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">PATH</span><span class="o">=</span><span class="nv">$PATH</span>:/usr/locar/new/bin 
+</span></span><span class="line"><span class="cl"><span class="c1"># 本次终端中有效，重启后无效。</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 在 /etc/profile或/home/.bashrc（source ~/.bashrc）才能永久生效。</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="28-后门自动排查---rkhunter">2.8 后门自动排查 - rkhunter</h3>
 <p>Rkhunter 具有以下功能：</p>
@@ -438,10 +438,10 @@ awk -F：<span class="s1">&#39;length（$2）==0 {print $1}&#39;</span> /etc/sha
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">rkhunter -check-sk
--c,--check <span class="c1"># Check the local system</span>
--sk --skip-keypress <span class="c1"># Don&#39;t wait for a keypress after each test</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">rkhunter -check-sk
+</span></span><span class="line"><span class="cl">-c,--check <span class="c1"># Check the local system</span>
+</span></span><span class="line"><span class="cl">-sk --skip-keypress <span class="c1"># Don&#39;t wait for a keypress after each test</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div></div><div class="post-footer" id="post-footer">
     <div class="post-info">
@@ -471,7 +471,7 @@ awk -F：<span class="s1">&#39;length（$2）==0 {print $1}&#39;</span> /etc/sha
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

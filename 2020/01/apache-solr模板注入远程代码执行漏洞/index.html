@@ -27,7 +27,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/www.geekby.site\/2020\/01\/apache-solr%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E\/"
-        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "漏洞复现, Solr","wordcount":  114 ,
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "漏洞复现, Solr","wordcount":  113 ,
         "url": "https:\/\/www.geekby.site\/2020\/01\/apache-solr%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E\/","datePublished": "2020-01-02T19:39:00+08:00","dateModified": "2020-01-02T19:39:00+08:00","publisher": {
             "@type": "Organization",
             "name": "Geekby","logo": {
@@ -109,7 +109,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">Apache Solr模板注入远程代码执行漏洞</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/"><i class="far fa-folder fa-fw"></i>漏洞复现</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-01-02">2020-01-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 114 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2020-01-02">2020-01-02</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 113 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -138,9 +138,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">docker-compose up -d
-docker-compose <span class="nb">exec</span> solr bash bin/solr create_core -c <span class="nb">test</span> -d example/example-DIH/solr/db
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">docker-compose up -d
+</span></span><span class="line"><span class="cl">docker-compose <span class="nb">exec</span> solr bash bin/solr create_core -c <span class="nb">test</span> -d example/example-DIH/solr/db
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>将 <code>contrib/velocity/lib</code> 中以 <code>velocity</code> 开头的 <code>jar</code>包复制到 <code>server/solr-webapp/webapp/WEB-INF/lib/</code> 下:
 <img
@@ -166,21 +166,19 @@ docker-compose <span class="nb">exec</span> solr bash bin/solr create_core -c <s
 </span><span class="lnt"> 8
 </span><span class="lnt"> 9
 </span><span class="lnt">10
-</span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="p">{</span>
-  <span class="nt">&#34;update-queryresponsewriter&#34;</span><span class="p">:</span> <span class="p">{</span>
-    <span class="nt">&#34;startup&#34;</span><span class="p">:</span> <span class="s2">&#34;lazy&#34;</span><span class="p">,</span>
-    <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;velocity&#34;</span><span class="p">,</span>
-    <span class="nt">&#34;class&#34;</span><span class="p">:</span> <span class="s2">&#34;solr.VelocityResponseWriter&#34;</span><span class="p">,</span>
-    <span class="nt">&#34;template.base.dir&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
-    <span class="nt">&#34;solr.resource.loader.enabled&#34;</span><span class="p">:</span> <span class="s2">&#34;true&#34;</span><span class="p">,</span>
-    <span class="nt">&#34;params.resource.loader.enabled&#34;</span><span class="p">:</span> <span class="s2">&#34;true&#34;</span>
-  <span class="p">}</span>
-<span class="p">}</span>
-
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;update-queryresponsewriter&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;startup&#34;</span><span class="p">:</span> <span class="s2">&#34;lazy&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;velocity&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;class&#34;</span><span class="p">:</span> <span class="s2">&#34;solr.VelocityResponseWriter&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;template.base.dir&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;solr.resource.loader.enabled&#34;</span><span class="p">:</span> <span class="s2">&#34;true&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;params.resource.loader.enabled&#34;</span><span class="p">:</span> <span class="s2">&#34;true&#34;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -249,7 +247,7 @@ docker-compose <span class="nb">exec</span> solr bash bin/solr create_core -c <s
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

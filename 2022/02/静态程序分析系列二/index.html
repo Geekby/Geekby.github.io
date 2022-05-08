@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>静态程序分析系列(二) - Geekby&#39;s Blog</title><meta name="Description" content="静态程序分析(二) - 过程间分析"><meta property="og:title" content="静态程序分析系列(二)" />
+<meta property="og:description" content="静态程序分析(二) - 过程间分析" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%BA%8C/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-02-17T10:23:00+08:00" />
+<meta property="article:modified_time" content="2022-02-17T10:23:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="静态程序分析系列(二)"/>
+<meta name="twitter:description" content="静态程序分析(二) - 过程间分析"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%BA%8C/" /><link rel="prev" href="https://www.geekby.site/2022/02/codeql%E5%9F%BA%E7%A1%80/" /><link rel="next" href="https://www.geekby.site/2022/03/waf-bypass/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "静态程序分析系列(二)",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2022\/02\/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%BA%8C\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "静态程序分析","wordcount":  343 ,
+        "url": "https:\/\/www.geekby.site\/2022\/02\/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%BA%8C\/","datePublished": "2022-02-17T10:23:00+08:00","dateModified": "2022-02-17T10:23:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "静态程序分析(二) - 过程间分析"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">静态程序分析系列(二)</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90/"><i class="far fa-folder fa-fw"></i>静态程序分析</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-02-17">2022-02-17</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 343 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-调用图call-graph-construction">1 调用图：Call Graph Construction</a>
+      <ul>
+        <li><a href="#11-概念">1.1 概念</a></li>
+        <li><a href="#12-分类">1.2 分类</a></li>
+        <li><a href="#13-java-中的方法调用形式">1.3 Java 中的方法调用形式</a></li>
+        <li><a href="#14-virtual-call的方法调度函数-dispatch">1.4 Virtual Call的方法调度函数 (Dispatch)</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-class-hierarchy-analysis-cha">2 Class Hierarchy Analysis (CHA)</a>
+      <ul>
+        <li><a href="#21-定义">2.1 定义</a></li>
+        <li><a href="#22-具体过程">2.2 具体过程</a>
+          <ul>
+            <li><a href="#221-static-call">2.2.1 static call</a></li>
+            <li><a href="#222-special-call">2.2.2 special call</a></li>
+            <li><a href="#223-virtual-call">2.2.3 virtual call</a></li>
+          </ul>
+        </li>
+        <li><a href="#23-cha-的特征">2.3 CHA 的特征</a></li>
+        <li><a href="#24-调用图构建">2.4 调用图构建</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-过程间的控制流图interprocedural-control-flow-graph">3 过程间的控制流图：Interprocedural Control-Flow Graph</a></li>
+    <li><a href="#4-过程间数据流分析interprocedural-data-flow-analysis">4 过程间数据流分析：Interprocedural Data-Flow Analysis</a>
+      <ul>
+        <li><a href="#41-定义与比较">4.1 定义与比较</a></li>
+        <li><a href="#42-示例">4.2 示例</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="静态程序分析二">静态程序分析(二)</h1>
+<h2 id="1-调用图call-graph-construction">1 调用图：Call Graph Construction</h2>
+<h3 id="11-概念">1.1 概念</h3>
+<p>本质上来说，一个调用图就是从调用点到目标方法(callee)的<strong>一系列调用边</strong>。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190937291.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190937291.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190937291.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190937291.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190937291.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190937291.png-water_print" /></p>
+<p>程序调用图是过程间分析的基础，可以用于程序优化、理解、调试、测试等。</p>
+<h3 id="12-分类">1.2 分类</h3>
+<p>Call Graph 有很多种不同的构造方法，本文接下来会讲解两个极端：最准确的和最快速的。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190938687.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190938687.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190938687.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190938687.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190938687.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190938687.png-water_print" /></p>
+<p>调用图构造主要作用于面向对象语言，即以 Java 为代表的，面向对象的语言。一般用到如图四种算法，其中 CHA 是最快的，指针分析 K-CHA 是最准的，本文主要将 CHA，后面的文章会讲指针分析。</p>
+<h3 id="13-java-中的方法调用形式">1.3 Java 中的方法调用形式</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190940655.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190940655.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190940655.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190940655.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190940655.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190940655.png-water_print" /></p>
+<ul>
+<li>Instruction：指 Java 的 <strong>IR 中的指令</strong></li>
+<li>Receiver objects：方法调用对应的实例对象（static 方法调用不需要对应实例）。</li>
+<li>Target methods：表示 <strong>IR 指令到被调用目标方法的映射关系</strong></li>
+<li>Num of target methods：call 对应的可能被调用的目标方法的数量。Virtual call 与动态绑定和多态实现有关，可以对应多个对象下的重写方法。所以 <strong>Virtual call 的可能对象可能超过 1 个</strong>。</li>
+<li>Determinacy：指什么时候能够确定这个 call 的对应方法。Virtual call 与多态有关，只能在运行时决定调用哪一个具体方法的实现。其他两种 call 都和多态机制不相关，编译时刻就可以确定。</li>
+</ul>
+<h3 id="14-virtual-call的方法调度函数-dispatch">1.4 Virtual Call的方法调度函数 (Dispatch)</h3>
+<p>Virtual call 是几种调用中最为复杂的一种，首先重点讨论它。在动态运行时，Virtual call 基于两点决定调用哪个具体方法：</p>
+<ol>
+<li>virtual call 返回内容的接收对象是谁：<strong>c</strong></li>
+<li>调用点处的<strong>方法签名：m</strong>
+<ol>
+<li>Signature = class type + method name + descriptor</li>
+<li>Descriptor = return type + parameter types</li>
+</ol>
+</li>
+</ol>
+<p>本文中的方法签名定义如下：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190945032.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190945032.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190945032.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190945032.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190945032.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190945032.png-water_print" /></p>
+<p>定义 <code>Dispatch(c,m)</code> 函数来描述函数间的分配关系：Java 中 Dispatch 机制决定具体调用哪个方法，c 是类名，m 是一个方法。如果能在本类中找到 name 和 descriptor 一致的方法，则调用 c 的方法，否则到父类中寻找。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190949182.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190949182.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190949182.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190949182.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190949182.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190949182.png-water_print" /></p>
+<p>一个示例：Dispatch 关注 <code>Receiver Object</code> 即 <code>new B()</code> 和方法签名：<code>A.foo()</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190951406.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190951406.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190951406.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190951406.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190951406.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202190951406.png-water_print" /></p>
+<h2 id="2-class-hierarchy-analysis-cha">2 Class Hierarchy Analysis (CHA)</h2>
+<h3 id="21-定义">2.1 定义</h3>
+<ul>
+<li>需要首先获得整个程序的类继承关系图</li>
+<li>通过接收变量的声明类型来解析 Virtual call
+<ul>
+<li>接收变量的例子：在 <code>a.foo()</code> 中，a 就是接收变量</li>
+</ul>
+</li>
+<li>假设一个接收变量能够指向 A 或 A 的所有子类</li>
+</ul>
+<h3 id="22-具体过程">2.2 具体过程</h3>
+<p>下面介绍解析调用的算法。定义 <code>Reslove(cs)</code> 函数为：通过 CHA 算法寻找到某个程序调用点对应的可能的目标函数实体。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191001784.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191001784.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191001784.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191001784.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191001784.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191001784.png-water_print" /></p>
+<ul>
+<li>call site(cs) 就是调用语句，m(method) 就是对应的函数签名。</li>
+<li>T 集合中保存找到的结果</li>
+<li>三个 if 分支分别对应之前提到的 Java 中的三种 call 类型
+<ul>
+<li>Static call</li>
+<li>Special call</li>
+<li>Virtual call</li>
+</ul>
+</li>
+</ul>
+<h4 id="221-static-call">2.2.1 static call</h4>
+<p>静态方法调用前写的是类名，而非静态方法调用前写的是变量或指针名。静态方法调用不需要依赖实例。因此静态方法调用的分析结果十分简单，很明显调用的就是当前类的方法，所以直接加到集合 T 中。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191006532.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191006532.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191006532.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191006532.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191006532.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191006532.png-water_print" /></p>
+<h4 id="222-special-call">2.2.2 special call</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191013525.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191013525.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191013525.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191013525.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191013525.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191013525.png-water_print" /></p>
+<p>special call 主要分为三种情况。上图是第一种使用 super 类的调用方法。<code>foo()</code> 虽然在当前类有定义，但是实际使用的是父类的 <code>foo()</code>，因此需要使用 <code>Dispatch</code> 函数，其中的 <code>foo()</code> 的签名 <code>m</code> 由编译器返回信息可以知道是 <code>B</code> 的，那么获取 <code>foo()</code> 返回值的 <code>c</code> 也指向 <code>B</code>，也就相当于在父类中寻找了。</p>
+<p>为什么处理 <code>super</code> 调用需要使用 <code>Dispatch</code> 函数？在下图所示情况中没有 <code>Dispatch</code> 函数时无法正确解析 <code>C</code> 类的 <code>super.foo</code> 调用：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191016937.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191016937.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191016937.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191016937.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191016937.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191016937.png-water_print" /></p>
+<p>而 <code>Private instance method</code> 和 <code>Constructor</code>（一定由类实现或有默认的构造函数）都会在本类的实现中给出，使用 Dispatch 函数能够将这三种情况都包含，简化代码。</p>
+<h4 id="223-virtual-call">2.2.3 virtual call</h4>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191020986.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191020986.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191020986.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191020986.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191020986.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191020986.png-water_print" /></p>
+<p>最后是处理 virtual call，这也是 CHA 区别于其他算法的主要之处。该算法会对此方法做一个 <code>Dispatch(c,m)</code> 并将 c 的所有子集以及子集的子集全都做一次 <code>Dispatch(c', m)</code>。直观来看，可以分为两步，第一步是对本身做一次 Dispatch，看看当前类中是否有 foo()，没有的话就到父类中递归地找；第二步是在当前类地所有子集中找到所有的 foo()，然后将这些 foo 同第一步找到的 foo 全都加入 T 中。</p>
+<p>一个例子：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191024074.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191024074.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191024074.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191024074.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191024074.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191024074.png-water_print" /></p>
+<p>常用于 IDE 中，给用户提供提示。比如写一小段测试代码，看看 b.foo() 可能会调用哪些函数签名。可以看出 CHA 分析中认为 <code>b.foo()</code> 可能调用 A、C、D 中的 <code>foo() </code>方法。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191031116.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191031116.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191031116.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191031116.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191031116.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191031116.png-water_print" /></p>
+<h3 id="23-cha-的特征">2.3 CHA 的特征</h3>
+<ol>
+<li>只考虑类继承结构，所以<strong>很快</strong></li>
+<li>因为忽略了数据流和控制流的信息，所以<strong>不太准确</strong></li>
+</ol>
+<h3 id="24-调用图构建">2.4 调用图构建</h3>
+<p>分为三步：</p>
+<ol>
+<li>从入口方法进入，一般是 main 方法</li>
+<li>对于每个可到达的方法 m，通过 CHA 算法找出点调用的方法 <code>m'</code> 的调用位置</li>
+<li>对于每个 m (以及新加入的 <code>m'</code>) 都进行第二步，知道不再有新的方法被发现</li>
+</ol>
+<p>构造调用图的算法如下：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191036378.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191036378.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191036378.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191036378.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191036378.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191036378.png-water_print" /></p>
+<ul>
+<li>Worklist 记录需要处理的 methods</li>
+<li>Call graph 是需要构建的目标，是 call edges 的集合</li>
+<li>Reachable method (RM) 是已经处理过的目标，在 Worklist 中取新目标时，不需要再次处理已经在 RM 中的目标</li>
+</ul>
+<p>一个例子：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191043156.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191043156.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191043156.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191043156.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191043156.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191043156.png-water_print" /></p>
+<h2 id="3-过程间的控制流图interprocedural-control-flow-graph">3 过程间的控制流图：Interprocedural Control-Flow Graph</h2>
+<blockquote>
+<p>ICFG = CFGs + <strong>call &amp; return edges</strong></p>
+</blockquote>
+<ul>
+<li>调用边：从调用点 call site 到被调方法 callee 的入口</li>
+<li>返回边：从 callee 的返回语句到 call site 的<strong>下一句</strong></li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191053181.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191053181.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191053181.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191053181.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191053181.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191053181.png-water_print" /></p>
+<p>图示便是过程间的控制流图，ICFG 本质还是 CFG，应该用三地址码构成的 Basic Block 构成，但是此处为了清晰分析，所以还是将 BB 拆开来分析。</p>
+<h2 id="4-过程间数据流分析interprocedural-data-flow-analysis">4 过程间数据流分析：Interprocedural Data-Flow Analysis</h2>
+<h3 id="41-定义与比较">4.1 定义与比较</h3>
+<p>过程间分析多了一个调用返回边及对应的传递函数。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191100147.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191100147.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191100147.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191100147.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191100147.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191100147.png-water_print" /></p>
+<ul>
+<li>Call edge transfer：从调用者向被调用者传递参数</li>
+<li>Return edge transfer：被调用者向调用者传递返回值</li>
+<li>Node transfer：与前面文章提到的传递函数基本一样，但是多了一个性质，对于每次调用 (例如 b=foo(a)) 会将等式左侧的数值 kill 掉，然后在下一步中有返回边传递函数重新赋值。这个操作可以在返回值与原值不同时防止数据冲突。</li>
+</ul>
+<h3 id="42-示例">4.2 示例</h3>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191059364.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191059364.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191059364.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191059364.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191059364.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191059364.png-water_print" /></p>
+<p>这一段存在的必要性？</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191113887.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191113887.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191113887.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191113887.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191113887.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191113887.png-water_print" /></p>
+<p>如果没有这一段，那么变量 a 在分析被调用函数的全程中都需要记住 a 的值，这在程序运行时会浪费大量内存。</p>
+<p>此外，要记得在调用语句处 kill 掉表达式左边的值，否则会造成结果的不准确：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191114828.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191114828.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191114828.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191114828.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191114828.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202202191114828.png-water_print" /></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2022-02-17</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%BA%8C/" data-title="静态程序分析系列(二)"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%BA%8C/" data-title="静态程序分析系列(二)"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%BA%8C/" data-title="静态程序分析系列(二)"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90/">静态程序分析</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2022/02/codeql%E5%9F%BA%E7%A1%80/" class="prev" rel="prev" title="CodeQL 基础"><i class="fas fa-angle-left fa-fw"></i>CodeQL 基础</a>
+            <a href="/2022/03/waf-bypass/" class="next" rel="next" title="WAF Bypass">WAF Bypass<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

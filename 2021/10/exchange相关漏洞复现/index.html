@@ -379,7 +379,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">New-ManagementRoleAssignment</span> <span class="s2">&#34;Import Export_Domain Admins&#34;</span> <span class="n">-Confirm</span><span class="err">:</span><span class="nv">$false</span>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">New-ManagementRoleAssignment</span> <span class="s2">&#34;Import Export_Domain Admins&#34;</span> <span class="n">-Confirm:</span><span class="vm">$false</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
@@ -401,7 +401,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">New-MailboxExportRequest</span> <span class="n">-Mailbox</span> <span class="n">administrator</span> <span class="n">-FilePath</span> <span class="p">\\</span><span class="n">IP</span><span class="p">\</span><span class="n">inetpub</span><span class="p">\</span><span class="n">administrator</span><span class="p">.</span><span class="n">pst</span>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">New-MailboxExportRequest</span> <span class="n">-Mailbox</span> <span class="n">administrator</span> <span class="n">-FilePath</span> <span class="p">\\</span><span class="n">IP</span><span class="p">\</span><span class="n">inetpub</span><span class="p">\</span><span class="n">administrator</span><span class="p">.</span><span class="py">pst</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="242-清理痕迹">2.4.2 清理痕迹</h3>
@@ -497,7 +497,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Invoke-PasswordSprayEWS</span> <span class="n">-ExchHostname</span> <span class="n">exchange</span><span class="p">.</span><span class="n">pentest</span><span class="p">.</span><span class="n">lab</span> <span class="n">-UserList</span> <span class="p">.\</span><span class="n">user</span><span class="p">.</span><span class="n">txt</span> <span class="n">-Password</span> <span class="n">123456</span> <span class="n">-ExchangeVersion</span> <span class="n">Exchange2016</span>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Invoke-PasswordSprayEWS</span> <span class="n">-ExchHostname</span> <span class="n">exchange</span><span class="p">.</span><span class="py">pentest</span><span class="p">.</span><span class="py">lab</span> <span class="n">-UserList</span> <span class="p">.\</span><span class="n">user</span><span class="p">.</span><span class="py">txt</span> <span class="n">-Password</span> <span class="mf">123456</span> <span class="n">-ExchangeVersion</span> <span class="n">Exchange2016</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
@@ -749,7 +749,7 @@
 </span><span class="lnt">11
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">protected</span> <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">ShouldCopyHeaderToServerRequest</span><span class="p">(</span><span class="kt">string</span> <span class="n">headerName</span><span class="p">)</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">protected</span> <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">ShouldCopyHeaderToServerRequest</span><span class="p">(</span><span class="kt">string</span> <span class="n">headerName</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="p">!</span><span class="kt">string</span><span class="p">.</span><span class="n">Equals</span><span class="p">(</span><span class="n">headerName</span><span class="p">,</span> <span class="s">&#34;X-CommonAccessToken&#34;</span><span class="p">,</span> <span class="n">OrdinalIgnoreCase</span><span class="p">)</span> 
 </span></span><span class="line"><span class="cl">      <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="kt">string</span><span class="p">.</span><span class="n">Equals</span><span class="p">(</span><span class="n">headerName</span><span class="p">,</span> <span class="s">&#34;X-IsFromCafe&#34;</span><span class="p">,</span> <span class="n">OrdinalIgnoreCase</span><span class="p">)</span> 
 </span></span><span class="line"><span class="cl">      <span class="p">&amp;&amp;</span> <span class="p">!</span><span class="kt">string</span><span class="p">.</span><span class="n">Equals</span><span class="p">(</span><span class="n">headerName</span><span class="p">,</span> <span class="s">&#34;X-SourceCafeServer&#34;</span><span class="p">,</span> <span class="n">OrdinalIgnoreCase</span><span class="p">)</span> 
@@ -788,7 +788,7 @@
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">protected</span> <span class="n">HttpWebRequest</span> <span class="n">CreateServerRequest</span><span class="p">(</span><span class="n">Uri</span> <span class="n">targetUrl</span><span class="p">)</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">protected</span> <span class="n">HttpWebRequest</span> <span class="n">CreateServerRequest</span><span class="p">(</span><span class="n">Uri</span> <span class="n">targetUrl</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">HttpWebRequest</span> <span class="n">httpWebRequest</span> <span class="p">=</span> <span class="p">(</span><span class="n">HttpWebRequest</span><span class="p">)</span><span class="n">WebRequest</span><span class="p">.</span><span class="n">Create</span><span class="p">(</span><span class="n">targetUrl</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(!</span><span class="n">HttpProxySettings</span><span class="p">.</span><span class="n">UseDefaultWebProxy</span><span class="p">.</span><span class="n">Value</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="n">httpWebRequest</span><span class="p">.</span><span class="n">Proxy</span> <span class="p">=</span> <span class="n">NullWebProxy</span><span class="p">.</span><span class="n">Instance</span><span class="p">;</span>
@@ -853,13 +853,13 @@
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">internal</span> <span class="k">static</span> <span class="kt">string</span> <span class="n">GenerateKerberosAuthHeader</span><span class="p">(</span><span class="kt">string</span> <span class="n">host</span><span class="p">,</span> <span class="kt">int</span> <span class="n">traceContext</span><span class="p">,</span> <span class="k">ref</span> <span class="n">AuthenticationContext</span> <span class="n">authenticationContext</span><span class="p">,</span> <span class="k">ref</span> <span class="kt">string</span> <span class="n">kerberosChallenge</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">byte</span><span class="p">[]</span> <span class="n">array</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">byte</span><span class="p">[]</span> <span class="n">bytes</span> <span class="p">=</span> <span class="k">null</span><span class="p">;</span>
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">internal</span> <span class="kd">static</span> <span class="kt">string</span> <span class="n">GenerateKerberosAuthHeader</span><span class="p">(</span><span class="kt">string</span> <span class="n">host</span><span class="p">,</span> <span class="kt">int</span> <span class="n">traceContext</span><span class="p">,</span> <span class="k">ref</span> <span class="n">AuthenticationContext</span> <span class="n">authenticationContext</span><span class="p">,</span> <span class="k">ref</span> <span class="kt">string</span> <span class="n">kerberosChallenge</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">byte</span><span class="p">[]</span> <span class="n">array</span> <span class="p">=</span> <span class="kc">null</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">byte</span><span class="p">[]</span> <span class="n">bytes</span> <span class="p">=</span> <span class="kc">null</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// ...</span>
 </span></span><span class="line"><span class="cl">    <span class="n">authenticationContext</span> <span class="p">=</span> <span class="k">new</span> <span class="n">AuthenticationContext</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">string</span> <span class="n">text</span> <span class="p">=</span> <span class="s">&#34;HTTP/&#34;</span> <span class="p">+</span> <span class="n">host</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">authenticationContext</span><span class="p">.</span><span class="n">InitializeForOutboundNegotiate</span><span class="p">(</span><span class="n">AuthenticationMechanism</span><span class="p">.</span><span class="n">Kerberos</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="k">null</span><span class="p">,</span> <span class="k">null</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">authenticationContext</span><span class="p">.</span><span class="n">InitializeForOutboundNegotiate</span><span class="p">(</span><span class="n">AuthenticationMechanism</span><span class="p">.</span><span class="n">Kerberos</span><span class="p">,</span> <span class="n">text</span><span class="p">,</span> <span class="kc">null</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="n">SecurityStatus</span> <span class="n">securityStatus</span> <span class="p">=</span> <span class="n">authenticationContext</span><span class="p">.</span><span class="n">NegotiateSecurityContext</span><span class="p">(</span><span class="n">inputBuffer</span><span class="p">,</span> <span class="k">out</span> <span class="n">bytes</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">// ...</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">string</span> <span class="n">@string</span> <span class="p">=</span> <span class="n">Encoding</span><span class="p">.</span><span class="n">ASCII</span><span class="p">.</span><span class="n">GetString</span><span class="p">(</span><span class="n">bytes</span><span class="p">);</span>
@@ -922,23 +922,23 @@
 </span><span class="lnt">42
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">private</span> <span class="k">void</span> <span class="n">OnAuthenticateRequest</span><span class="p">(</span><span class="kt">object</span> <span class="n">source</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">private</span> <span class="k">void</span> <span class="n">OnAuthenticateRequest</span><span class="p">(</span><span class="kt">object</span> <span class="n">source</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">args</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">httpContext</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">IsAuthenticated</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="p">.</span><span class="n">ProcessRequest</span><span class="p">(</span><span class="n">httpContext</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">private</span> <span class="k">void</span> <span class="n">ProcessRequest</span><span class="p">(</span><span class="n">HttpContext</span> <span class="n">httpContext</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="kd">private</span> <span class="k">void</span> <span class="n">ProcessRequest</span><span class="p">(</span><span class="n">HttpContext</span> <span class="n">httpContext</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">CommonAccessToken</span> <span class="n">token</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">TryGetCommonAccessToken</span><span class="p">(</span><span class="n">httpContext</span><span class="p">,</span> <span class="k">out</span> <span class="n">token</span><span class="p">))</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// ...</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">private</span> <span class="kt">bool</span> <span class="n">TryGetCommonAccessToken</span><span class="p">(</span><span class="n">HttpContext</span> <span class="n">httpContext</span><span class="p">,</span> <span class="k">out</span> <span class="n">CommonAccessToken</span> <span class="n">token</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="kd">private</span> <span class="kt">bool</span> <span class="n">TryGetCommonAccessToken</span><span class="p">(</span><span class="n">HttpContext</span> <span class="n">httpContext</span><span class="p">,</span> <span class="k">out</span> <span class="n">CommonAccessToken</span> <span class="n">token</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">string</span> <span class="n">text</span> <span class="p">=</span> <span class="n">httpContext</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">Headers</span><span class="p">[</span><span class="s">&#34;X-CommonAccessToken&#34;</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="n">text</span><span class="p">))</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="k">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="kc">false</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        
 </span></span><span class="line"><span class="cl">    <span class="kt">bool</span> <span class="n">flag</span><span class="p">;</span>
@@ -954,12 +954,12 @@
 </span></span><span class="line"><span class="cl">    <span class="c1">//...</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">private</span> <span class="kt">bool</span> <span class="n">IsTokenSerializationAllowed</span><span class="p">(</span><span class="n">WindowsIdentity</span> <span class="n">windowsIdentity</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="kd">private</span> <span class="kt">bool</span> <span class="n">IsTokenSerializationAllowed</span><span class="p">(</span><span class="n">WindowsIdentity</span> <span class="n">windowsIdentity</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">   <span class="n">flag2</span> <span class="p">=</span> <span class="n">LocalServer</span><span class="p">.</span><span class="n">AllowsTokenSerializationBy</span><span class="p">(</span><span class="n">clientSecurityContext</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">   <span class="k">return</span> <span class="n">flag2</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">private</span> <span class="k">static</span> <span class="kt">bool</span> <span class="n">AllowsTokenSerializationBy</span><span class="p">(</span><span class="n">ClientSecurityContext</span> <span class="n">clientContext</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="kd">private</span> <span class="kd">static</span> <span class="kt">bool</span> <span class="n">AllowsTokenSerializationBy</span><span class="p">(</span><span class="n">ClientSecurityContext</span> <span class="n">clientContext</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="n">LocalServer</span><span class="p">.</span><span class="n">HasExtendedRightOnServer</span><span class="p">(</span><span class="n">clientContext</span><span class="p">,</span> 
 </span></span><span class="line"><span class="cl">        <span class="n">WellKnownGuid</span><span class="p">.</span><span class="n">TokenSerializationRightGuid</span><span class="p">);</span>  <span class="c1">// ms-Exch-EPI-Token-Serialization</span>
 </span></span><span class="line"><span class="cl">
@@ -1091,40 +1091,40 @@
 </span><span class="lnt">34
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">public</span> <span class="n">IAsyncResult</span> <span class="n">BeginProcessRequest</span><span class="p">(</span><span class="n">HttpContext</span> <span class="n">context</span><span class="p">,</span> <span class="n">AsyncCallback</span> <span class="n">cb</span><span class="p">,</span> <span class="kt">object</span> <span class="n">extraData</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">    <span class="k">private</span> <span class="k">void</span> <span class="n">InternalBeginCalculateTargetBackEnd</span><span class="p">(</span><span class="k">out</span> <span class="n">AnchorMailbox</span> <span class="n">anchorMailbox</span><span class="p">)</span>
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">IAsyncResult</span> <span class="n">BeginProcessRequest</span><span class="p">(</span><span class="n">HttpContext</span> <span class="n">context</span><span class="p">,</span> <span class="n">AsyncCallback</span> <span class="n">cb</span><span class="p">,</span> <span class="kt">object</span> <span class="n">extraData</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">private</span> <span class="k">void</span> <span class="n">InternalBeginCalculateTargetBackEnd</span><span class="p">(</span><span class="k">out</span> <span class="n">AnchorMailbox</span> <span class="n">anchorMailbox</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="k">protected</span> <span class="k">override</span> <span class="n">AnchorMailbox</span> <span class="n">ResolveAnchorMailbox</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">            <span class="k">public</span> <span class="n">ServerInfoAnchorMailbox</span><span class="p">(</span><span class="n">BackEndServer</span> <span class="n">backendServer</span><span class="p">,</span> <span class="n">IRequestContext</span> <span class="n">requestContext</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                <span class="k">public</span> <span class="k">static</span> <span class="n">BackEndServer</span> <span class="n">FromString</span><span class="p">(</span><span class="kt">string</span> <span class="n">input</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">protected</span> <span class="kd">override</span> <span class="n">AnchorMailbox</span> <span class="n">ResolveAnchorMailbox</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">            <span class="kd">public</span> <span class="n">ServerInfoAnchorMailbox</span><span class="p">(</span><span class="n">BackEndServer</span> <span class="n">backendServer</span><span class="p">,</span> <span class="n">IRequestContext</span> <span class="n">requestContext</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="kd">public</span> <span class="kd">static</span> <span class="n">BackEndServer</span> <span class="n">FromString</span><span class="p">(</span><span class="kt">string</span> <span class="n">input</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="k">private</span> <span class="k">void</span> <span class="n">OnCalculateTargetBackEndCompleted</span><span class="p">(</span><span class="kt">object</span> <span class="n">extraData</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="k">private</span> <span class="k">void</span> <span class="n">InternalOnCalculateTargetBackEndCompleted</span><span class="p">(</span><span class="n">TargetCalculationCallbackBeacon</span> <span class="n">beacon</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                <span class="k">private</span> <span class="k">void</span> <span class="n">BeginValidateBackendServerCacheOrProxyOrRecalculate</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">                    <span class="k">protected</span> <span class="k">void</span> <span class="n">BeginProxyRequestOrRecalculate</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">                        <span class="k">protected</span> <span class="k">void</span> <span class="n">BeginProxyRequest</span><span class="p">(</span><span class="kt">object</span> <span class="n">extraData</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">private</span> <span class="k">void</span> <span class="n">OnCalculateTargetBackEndCompleted</span><span class="p">(</span><span class="kt">object</span> <span class="n">extraData</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="kd">private</span> <span class="k">void</span> <span class="n">InternalOnCalculateTargetBackEndCompleted</span><span class="p">(</span><span class="n">TargetCalculationCallbackBeacon</span> <span class="n">beacon</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="kd">private</span> <span class="k">void</span> <span class="n">BeginValidateBackendServerCacheOrProxyOrRecalculate</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                    <span class="kd">protected</span> <span class="k">void</span> <span class="n">BeginProxyRequestOrRecalculate</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                        <span class="kd">protected</span> <span class="k">void</span> <span class="n">BeginProxyRequest</span><span class="p">(</span><span class="kt">object</span> <span class="n">extraData</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">                            <span class="k">protected</span> <span class="k">virtual</span> <span class="n">Uri</span> <span class="n">GetTargetBackEndServerUrl</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                            <span class="kd">protected</span> <span class="k">virtual</span> <span class="n">Uri</span> <span class="n">GetTargetBackEndServerUrl</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">                            <span class="k">protected</span> <span class="n">HttpWebRequest</span> <span class="n">CreateServerRequest</span><span class="p">(</span><span class="n">Uri</span> <span class="n">targetUrl</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                                <span class="k">protected</span> <span class="k">void</span> <span class="n">PrepareServerRequest</span><span class="p">(</span><span class="n">HttpWebRequest</span> <span class="n">serverRequest</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                            <span class="kd">protected</span> <span class="n">HttpWebRequest</span> <span class="n">CreateServerRequest</span><span class="p">(</span><span class="n">Uri</span> <span class="n">targetUrl</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                                <span class="kd">protected</span> <span class="k">void</span> <span class="n">PrepareServerRequest</span><span class="p">(</span><span class="n">HttpWebRequest</span> <span class="n">serverRequest</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">                                        <span class="k">internal</span> <span class="k">static</span> <span class="kt">string</span> <span class="n">KerberosUtilities</span><span class="p">.</span><span class="n">GenerateKerberosAuthHeader</span><span class="p">(...)</span>
+</span></span><span class="line"><span class="cl">                                        <span class="kd">internal</span> <span class="kd">static</span> <span class="kt">string</span> <span class="n">KerberosUtilities</span><span class="p">.</span><span class="n">GenerateKerberosAuthHeader</span><span class="p">(...)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">                                		<span class="k">private</span> <span class="k">void</span> <span class="n">CopyHeadersToServerRequest</span><span class="p">(</span><span class="n">HttpWebRequest</span> <span class="n">destination</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                                            <span class="k">protected</span> <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">ShouldCopyHeaderToServerRequest</span><span class="p">(</span><span class="kt">string</span> <span class="n">headerName</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                                		<span class="kd">private</span> <span class="k">void</span> <span class="n">CopyHeadersToServerRequest</span><span class="p">(</span><span class="n">HttpWebRequest</span> <span class="n">destination</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                                            <span class="kd">protected</span> <span class="k">virtual</span> <span class="kt">bool</span> <span class="n">ShouldCopyHeaderToServerRequest</span><span class="p">(</span><span class="kt">string</span> <span class="n">headerName</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">                            			<span class="k">private</span> <span class="k">void</span> <span class="n">CopyCookiesToServerRequest</span><span class="p">(</span><span class="n">HttpWebRequest</span> <span class="n">serverRequest</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                            			<span class="kd">private</span> <span class="k">void</span> <span class="n">CopyCookiesToServerRequest</span><span class="p">(</span><span class="n">HttpWebRequest</span> <span class="n">serverRequest</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">                            			<span class="k">protected</span> <span class="k">virtual</span> <span class="k">void</span> <span class="n">SetProtocolSpecificServerRequestParameters</span><span class="p">(</span><span class="n">HttpWebRequest</span> <span class="n">serverRequest</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                            			<span class="k">protected</span> <span class="k">virtual</span> <span class="k">void</span> <span class="n">AddProtocolSpecificHeadersToServerRequest</span><span class="p">(</span><span class="n">WebHeaderCollection</span> <span class="n">headers</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                            			<span class="kd">protected</span> <span class="k">virtual</span> <span class="k">void</span> <span class="n">SetProtocolSpecificServerRequestParameters</span><span class="p">(</span><span class="n">HttpWebRequest</span> <span class="n">serverRequest</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                            			<span class="kd">protected</span> <span class="k">virtual</span> <span class="k">void</span> <span class="n">AddProtocolSpecificHeadersToServerRequest</span><span class="p">(</span><span class="n">WebHeaderCollection</span> <span class="n">headers</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">                            <span class="k">private</span> <span class="k">void</span> <span class="n">BeginGetServerResponse</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">                                <span class="k">private</span> <span class="k">static</span> <span class="k">void</span> <span class="n">ResponseReadyCallback</span><span class="p">(</span><span class="n">IAsyncResult</span> <span class="n">result</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                                    <span class="k">private</span> <span class="k">void</span> <span class="n">OnResponseReady</span><span class="p">(</span><span class="kt">object</span> <span class="n">extraData</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                                        <span class="k">private</span> <span class="k">void</span> <span class="n">ProcessResponse</span><span class="p">(</span><span class="n">WebException</span> <span class="n">exception</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                                            <span class="k">private</span> <span class="k">void</span> <span class="n">CopyHeadersToClientResponse</span><span class="p">()</span>
-</span></span><span class="line"><span class="cl">                                            <span class="k">private</span> <span class="k">void</span> <span class="n">CopyCookiesToClientResponse</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                            <span class="kd">private</span> <span class="k">void</span> <span class="n">BeginGetServerResponse</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                                <span class="kd">private</span> <span class="kd">static</span> <span class="k">void</span> <span class="n">ResponseReadyCallback</span><span class="p">(</span><span class="n">IAsyncResult</span> <span class="n">result</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                                    <span class="kd">private</span> <span class="k">void</span> <span class="n">OnResponseReady</span><span class="p">(</span><span class="kt">object</span> <span class="n">extraData</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                                        <span class="kd">private</span> <span class="k">void</span> <span class="n">ProcessResponse</span><span class="p">(</span><span class="n">WebException</span> <span class="n">exception</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                                            <span class="kd">private</span> <span class="k">void</span> <span class="n">CopyHeadersToClientResponse</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">                                            <span class="kd">private</span> <span class="k">void</span> <span class="n">CopyCookiesToClientResponse</span><span class="p">()</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p><strong>ResolveAnchorMailbox</strong></p>
@@ -1148,9 +1148,9 @@
 </span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">protected</span> <span class="k">override</span> <span class="n">AnchorMailbox</span> <span class="n">ResolveAnchorMailbox</span><span class="p">()</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">protected</span> <span class="kd">override</span> <span class="n">AnchorMailbox</span> <span class="n">ResolveAnchorMailbox</span><span class="p">()</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="n">HttpCookie</span> <span class="n">httpCookie</span> <span class="p">=</span> <span class="k">base</span><span class="p">.</span><span class="n">ClientRequest</span><span class="p">.</span><span class="n">Cookies</span><span class="p">[</span><span class="s">&#34;X-AnonResource-Backend&#34;</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">httpCookie</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">httpCookie</span> <span class="p">!=</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">this</span><span class="p">.</span><span class="n">savedBackendServer</span> <span class="p">=</span> <span class="n">httpCookie</span><span class="p">.</span><span class="n">Value</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(!</span><span class="kt">string</span><span class="p">.</span><span class="n">IsNullOrEmpty</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">savedBackendServer</span><span class="p">))</span> <span class="p">{</span>
@@ -1193,7 +1193,7 @@
 </span><span class="lnt">4
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">protected</span> <span class="k">virtual</span> <span class="n">UriBuilder</span> <span class="n">GetClientUrlForProxy</span><span class="p">()</span>
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">protected</span> <span class="k">virtual</span> <span class="n">UriBuilder</span> <span class="n">GetClientUrlForProxy</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="k">new</span> <span class="n">UriBuilder</span><span class="p">(</span><span class="k">this</span><span class="p">.</span><span class="n">ClientRequest</span><span class="p">.</span><span class="n">Url</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
@@ -1222,12 +1222,12 @@
 </span><span class="lnt">18
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">public</span> <span class="kt">string</span> <span class="n">Host</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kt">string</span> <span class="n">Host</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">get</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">m_host</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="k">set</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="k">value</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="k">value</span> <span class="p">==</span> <span class="kc">null</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="k">value</span> <span class="p">=</span> <span class="n">String</span><span class="p">.</span><span class="n">Empty</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="n">m_host</span> <span class="p">=</span> <span class="k">value</span><span class="p">;</span>
@@ -1237,7 +1237,7 @@
 </span></span><span class="line"><span class="cl">            <span class="k">if</span> <span class="p">(</span><span class="n">m_host</span><span class="p">[</span><span class="m">0</span><span class="p">]</span> <span class="p">!=</span> <span class="sc">&#39;[&#39;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">                <span class="n">m_host</span> <span class="p">=</span> <span class="s">&#34;[&#34;</span> <span class="p">+</span> <span class="n">m_host</span> <span class="p">+</span> <span class="s">&#34;]&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="n">m_changed</span> <span class="p">=</span> <span class="k">true</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">m_changed</span> <span class="p">=</span> <span class="kc">true</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
@@ -1257,12 +1257,12 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="k">public</span> <span class="n">Uri</span> <span class="n">Uri</span> <span class="p">{</span>
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="n">Uri</span> <span class="n">Uri</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">    <span class="k">get</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">m_changed</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">            <span class="n">m_uri</span> <span class="p">=</span> <span class="k">new</span> <span class="n">Uri</span><span class="p">(</span><span class="n">ToString</span><span class="p">());</span>
 </span></span><span class="line"><span class="cl">            <span class="n">SetFieldsFromUri</span><span class="p">(</span><span class="n">m_uri</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">            <span class="n">m_changed</span> <span class="p">=</span> <span class="k">false</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">            <span class="n">m_changed</span> <span class="p">=</span> <span class="kc">false</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">m_uri</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
@@ -1308,13 +1308,13 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="c1">// Microsoft.Exchange.Security.Authentication</span>
-</span></span><span class="line"><span class="cl"><span class="k">public</span> <span class="k">class</span> <span class="nc">BackendRehydrationModule</span> <span class="p">:</span> <span class="n">IHttpModule</span>
-</span></span><span class="line"><span class="cl">    <span class="k">public</span> <span class="k">void</span> <span class="n">Init</span><span class="p">(</span><span class="n">HttpApplication</span> <span class="n">application</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="k">private</span> <span class="k">void</span> <span class="n">OnAuthenticateRequest</span><span class="p">(</span><span class="kt">object</span> <span class="n">source</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">args</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="k">private</span> <span class="k">void</span> <span class="n">ProcessRequest</span><span class="p">(</span><span class="n">HttpContext</span> <span class="n">httpContext</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">                <span class="k">private</span> <span class="kt">bool</span> <span class="n">TryGetCommonAccessToken</span><span class="p">(</span><span class="n">HttpContext</span> <span class="n">httpContext</span><span class="p">,</span> <span class="n">Stopwatch</span> <span class="n">stopwatch</span><span class="p">,</span> <span class="k">out</span> <span class="n">CommonAccessToken</span> <span class="n">token</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">BackendRehydrationModule</span> <span class="p">:</span> <span class="n">IHttpModule</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="k">void</span> <span class="n">Init</span><span class="p">(</span><span class="n">HttpApplication</span> <span class="n">application</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="kd">private</span> <span class="k">void</span> <span class="n">OnAuthenticateRequest</span><span class="p">(</span><span class="kt">object</span> <span class="n">source</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="kd">private</span> <span class="k">void</span> <span class="n">ProcessRequest</span><span class="p">(</span><span class="n">HttpContext</span> <span class="n">httpContext</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                <span class="kd">private</span> <span class="kt">bool</span> <span class="n">TryGetCommonAccessToken</span><span class="p">(</span><span class="n">HttpContext</span> <span class="n">httpContext</span><span class="p">,</span> <span class="n">Stopwatch</span> <span class="n">stopwatch</span><span class="p">,</span> <span class="k">out</span> <span class="n">CommonAccessToken</span> <span class="n">token</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">                    <span class="k">private</span> <span class="kt">bool</span> <span class="n">IsTokenSerializationAllowed</span><span class="p">(</span><span class="n">WindowsIdentity</span> <span class="n">windowsIdentity</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">                    <span class="kd">private</span> <span class="kt">bool</span> <span class="n">IsTokenSerializationAllowed</span><span class="p">(</span><span class="n">WindowsIdentity</span> <span class="n">windowsIdentity</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">            			<span class="k">using</span> <span class="p">(</span><span class="n">ClientSecurityContext</span> <span class="n">clientSecurityContext</span> <span class="p">=</span> <span class="k">new</span> <span class="n">ClientSecurityContext</span><span class="p">(</span><span class="n">windowsIdentity</span><span class="p">))</span>
 </span></span><span class="line"><span class="cl">            			<span class="p">{</span>
 </span></span><span class="line"><span class="cl">            				<span class="n">flag2</span> <span class="p">=</span> <span class="n">LocalServer</span><span class="p">.</span><span class="n">AllowsTokenSerializationBy</span><span class="p">(</span><span class="n">clientSecurityContext</span><span class="p">);</span>
@@ -1621,7 +1621,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

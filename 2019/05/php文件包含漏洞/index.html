@@ -27,7 +27,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/www.geekby.site\/2019\/05\/php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E\/"
-        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "常用, CTF","wordcount":  766 ,
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "常用, CTF","wordcount":  767 ,
         "url": "https:\/\/www.geekby.site\/2019\/05\/php%E6%96%87%E4%BB%B6%E5%8C%85%E5%90%AB%E6%BC%8F%E6%B4%9E\/","datePublished": "2019-05-30T16:20:00+08:00","dateModified": "2019-05-30T16:20:00+08:00","publisher": {
             "@type": "Organization",
             "name": "Geekby","logo": {
@@ -109,7 +109,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">PHP 文件包含漏洞</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E5%B8%B8%E7%94%A8/"><i class="far fa-folder fa-fw"></i>常用</a>&nbsp;<a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"><i class="far fa-folder fa-fw"></i>代码审计</a>&nbsp;<a href="/categories/ctf/"><i class="far fa-folder fa-fw"></i>CTF</a>&nbsp;<a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-05-30">2019-05-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 766 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2019-05-30">2019-05-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 767 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 4 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -348,18 +348,18 @@ php://filter 目标使用以下的参数作为它路径的一部分。复合过�
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;form action=&#34;upload.php&#34; method=&#34;POST&#34; enctype=&#34;multipart/form-data&#34;&gt;
-</span></span><span class="line"><span class="cl"> &lt;input type=&#34;hidden&#34; name=&#34;&lt;?php echo ini_get(&#34;session.upload_progress.name&#34;); ?&gt;&#34; value=&#34;iamnotorange&#34; /&gt;
-</span></span><span class="line"><span class="cl"> &lt;input type=&#34;file&#34; name=&#34;file1&#34; /&gt;
-</span></span><span class="line"><span class="cl"> &lt;input type=&#34;file&#34; name=&#34;file2&#34; /&gt;
-</span></span><span class="line"><span class="cl"> &lt;input type=&#34;submit&#34; /&gt;
-</span></span><span class="line"><span class="cl">&lt;/form&gt;
-</span></span><span class="line"><span class="cl">&lt;?php
-</span></span><span class="line"><span class="cl">session_start();
-</span></span><span class="line"><span class="cl">$name = ini_get(&#39;session.upload_progress.name&#39;);
-</span></span><span class="line"><span class="cl">$key = ini_get(&#39;session.upload_progress.prefix&#39;) . $_POST[$name];
-</span></span><span class="line"><span class="cl">var_dump($_SESSION[$key]); 
-</span></span><span class="line"><span class="cl">include &#39;/var/lib/php/sessions/sess_iamnotorange&#39;;
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">form</span> <span class="n">action</span><span class="o">=</span><span class="s2">&#34;upload.php&#34;</span> <span class="n">method</span><span class="o">=</span><span class="s2">&#34;POST&#34;</span> <span class="n">enctype</span><span class="o">=</span><span class="s2">&#34;multipart/form-data&#34;</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">input</span> <span class="n">type</span><span class="o">=</span><span class="s2">&#34;hidden&#34;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&#34;&lt;?php echo ini_get(&#34;</span><span class="n">session</span><span class="o">.</span><span class="n">upload_progress</span><span class="o">.</span><span class="n">name</span><span class="s2">&#34;); ?&gt;&#34;</span> <span class="n">value</span><span class="o">=</span><span class="s2">&#34;iamnotorange&#34;</span> <span class="o">/&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">input</span> <span class="n">type</span><span class="o">=</span><span class="s2">&#34;file&#34;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&#34;file1&#34;</span> <span class="o">/&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">input</span> <span class="n">type</span><span class="o">=</span><span class="s2">&#34;file&#34;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&#34;file2&#34;</span> <span class="o">/&gt;</span>
+</span></span><span class="line"><span class="cl"> <span class="o">&lt;</span><span class="n">input</span> <span class="n">type</span><span class="o">=</span><span class="s2">&#34;submit&#34;</span> <span class="o">/&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">form</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="err">?</span><span class="n">php</span>
+</span></span><span class="line"><span class="cl"><span class="n">session_start</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl"><span class="o">$</span><span class="n">name</span> <span class="o">=</span> <span class="n">ini_get</span><span class="p">(</span><span class="s1">&#39;session.upload_progress.name&#39;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="o">$</span><span class="n">key</span> <span class="o">=</span> <span class="n">ini_get</span><span class="p">(</span><span class="s1">&#39;session.upload_progress.prefix&#39;</span><span class="p">)</span> <span class="o">.</span> <span class="o">$</span><span class="n">_POST</span><span class="p">[</span><span class="o">$</span><span class="n">name</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="n">var_dump</span><span class="p">(</span><span class="o">$</span><span class="n">_SESSION</span><span class="p">[</span><span class="o">$</span><span class="n">key</span><span class="p">]);</span> 
+</span></span><span class="line"><span class="cl"><span class="n">include</span> <span class="s1">&#39;/var/lib/php/sessions/sess_iamnotorange&#39;</span><span class="p">;</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>然后开个多线程跑几次，就能看到通过条件竞争读出的文件内容：</p>
@@ -673,7 +673,7 @@ php://filter 目标使用以下的参数作为它路径的一部分。复合过�
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

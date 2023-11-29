@@ -489,14 +489,14 @@
 </span><span class="lnt">8
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">location ~ \.php$ {
-</span></span><span class="line"><span class="cl">    include        fastcgi_params;
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">location</span> <span class="o">~</span> \<span class="o">.</span><span class="n">php</span><span class="o">$</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">include</span>        <span class="n">fastcgi_params</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    fastcgi_pass   127.0.0.1:9000;
-</span></span><span class="line"><span class="cl">    fastcgi_index  index.php;
-</span></span><span class="line"><span class="cl">    fastcgi_param  SCRIPT_FILENAME  /var/www/html$fastcgi_script_name;
-</span></span><span class="line"><span class="cl">    fastcgi_param  DOCUMENT_ROOT /var/www/html;
-</span></span><span class="line"><span class="cl">}
+</span></span><span class="line"><span class="cl">    <span class="n">fastcgi_pass</span>   <span class="mf">127.0</span><span class="o">.</span><span class="mf">0.1</span><span class="p">:</span><span class="mi">9000</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fastcgi_index</span>  <span class="n">index</span><span class="o">.</span><span class="n">php</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fastcgi_param</span>  <span class="n">SCRIPT_FILENAME</span>  <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span><span class="o">$</span><span class="n">fastcgi_script_name</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">fastcgi_param</span>  <span class="n">DOCUMENT_ROOT</span> <span class="o">/</span><span class="k">var</span><span class="o">/</span><span class="n">www</span><span class="o">/</span><span class="n">html</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>正常情况下（关闭 <code>pathinfo</code> 的情况下），只有 <code>.php</code> 后缀的文件才会被发送给 <code>fastcgi</code> 解析。</p>
@@ -599,23 +599,23 @@
 </span><span class="lnt">17
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">&lt;servlet&gt;
-</span></span><span class="line"><span class="cl">    &lt;servlet-name&gt;default&lt;/servlet-name&gt;
-</span></span><span class="line"><span class="cl">    &lt;servlet-class&gt;org.apache.catalina.servlets.DefaultServlet&lt;/servlet-class&gt;
-</span></span><span class="line"><span class="cl">    &lt;init-param&gt;
-</span></span><span class="line"><span class="cl">        &lt;param-name&gt;debug&lt;/param-name&gt;
-</span></span><span class="line"><span class="cl">        &lt;param-value&gt;0&lt;/param-value&gt;
-</span></span><span class="line"><span class="cl">    &lt;/init-param&gt;
-</span></span><span class="line"><span class="cl">    &lt;init-param&gt;
-</span></span><span class="line"><span class="cl">        &lt;param-name&gt;listings&lt;/param-name&gt;
-</span></span><span class="line"><span class="cl">        &lt;param-value&gt;false&lt;/param-value&gt;
-</span></span><span class="line"><span class="cl">    &lt;/init-param&gt;
-</span></span><span class="line"><span class="cl">    &lt;init-param&gt;
-</span></span><span class="line"><span class="cl">        &lt;param-name&gt;readonly&lt;/param-name&gt;
-</span></span><span class="line"><span class="cl">        &lt;param-value&gt;false&lt;/param-value&gt;
-</span></span><span class="line"><span class="cl">    &lt;/init-param&gt;
-</span></span><span class="line"><span class="cl">    &lt;load-on-startup&gt;1&lt;/load-on-startup&gt;
-</span></span><span class="line"><span class="cl">&lt;/servlet&gt;
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="o">&lt;</span><span class="n">servlet</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">servlet</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span><span class="n">default</span><span class="o">&lt;/</span><span class="n">servlet</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">servlet</span><span class="o">-</span><span class="k">class</span><span class="o">&gt;</span><span class="n">org</span><span class="o">.</span><span class="n">apache</span><span class="o">.</span><span class="n">catalina</span><span class="o">.</span><span class="n">servlets</span><span class="o">.</span><span class="n">DefaultServlet</span><span class="o">&lt;/</span><span class="n">servlet</span><span class="o">-</span><span class="k">class</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">init</span><span class="o">-</span><span class="n">param</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">param</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span><span class="n">debug</span><span class="o">&lt;/</span><span class="n">param</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">param</span><span class="o">-</span><span class="n">value</span><span class="o">&gt;</span><span class="mi">0</span><span class="o">&lt;/</span><span class="n">param</span><span class="o">-</span><span class="n">value</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;/</span><span class="n">init</span><span class="o">-</span><span class="n">param</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">init</span><span class="o">-</span><span class="n">param</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">param</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span><span class="n">listings</span><span class="o">&lt;/</span><span class="n">param</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">param</span><span class="o">-</span><span class="n">value</span><span class="o">&gt;</span><span class="bp">false</span><span class="o">&lt;/</span><span class="n">param</span><span class="o">-</span><span class="n">value</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;/</span><span class="n">init</span><span class="o">-</span><span class="n">param</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="n">init</span><span class="o">-</span><span class="n">param</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">param</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span><span class="n">readonly</span><span class="o">&lt;/</span><span class="n">param</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="o">&lt;</span><span class="n">param</span><span class="o">-</span><span class="n">value</span><span class="o">&gt;</span><span class="bp">false</span><span class="o">&lt;/</span><span class="n">param</span><span class="o">-</span><span class="n">value</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;/</span><span class="n">init</span><span class="o">-</span><span class="n">param</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="o">&lt;</span><span class="nb">load</span><span class="o">-</span><span class="n">on</span><span class="o">-</span><span class="n">startup</span><span class="o">&gt;</span><span class="mi">1</span><span class="o">&lt;/</span><span class="nb">load</span><span class="o">-</span><span class="n">on</span><span class="o">-</span><span class="n">startup</span><span class="o">&gt;</span>
+</span></span><span class="line"><span class="cl"><span class="o">&lt;/</span><span class="n">servlet</span><span class="o">&gt;</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>虽然 Tomcat 对文件后缀有一定检测（不能直接写 jsp），但我们使用一些文件系统的特性（如 Linux 下可用 / ）来绕过了限制。</p>
@@ -745,7 +745,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

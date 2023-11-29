@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>RSAC议题解读-云上跨租户漏洞攻击面分析 - Geekby&#39;s Blog</title><meta name="Description" content="云上跨租户漏洞攻击面分析"><meta property="og:title" content="RSAC议题解读-云上跨租户漏洞攻击面分析" />
+<meta property="og:description" content="云上跨租户漏洞攻击面分析" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://www.geekby.site/2023/05/rsac%E8%AE%AE%E9%A2%98%E8%A7%A3%E8%AF%BB-%E4%BA%91%E4%B8%8A%E8%B7%A8%E7%A7%9F%E6%88%B7%E6%BC%8F%E6%B4%9E%E6%94%BB%E5%87%BB%E9%9D%A2%E5%88%86%E6%9E%90/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-05-31T15:23:00+08:00" />
+<meta property="article:modified_time" content="2023-05-31T15:23:00+08:00" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="RSAC议题解读-云上跨租户漏洞攻击面分析"/>
+<meta name="twitter:description" content="云上跨租户漏洞攻击面分析"/>
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2023/05/rsac%E8%AE%AE%E9%A2%98%E8%A7%A3%E8%AF%BB-%E4%BA%91%E4%B8%8A%E8%B7%A8%E7%A7%9F%E6%88%B7%E6%BC%8F%E6%B4%9E%E6%94%BB%E5%87%BB%E9%9D%A2%E5%88%86%E6%9E%90/" /><link rel="prev" href="https://www.geekby.site/2023/05/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E/" /><link rel="next" href="https://www.geekby.site/2023/11/kubernetes-pod-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "RSAC议题解读-云上跨租户漏洞攻击面分析",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2023\/05\/rsac%E8%AE%AE%E9%A2%98%E8%A7%A3%E8%AF%BB-%E4%BA%91%E4%B8%8A%E8%B7%A8%E7%A7%9F%E6%88%B7%E6%BC%8F%E6%B4%9E%E6%94%BB%E5%87%BB%E9%9D%A2%E5%88%86%E6%9E%90\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试","wordcount":  189 ,
+        "url": "https:\/\/www.geekby.site\/2023\/05\/rsac%E8%AE%AE%E9%A2%98%E8%A7%A3%E8%AF%BB-%E4%BA%91%E4%B8%8A%E8%B7%A8%E7%A7%9F%E6%88%B7%E6%BC%8F%E6%B4%9E%E6%94%BB%E5%87%BB%E9%9D%A2%E5%88%86%E6%9E%90\/","datePublished": "2023-05-31T15:23:00+08:00","dateModified": "2023-05-31T15:23:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "云上跨租户漏洞攻击面分析"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">RSAC议题解读-云上跨租户漏洞攻击面分析</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2023-05-31">2023-05-31</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 189 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-相关概念">1 相关概念</a>
+      <ul>
+        <li><a href="#11-多租户技术">1.1 多租户技术</a></li>
+        <li><a href="#12-跨租户漏洞">1.2 跨租户漏洞</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-租户隔离的实现方式">2 租户隔离的实现方式</a>
+      <ul>
+        <li><a href="#21-逻辑隔离">2.1 逻辑隔离</a></li>
+        <li><a href="#22-基于容器的隔离">2.2 基于容器的隔离</a></li>
+        <li><a href="#23-基于虚拟机的隔离">2.3 基于虚拟机的隔离</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-真实环境中的漏洞案例">3 真实环境中的漏洞案例</a>
+      <ul>
+        <li><a href="#31-阿里云-analyticdb-for-postgresql">3.1 阿里云 AnalyticDB for PostgreSQL</a></li>
+        <li><a href="#32-azure-database-for-postgresql">3.2 Azure Database for PostgreSQL</a></li>
+        <li><a href="#33-ibm-managed-databases">3.3 IBM Managed Databases</a></li>
+        <li><a href="#34-其它案例">3.4 其它案例</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="rsac议题解读-云上跨租户漏洞攻击面分析">RSAC议题解读-云上跨租户漏洞攻击面分析</h1>
+<blockquote>
+<p>2023 年的 RSAC 会议上两位来自 Wiz 的安全研究员，分享了名为《Tackling the Recent Rise of Cross-Tenant Vulnerabilities》的议题。两位研究员提出一个新兴的攻击方向，即跨租户漏洞，介绍相关概念，并在现网环境中挖掘 Google Cloud、AWS、Alibaba Cloud 等跨租户漏洞，影响巨大。</p>
+</blockquote>
+<h2 id="1-相关概念">1 相关概念</h2>
+<h3 id="11-多租户技术">1.1 多租户技术</h3>
+<p>多租户技术是一种在云计算环境中广泛使用的架构设计方法，用于在单个应用程序或服务中同时支持多个独立的租户或用户。</p>
+<p>在传统的单租户架构中，每个应用程序或服务只为一个租户提供服务。而在多租户架构中，应用程序或服务被设计成可以同时为多个租户提供服务，而且每个租户都被隔离在彼此之间，彼此独立且互不干扰。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302102272.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302102272.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302102272.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302102272.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302102272.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302102272.png-water_print" /></p>
+<p>多租户技术的关键特点是资源共享和隔离。多个租户共享相同的基础设施，包括硬件、网络和软件组件等，从而实现资源的高效利用。同时，每个租户之间的数据和运行环境是相互隔离的，确保租户之间的安全性和隐私性。</p>
+<p>多租户架构通常在平台即服务（PaaS）和软件即服务（SaaS）等云服务模型中得到广泛应用。在这些模型中，云提供商为多个租户提供相同的应用程序或服务实例，而每个租户都可以定制和管理自己的数据和配置。</p>
+<h3 id="12-跨租户漏洞">1.2 跨租户漏洞</h3>
+<p>在云上多租户技术广泛应用的场景下，跨租户漏洞应运而生。跨租户漏洞是指存在于多租户环境中的安全漏洞，可能导致一个租户能够访问或干扰其他租户的数据或资源。这种漏洞可能会引起严重的安全问题，攻击者可以通过跨租户漏洞获取租户的数据或系统控制权，严重破坏了租户之间的隔离性和安全性。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302109644.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302109644.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302109644.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302109644.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302109644.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302109644.png-water_print" /></p>
+<h2 id="2-租户隔离的实现方式">2 租户隔离的实现方式</h2>
+<h3 id="21-逻辑隔离">2.1 逻辑隔离</h3>
+<p>逻辑隔离是一种十分简单的租户隔离方式，租户在共享数据库实例中拥有一个专用数据库。但是每个客户都拥有自己的凭据，来保证不同用户之间的隔离。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302124451.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302124451.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302124451.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302124451.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302124451.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302124451.png-water_print" /></p>
+<p>这种隔离方式在工业实践中有良好的可操作性，软件架构简单且易于实现，成本较低。但是一旦出现单点故障，将影响数据库实例下的所有租户。</p>
+<p>此外，当一个数据库被攻击者攻破后，比如攻击者从当前租户权限提升到管理员权限，攻击者就可以访问其它租户的数据。此外，对于一些运维人员来说，在配置数据库实例的时候，很容易出现配置不当的问题。在这种情况下，攻击者甚至不必利用 0-day 提升权限，通过只是滥用某些错误配置，就可以达到访问其它用户数据的目的。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302134163.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302134163.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302134163.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302134163.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302134163.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302134163.png-water_print" /></p>
+<h3 id="22-基于容器的隔离">2.2 基于容器的隔离</h3>
+<p>基于容器的隔离相比于上面的隔离方法具有一定优势。在这种隔离方法中，不再是多个客户共享同一个数据库实例，每个客户都有自己的数据库实例，在相对独立的容器内运行， 并且多个客户可能共享同一个虚拟机。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302148078.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302148078.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302148078.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302148078.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302148078.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302148078.png-water_print" /></p>
+<p>这种隔离方式同样相对便宜且易于实施。当攻击者想要突破隔离时，需要打破两层安全边界，即：第一层数据库，与上一种方式相同；第二层容器。一旦攻击者从容器中逃逸出来，就可以在虚拟机上执行任意代码，在虚拟机中，可以看到其它租户的容器，并能够访问他们的数据。</p>
+<p>虽然这种隔离方式看上去是一个更好的方法，与前面的方法相比，它仍有其缺点。正如一些安全研究人员所认为的那样，容器不被认为是一个非常强大的安全屏障，每隔一段时间 Linux 都会发布一些内核漏洞，部分漏洞通过武器化，可以被用来容器逃逸。</p>
+<p>Wiz 团队针对阿里云数据库披露了一个报告，具体细节在第三章节进行阐述。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302159759.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302159759.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302159759.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302159759.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302159759.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302159759.png-water_print" /></p>
+<h3 id="23-基于虚拟机的隔离">2.3 基于虚拟机的隔离</h3>
+<p>第三种隔离租户的方法，也是大多数服务提供商倾向于做的，即：基于虚拟机的隔离。在这种隔离方法中，每个租户都有自己的数据库实例，在单独的专用虚拟机中运行。因此，客户现在共享的是物理计算资源，而不是像之前的隔离方法那样，共享一个虚拟机。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302203644.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302203644.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302203644.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302203644.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302203644.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302203644.png-water_print" /></p>
+<p>如图所示，攻击者想要打破这种隔离方式，需要打破两到三层安全边界，第一层然需要数据库漏洞，能够执行任意代码。第二层可能需要进行容器逃逸，第三层虚拟机漏洞。通常来说，VM 逃逸漏洞更难挖掘。</p>
+<p>当每一个租户都有自己专用的虚拟机，云服务提供商的成本变得相当昂贵。与此同时，架构也开始变得很难维护，隔离服务越强，越难实际调试服务，并解决服务中的问题。</p>
+<h2 id="3-真实环境中的漏洞案例">3 真实环境中的漏洞案例</h2>
+<p>租户隔离不仅仅是要实现隔离计算资源。还有有其它资源和其它资产。首先来看，在一个常见的租户隔离系统中，有哪些风险暴露面：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302215790.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302215790.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302215790.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302215790.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302215790.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305302215790.png-water_print" /></p>
+<p>比如像 Kubernetes 或 service Fabric 这样的编排器、内部 API。此外通常托管服务运行在共享网络环境中，数据可以通过共享网络进行交互。另外存储、身份认证设施等也同样需要考虑隔离。</p>
+<h3 id="31-阿里云-analyticdb-for-postgresql">3.1 阿里云 AnalyticDB for PostgreSQL</h3>
+<p>云原生数据仓库AnalyticDB PostgreSQL版是一种大规模并行处理（MPP）数据仓库服务，可提供海量数据在线分析服务。</p>
+<p>针对 AnalyticDB for PostgreSQL 的攻击链大致如下：</p>
+<ol>
+<li>利用 cronjob 定时任务提权至容器内的 root 权限。</li>
+<li>利用 Pod 内容器共享 PID 命名空间的特性横向移动到 Pod 中的相邻特权容器。</li>
+<li>利用特权容器逃逸至宿主机。</li>
+<li>利用宿主机上的 kubelet 凭证访问敏感资源，包括密钥、serviceaccount 和 Pod。</li>
+<li>利用收集到的凭证访问阿里云私有容器镜像仓库，查看凭证权限。</li>
+<li>经测试发现凭据具有容器镜像仓库的读取和写入权限，允许发起供应链攻击。</li>
+</ol>
+<p>已有相关文章分析该漏洞，在此不做赘述。</p>
+<h3 id="32-azure-database-for-postgresql">3.2 Azure Database for PostgreSQL</h3>
+<p>在 Azure Database for PostgreSQL 中，不同租户间的数据库并没有做网络隔离，也就是说两个租户间是有网络联通的。Wiz 的研究人员首先通过漏洞获得了对自己数据库的访问权，又因为当前机器能够与其它数据库通信，并通过伪造 SSL 证书，并绕过对其它数据库的身份验证，获取对其它租户数据的完全读取权限。微软对此漏洞的修复是对租户间的网络进行隔离，来保证租户间的相对独立。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311630613.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311630613.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311630613.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311630613.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311630613.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311630613.png-water_print" /></p>
+<h3 id="33-ibm-managed-databases">3.3 IBM Managed Databases</h3>
+<p>IBM Managed Databases 这个案例比较有趣，在这个案例中，IBM 服务的架构比较完善，资源分离也设计得很好，每个租户有专门的 Kubernetes 命名空间：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311635747.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311635747.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311635747.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311635747.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311635747.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311635747.png-water_print" /></p>
+<p>但是研究人员在容器中发现了 K8S API 的网络连接，同时，由于 K8S 本身配置不当，将高权限 service account 挂在到当前 pod 中，因此可以利用该 Token 向 K8S API 直接发送请求，执行 K8S 相关操作。经过研究人员的测试，该 Token 有在私有仓库拉取镜像的权限：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311642644.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311642644.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311642644.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311642644.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311642644.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311642644.png-water_print" /></p>
+<p>因此，攻击者可以拿到镜像仓库的所有镜像：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311643565.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311643565.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311643565.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311643565.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311643565.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311643565.png-water_print" /></p>
+<p>镜像中包含大量数据，包括源码、配置等。通过对镜像内容进行分析，找到内部 CI/CD 服务器凭证，具有读写权限，可以实施供应链攻击。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311652381.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311652381.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311652381.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311652381.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311652381.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311652381.png-water_print" /></p>
+<h3 id="34-其它案例">3.4 其它案例</h3>
+<p>笔者在公司内部某产品线做安全测试时，也曾遇到过类似的安全问题，由于租户间未做好隔离，导致获取大量租户权限与数据的问题。</p>
+<p>以其中一个为例：</p>
+<p>在某站点创建远程计算资源（在线 IDE）时，用户会收到一封接入内网的 VPN 配置连接邮件，在拨入 VPN 后，发现内网并未做隔离，租户间网络互通。</p>
+<p>直接在内网申请的资源主机上扫 <code>10.208.0.0/16</code> 网段，发现做了隔离。但是，尝试在本机上对 VPN 网段 <code>172.36.0.0/16</code> 进行扫描，发现未做隔离，结果如下：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311709386.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311709386.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311709386.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311709386.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311709386.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311709386.png-water_print" /></p>
+<p>以内网一台租户申请的机器为例，由于在线 IDE 具有 Terminal 功能，且未对用户权限做校验，因此可以执行命令，在线 IDE 中的用户为 devkit 普通用户：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311712370.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311712370.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311712370.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311712370.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311712370.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311712370.png-water_print" /></p>
+<p>经过信息收集，发现此类主机均为云上统一下发的机器，查看查询 ECS 的用户自定义数据找到初始化 SSH 登录密钥：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">curl http://169.254.169.254/openstack/latest/user_data
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在 <code>user_data</code> 记录了 SSH 的明文密码，可以直接利用该密码切换到 <code>root</code>:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311716874.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311716874.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311716874.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311716874.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311716874.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202305311716874.png-water_print" /></p>
+<p>通过这种方式，可以批量横向到各个租户，获取大量租户资源机器的 root 权限，并登录 SSH，获取机器内存放的各种资源文件。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2023-05-31</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2023/05/rsac%E8%AE%AE%E9%A2%98%E8%A7%A3%E8%AF%BB-%E4%BA%91%E4%B8%8A%E8%B7%A8%E7%A7%9F%E6%88%B7%E6%BC%8F%E6%B4%9E%E6%94%BB%E5%87%BB%E9%9D%A2%E5%88%86%E6%9E%90/" data-title="RSAC议题解读-云上跨租户漏洞攻击面分析"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2023/05/rsac%E8%AE%AE%E9%A2%98%E8%A7%A3%E8%AF%BB-%E4%BA%91%E4%B8%8A%E8%B7%A8%E7%A7%9F%E6%88%B7%E6%BC%8F%E6%B4%9E%E6%94%BB%E5%87%BB%E9%9D%A2%E5%88%86%E6%9E%90/" data-title="RSAC议题解读-云上跨租户漏洞攻击面分析"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2023/05/rsac%E8%AE%AE%E9%A2%98%E8%A7%A3%E8%AF%BB-%E4%BA%91%E4%B8%8A%E8%B7%A8%E7%A7%9F%E6%88%B7%E6%BC%8F%E6%B4%9E%E6%94%BB%E5%87%BB%E9%9D%A2%E5%88%86%E6%9E%90/" data-title="RSAC议题解读-云上跨租户漏洞攻击面分析"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2023/05/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E/" class="prev" rel="prev" title="OAuth 2.0协议及漏洞"><i class="fas fa-angle-left fa-fw"></i>OAuth 2.0协议及漏洞</a>
+            <a href="/2023/11/kubernetes-pod-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/" class="next" rel="next" title="Kubernetes Pod 横向移动">Kubernetes Pod 横向移动<i class="fas fa-angle-right fa-fw"></i></a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

@@ -658,16 +658,16 @@
 </span><span class="lnt">10
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[common]
-</span></span><span class="line"><span class="cl"># frp 服务端端口
-</span></span><span class="line"><span class="cl">bind_port = 7000
-</span></span><span class="line"><span class="cl"># 仪表盘端口
-</span></span><span class="line"><span class="cl">dashboard_port = 8888
-</span></span><span class="line"><span class="cl"># frp服务端密码
-</span></span><span class="line"><span class="cl">token = 123456
-</span></span><span class="line"><span class="cl"># 仪表盘默认账号密码
-</span></span><span class="line"><span class="cl">dashboard_user = admin
-</span></span><span class="line"><span class="cl">dashboard_pwd = admin
+<pre tabindex="0" class="chroma"><code class="language-properties" data-lang="properties"><span class="line"><span class="cl"><span class="err">[common]</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># frp 服务端端口</span>
+</span></span><span class="line"><span class="cl"><span class="na">bind_port</span> <span class="o">=</span> <span class="s">7000</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 仪表盘端口</span>
+</span></span><span class="line"><span class="cl"><span class="na">dashboard_port</span> <span class="o">=</span> <span class="s">8888</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># frp服务端密码</span>
+</span></span><span class="line"><span class="cl"><span class="na">token</span> <span class="o">=</span> <span class="s">123456</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 仪表盘默认账号密码</span>
+</span></span><span class="line"><span class="cl"><span class="na">dashboard_user</span> <span class="o">=</span> <span class="s">admin</span>
+</span></span><span class="line"><span class="cl"><span class="na">dashboard_pwd</span> <span class="o">=</span> <span class="s">admin</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>启动 FRP：<code>frps -c frps.ini</code></p>
@@ -688,18 +688,18 @@
 </span><span class="lnt">12
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">[common]
-</span></span><span class="line"><span class="cl">server_addr = VPS IP
-</span></span><span class="line"><span class="cl">server_port = 7000
-</span></span><span class="line"><span class="cl"># 与 vps 保持一致
-</span></span><span class="line"><span class="cl">token = 123456
-</span></span><span class="line"><span class="cl">[ssh]
-</span></span><span class="line"><span class="cl">type = tcp
-</span></span><span class="line"><span class="cl">local_ip = 127.0.0.1
-</span></span><span class="line"><span class="cl">local_port = 22
-</span></span><span class="line"><span class="cl">remote_port = 7000
-</span></span><span class="line"><span class="cl">use_encryption = true
-</span></span><span class="line"><span class="cl">use_compression = true
+<pre tabindex="0" class="chroma"><code class="language-properties" data-lang="properties"><span class="line"><span class="cl"><span class="err">[common]</span>
+</span></span><span class="line"><span class="cl"><span class="na">server_addr</span> <span class="o">=</span> <span class="s">VPS IP</span>
+</span></span><span class="line"><span class="cl"><span class="na">server_port</span> <span class="o">=</span> <span class="s">7000</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 与 vps 保持一致</span>
+</span></span><span class="line"><span class="cl"><span class="na">token</span> <span class="o">=</span> <span class="s">123456</span>
+</span></span><span class="line"><span class="cl"><span class="err">[ssh]</span>
+</span></span><span class="line"><span class="cl"><span class="na">type</span> <span class="o">=</span> <span class="s">tcp</span>
+</span></span><span class="line"><span class="cl"><span class="na">local_ip</span> <span class="o">=</span> <span class="s">127.0.0.1</span>
+</span></span><span class="line"><span class="cl"><span class="na">local_port</span> <span class="o">=</span> <span class="s">22</span>
+</span></span><span class="line"><span class="cl"><span class="na">remote_port</span> <span class="o">=</span> <span class="s">7000</span>
+</span></span><span class="line"><span class="cl"><span class="na">use_encryption</span> <span class="o">=</span> <span class="s">true</span>
+</span></span><span class="line"><span class="cl"><span class="na">use_compression</span> <span class="o">=</span> <span class="s">true</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h3 id="42-iox">4.2 iox</h3>
@@ -851,7 +851,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

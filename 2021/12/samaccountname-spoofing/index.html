@@ -306,7 +306,7 @@
 </span></span><span class="line"><span class="cl"><span class="nb">Get-ADComputer</span> <span class="n">-Filter</span> <span class="p">*</span> <span class="n">-Property</span> <span class="p">*</span> <span class="p">|</span> <span class="nb">Format-Table</span> <span class="n">Name</span><span class="p">,</span><span class="n">OperatingSystem</span><span class="p">,</span><span class="n">OperatingSystemServicePack</span><span class="p">,</span><span class="n">OperatingSystemVersion</span> <span class="n">-Wrap</span> <span class="n">-Auto</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c"># 权限查询</span>
-</span></span><span class="line"><span class="cl"><span class="nb">Get-DomainObjectAcl</span> <span class="n">ControlledComputer</span> <span class="n">-ResolveGUIDs</span> <span class="p">|?{</span><span class="nv">$_</span><span class="p">.</span><span class="n">securityidentifier</span> <span class="o">-eq</span> <span class="p">(</span><span class="nb">get-domainuser</span> <span class="n">win11user</span><span class="p">).</span><span class="n">objectsid</span><span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="nb">Get-DomainObjectAcl</span> <span class="n">ControlledComputer</span> <span class="n">-ResolveGUIDs</span> <span class="p">|?{</span><span class="nv">$_</span><span class="p">.</span><span class="py">securityidentifier</span> <span class="o">-eq</span> <span class="p">(</span><span class="nb">get-domainuser</span> <span class="n">win11user</span><span class="p">).</span><span class="n">objectsid</span><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p><img
@@ -358,7 +358,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

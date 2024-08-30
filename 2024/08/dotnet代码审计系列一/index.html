@@ -31,7 +31,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/www.geekby.site\/2024\/08\/dotnet%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%B3%BB%E5%88%97%E4%B8%80\/"
-        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "代码审计","wordcount":  1046 ,
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "代码审计","wordcount":  1050 ,
         "url": "https:\/\/www.geekby.site\/2024\/08\/dotnet%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%B3%BB%E5%88%97%E4%B8%80\/","datePublished": "2024-08-30T09:23:00+08:00","dateModified": "2024-08-30T09:23:00+08:00","publisher": {
             "@type": "Organization",
             "name": "Geekby","logo": {
@@ -113,7 +113,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">dotnet代码审计系列(一)</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"><i class="far fa-folder fa-fw"></i>代码审计</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2024-08-30">2024-08-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1046 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2024-08-30">2024-08-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1050 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -122,42 +122,53 @@
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#11-背景">1.1. 背景</a></li>
-    <li><a href="#12-net-framework与net-core的区别">1.2. .NET Framework与.NET Core的区别</a>
+    <li><a href="#1-概述">1. 概述</a>
       <ul>
-        <li><a href="#平台支持"><strong>平台支持</strong></a></li>
-        <li><a href="#开源与社区支持"><strong>开源与社区支持</strong></a></li>
+        <li><a href="#11-背景">1.1. 背景</a></li>
+        <li><a href="#12-net-framework与net-core的区别">1.2. .NET Framework与.NET Core的区别</a>
+          <ul>
+            <li><a href="#平台支持">平台支持</a></li>
+            <li><a href="#开源与社区支持">开源与社区支持</a></li>
+          </ul>
+        </li>
       </ul>
     </li>
-  </ul>
-
-  <ul>
-    <li><a href="#21-webform开发模式">2.1. WebForm开发模式</a></li>
-    <li><a href="#22-mvc-开发模式">2.2. MVC 开发模式</a></li>
-    <li><a href="#aspnet-core-razor-pages"><strong>ASP.NET Core</strong> Razor Pages</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#41-文件上传漏洞">4.1. 文件上传漏洞</a></li>
-    <li><a href="#42-rce-漏洞">4.2. RCE 漏洞</a></li>
-    <li><a href="#43-sql-注入漏洞">4.3. SQL 注入漏洞</a></li>
-    <li><a href="#44-任意文件读取下载">4.4. 任意文件读取/下载</a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#aspnet-core-项目"><strong>ASP.NET Core 项目</strong></a></li>
-    <li><a href="#aspnet-mvc-项目"><strong>ASP.NET MVC 项目</strong></a></li>
-    <li><a href="#aspnet-web-forms-项目"><strong>ASP.NET Web Forms 项目</strong></a></li>
-  </ul>
-
-  <ul>
-    <li><a href="#61-aspnet-core-项目">6.1. ASP.NET Core 项目</a></li>
-    <li><a href="#62-aspnet-mvc-项目">6.2. ASP.NET MVC 项目</a></li>
+    <li><a href="#2-net-web-项目">2. .NET Web 项目</a>
+      <ul>
+        <li><a href="#21-webform开发模式">2.1. WebForm开发模式</a></li>
+        <li><a href="#22-mvc-开发模式">2.2. MVC 开发模式</a></li>
+        <li><a href="#23-aspnet-core-razor-pages">2.3. ASP.NET Core Razor Pages</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-反编译工具">3. 反编译工具</a></li>
+    <li><a href="#4-常见漏洞">4. 常见漏洞</a>
+      <ul>
+        <li><a href="#41-文件上传漏洞">4.1. 文件上传漏洞</a></li>
+        <li><a href="#42-rce-漏洞">4.2. RCE 漏洞</a></li>
+        <li><a href="#43-sql-注入漏洞">4.3. SQL 注入漏洞</a></li>
+        <li><a href="#44-任意文件读取下载">4.4. 任意文件读取/下载</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-查找程序入口点">5. 查找程序入口点</a>
+      <ul>
+        <li><a href="#51-aspnet-core-项目">5.1. ASP.NET Core 项目</a></li>
+        <li><a href="#52-aspnet-mvc-项目">5.2. ASP.NET MVC 项目</a></li>
+        <li><a href="#53-aspnet-web-forms-项目">5.3. ASP.NET Web Forms 项目</a></li>
+      </ul>
+    </li>
+    <li><a href="#6-查找路由">6. 查找路由</a>
+      <ul>
+        <li><a href="#61-aspnet-core-项目">6.1. ASP.NET Core 项目</a></li>
+        <li><a href="#62-aspnet-mvc-项目">6.2. ASP.NET MVC 项目</a></li>
+      </ul>
+    </li>
+    <li><a href="#7-实战某erp项目">7. 实战某ERP项目</a></li>
+    <li><a href="#8-参考">8. 参考</a></li>
   </ul>
 </nav></div>
             </div><div class="content" id="content"><h1 id="dotnet代码审计系列一">dotnet代码审计系列(一)</h1>
-<h1 id="1-概述">1. 概述</h1>
-<h2 id="11-背景">1.1. 背景</h2>
+<h2 id="1-概述">1. 概述</h2>
+<h3 id="11-背景">1.1. 背景</h3>
 <p>.NET Framework 是微软开发的一个托管代码框架，主要用于构建和运行 Windows 应用程序。它提供了大量的类库、通用语言运行时（CLR）、以及开发和管理应用程序的工具。使用 .NET Framework 开发的应用程序通常是用 C#、VB.NET、F# 等语言编写的，编译后生成中间语言（IL），然后由 CLR 执行。</p>
 <p>.NET Framework 的重要特性包括：</p>
 <ol>
@@ -166,20 +177,20 @@
 <li><strong>安全模型</strong>：.NET Framework 提供了代码访问安全（CAS）和验证机制，控制代码的权限和执行。</li>
 </ol>
 <p>在企业应用中，.NET Framework 广泛应用于开发 Web 应用程序、桌面应用程序和服务。在今年国家HW中，仍有大量应用采用 .NET框架。由于其广泛使用以及应用程序的复杂性，.NET 应用程序容易成为攻击者的目标。目前市面上针对 .NET框架代码审计的资料较少，遂总结本文。</p>
-<h2 id="12-net-framework与net-core的区别">1.2. .NET Framework与.NET Core的区别</h2>
+<h3 id="12-net-framework与net-core的区别">1.2. .NET Framework与.NET Core的区别</h3>
 <p><code>.NET</code> 和 <code>.NET Core</code> 是微软开发的两个不同的开发框架，有如下区别：</p>
-<h3 id="平台支持"><strong>平台支持</strong></h3>
+<h4 id="平台支持">平台支持</h4>
 <ul>
 <li><strong>.NET Framework (.NET)</strong>: 仅支持在 Windows 操作系统上运行。适合开发 Windows 桌面应用程序、ASP.NET Web 应用程序等。</li>
 <li><strong>.NET Core</strong>: 是跨平台的框架，可以在 Windows、Linux 和 macOS 上运行。因此，它更适合需要跨平台部署的应用程序。</li>
 </ul>
-<h3 id="开源与社区支持"><strong>开源与社区支持</strong></h3>
+<h4 id="开源与社区支持">开源与社区支持</h4>
 <ul>
 <li><strong>.NET Framework</strong>: 不是完全开源的，虽然它的一些组件是开源的，但整体框架仍然是由微软维护和控制的。</li>
 <li><strong>.NET Core</strong>: 是完全开源的，并且有一个活跃的开源社区。开发者可以访问源代码，并对其进行贡献。</li>
 </ul>
 <p>总之，<code>.NET Core</code> 是一个更现代化、跨平台、模块化的框架，更适合现代应用的开发需求。而 <code>.NET Framework</code> 则主要用于现有 Windows 应用的维护和延续开发。随着 .NET 5+ 的发布，微软将 .NET Core 作为未来的主线开发方向，并统一了整个 .NET 生态系统。</p>
-<h1 id="2-net-web-项目">2. .NET Web 项目</h1>
+<h2 id="2-net-web-项目">2. .NET Web 项目</h2>
 <p>目前，ASP.NET中三种主流的开发方式是：ASP.NET Webform、ASP.NET MVC、ASP.NET Core。</p>
 <p>拿一张官方图片来描述：</p>
 <p><img
@@ -190,7 +201,7 @@
         data-sizes="auto"
         alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301005044.png-water_print"
         title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301005044.png-water_print" /></p>
-<h2 id="21-webform开发模式">2.1. WebForm开发模式</h2>
+<h3 id="21-webform开发模式">2.1. WebForm开发模式</h3>
 <p>一张经典的图来描述整个过程：</p>
 <p><img
         class="lazyload"
@@ -239,7 +250,7 @@
 </span></span><span class="line"><span class="cl">Web.config: 应用程序的配置文件，用于定义应用程序的设置、连接字符串、路由等。
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="22-mvc-开发模式">2.2. MVC 开发模式</h2>
+</div><h3 id="22-mvc-开发模式">2.2. MVC 开发模式</h3>
 <p>ASP.NET MVC 是一种基于 MVC 模式的 Web 开发框架，注重分离关注点（Separation of Concerns），即将业务逻辑、用户界面和输入控制分离。具体呈现模式和Java比较类似，在此不做赘述。</p>
 <p>目录结构：</p>
 <div class="highlight"><div class="chroma">
@@ -266,7 +277,7 @@
 </span></span><span class="line"><span class="cl">Web.config: 应用程序的配置文件。
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="aspnet-core-razor-pages"><strong>ASP.NET Core</strong> Razor Pages</h2>
+</div><h3 id="23-aspnet-core-razor-pages">2.3. ASP.NET Core Razor Pages</h3>
 <p>ASP.NET Core 是一个跨平台、高性能的开源框架，用于构建现代 Web 应用、云应用和微服务。它整合了 ASP.NET MVC 和 Web API，并具有更好的性能和灵活性。通过 Razor Pages 提供了一种类似 Web Forms 的开发体验，但更轻量。每个页面由一个 Razor 文件（<code>.cshtml</code>）和一个代码隐藏文件（<code>.cshtml.cs</code>）组成，页面逻辑与视图紧密结合。避免了 MVC 中的路由配置复杂性，适合页面数量少的应用，适用于小型项目或单页面应用程序，以及希望简化页面开发的场景。</p>
 <p>目录结构：</p>
 <div class="highlight"><div class="chroma">
@@ -303,7 +314,7 @@
 </span></span><span class="line"><span class="cl">Properties: 包含项目的属性文件，如 launchSettings.json，用于配置开发和发布设置。
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h1 id="3-反编译工具">3. 反编译工具</h1>
+</div><h2 id="3-反编译工具">3. 反编译工具</h2>
 <p>在 .NET 应用程序开发中，预编译（Precompilation）是指将应用程序的代码提前编译成DLL等库文件，以提高性能、减少首次请求的启动时间，并增强代码的保护性。预编译通常应用于 Web 应用程序，如 ASP.NET，这类应用程序的代码在部署到服务器之前可以通过预编译减少或消除运行时编译的需求。</p>
 <p>当站点存在这种情况时，就需要反编译 <code>/bin</code> 目录下的 DLL 文件，来获取源码。</p>
 <p>可选择的 .NET反编译工具主要有四个：dnSpy（于2020年左右停止更新）、ILSpy、dotPeek（JetBrains发布）、dnSpyx（非官方更新版）。</p>
@@ -344,9 +355,9 @@
 <pre tabindex="0" class="chroma"><code class="language-batch" data-lang="batch"><span class="line"><span class="cl">de4dot.exe -r c:\input -ru -ro c:\output
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h1 id="4-常见漏洞">4. 常见漏洞</h1>
+</div><h2 id="4-常见漏洞">4. 常见漏洞</h2>
 <p>以下漏洞代码均以WebGoat.NET靶场为例</p>
-<h2 id="41-文件上传漏洞">4.1. 文件上传漏洞</h2>
+<h3 id="41-文件上传漏洞">4.1. 文件上传漏洞</h3>
 <p><code>/WebGoat/Content/UploadPathManipulation.aspx.cs</code></p>
 <p><img
         class="lazyload"
@@ -400,7 +411,7 @@
 </span></span><span class="line"><span class="cl">System.IO.File.WriteAllBytes
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="42-rce-漏洞">4.2. RCE 漏洞</h2>
+</div><h3 id="42-rce-漏洞">4.2. RCE 漏洞</h3>
 <p><code>/WebGoat/App_Code/Util.cs</code></p>
 <p><img
         class="lazyload"
@@ -422,7 +433,7 @@
 </span></span><span class="line"><span class="cl">ShellExecute()
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="43-sql-注入漏洞">4.3. SQL 注入漏洞</h2>
+</div><h3 id="43-sql-注入漏洞">4.3. SQL 注入漏洞</h3>
 <p><code>/WebGoat/Content/SQLInjection.aspx.cs</code></p>
 <p><img
         class="lazyload"
@@ -451,7 +462,7 @@
 <pre tabindex="0" class="chroma"><code class="language-batch" data-lang="batch"><span class="line"><span class="cl">SQL语句拼接处
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="44-任意文件读取下载">4.4. 任意文件读取/下载</h2>
+</div><h3 id="44-任意文件读取下载">4.4. 任意文件读取/下载</h3>
 <p>/WebGoat/Content/PathManipulation.aspx.cs</p>
 <p><img
         class="lazyload"
@@ -493,9 +504,9 @@
 </span></span><span class="line"><span class="cl">Response.WriteFile 常用于文件下载
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h1 id="5-查找程序入口点">5. 查找程序入口点</h1>
+</div><h2 id="5-查找程序入口点">5. 查找程序入口点</h2>
 <p>在 .NET Web 项目中，入口点是程序开始执行的地方，确定了应用程序的初始化过程。入口点会因项目类型的不同而有所不同，以下是一些常见的 .NET Web 项目类型及其入口点的概述：</p>
-<h2 id="aspnet-core-项目"><strong>ASP.NET Core 项目</strong></h2>
+<h3 id="51-aspnet-core-项目">5.1. ASP.NET Core 项目</h3>
 <p>ASP.NET Core 项目的入口点通常在 <code>Program.cs</code> 文件中。该文件包含 <code>Main</code> 方法，这是应用程序的实际入口。</p>
 <p>示例：</p>
 <div class="highlight"><div class="chroma">
@@ -536,7 +547,7 @@
 <li><strong><code>Main</code></strong>** 方法**：应用程序从这里开始执行。<code>CreateHostBuilder</code> 方法用于创建和配置应用程序的主机。</li>
 <li><strong><code>Startup</code></strong>** 类**：指定在启动过程中要配置应用程序服务和中间件的类。</li>
 </ul>
-<h2 id="aspnet-mvc-项目"><strong>ASP.NET MVC 项目</strong></h2>
+<h3 id="52-aspnet-mvc-项目">5.2. ASP.NET MVC 项目</h3>
 <p>在 ASP.NET MVC 项目中，入口点位于 <code>Global.asax.cs</code> 文件中，通常是 <code>Application_Start</code> 方法。</p>
 <p>示例：</p>
 <div class="highlight"><div class="chroma">
@@ -568,7 +579,7 @@
 </div><ul>
 <li><strong><code>Application_Start</code></strong>** 方法**：这是 MVC 应用程序的入口点，当应用程序启动时，ASP.NET 会调用这个方法，用于配置路由、过滤器、捆绑包等。</li>
 </ul>
-<h2 id="aspnet-web-forms-项目"><strong>ASP.NET Web Forms 项目</strong></h2>
+<h3 id="53-aspnet-web-forms-项目">5.3. ASP.NET Web Forms 项目</h3>
 <p>ASP.NET Web Forms 项目的入口点也在 <code>Global.asax.cs</code> 文件中，同样使用 <code>Application_Start</code> 方法进行初始化。</p>
 <p>示例：</p>
 <div class="highlight"><div class="chroma">
@@ -591,9 +602,9 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h1 id="6-查找路由">6. 查找路由</h1>
+</div><h2 id="6-查找路由">6. 查找路由</h2>
 <p>在 .NET Web 项目中，路由定义了 URL 请求如何映射到特定的控制器和操作方法（或者处理程序）。当确定了程序入口点，以及存在风险的不安全函数后，如何访问到存在漏洞的页面呢？Web Forms 项目很简单，直接访问对应的 <code>xxx.aspx</code> 即可，其它架构下就需要寻找其路由定义。</p>
-<h2 id="61-aspnet-core-项目">6.1. ASP.NET Core 项目</h2>
+<h3 id="61-aspnet-core-项目">6.1. ASP.NET Core 项目</h3>
 <p>ASP.NET Core 使用 <code>Startup.cs</code> 文件中的 <code>Configure</code> 方法来配置路由。通常你会看到类似如下的代码：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -624,7 +635,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>在这里，<code>MapControllerRoute</code> 方法定义了默认的路由模式，你可以在这个 <code>UseEndpoints</code> 方法中查看和定义项目的所有路由。</p>
-<h2 id="62-aspnet-mvc-项目">6.2. ASP.NET MVC 项目</h2>
+<h3 id="62-aspnet-mvc-项目">6.2. ASP.NET MVC 项目</h3>
 <p>在 ASP.NET MVC 项目中，路由通常配置在 <code>RouteConfig.cs</code> 文件中，该文件位于 <code>App_Start</code> 文件夹下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -658,7 +669,7 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h1 id="7-实战某erp项目">7. 实战某ERP项目</h1>
+</div><h2 id="7-实战某erp项目">7. 实战某ERP项目</h2>
 <p>这是一套典型的MVC架构，采取预编译形式，DLL 文件均放置在 bin 目录下：</p>
 <p><img
         class="lazyload"
@@ -917,7 +928,7 @@
 </span></span><span class="line"><span class="cl">}
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h1 id="8-参考">8. 参考</h1>
+</div><h2 id="8-参考">8. 参考</h2>
 <p><a href="https://github.com/wy876/POC/raw/f98270a2af8444ba6a1733888bf9c95560d0970e/%e5%af%8c%e9%80%9a%e5%a4%a9%e4%b8%8b%e5%a4%96%e8%b4%b8ERP/%e5%af%8c%e9%80%9a%e5%a4%a9%e4%b8%8b%e5%a4%96%e8%b4%b8ERP%e4%bb%bb%e6%84%8f%e6%96%87%e4%bb%b6%e4%b8%8a%e4%bc%a0%e6%bc%8f%e6%b4%9e.md" title="https://github.com/wy876/POC/raw/f98270a2af8444ba6a1733888bf9c95560d0970e/富通天下外贸ERP/富通天下外贸ERP任意文件上传漏洞.md" target="_blank" rel="noopener noreffer">https://github.com/wy876/POC/raw/f98270a2af8444ba6a1733888bf9c95560d0970e/富通天下外贸ERP/富通天下外贸ERP任意文件上传漏洞.md</a></p>
 <p><a href="https://wiki.owasp.org/index.php/Category:OWASP_WebGoat.NET" title="https://wiki.owasp.org/index.php/Category:OWASP_WebGoat.NET" target="_blank" rel="noopener noreffer">https://wiki.owasp.org/index.php/Category:OWASP_WebGoat.NET</a></p>
 <p><a href="https://www.freebuf.com/vuls/398034.html" title="https://www.freebuf.com/vuls/398034.html" target="_blank" rel="noopener noreffer">https://www.freebuf.com/vuls/398034.html</a></p>

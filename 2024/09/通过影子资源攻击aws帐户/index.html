@@ -31,7 +31,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "https:\/\/www.geekby.site\/2024\/09\/%E9%80%9A%E8%BF%87%E5%BD%B1%E5%AD%90%E8%B5%84%E6%BA%90%E6%94%BB%E5%87%BBaws%E5%B8%90%E6%88%B7\/"
-        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "云原生安全","wordcount":  417 ,
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "云原生安全","wordcount":  411 ,
         "url": "https:\/\/www.geekby.site\/2024\/09\/%E9%80%9A%E8%BF%87%E5%BD%B1%E5%AD%90%E8%B5%84%E6%BA%90%E6%94%BB%E5%87%BBaws%E5%B8%90%E6%88%B7\/","datePublished": "2024-09-25T17:00:00+08:00","dateModified": "2024-09-25T17:00:00+08:00","publisher": {
             "@type": "Organization",
             "name": "Geekby","logo": {
@@ -113,7 +113,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animated flipInX">通过影子资源攻击AWS帐户</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/"><i class="far fa-folder fa-fw"></i>云原生安全</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2024-09-25">2024-09-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 417 字&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2024-09-25">2024-09-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 411 字&nbsp;
                 <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
         </div><div class="details toc" id="toc-static"  kept="">
                 <div class="details-summary toc-title">
@@ -149,8 +149,7 @@
 <blockquote>
 <p>影子资源是指在AWS环境中自动或半自动生成的资源，通常在用户不知情的情况下创建，可能会被账户所有者忽视。</p>
 </blockquote>
-<p>举个例子，在AWS中，影子资源可以是为支持各种服务而创建的 AWS S3 bucket。在对这一载体（特别是利用 S3 桶资源）进行彻底调查时，我们发现了一种技术，并将其命名为 “桶垄断”。这种技术可以大大提高利用影子 S3 桶资源进行攻击的成功率。</p>
-<p>以AWS CloudFormation 服务为例，AWS CloudFormation是一个AWS提供的，可以帮助用户快速创建云资源的工具。一般来说，创建AWS资源，可以使用CLI，API或者各种SDK直接创建资源或者通过控制台页面进行点击操作，这些方式对于创建单类资源还好，如果要用来管理整个team或公司的资源就显得力不从心，而CloudFormation是专门用来管理AWS资源的工具，可以清晰的描述和修改资源。下面是一个Template示例：</p>
+<p>在AWS中，影子资源可以是为支持各种服务而创建的 AWS S3 bucket。以AWS CloudFormation 服务为例，AWS CloudFormation是一个AWS提供的，可以帮助用户快速创建云资源的工具。一般来说，创建AWS资源，可以使用CLI，API或者各种SDK直接创建资源或者通过控制台页面进行点击操作，这些方式对于创建单类资源还好，如果要用来管理整个team或公司的资源就显得力不从心，而CloudFormation是专门用来管理AWS资源的工具，可以清晰的描述和修改资源。下面是一个Template示例：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1

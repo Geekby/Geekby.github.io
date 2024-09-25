@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>通过影子资源攻击AWS帐户 - Geekby&#39;s Blog</title><meta name="Description" content="通过影子资源攻击AWS帐户"><meta property="og:url" content="https://www.geekby.site/2024/09/%E9%80%9A%E8%BF%87%E5%BD%B1%E5%AD%90%E8%B5%84%E6%BA%90%E6%94%BB%E5%87%BBaws%E5%B8%90%E6%88%B7/">
+  <meta property="og:site_name" content="Geekby&#39;s Blog">
+  <meta property="og:title" content="通过影子资源攻击AWS帐户">
+  <meta property="og:description" content="通过影子资源攻击AWS帐户">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-09-25T17:00:00+08:00">
+    <meta property="article:modified_time" content="2024-09-25T17:00:00+08:00">
+    <meta property="article:tag" content="云原生安全">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="通过影子资源攻击AWS帐户">
+  <meta name="twitter:description" content="通过影子资源攻击AWS帐户">
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2024/09/%E9%80%9A%E8%BF%87%E5%BD%B1%E5%AD%90%E8%B5%84%E6%BA%90%E6%94%BB%E5%87%BBaws%E5%B8%90%E6%88%B7/" /><link rel="prev" href="https://www.geekby.site/2024/08/dotnet%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%B3%BB%E5%88%97%E4%B8%80/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "通过影子资源攻击AWS帐户",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2024\/09\/%E9%80%9A%E8%BF%87%E5%BD%B1%E5%AD%90%E8%B5%84%E6%BA%90%E6%94%BB%E5%87%BBaws%E5%B8%90%E6%88%B7\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "云原生安全","wordcount":  417 ,
+        "url": "https:\/\/www.geekby.site\/2024\/09\/%E9%80%9A%E8%BF%87%E5%BD%B1%E5%AD%90%E8%B5%84%E6%BA%90%E6%94%BB%E5%87%BBaws%E5%B8%90%E6%88%B7\/","datePublished": "2024-09-25T17:00:00+08:00","dateModified": "2024-09-25T17:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "通过影子资源攻击AWS帐户"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">通过影子资源攻击AWS帐户</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/"><i class="far fa-folder fa-fw"></i>云原生安全</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2024-09-25">2024-09-25</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 417 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-前言">1. 前言</a></li>
+    <li><a href="#2-背景">2. 背景</a></li>
+    <li><a href="#3-使用s3-bucket作为影子资源">3. 使用S3 Bucket作为影子资源</a></li>
+    <li><a href="#4-aws-cloudformation-漏洞cf-templates-hash-region">4. AWS CloudFormation 漏洞：cf-templates-{Hash}-{Region}</a>
+      <ul>
+        <li><a href="#cloudformation存储桶已被攻击者占用会的情况">CloudFormation存储桶已被攻击者占用会的情况</a></li>
+        <li><a href="#42-存储桶设置为公开读写">4.2. 存储桶设置为公开读写</a></li>
+        <li><a href="#43-编辑cloudformation模板">4.3. 编辑CloudFormation模板</a></li>
+        <li><a href="#44-如何获取哈希值">4.4. 如何获取哈希值</a></li>
+      </ul>
+    </li>
+    <li><a href="#5-aws-glue漏洞aws-glue-assets-account-id-region">5. AWS Glue漏洞：aws-glue-assets-{Account-ID}-{Region}</a></li>
+    <li><a href="#6-aws-emr漏洞aws-emr-studio-account-id-region">6. AWS EMR漏洞：aws-emr-studio-{Account-ID}-{Region}</a></li>
+    <li><a href="#7-aws-sagemaker漏洞sagemaker-region-account-id">7. AWS SageMaker漏洞：sagemaker-{Region}-{Account-ID}</a></li>
+    <li><a href="#8-aws-codestar-漏洞aws-codestar-region-account-id">8. AWS CodeStar 漏洞：aws-codestar-{Region}-{Account-ID}</a></li>
+    <li><a href="#9-aws-service-catalog漏洞cf-templates-hash-region">9. AWS Service Catalog漏洞：cf-templates-{Hash}-{Region}</a></li>
+    <li><a href="#10-启示">10. 启示</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="rsac议题解读-通过影子资源攻击aws帐户">RSAC议题解读-通过影子资源攻击AWS帐户</h1>
+<h2 id="1-前言">1. 前言</h2>
+<p>2024 年的 BlackHat 会议上三位研究员分享了名为《Breaching-AWS-Accounts-Through-Shadow-Resources》的议题，议题主要探讨了一种新型的攻击方式，称为“影子资源”（Shadow Resources），以及如何通过这些资源对AWS账户进行攻击。</p>
+<h2 id="2-背景">2. 背景</h2>
+<p>首先来讲一下什么是影子资源：</p>
+<blockquote>
+<p>影子资源是指在AWS环境中自动或半自动生成的资源，通常在用户不知情的情况下创建，可能会被账户所有者忽视。</p>
+</blockquote>
+<p>举个例子，在AWS中，影子资源可以是为支持各种服务而创建的 AWS S3 bucket。在对这一载体（特别是利用 S3 桶资源）进行彻底调查时，我们发现了一种技术，并将其命名为 “桶垄断”。这种技术可以大大提高利用影子 S3 桶资源进行攻击的成功率。</p>
+<p>以AWS CloudFormation 服务为例，AWS CloudFormation是一个AWS提供的，可以帮助用户快速创建云资源的工具。一般来说，创建AWS资源，可以使用CLI，API或者各种SDK直接创建资源或者通过控制台页面进行点击操作，这些方式对于创建单类资源还好，如果要用来管理整个team或公司的资源就显得力不从心，而CloudFormation是专门用来管理AWS资源的工具，可以清晰的描述和修改资源。下面是一个Template示例：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">AWSTemplateFormatVersion</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;2024-09-25&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l">create ELB for query service</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">Parameters</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">EnvName</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">Type</span><span class="p">:</span><span class="w"> </span><span class="l">String</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">Description</span><span class="p">:</span><span class="w"> </span><span class="l">Name of current running environment</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">Resources</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">AWSCFELB</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">Type</span><span class="p">:</span><span class="w"> </span><span class="l">AWS::ElasticLoadBalancing::LoadBalancer</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">Properties</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">LoadBalancerName</span><span class="p">:</span><span class="w"> </span>!<span class="l">Join</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="s1">&#39;&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- - <span class="l">aws-cf-lb-</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span>- !<span class="l">Ref &#39;EnvName&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">Subnets</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;xxxxx&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">SecurityGroups</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;yyyyy&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">CrossZone</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">Listeners</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span>- <span class="nt">LoadBalancerPort</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;2443&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">InstancePort</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;3443&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">Protocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">InstanceProtocol</span><span class="p">:</span><span class="w"> </span><span class="l">TCP</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">      </span><span class="nt">ConnectionSettings</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="nt">IdleTimeout</span><span class="p">:</span><span class="w"> </span><span class="m">300</span><span class="w">
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><p>其中：</p>
+<ul>
+<li><strong>template</strong>可以是本地文件，也可以是放在S3上的文件</li>
+<li><strong>stack</strong>: 管理资源的集合，一个template对应一个stack</li>
+<li><strong>changeset</strong>: 描述对一个stack的修改</li>
+</ul>
+<blockquote>
+<p>简单理解可以类比k8s pod的配置文件，通过<code>kubectl apply xx.yaml</code> 即可批量创建多个资源。</p>
+</blockquote>
+<p>在使用 AWS CloudFormation 时，当用户通过 AWS 控制台在新区域首次使用该服务创建新stack时，该服务会自动触发 AWS 创建一个 S3 存储桶，用于存储用户的 CloudFormation 模板。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251740959.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251740959.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251740959.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251740959.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251740959.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251740959.png-water_print" /></p>
+<p>众所周知，AWS S3 存储桶名称必须是唯一的。如果用户创建了一个名为my-bucket的存储桶，那么其它用户都无法创建相同名字的新存储桶。</p>
+<p>但是，服务于CloudFormation的 S3 存储桶，除了区域名称外，所有 AWS 区域的存储桶名称都是相同的。 这里面就存在一个安全问题，如果外部攻击者以某种方式猜到 CloudFormation S3 存储桶的名称，并抢在受害者之前在不同的区域创建一个新的存储桶，从而实现劫持的效果。研究发现，攻击者确实抢先注册一个新存储桶，并等待受害者在新区域中使用 CloudFormation 服务，从而使用攻击者控制的 S3 桶作为 CloudFormation 服务的一部分。 通过上述操作，攻击者可以利用S3 bucket执行代码、修改或窃取数据，甚至在用户不知情的情况下完全控制受害者账户。 </p>
+<h2 id="3-使用s3-bucket作为影子资源">3. 使用S3 Bucket作为影子资源</h2>
+<p>S3 存储桶是一种在线存储容器，用于管理文件、图像、视频和其他数据，类似于基于云的硬盘驱动器。</p>
+<p>在 AWS 管理控制台使用 CloudFormation 上传模板文件时，CloudFormation会在用户没有明确指示的情况下自动生成一个 S3 桶，该桶遵循特定命名规范：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251740282.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251740282.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251740282.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251740282.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251740282.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251740282.png-water_print" /></p>
+<ul>
+<li>前缀：这是通过 AWS管理控制台上传模板时为 CloudFormation 服务创建的 S3 存储桶的前缀（“cf-templates”），在所有 AWS 账户中均相同</li>
+<li>哈希：随机的12个字符的哈希值，包含字母数字字符（a-z，0-9）</li>
+<li>区域：表示使用 CloudFormation 服务的区域名称</li>
+</ul>
+<p>研究发现，在不同可用区为同一账户创建模板将生成具有相同前缀和哈希值的 CloudFormation S3存储桶名。唯一不同的是地区部分。举个例子，如果某个帐户在 us-east-1 区域使用 CloudFormation，则相关的桶名称为<code>cf-templates-a3gjv31ap90h-us-east-1</code>。当同一账户在另一个区域（如 eu-west-2）使用 CloudFormation 时，AWS 会创建一个名为<code>cf-templates-a3gjv31ap90h-us-east-2</code>的新存储桶。唯一不同的是地区名称。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251745621.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251745621.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251745621.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251745621.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251745621.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251745621.png-water_print" /></p>
+<p>总之，CloudFormation 的存储桶名称由三部分组成：常量服务名称前缀 cf-templates-、一个包含 <code>4,738,381,338,321,616,896</code> 个可能选项的12个字符的随机字符串（不可能暴力猜解）以及区域名称（公开信息，已知所有33 个AWS可用区）。那么攻击者如何获取哈希值呢？我们将在本文章的后续部分讨论这个问题。</p>
+<h2 id="4-aws-cloudformation-漏洞cf-templates-hash-region">4. AWS CloudFormation 漏洞：cf-templates-{Hash}-{Region}</h2>
+<p>此时，我们有两个主要问题需要解决： </p>
+<ul>
+<li>如果另一个用户已经用指定名称创建了一个存储桶，会有什么影响？</li>
+<li>如何猜到哈希值？我们是否应该将其视为秘密？</li>
+</ul>
+<p>首先来看一下CloudFormation创建存储桶的具体流程：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251745621.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251745621.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251745621.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251745621.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251745621.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251745621.png-water_print" /></p>
+<p>1、用户选择上传模板文件以启动CloudFormation创建资源，该这个过程底层会调用CreateUploadBucket API请求，创建存储桶。
+2、如果用户的 S3 存储桶不存在，CloudFormation会自动创建一个 S3 存储桶，名字为：cf-templates-{Hash}-{Region}。如果桶已经存在，CloudFormation 将直接使用原有存储桶。
+3、服务器返回 S3 存储桶名称。
+4、系统调用 PutObject API 请求将模板文件存储到 S3 存储桶中。
+5、验证等操作将在后台执行（例如，GetTemplateSummary和DescribeStacks）。
+6、启动 CreateStack API 请求，创建堆栈资源。</p>
+<h3 id="cloudformation存储桶已被攻击者占用会的情况">CloudFormation存储桶已被攻击者占用会的情况</h3>
+<p>假设攻击者知道受害者CloudFormation存储桶中哈希值部分，受害者在us-east-1可用区中创建了一个桶，因此攻击者可以在受害者尚未使用过的其它可用区创建一个具有可预测名称的存储桶。</p>
+<p>当受害者首次尝试在eu-west-2中部署新的CloudFormation资源时，将发生以下一系列事件：</p>
+<p><strong>1、受害者启动操作</strong>：受害者在账户A中操作，通过 AWS 管理控制台上传 CloudFormation 模板启动流程。 CloudFormation服务将检查名称为 <code>cf-templates-{Hash}-{Region}</code> 的 S3 存储桶是否存在。如果不存在，它将尝试创建一个。</p>
+<p>**2、存储桶名称唯一：**由于 S3 存储桶名称在所有 AWS 账户中都是全局唯一的，因此目标存储桶名称已被占用。
+<strong>3、CloudFormation ERROR</strong>：当受害者账号中的 CloudFormation 服务尝试创建 S3 桶并将模板文件上传到该桶时，服务遇到了问题。虽然服务识别到桶已经存在，但上传过程失败，CloudFormation返回错误，通常是 “AccessDenied”（拒绝访问），表明服务未能将模板文件上传到现有的 S3 桶。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251746978.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251746978.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251746978.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251746978.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251746978.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251746978.png-water_print" /></p>
+<p>这个问题可以看做是一种拒绝服务（DoS）攻击。出现这种情况是因为 S3 存储桶默认设置为阻止所有公共访问、上传，因此受害者没有权限在攻击者创建的存储桶上执行操作。那么如何将危害升级呢？</p>
+<h3 id="42-存储桶设置为公开读写">4.2. 存储桶设置为公开读写</h3>
+<p>首先将存储桶权限设置为公开读写：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747546.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747546.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747546.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747546.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747546.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747546.png-water_print" /></p>
+<p>那么再来看一下CloudFormation运行的整个过程，受害者账户中CloudFormation服务尝试创建 S3 存储桶并将模板文件上传到该存储桶，但由于该存储桶已经存在（在攻击者的账户中），它将信任该存储桶，访问该存储桶并将模板文件上传到该存储桶。</p>
+<p>这就导致CloudFormation存在<strong>信息泄露漏洞</strong>，攻击者可以读取受害者CloudFormation服务写入恶意 S3 存储桶的模板文件。如果CloudFormation模板包含环境变量、凭据等敏感信息，该漏洞可能会造成更加严重的影响。</p>
+<h3 id="43-编辑cloudformation模板">4.3. 编辑CloudFormation模板</h3>
+<p>如何进一步扩大危害呢？研究发现，rhino实验室提出一种资源注入技术，简单说就是：创建一个Lambda函数，并利用AWS的PutBucketNotification 事件触发，修改传入的CloudFormation模板（插入恶意代码如：将攻击者赋予管理员权限），因此，只要有文件被上传到该文件桶，Lambda 函数就会自动对其进行修改。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747505.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747505.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747505.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747505.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747505.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747505.png-water_print" /></p>
+<h3 id="44-如何获取哈希值">4.4. 如何获取哈希值</h3>
+<p>如前面章节所述，CloudFormation 服务通过 AWS 控制台使用的 S3 存储桶名称包括以下格式：<code>cf-templates-{Hash}-{Region}</code>。其中哈希值它由12个字符（a-z，0-9）的字母数字序列组成，可产生 <code>4,738,381,338,321,616,896</code>种可能的组合，因此无法简单猜测或暴力破解。目前暂时无法通过算法计算出特定用户的哈希值。尽管如此，还是通过使用GitHub等代码托管平台的搜索到大量泄露的哈希值：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747505.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747505.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747505.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747505.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747505.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747505.png-water_print" /></p>
+<p>研究发现，除了CloudFormation存在存储桶问题外，还发现了多种产品存在类似的问题，一些 AWS 服务使用可预测的名称创建S3桶。这些服务不使用哈希值，而是使用 AWS 帐户ID作为这些存储桶的唯一标识符。例如，某个 AWS 服务使用的存储桶名称存在以下规律：{服务前缀}-{AWS 帐户 ID}-{可用区}，经过分析研究，最终发现了6个AWS服务的问题。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print" /></p>
+<h2 id="5-aws-glue漏洞aws-glue-assets-account-id-region">5. AWS Glue漏洞：aws-glue-assets-{Account-ID}-{Region}</h2>
+<p>AWS Glue 是一项无服务器数据集成服务，可让使用分析功能的用户轻松发现、准备、移动和集成来自多个来源的数据。您可以将其用于分析、机器学习和应用程序开发。它还包括用于编写、运行任务和实施业务工作流程的额外生产力和数据操作工具。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print" /></p>
+<p>研究中发现，当用户使用AWS管理控制台和Visual ETL工具创建作业时，会使用一个S3桶来存储 Glue 作业，这些作业主要是由 Glue 执行的 Python 脚本。</p>
+<p>Glue 服务会根据以下命名规则为用户自动创建这个 S3 存储桶：<code>aws-glue-assets-{Account-ID}-{Region}</code>。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747578.png-water_print" /></p>
+<p>攻击思路和前面的相同，在此不做赘述：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747748.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747748.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747748.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747748.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747748.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747748.png-water_print" /></p>
+<p>其中一个有趣的现象是，即使攻击者修改了Glue 脚本的内容，当受害者在AWS管理控制台中查看该函数时，显示的仍然是正常的内容，并不是修改后的内容，但受害者的 Glue 服务仍会运行修改后恶意的脚本，猜测是由于缓存机制造成的。</p>
+<h2 id="6-aws-emr漏洞aws-emr-studio-account-id-region">6. AWS EMR漏洞：aws-emr-studio-{Account-ID}-{Region}</h2>
+<p>Amazon Elastic MapReduce (Amazon EMR) 是一种 Web 服务，能够轻松快速并经济高效地处理大量数据。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747711.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747711.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747711.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747711.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747711.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251747711.png-water_print" /></p>
+<p>研究中发现，当用户使用EMR 服务和EMR Studio创建studio时，EMR 服务会自动生成一个 S3 存储桶。该 S3 存储桶的命名过滤为：<code>aws-emr-studio-{Account-ID}-{Region}</code>。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748146.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748146.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748146.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748146.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748146.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748146.png-water_print" /></p>
+<p>攻击思路：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748433.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748433.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748433.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748433.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748433.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748433.png-water_print" /></p>
+<p>一旦受害者的 EMR 服务将文件写入攻击者的存储桶，攻击者就可以通过注入恶意代码来加以利用。在这种情况下，Lambda函数会将恶意代码注入由受害者的 EMR 服务写入攻击者存储桶的 Jupyter 笔记本（.ipynb）文件中。当用户在 EMR Studio 中打开笔记本时，可能会导致跨站脚本 (XSS) 攻击。例如，攻击者可以将用户重定向到欺骗的 AWS 登录页面，从而窃取凭据。</p>
+<p>有趣的是在该服务下，AWS 在策略中强制执行了检查条件，即检查 EMR所用 S3 存储桶的 aws:ResourceAccount，这样可以确保 S3 存储桶属于受害者的账户。若不相同，会触发一个告警。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748409.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748409.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748409.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748409.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748409.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251748409.png-water_print" /></p>
+<p>此时，用户还是有两个选项来继续创建Studio：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749415.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749415.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749415.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749415.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749415.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749415.png-water_print" /></p>
+<p>无论用户选择哪种，均可以成功创建Studio。</p>
+<h2 id="7-aws-sagemaker漏洞sagemaker-region-account-id">7. AWS SageMaker漏洞：sagemaker-{Region}-{Account-ID}</h2>
+<p>AWS SageMaker 是一项用于大规模构建、训练和部署机器学习模型的服务，为整个工作流程提供全面的工具。Amazon SageMaker Canvas 是该生态系统的一部分，它是一个无代码的可视化平台，使非开发人员和业务分析师能够轻松开发、训练和部署模型。</p>
+<p>研究发现，当用户创建 SageMaker Canvas时，SageMaker 服务会自动创建一个 S3 存储桶来存储服务使用的文件。该 S3 存储桶的命名规律为：<code>Sagemaker-{Region}-{Account-ID}</code>。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749344.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749344.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749344.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749344.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749344.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749344.png-water_print" /></p>
+<p>攻击思路如下：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749343.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749343.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749343.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749343.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749343.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749343.png-water_print" /></p>
+<p>每次 SageMaker Canvas 用户尝试创建数据集或将数据导入服务时，这些数据都会被写入攻击者的 S3 存储桶（Canvas/default-{Time}/* 下）。之后，SageMaker Canvas 服务将为用户使用这些数据，从而导致以下重大风险： </p>
+<h2 id="8-aws-codestar-漏洞aws-codestar-region-account-id">8. AWS CodeStar 漏洞：aws-codestar-{Region}-{Account-ID}</h2>
+<p>AWS CodeStar是一项通过集成用于编码、构建和部署应用程序的 AWS 开发工具来简化项目管理的服务。</p>
+<p>创建 CodeStar项目时，CodeStar服务会自动为所用项目生成一个 S3 存储桶。该 S3 存储桶的命名规律为：<code>aws-codestar-{Region}-{Account-ID}</code>。</p>
+<p>攻击思路如下：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749399.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749399.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749399.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749399.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749399.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251749399.png-water_print" /></p>
+<p>与前一种情况类似，如果桶名被攻击者提前注册，合法用户将无法使用该服务，并在尝试创建 CodeStar 项目时收到 “项目创建失败 ”的消息。 从而造成拒绝服务（DoS）攻击，即攻击者阻止用户使用特定的 AWS 服务。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251750609.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251750609.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251750609.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251750609.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251750609.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251750609.png-water_print" /></p>
+<h2 id="9-aws-service-catalog漏洞cf-templates-hash-region">9. AWS Service Catalog漏洞：cf-templates-{Hash}-{Region}</h2>
+<p>AWS Service Catalog允许组织集中管理、创建和分发获准在AWS上使用的IT服务目录，这些服务包括虚拟机映像、服务器、软件、数据库以及完整的多层应用程序架构等。</p>
+<p>有几种方法可以将产品添加到服务目录中，其中一种是使用 AWS CloudFormation。如果选择这种方法，用户可以选择上传 CloudFormation 模板。上传 CloudFormation 模板后，AWS 服务目录会创建一个 S3 存储桶来存储模板， 这个就和前面的攻击相同了。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251750128.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251750128.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251750128.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251750128.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251750128.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409251750128.png-water_print" /></p>
+<h2 id="10-启示">10. 启示</h2>
+<p>为了解决影子访问问题，需要采取一系列措施来减少不必要的访问并加强身份验证和授权控制。</p>
+<p>首先，**组织应该实施最小权限原则，**只为所需人员提供所需的访问权限。这可以通过限制对敏感资源的访问和使用强密码策略来实现。此外，组织还应定期审查和更新账户权限，以确保它们仍然有效且符合最佳实践。</p>
+<p>此外，<strong>组织还应实施多因素身份验证（MFA）</strong>，这是一种更安全的身份验证方法，要求用户提供额外的验证步骤才能登录账户。这可以大大减少未经授权的访问尝试并提高安全性。</p>
+<p>另一个重要的步骤是<strong>监控和日志记录</strong>。组织应使用监控工具来跟踪和记录账户活动，以便及时发现任何可疑行为或未经授权的访问尝试。这有助于组织快速响应安全事件并采取适当的措施来防止进一步的数据泄露或其他安全事件发生。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2024-09-25</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2024/09/%E9%80%9A%E8%BF%87%E5%BD%B1%E5%AD%90%E8%B5%84%E6%BA%90%E6%94%BB%E5%87%BBaws%E5%B8%90%E6%88%B7/" data-title="通过影子资源攻击AWS帐户"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2024/09/%E9%80%9A%E8%BF%87%E5%BD%B1%E5%AD%90%E8%B5%84%E6%BA%90%E6%94%BB%E5%87%BBaws%E5%B8%90%E6%88%B7/" data-title="通过影子资源攻击AWS帐户"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2024/09/%E9%80%9A%E8%BF%87%E5%BD%B1%E5%AD%90%E8%B5%84%E6%BA%90%E6%94%BB%E5%87%BBaws%E5%B8%90%E6%88%B7/" data-title="通过影子资源攻击AWS帐户"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/">云原生安全</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2024/08/dotnet%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%B3%BB%E5%88%97%E4%B8%80/" class="prev" rel="prev" title="dotnet代码审计系列(一)"><i class="fas fa-angle-left fa-fw"></i>dotnet代码审计系列(一)</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

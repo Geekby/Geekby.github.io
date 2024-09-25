@@ -234,50 +234,50 @@
 <h3 id="12-组件接口存在的风险">1.2 组件接口存在的风险</h3>
 <p>k8s 中的大多数组件以 HTTP 和 HTTPS 的 API 形式提供服务，常见端口如下：</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:center">组件</th>
-<th style="text-align:center">默认端口</th>
-<th style="text-align:center">说明</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">API Server</td>
-<td style="text-align:center">6443</td>
-<td style="text-align:center">基于 HTTP 的安全端口</td>
-</tr>
-<tr>
-<td style="text-align:center">API Server</td>
-<td style="text-align:center">8080</td>
-<td style="text-align:center">不安全的 HTTP 端口</td>
-</tr>
-<tr>
-<td style="text-align:center">Kubelet</td>
-<td style="text-align:center">10248</td>
-<td style="text-align:center">检查健康状态的端口</td>
-</tr>
-<tr>
-<td style="text-align:center">Kubelet</td>
-<td style="text-align:center">10250</td>
-<td style="text-align:center">面向 API Server 提供服务的 HTTPS 端口</td>
-</tr>
-<tr>
-<td style="text-align:center">Dashboard</td>
-<td style="text-align:center">8001</td>
-<td style="text-align:center">提供 HTTP 服务的端口</td>
-</tr>
-<tr>
-<td style="text-align:center">etcd</td>
-<td style="text-align:center">2379</td>
-<td style="text-align:center">客户端与服务端之间通信的端口</td>
-</tr>
-<tr>
-<td style="text-align:center">etcd</td>
-<td style="text-align:center">2380</td>
-<td style="text-align:center">不同服务端之间通信的端口</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: center">组件</th>
+          <th style="text-align: center">默认端口</th>
+          <th style="text-align: center">说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">API Server</td>
+          <td style="text-align: center">6443</td>
+          <td style="text-align: center">基于 HTTP 的安全端口</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">API Server</td>
+          <td style="text-align: center">8080</td>
+          <td style="text-align: center">不安全的 HTTP 端口</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Kubelet</td>
+          <td style="text-align: center">10248</td>
+          <td style="text-align: center">检查健康状态的端口</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Kubelet</td>
+          <td style="text-align: center">10250</td>
+          <td style="text-align: center">面向 API Server 提供服务的 HTTPS 端口</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Dashboard</td>
+          <td style="text-align: center">8001</td>
+          <td style="text-align: center">提供 HTTP 服务的端口</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">etcd</td>
+          <td style="text-align: center">2379</td>
+          <td style="text-align: center">客户端与服务端之间通信的端口</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">etcd</td>
+          <td style="text-align: center">2380</td>
+          <td style="text-align: center">不同服务端之间通信的端口</td>
+      </tr>
+  </tbody>
 </table>
 <h4 id="121-api-server">1.2.1 API Server</h4>
 <p>默认情况下，<code>API Server</code> 在 <code>8080</code> 和 <code>6443</code> 两个端口上提供服务。</p>

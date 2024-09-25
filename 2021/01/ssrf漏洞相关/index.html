@@ -419,25 +419,25 @@
 <p><strong>手动实现</strong></p>
 <p>需要先添加一条 NS 记录和一条 A 记录：</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:center">记录类型</th>
-<th style="text-align:center">主机记录</th>
-<th style="text-align:center">记录值</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">NS</td>
-<td style="text-align:center">test</td>
-<td style="text-align:center">ns.geekby.xyz</td>
-</tr>
-<tr>
-<td style="text-align:center">A</td>
-<td style="text-align:center">ns</td>
-<td style="text-align:center">39.96.14.41</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: center">记录类型</th>
+          <th style="text-align: center">主机记录</th>
+          <th style="text-align: center">记录值</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">NS</td>
+          <td style="text-align: center">test</td>
+          <td style="text-align: center">ns.geekby.xyz</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">A</td>
+          <td style="text-align: center">ns</td>
+          <td style="text-align: center">39.96.14.41</td>
+      </tr>
+  </tbody>
 </table>
 <p>NS 记录表示域名 <code>test.geekby.xyz</code> 这个子域名指定由 <code>ns.geekby.xyz</code> 这个域名服务器来解析，然后 A 记录表示这个 <code>ns.geekby.xyz</code> 的位置在 IP 地址 <code>39.96.14.41</code> 上。</p>
 <p>这里搭建 DNS 服务器采用 python 的 twisted 库中的 name 模块，代码如下：</p>

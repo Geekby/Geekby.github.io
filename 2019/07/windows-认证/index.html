@@ -495,42 +495,42 @@ Smbmap</p>
 </ul>
 <p>由于白银票据需要目标服务器的Hash，所以没办法生成对应域内所有服务器的票据，也不能通过TGT申请。因此只能针对服务器上的某些服务去伪造，伪造的服务类型列表如下:</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:center">服务注释</th>
-<th style="text-align:center">服务名</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">WMI</td>
-<td style="text-align:center">HOST、RPCSS</td>
-</tr>
-<tr>
-<td style="text-align:center">Powershell Remoteing</td>
-<td style="text-align:center">HOST、HTTP</td>
-</tr>
-<tr>
-<td style="text-align:center">WinRM</td>
-<td style="text-align:center">HOST、HTTP</td>
-</tr>
-<tr>
-<td style="text-align:center">Scheduled Tasks</td>
-<td style="text-align:center">HOST</td>
-</tr>
-<tr>
-<td style="text-align:center">LDAP 、DCSync</td>
-<td style="text-align:center">LDAP</td>
-</tr>
-<tr>
-<td style="text-align:center">Windows File Share (CIFS)</td>
-<td style="text-align:center">CIFS</td>
-</tr>
-<tr>
-<td style="text-align:center">Windows Remote ServerAdministration Tools</td>
-<td style="text-align:center">RPCSS、LDAP、CIFS</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: center">服务注释</th>
+          <th style="text-align: center">服务名</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">WMI</td>
+          <td style="text-align: center">HOST、RPCSS</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Powershell Remoteing</td>
+          <td style="text-align: center">HOST、HTTP</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">WinRM</td>
+          <td style="text-align: center">HOST、HTTP</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Scheduled Tasks</td>
+          <td style="text-align: center">HOST</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">LDAP 、DCSync</td>
+          <td style="text-align: center">LDAP</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Windows File Share (CIFS)</td>
+          <td style="text-align: center">CIFS</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">Windows Remote ServerAdministration Tools</td>
+          <td style="text-align: center">RPCSS、LDAP、CIFS</td>
+      </tr>
+  </tbody>
 </table>
 <h3 id="白银票据silver-tickets防御">白银票据(Silver Tickets)防御</h3>
 <ol>

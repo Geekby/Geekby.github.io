@@ -604,25 +604,25 @@
 <p>首先我们来思考一个问题：**&ldquo;谁有权限能修改 msDS-AllowedToActOnBehalfOfOtherIdentity 属性的值呢?&rdquo; **</p>
 <p>分析环境如下：</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:center">角色</th>
-<th style="text-align:center">用户</th>
-<th style="text-align:center">系统</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">域内普通机器</td>
-<td style="text-align:center">Redteam\web3user</td>
-<td style="text-align:center">Win 2012</td>
-</tr>
-<tr>
-<td style="text-align:center">域控机器</td>
-<td style="text-align:center">Redteam\administrator</td>
-<td style="text-align:center">Win 2012</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: center">角色</th>
+          <th style="text-align: center">用户</th>
+          <th style="text-align: center">系统</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">域内普通机器</td>
+          <td style="text-align: center">Redteam\web3user</td>
+          <td style="text-align: center">Win 2012</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">域控机器</td>
+          <td style="text-align: center">Redteam\administrator</td>
+          <td style="text-align: center">Win 2012</td>
+      </tr>
+  </tbody>
 </table>
 <p>查询 web3 的 msDS-AllowedToActOnBehalfOfOtherIdentity 属性发现默认是不存在的。</p>
 <p><img

@@ -4,7 +4,14 @@
         <link>https://www.geekby.site/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/</link>
         <description>云原生安全 - 标签 - Geekby&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
-            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Wed, 29 Nov 2023 15:28:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Wed, 25 Sep 2024 17:00:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/" rel="self" type="application/rss+xml" /><item>
+    <title>通过影子资源攻击AWS帐户</title>
+    <link>https://www.geekby.site/2024/09/%E9%80%9A%E8%BF%87%E5%BD%B1%E5%AD%90%E8%B5%84%E6%BA%90%E6%94%BB%E5%87%BBaws%E5%B8%90%E6%88%B7/</link>
+    <pubDate>Wed, 25 Sep 2024 17:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2024/09/%E9%80%9A%E8%BF%87%E5%BD%B1%E5%AD%90%E8%B5%84%E6%BA%90%E6%94%BB%E5%87%BBaws%E5%B8%90%E6%88%B7/</guid>
+    <description><![CDATA[BlackHat议题解读：通过影子资源攻击AWS帐户]]></description>
+</item><item>
     <title>Kubernetes Pod 横向移动</title>
     <link>https://www.geekby.site/2023/11/kubernetes-pod-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/</link>
     <pubDate>Wed, 29 Nov 2023 15:28:00 &#43;0800</pubDate>

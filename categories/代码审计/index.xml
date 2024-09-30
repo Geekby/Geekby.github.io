@@ -1,78 +1,78 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>代码审计 - 分类 - Geekby&#39;s Blog</title>
-        <link>https://www.geekby.site/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</link>
+        <link>http://localhost:1313/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/</link>
         <description>代码审计 - 分类 - Geekby&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
-            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Fri, 30 Aug 2024 09:23:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Fri, 30 Aug 2024 09:23:00 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/categories/%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1/" rel="self" type="application/rss+xml" /><item>
     <title>dotnet代码审计系列(一)</title>
-    <link>https://www.geekby.site/2024/08/dotnet%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%B3%BB%E5%88%97%E4%B8%80/</link>
+    <link>http://localhost:1313/2024/08/dotnet%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%B3%BB%E5%88%97%E4%B8%80/</link>
     <pubDate>Fri, 30 Aug 2024 09:23:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2024/08/dotnet%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%B3%BB%E5%88%97%E4%B8%80/</guid>
+    <guid>http://localhost:1313/2024/08/dotnet%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E7%B3%BB%E5%88%97%E4%B8%80/</guid>
     <description><![CDATA[dotnet代码审计]]></description>
 </item><item>
     <title>CodeQL 基础</title>
-    <link>https://www.geekby.site/2022/02/codeql%E5%9F%BA%E7%A1%80/</link>
+    <link>http://localhost:1313/2022/02/codeql%E5%9F%BA%E7%A1%80/</link>
     <pubDate>Tue, 15 Feb 2022 15:23:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2022/02/codeql%E5%9F%BA%E7%A1%80/</guid>
+    <guid>http://localhost:1313/2022/02/codeql%E5%9F%BA%E7%A1%80/</guid>
     <description><![CDATA[CodeQL 基础]]></description>
 </item><item>
     <title>Java 本地命令执行漏洞</title>
-    <link>https://www.geekby.site/2022/02/java%E6%9C%AC%E5%9C%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</link>
+    <link>http://localhost:1313/2022/02/java%E6%9C%AC%E5%9C%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</link>
     <pubDate>Sun, 13 Feb 2022 15:23:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2022/02/java%E6%9C%AC%E5%9C%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</guid>
+    <guid>http://localhost:1313/2022/02/java%E6%9C%AC%E5%9C%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</guid>
     <description><![CDATA[历史文章整理 - Java 代码审计 - Java 本地命令执行漏洞]]></description>
 </item><item>
     <title>Java 代码审计 - 背景</title>
-    <link>https://www.geekby.site/2022/02/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%83%8C%E6%99%AF/</link>
+    <link>http://localhost:1313/2022/02/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%83%8C%E6%99%AF/</link>
     <pubDate>Sun, 13 Feb 2022 14:23:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2022/02/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%83%8C%E6%99%AF/</guid>
+    <guid>http://localhost:1313/2022/02/java%E4%BB%A3%E7%A0%81%E5%AE%A1%E8%AE%A1%E8%83%8C%E6%99%AF/</guid>
     <description><![CDATA[历史文章整理 - Java 代码审计 - Java 代码审计背景介绍]]></description>
 </item><item>
     <title>JavaScript 反混淆</title>
-    <link>https://www.geekby.site/2021/11/javascript%E5%8F%8D%E6%B7%B7%E6%B7%86/</link>
+    <link>http://localhost:1313/2021/11/javascript%E5%8F%8D%E6%B7%B7%E6%B7%86/</link>
     <pubDate>Thu, 18 Nov 2021 09:09:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2021/11/javascript%E5%8F%8D%E6%B7%B7%E6%B7%86/</guid>
+    <guid>http://localhost:1313/2021/11/javascript%E5%8F%8D%E6%B7%B7%E6%B7%86/</guid>
     <description><![CDATA[JavaScript 反混淆]]></description>
 </item><item>
     <title>Shiro 反序列化漏洞原理分析</title>
-    <link>https://www.geekby.site/2021/10/shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/</link>
+    <link>http://localhost:1313/2021/10/shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/</link>
     <pubDate>Sun, 10 Oct 2021 11:00:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2021/10/shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/</guid>
+    <guid>http://localhost:1313/2021/10/shiro%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E/</guid>
     <description><![CDATA[Shiro 反序列化漏洞 &amp; CommonsCollectionsK1 &amp; CommonsBeanutils1]]></description>
 </item><item>
     <title>Webshell 内存马分析</title>
-    <link>https://www.geekby.site/2021/09/webshell%E5%86%85%E5%AD%98%E9%A9%AC%E5%88%86%E6%9E%90/</link>
+    <link>http://localhost:1313/2021/09/webshell%E5%86%85%E5%AD%98%E9%A9%AC%E5%88%86%E6%9E%90/</link>
     <pubDate>Wed, 22 Sep 2021 10:00:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2021/09/webshell%E5%86%85%E5%AD%98%E9%A9%AC%E5%88%86%E6%9E%90/</guid>
+    <guid>http://localhost:1313/2021/09/webshell%E5%86%85%E5%AD%98%E9%A9%AC%E5%88%86%E6%9E%90/</guid>
     <description><![CDATA[Webshell 内存马分析]]></description>
 </item><item>
     <title>Java反序列化漏洞系列-5</title>
-    <link>https://www.geekby.site/2021/09/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-5/</link>
+    <link>http://localhost:1313/2021/09/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-5/</link>
     <pubDate>Wed, 01 Sep 2021 11:00:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2021/09/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-5/</guid>
+    <guid>http://localhost:1313/2021/09/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-5/</guid>
     <description><![CDATA[7U21 Gadget 分析]]></description>
 </item><item>
     <title>Java反序列化漏洞系列-4</title>
-    <link>https://www.geekby.site/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-4/</link>
+    <link>http://localhost:1313/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-4/</link>
     <pubDate>Mon, 30 Aug 2021 18:00:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-4/</guid>
+    <guid>http://localhost:1313/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-4/</guid>
     <description><![CDATA[Java 动态加载字节码 &amp;&amp; CommonsCollections 3、5、7 Gadget链分析]]></description>
 </item><item>
     <title>Java反序列化漏洞系列-3</title>
-    <link>https://www.geekby.site/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-3/</link>
+    <link>http://localhost:1313/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-3/</link>
     <pubDate>Sun, 29 Aug 2021 17:52:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-3/</guid>
+    <guid>http://localhost:1313/2021/08/java%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E-3/</guid>
     <description><![CDATA[反序列化涉及到的相关协议]]></description>
 </item></channel>
 </rss>

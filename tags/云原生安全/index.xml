@@ -1,57 +1,57 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>云原生安全 - 标签 - Geekby&#39;s Blog</title>
-        <link>https://www.geekby.site/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/</link>
+        <link>http://localhost:1313/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/</link>
         <description>云原生安全 - 标签 - Geekby&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
-            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Wed, 25 Sep 2024 17:00:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Mon, 30 Sep 2024 15:00:00 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/tags/%E4%BA%91%E5%8E%9F%E7%94%9F%E5%AE%89%E5%85%A8/" rel="self" type="application/rss+xml" /><item>
+    <title>利用云提供商漏洞获取初始访问权限</title>
+    <link>http://localhost:1313/2024/09/%E5%88%A9%E7%94%A8%E4%BA%91%E6%8F%90%E4%BE%9B%E5%95%86%E6%BC%8F%E6%B4%9E%E8%8E%B7%E5%8F%96%E5%88%9D%E5%A7%8B%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90/</link>
+    <pubDate>Mon, 30 Sep 2024 15:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>http://localhost:1313/2024/09/%E5%88%A9%E7%94%A8%E4%BA%91%E6%8F%90%E4%BE%9B%E5%95%86%E6%BC%8F%E6%B4%9E%E8%8E%B7%E5%8F%96%E5%88%9D%E5%A7%8B%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90/</guid>
+    <description><![CDATA[BlackHat议题解读：利用云提供商漏洞获取初始访问权限]]></description>
+</item><item>
     <title>通过影子资源攻击AWS帐户</title>
-    <link>https://www.geekby.site/2024/09/%E9%80%9A%E8%BF%87%E5%BD%B1%E5%AD%90%E8%B5%84%E6%BA%90%E6%94%BB%E5%87%BBaws%E5%B8%90%E6%88%B7/</link>
+    <link>http://localhost:1313/2024/09/%E9%80%9A%E8%BF%87%E5%BD%B1%E5%AD%90%E8%B5%84%E6%BA%90%E6%94%BB%E5%87%BBaws%E5%B8%90%E6%88%B7/</link>
     <pubDate>Wed, 25 Sep 2024 17:00:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2024/09/%E9%80%9A%E8%BF%87%E5%BD%B1%E5%AD%90%E8%B5%84%E6%BA%90%E6%94%BB%E5%87%BBaws%E5%B8%90%E6%88%B7/</guid>
+    <guid>http://localhost:1313/2024/09/%E9%80%9A%E8%BF%87%E5%BD%B1%E5%AD%90%E8%B5%84%E6%BA%90%E6%94%BB%E5%87%BBaws%E5%B8%90%E6%88%B7/</guid>
     <description><![CDATA[BlackHat议题解读：通过影子资源攻击AWS帐户]]></description>
 </item><item>
     <title>Kubernetes Pod 横向移动</title>
-    <link>https://www.geekby.site/2023/11/kubernetes-pod-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/</link>
+    <link>http://localhost:1313/2023/11/kubernetes-pod-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/</link>
     <pubDate>Wed, 29 Nov 2023 15:28:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2023/11/kubernetes-pod-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/</guid>
+    <guid>http://localhost:1313/2023/11/kubernetes-pod-%E6%A8%AA%E5%90%91%E7%A7%BB%E5%8A%A8/</guid>
     <description><![CDATA[Kubernetes Pod 横向移动]]></description>
 </item><item>
     <title>OAuth 2.0协议及漏洞</title>
-    <link>https://www.geekby.site/2023/05/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E/</link>
+    <link>http://localhost:1313/2023/05/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E/</link>
     <pubDate>Mon, 01 May 2023 15:23:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2023/05/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E/</guid>
+    <guid>http://localhost:1313/2023/05/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E/</guid>
     <description><![CDATA[OAuth 2.0协议及漏洞]]></description>
 </item><item>
     <title>K8s 安全</title>
-    <link>https://www.geekby.site/2021/11/k8s%E5%AE%89%E5%85%A8/</link>
+    <link>http://localhost:1313/2021/11/k8s%E5%AE%89%E5%85%A8/</link>
     <pubDate>Tue, 30 Nov 2021 15:23:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2021/11/k8s%E5%AE%89%E5%85%A8/</guid>
+    <guid>http://localhost:1313/2021/11/k8s%E5%AE%89%E5%85%A8/</guid>
     <description><![CDATA[云原生安全(二) - 容器编排平台的风险分析]]></description>
 </item><item>
     <title>容器安全</title>
-    <link>https://www.geekby.site/2021/11/%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/</link>
+    <link>http://localhost:1313/2021/11/%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/</link>
     <pubDate>Wed, 10 Nov 2021 15:23:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2021/11/%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/</guid>
+    <guid>http://localhost:1313/2021/11/%E5%AE%B9%E5%99%A8%E5%AE%89%E5%85%A8/</guid>
     <description><![CDATA[云原生安全(一) - 容器基础设施的安全风险分析]]></description>
 </item><item>
     <title>Docker 核心技术</title>
-    <link>https://www.geekby.site/2021/10/docker%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF/</link>
+    <link>http://localhost:1313/2021/10/docker%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF/</link>
     <pubDate>Thu, 21 Oct 2021 20:23:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2021/10/docker%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF/</guid>
+    <guid>http://localhost:1313/2021/10/docker%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF/</guid>
     <description><![CDATA[云原生安全前言(一) - docker 核心技术简介]]></description>
-</item><item>
-    <title>Docker 逃逸相关总结</title>
-    <link>https://www.geekby.site/2021/02/docker%E9%80%83%E9%80%B8%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/</link>
-    <pubDate>Wed, 03 Feb 2021 09:39:00 &#43;0800</pubDate>
-    <author>作者</author>
-    <guid>https://www.geekby.site/2021/02/docker%E9%80%83%E9%80%B8%E7%9B%B8%E5%85%B3%E6%80%BB%E7%BB%93/</guid>
-    <description><![CDATA[Docker 逃逸相关总结]]></description>
 </item></channel>
 </rss>

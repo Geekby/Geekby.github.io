@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>公有云 - 标签 - Geekby&#39;s Blog</title>
-        <link>https://www.geekby.site/tags/%E5%85%AC%E6%9C%89%E4%BA%91/</link>
+        <link>http://localhost:1313/tags/%E5%85%AC%E6%9C%89%E4%BA%91/</link>
         <description>公有云 - 标签 - Geekby&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
-            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Thu, 31 Dec 2020 14:00:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/%E5%85%AC%E6%9C%89%E4%BA%91/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Thu, 31 Dec 2020 14:00:00 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/tags/%E5%85%AC%E6%9C%89%E4%BA%91/" rel="self" type="application/rss+xml" /><item>
     <title>公有云安全</title>
-    <link>https://www.geekby.site/2020/12/%E5%85%AC%E6%9C%89%E4%BA%91%E5%AE%89%E5%85%A8/</link>
+    <link>http://localhost:1313/2020/12/%E5%85%AC%E6%9C%89%E4%BA%91%E5%AE%89%E5%85%A8/</link>
     <pubDate>Thu, 31 Dec 2020 14:00:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2020/12/%E5%85%AC%E6%9C%89%E4%BA%91%E5%AE%89%E5%85%A8/</guid>
+    <guid>http://localhost:1313/2020/12/%E5%85%AC%E6%9C%89%E4%BA%91%E5%AE%89%E5%85%A8/</guid>
     <description><![CDATA[公有云介绍及相关漏洞利用方式]]></description>
 </item></channel>
 </rss>

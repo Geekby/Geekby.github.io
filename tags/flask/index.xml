@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>Flask - 标签 - Geekby&#39;s Blog</title>
-        <link>https://www.geekby.site/tags/flask/</link>
+        <link>http://localhost:1313/tags/flask/</link>
         <description>Flask - 标签 - Geekby&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
-            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Sat, 16 Feb 2019 09:20:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/flask/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Sat, 16 Feb 2019 09:20:00 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/tags/flask/" rel="self" type="application/rss+xml" /><item>
     <title>Flask（Jinja2）服务端模板注入漏洞</title>
-    <link>https://www.geekby.site/2019/02/flaskjinja2-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/</link>
+    <link>http://localhost:1313/2019/02/flaskjinja2-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/</link>
     <pubDate>Sat, 16 Feb 2019 09:20:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2019/02/flaskjinja2-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/</guid>
+    <guid>http://localhost:1313/2019/02/flaskjinja2-%E6%9C%8D%E5%8A%A1%E7%AB%AF%E6%A8%A1%E6%9D%BF%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E/</guid>
     <description><![CDATA[Flask（Jinja2）服务端模板注入漏洞复现]]></description>
 </item></channel>
 </rss>

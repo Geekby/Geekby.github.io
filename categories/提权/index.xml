@@ -1,22 +1,22 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>提权 - 分类 - Geekby&#39;s Blog</title>
-        <link>https://www.geekby.site/categories/%E6%8F%90%E6%9D%83/</link>
+        <link>http://localhost:1313/categories/%E6%8F%90%E6%9D%83/</link>
         <description>提权 - 分类 - Geekby&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
-            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Tue, 26 Jan 2021 09:05:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/categories/%E6%8F%90%E6%9D%83/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Tue, 26 Jan 2021 09:05:00 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/categories/%E6%8F%90%E6%9D%83/" rel="self" type="application/rss+xml" /><item>
     <title>Windows 提权方式总结</title>
-    <link>https://www.geekby.site/2021/01/windows%E6%8F%90%E6%9D%83%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/</link>
+    <link>http://localhost:1313/2021/01/windows%E6%8F%90%E6%9D%83%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/</link>
     <pubDate>Tue, 26 Jan 2021 09:05:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2021/01/windows%E6%8F%90%E6%9D%83%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/</guid>
+    <guid>http://localhost:1313/2021/01/windows%E6%8F%90%E6%9D%83%E6%96%B9%E5%BC%8F%E6%80%BB%E7%BB%93/</guid>
     <description><![CDATA[Windows 提权方式总结]]></description>
 </item><item>
     <title>Potato 家族提权分析</title>
-    <link>https://www.geekby.site/2020/08/potato%E5%AE%B6%E6%97%8F%E6%8F%90%E6%9D%83%E5%88%86%E6%9E%90/</link>
+    <link>http://localhost:1313/2020/08/potato%E5%AE%B6%E6%97%8F%E6%8F%90%E6%9D%83%E5%88%86%E6%9E%90/</link>
     <pubDate>Sat, 15 Aug 2020 09:05:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2020/08/potato%E5%AE%B6%E6%97%8F%E6%8F%90%E6%9D%83%E5%88%86%E6%9E%90/</guid>
+    <guid>http://localhost:1313/2020/08/potato%E5%AE%B6%E6%97%8F%E6%8F%90%E6%9D%83%E5%88%86%E6%9E%90/</guid>
     <description><![CDATA[Potato 家族提权分析]]></description>
 </item></channel>
 </rss>

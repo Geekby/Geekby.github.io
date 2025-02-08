@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>别让DeepSeek坑了你！本地部署模型真的安全吗？ - Geekby&#39;s Blog</title><meta name="Description" content="本地部署大模型安全分析"><meta property="og:url" content="http://localhost:1313/2025/02/%E5%88%AB%E8%AE%A9deepseek%E5%9D%91%E4%BA%86%E4%BD%A0%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9E%8B%E7%9C%9F%E7%9A%84%E5%AE%89%E5%85%A8%E5%90%97/">
+  <meta property="og:site_name" content="Geekby&#39;s Blog">
+  <meta property="og:title" content="别让DeepSeek坑了你！本地部署模型真的安全吗？">
+  <meta property="og:description" content="本地部署大模型安全分析">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-02-08T14:00:00+08:00">
+    <meta property="article:modified_time" content="2025-02-08T14:00:00+08:00">
+    <meta property="article:tag" content="渗透测试">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="别让DeepSeek坑了你！本地部署模型真的安全吗？">
+  <meta name="twitter:description" content="本地部署大模型安全分析">
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/2025/02/%E5%88%AB%E8%AE%A9deepseek%E5%9D%91%E4%BA%86%E4%BD%A0%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9E%8B%E7%9C%9F%E7%9A%84%E5%AE%89%E5%85%A8%E5%90%97/" /><link rel="prev" href="http://localhost:1313/2024/09/%E5%88%A9%E7%94%A8%E4%BA%91%E6%8F%90%E4%BE%9B%E5%95%86%E6%BC%8F%E6%B4%9E%E8%8E%B7%E5%8F%96%E5%88%9D%E5%A7%8B%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "别让DeepSeek坑了你！本地部署模型真的安全吗？",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "http:\/\/localhost:1313\/2025\/02\/%E5%88%AB%E8%AE%A9deepseek%E5%9D%91%E4%BA%86%E4%BD%A0%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9E%8B%E7%9C%9F%E7%9A%84%E5%AE%89%E5%85%A8%E5%90%97\/"
+        },"image": ["http:\/\/localhost:1313\/logo.png"],"genre": "posts","keywords": "渗透测试","wordcount":  168 ,
+        "url": "http:\/\/localhost:1313\/2025\/02\/%E5%88%AB%E8%AE%A9deepseek%E5%9D%91%E4%BA%86%E4%BD%A0%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9E%8B%E7%9C%9F%E7%9A%84%E5%AE%89%E5%85%A8%E5%90%97\/","datePublished": "2025-02-08T14:00:00+08:00","dateModified": "2025-02-08T14:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "http:\/\/localhost:1313\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "本地部署大模型安全分析"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">别让DeepSeek坑了你！本地部署模型真的安全吗？</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/"><i class="far fa-folder fa-fw"></i>渗透测试</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2025-02-08">2025-02-08</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 168 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 1 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-前言">1. 前言</a></li>
+    <li><a href="#2-你的ollama安全么">2. 你的Ollama安全么？</a></li>
+    <li><a href="#3-模型保住了就真的安全了么">3. 模型保住了，就真的安全了么？</a></li>
+    <li><a href="#4-设置了复杂密码这回该安全了吧">4. 设置了复杂密码，这回该安全了吧！？</a></li>
+    <li><a href="#5-总结">5. 总结</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="别让deepseek坑了你本地部署模型真的安全吗">别让DeepSeek坑了你！本地部署模型真的安全吗？</h1>
+<h2 id="1-前言">1. 前言</h2>
+<p>自从ChatGPT掀起全球热潮之后，DeepSeek（深度求索）迅速崛起，成为又一现象级的AI产品。根据国内AI产品排行榜的最新统计，DeepSeek在上线短短20天内，日活跃用户数便突破了惊人的2000万，达到2215万。这股热潮不仅让DeepSeek火遍全球，也让其线上服务遭遇了前所未有的挑战：大规模的DDoS流量攻击频繁导致网页和API服务中断，甚至一度让用户无法完成注册。与此同时，由于在线用户激增，官方经常显示“服务器繁忙，请稍后再试”的提示，让不少用户望而兴叹。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222917.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222917.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222917.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222917.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222917.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222917.png-water_print" /></p>
+<p>面对如此热情的用户群体，许多人开始探索在本地部署DeepSeek模型的方法。然而，完整版的DeepSeek模型文件体积巨大，达到671B，对显存的要求极高。为此，许多教程推荐使用千问、Llama等蒸馏小模型，如32B和70B版本，以实现本地部署。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222529.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222529.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222529.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222529.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222529.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222529.png-water_print" /></p>
+<p>尽管市面上充斥着各种部署指南，本文的重点并不在于技术细节，而是聚焦于作者在尝鲜过程中发现的一些潜在安全风险，由于部署模型的机器上一般拥有较大算力，这些风险可能对数据安全和系统稳定性构成严重威胁，不容小觑。</p>
+<h2 id="2-你的ollama安全么">2. 你的Ollama安全么？</h2>
+<p>Ollama是一个开源框架，专为在本地机器上便捷部署和运行大型语言模型（LLM）而设计。在众多教程中，Ollama以其一键部署的优点，深受欢迎。Ollama类似docker，也拥有模型仓库，包含一系列预先训练好的大型语言模型，用户可以直接选用这些模型应用于自己的应用程序，无需从头训练或自行寻找模型源。同时，Ollama还提供了一套简洁的 API，使得开发者能够轻松创建、运行和管理大型语言模型实例，降低了与模型交互的技术门槛。</p>
+<p>在Ollama的配置中，可以调整API绑定情况，可以看到，默认情况下，Ollama API接口绑定在<code>localhost:11434</code>上：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222251.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222251.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222251.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222251.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222251.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222251.png-water_print" /></p>
+<p>通过API，可以直接和Ollama及部署的大模型进行交互，如下是查看当前机器运行模型的情况：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222531.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222531.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222531.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222531.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222531.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081222531.png-water_print" /></p>
+<p>利用API向大模型提问经典问题：<code>What color is the sky at different times of the day?</code></p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-batch" data-lang="batch"><span class="line"><span class="cl">curl -X POST http://localhost:11434/api/generate -H <span class="s2">&#34;Content-Type: application/json&#34;</span> -d <span class="s2">&#34;{\&#34;</span>model\<span class="s2">&#34;: \&#34;</span>deepseek-r1:70b\<span class="s2">&#34;,\&#34;</span>prompt\<span class="s2">&#34;: \&#34;</span>What color is the sky at different times of the day? Respond using JSON\<span class="s2">&#34;,\&#34;</span>format\<span class="s2">&#34;: \&#34;</span>json\<span class="s2">&#34;,\&#34;</span>stream\<span class="s2">&#34;: false}&#34;</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223371.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223371.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223371.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223371.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223371.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223371.png-water_print" /></p>
+<p>可以看到，Ollama的接口竟然没有鉴权，可以直接访问。为了方便调用，有开发者直接将API端口暴露出来，一旦将该端口暴露到公网，攻击者就可以直接利用接口调用模型，消耗资源造成浪费。利用Fofa进行搜索，看到Ollama API 公网暴露数量约4W+，搜索语法如下：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">body=&#34;Ollama is running&#34;
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223144.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223144.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223144.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223144.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223144.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223144.png-water_print" /></p>
+<p>利用国外暴露的Ollama API接口，直接调用DS模型：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223199.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223199.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223199.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223199.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223199.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223199.png-water_print" /></p>
+<p>此外，根据Ollama官方文档，利用API还可以Push、Pull、Delete模型，危害较大：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223514.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223514.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223514.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223514.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223514.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223514.png-water_print" /></p>
+<p>在一些古早版本的Ollama上，还存在路径穿越导致的RCE问题，WIZ研究团队以做过相关研究，在此不做赘述，链接：<a href="https://www.wiz.io/blog/probllama-ollama-vulnerability-cve-2024-37032" title="https://www.wiz.io/blog/probllama-ollama-vulnerability-cve-2024-37032" target="_blank" rel="noopener noreffer">https://www.wiz.io/blog/probllama-ollama-vulnerability-cve-2024-37032</a></p>
+<p>API未授权这么严重的问题，为什么Ollama官方并没有进行修复呢？深入分析文档发现，官方推荐的部署方式是利用反向代理，进行访问限制，如通过nginx进行白名单过滤：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-json" data-lang="json"><span class="line"><span class="cl"><span class="err">server</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">    <span class="err">listen</span> <span class="err">8080;</span> <span class="err">#</span> <span class="err">代理监听端口</span>
+</span></span><span class="line"><span class="cl">    <span class="err">server_name</span> <span class="err">your_server_ip_or_domain;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">    <span class="err">location</span> <span class="err">/</span> <span class="err">{</span>
+</span></span><span class="line"><span class="cl">        <span class="err">proxy_pass</span> <span class="err">http:</span><span class="c1">//127.0.0.1:11434; # Ollama 默认运行端口
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="err">proxy_set_header</span> <span class="err">Host</span> <span class="err">$host;</span>
+</span></span><span class="line"><span class="cl">        <span class="err">proxy_set_header</span> <span class="err">X-Real-IP</span> <span class="err">$remote_addr;</span>
+</span></span><span class="line"><span class="cl">        <span class="err">proxy_set_header</span> <span class="err">X-Forwarded-For</span> <span class="err">$proxy_add_x_forwarded_for;</span>
+</span></span><span class="line"><span class="cl">        <span class="err">proxy_set_header</span> <span class="err">X-Forwarded-Proto</span> <span class="err">$scheme;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="err">#</span> <span class="err">访问限制</span> <span class="err">-</span> <span class="err">只允许特定IP访问</span>
+</span></span><span class="line"><span class="cl">        <span class="err">allow</span> <span class="err">192.168.1.100;</span>
+</span></span><span class="line"><span class="cl">        <span class="err">deny</span> <span class="err">all;</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="err">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="3-模型保住了就真的安全了么">3. 模型保住了，就真的安全了么？</h2>
+<p>前面已经通过Ollama部署了一个本地LLM模型，假设我们也将Ollama API接口做了保护，那么就真的安全了么？</p>
+<p>尽管 Ollama 能够在本地部署模型服务，以供其他程序调用，但其原生的对话界面是在命令行/API 中进行的，用户无法方便与 AI 模型进行交互，因此，开发者通常利用第三方的WebUI应用来使用 Ollama，以获得更好的体验。整体架构如下：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223476.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223476.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223476.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223476.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223476.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081223476.png-water_print" /></p>
+<p>常见的UI框架有：LobeChat、Open WebUI、Enchanted、chatbox等，作者在选取较为火热的LobeChat框架作为研究对象进行展开。LobeChat 作为一款开源的 LLMs WebUI 框架，支持全球主流的大型语言模型，并提供精美的用户界面及卓越的用户体验。该框架支持通过本地 Docker 运行，亦可在 Vercel、Zeabur 等多个平台上进行部署。用户可通过配置接口地址，轻松实现集成。</p>
+<p>根据LobeChat官方文档，其提供了Docker 镜像，几分钟部署自己的聊天机器人。快速部署模式：</p>
+<p><a href="https://github.com/lobehub/lobe-chat/blob/main/README.zh-CN.md#b-%E4%BD%BF%E7%94%A8-docker-%E9%83%A8%E7%BD%B2" target="_blank" rel="noopener noreffer">https://github.com/lobehub/lobe-chat/blob/main/README.zh-CN.md#b-%E4%BD%BF%E7%94%A8-docker-%E9%83%A8%E7%BD%B2</a></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081224426.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081224426.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081224426.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081224426.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081224426.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081224426.png-water_print" /></p>
+<p>部署好的截图：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225477.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225477.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225477.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225477.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225477.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225477.png-water_print" /></p>
+<p>可以看到，默认情况下整个系统并没有进行鉴权，用户可以直接使用前端页面。细心的读者可能已经看到，在运行docker镜像的时候，有一个<code>ACCESS_CODE</code>字段，根据官方文档，这个字段是应用的解锁密码，具体功能是当使用聊天功能时，需要用户输入该密码才能开启：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225009.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225009.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225009.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225009.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225009.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225009.png-water_print" /></p>
+<p>这里存在两个问题：</p>
+<p>1、如果用户未配置<code>ACCESS_CODE</code>，攻击者可以直接调用LLM进行聊天。</p>
+<p>2、如果用户配置了<code>ACCESS_CODE</code>，但使用的是官方提供的<code>lobe66</code>默认密码，攻击者也可以获取控制权。</p>
+<p>那么再看一下公网上LobeChat的暴露情况：<code>title=&quot;LobeChat&quot;</code></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225646.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225646.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225646.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225646.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225646.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225646.png-water_print" /></p>
+<p>可以看到，约有1w+资产部署在公网，根据前面的风险点，尝试调用：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225213.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225213.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225213.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225213.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225213.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225213.png-water_print" /></p>
+<h2 id="4-设置了复杂密码这回该安全了吧">4. 设置了复杂密码，这回该安全了吧！？</h2>
+<p>根据前面提到的风险点，即便我们为前端设置了复杂密码来保护 LLM 不被其他用户调用，这就真的万无一失了吗？</p>
+<p>进一步探索Lobechat官方提供的部署方式，还存在一种进阶部署模式docker-compose：</p>
+<p><a href="https://github.com/lobehub/lobe-chat/blob/main/docker-compose/local/docker-compose.yml" target="_blank" rel="noopener noreffer">https://github.com/lobehub/lobe-chat/blob/main/docker-compose/local/docker-compose.yml</a></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225827.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225827.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225827.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225827.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225827.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225827.png-water_print" /></p>
+<p>这种部署方式和SSO相结合，供企业 / 组织内部使用，统一管理用户授权。官方提供的CAS应用为：casdoor。Casdoor‌ 是一个轻量级的身份认证和授权平台，支持多种协议（如OIDC、OAuth2、SAML、CAS等），并提供单点登录（SSO）功能。它支持多种登录方式，包括密码登录、短信/邮件验证码登录以及社交登录（如Google、GitHub等）‌。</p>
+<p>部署截图如下：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225222.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225222.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225222.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225222.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225222.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081225222.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226632.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226632.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226632.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226632.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226632.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226632.png-water_print" /></p>
+<p>如果统一身份认证平台存在漏洞，那么后果不堪设想。作者在最近的漏洞预警工作中，跟踪到Casdoor‌≤1.811.0的一个任意用户添加漏洞，在未授权情况下，攻击者可以通过添加用户接口<strong>添加管理员用户</strong>，获取系统控制权。本地环境复现：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226398.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226398.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226398.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226398.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226398.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226398.png-water_print" /></p>
+<p>添加管理员用户，并在casdoor统一身份认证后台登录：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226066.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226066.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226066.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226066.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226066.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226066.png-water_print" /></p>
+<p>至此，<strong>系统级控制权+LLM操控权限</strong>双重沦陷，敏感模型及算力遭“立体化收割”。</p>
+<p>在进一步对公网上的资产进行浏览时发现，有部分<strong>LLM代理聚合平台</strong>（汇聚全球AI模型API，灵活选择OpenAI、GPT、Claude等顶级模型API，实现敏捷开发）前端采用Lobechat部署，并利用CAS统一身份认证实现付费用户与免费用户角色划分，一旦此类平台失陷，攻击者可获取全平台SK资源，调用任意模型API，造成重大经济损失。</p>
+<h2 id="5-总结">5. 总结</h2>
+<p>这篇文章从热度较高的DeepSeek模型本地部署入手，主要讨论了在本地部署DeepSeek模型时可能遇到的安全风险。文章通过分析Ollama框架和LobeChat WebUI框架的使用情况，揭示了几个潜在的安全问题，希望为读者在本地化部署大模型时提供有价值的安全参考和应对策略。标题有蹭热度之嫌，见谅~</p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2025-02-08</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/2025/02/%E5%88%AB%E8%AE%A9deepseek%E5%9D%91%E4%BA%86%E4%BD%A0%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9E%8B%E7%9C%9F%E7%9A%84%E5%AE%89%E5%85%A8%E5%90%97/" data-title="别让DeepSeek坑了你！本地部署模型真的安全吗？"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/2025/02/%E5%88%AB%E8%AE%A9deepseek%E5%9D%91%E4%BA%86%E4%BD%A0%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9E%8B%E7%9C%9F%E7%9A%84%E5%AE%89%E5%85%A8%E5%90%97/" data-title="别让DeepSeek坑了你！本地部署模型真的安全吗？"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="http://localhost:1313/2025/02/%E5%88%AB%E8%AE%A9deepseek%E5%9D%91%E4%BA%86%E4%BD%A0%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9E%8B%E7%9C%9F%E7%9A%84%E5%AE%89%E5%85%A8%E5%90%97/" data-title="别让DeepSeek坑了你！本地部署模型真的安全吗？"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95/">渗透测试</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2024/09/%E5%88%A9%E7%94%A8%E4%BA%91%E6%8F%90%E4%BE%9B%E5%95%86%E6%BC%8F%E6%B4%9E%E8%8E%B7%E5%8F%96%E5%88%9D%E5%A7%8B%E8%AE%BF%E9%97%AE%E6%9D%83%E9%99%90/" class="prev" rel="prev" title="利用云提供商漏洞获取初始访问权限"><i class="fas fa-angle-left fa-fw"></i>利用云提供商漏洞获取初始访问权限</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

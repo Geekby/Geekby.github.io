@@ -253,42 +253,42 @@
 <p>在 <code>windows</code> 系统中，许多服务以主机账号运行，即许多 <code>ServiceAccount</code> 账号为本机的主机账号，格式为 <code>ComputerName$</code>。</p>
 <p>下表是常见的以主机账号运行的服务。右边一栏中有些有多个服务，例如 <code>WMI</code> 服务包括 <code>HOST</code>、<code>RPCSS</code> 这 2 个服务，表示访问 <code>WMI</code> 服务同时需要 2 个 <code>TGS</code> 票据</p>
 <table>
-  <thead>
-      <tr>
-          <th style="text-align: center">服务名称</th>
-          <th style="text-align: center">同时需要的服务</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td style="text-align: center">WMI</td>
-          <td style="text-align: center">HOST、RPCSS</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">PowerShell Remoting</td>
-          <td style="text-align: center">HOST、HTTP</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">WinRM</td>
-          <td style="text-align: center">HOST、HTTP</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">Scheduled Tasks</td>
-          <td style="text-align: center">HOST</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">Windows File Share</td>
-          <td style="text-align: center">CIFS</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">LDAP</td>
-          <td style="text-align: center">LDAP</td>
-      </tr>
-      <tr>
-          <td style="text-align: center">Windows Remote Server</td>
-          <td style="text-align: center">RPCSS、LDAP、CIFS</td>
-      </tr>
-  </tbody>
+<thead>
+<tr>
+<th style="text-align:center">服务名称</th>
+<th style="text-align:center">同时需要的服务</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">WMI</td>
+<td style="text-align:center">HOST、RPCSS</td>
+</tr>
+<tr>
+<td style="text-align:center">PowerShell Remoting</td>
+<td style="text-align:center">HOST、HTTP</td>
+</tr>
+<tr>
+<td style="text-align:center">WinRM</td>
+<td style="text-align:center">HOST、HTTP</td>
+</tr>
+<tr>
+<td style="text-align:center">Scheduled Tasks</td>
+<td style="text-align:center">HOST</td>
+</tr>
+<tr>
+<td style="text-align:center">Windows File Share</td>
+<td style="text-align:center">CIFS</td>
+</tr>
+<tr>
+<td style="text-align:center">LDAP</td>
+<td style="text-align:center">LDAP</td>
+</tr>
+<tr>
+<td style="text-align:center">Windows Remote Server</td>
+<td style="text-align:center">RPCSS、LDAP、CIFS</td>
+</tr>
+</tbody>
 </table>
 <p>已知域服务器主机账号的口令散列值，使用 <code>Mimikatz</code> 的白银票据功能，伪造访问 <code>HOST</code> 服务的<code>TGS</code> ，以域管理员权限运行域服务器的 <code>SCHTASKS</code> 命令，远程创建、查看、删除系统任务</p>
 <h4 id="构造白银票据">构造白银票据</h4>
@@ -575,7 +575,7 @@
 </div>
 </article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2024</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 

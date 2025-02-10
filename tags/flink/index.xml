@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>Flink - 标签 - Geekby&#39;s Blog</title>
-        <link>http://localhost:1313/tags/flink/</link>
+        <link>https://www.geekby.site/tags/flink/</link>
         <description>Flink - 标签 - Geekby&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
-            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Wed, 20 Nov 2019 10:02:00 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/tags/flink/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Wed, 20 Nov 2019 10:02:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/flink/" rel="self" type="application/rss+xml" /><item>
     <title>Apache Flink 任意 Jar 包上传导致 RCE 漏洞</title>
-    <link>http://localhost:1313/2019/11/flink%E4%BB%BB%E6%84%8Fjar%E5%8C%85%E4%B8%8A%E4%BC%A0%E5%AF%BC%E8%87%B4rce%E6%BC%8F%E6%B4%9E/</link>
+    <link>https://www.geekby.site/2019/11/flink%E4%BB%BB%E6%84%8Fjar%E5%8C%85%E4%B8%8A%E4%BC%A0%E5%AF%BC%E8%87%B4rce%E6%BC%8F%E6%B4%9E/</link>
     <pubDate>Wed, 20 Nov 2019 10:02:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://localhost:1313/2019/11/flink%E4%BB%BB%E6%84%8Fjar%E5%8C%85%E4%B8%8A%E4%BC%A0%E5%AF%BC%E8%87%B4rce%E6%BC%8F%E6%B4%9E/</guid>
+    <guid>https://www.geekby.site/2019/11/flink%E4%BB%BB%E6%84%8Fjar%E5%8C%85%E4%B8%8A%E4%BC%A0%E5%AF%BC%E8%87%B4rce%E6%BC%8F%E6%B4%9E/</guid>
     <description><![CDATA[Apache Flink 任意 Jar 包上传导致 RCE 漏洞复现]]></description>
 </item></channel>
 </rss>

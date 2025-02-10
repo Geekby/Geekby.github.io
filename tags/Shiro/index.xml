@@ -1,22 +1,22 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>Shiro - 标签 - Geekby&#39;s Blog</title>
-        <link>http://localhost:1313/tags/shiro/</link>
+        <link>https://www.geekby.site/tags/shiro/</link>
         <description>Shiro - 标签 - Geekby&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
-            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Wed, 01 Jul 2020 11:09:00 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/tags/shiro/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Wed, 01 Jul 2020 11:09:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/shiro/" rel="self" type="application/rss+xml" /><item>
     <title>Shiro 权限绕过漏洞复现(CVE-2020-11989)</title>
-    <link>http://localhost:1313/2020/07/shiro%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0cve-2020-11989/</link>
+    <link>https://www.geekby.site/2020/07/shiro%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0cve-2020-11989/</link>
     <pubDate>Wed, 01 Jul 2020 11:09:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://localhost:1313/2020/07/shiro%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0cve-2020-11989/</guid>
+    <guid>https://www.geekby.site/2020/07/shiro%E6%9D%83%E9%99%90%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0cve-2020-11989/</guid>
     <description><![CDATA[Shiro 权限绕过漏洞复现(CVE-2020-11989)]]></description>
 </item><item>
     <title>Apache Shiro padding oracle attack漏洞复现</title>
-    <link>http://localhost:1313/2019/11/apache-shiro-padding-oracle-attack%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</link>
+    <link>https://www.geekby.site/2019/11/apache-shiro-padding-oracle-attack%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</link>
     <pubDate>Mon, 18 Nov 2019 08:00:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://localhost:1313/2019/11/apache-shiro-padding-oracle-attack%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</guid>
+    <guid>https://www.geekby.site/2019/11/apache-shiro-padding-oracle-attack%E6%BC%8F%E6%B4%9E%E5%A4%8D%E7%8E%B0/</guid>
     <description><![CDATA[Apache Shiro padding oracle attack漏洞复现]]></description>
 </item></channel>
 </rss>

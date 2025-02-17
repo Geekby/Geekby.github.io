@@ -126,6 +126,9 @@
     <li><a href="#2-你的ollama安全么">2. 你的Ollama安全么？</a></li>
     <li><a href="#3-模型保住了就真的安全了么">3. 模型保住了，就真的安全了么？</a></li>
     <li><a href="#4-设置了复杂密码这回该安全了吧">4. 设置了复杂密码，这回该安全了吧！？</a></li>
+    <li><a href="#5-进阶使用模型微调工具也不安全吗">5. 进阶使用：模型微调工具也不安全吗？</a></li>
+    <li><a href="#6-模型应用部署的最后一击">6. 模型应用部署的“最后一击”</a></li>
+    <li><a href="#7-总结">7. 总结</a></li>
   </ul>
 </nav></div>
             </div><div class="content" id="content"><h1 id="别让deepseek坑了你本地部署模型真的安全吗">别让DeepSeek坑了你！本地部署模型真的安全吗？</h1>
@@ -417,7 +420,7 @@
         title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502081226066.png-water_print" /></p>
 <p>至此，<strong>系统级控制权+LLM操控权限</strong>双重沦陷，敏感模型及算力遭“立体化收割”。</p>
 <p>在进一步对公网上的资产进行浏览时发现，有部分<strong>LLM代理聚合平台</strong>（汇聚全球AI模型API，灵活选择OpenAI、GPT、Claude等顶级模型API，实现敏捷开发）前端采用Lobechat部署，并利用CAS统一身份认证实现付费用户与免费用户角色划分，一旦此类平台失陷，攻击者可获取全平台SK资源，调用任意模型API，造成重大经济损失。</p>
-<h1 id="5-进阶使用模型微调工具也不安全吗">5. 进阶使用：模型微调工具也不安全吗？</h1>
+<h2 id="5-进阶使用模型微调工具也不安全吗">5. 进阶使用：模型微调工具也不安全吗？</h2>
 <p>对于普通大众来说，进行大模型的预训练或者全量微调遥不可及。由此，催生了各种参数高效微调技术，让科研人员或者普通开发者有机会尝试微调大模型。‌模型微调‌是指对预训练好的大型语言模型（LLM）进行进一步训练，使用更小、更具体的数据集，以增强其在特定领域任务上的表现。微调的目的是将通用模型转变为专用模型，弥合通用预训练模型与特定应用需求之间的差距，确保语言模型更贴近人类的期望。‌</p>
 <p>常见的微调工具有：Llama-Factory、Unsloth、Swift、Firfly、Xtuner等。</p>
 <p><img
@@ -446,7 +449,7 @@
         data-sizes="auto"
         alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502171930563.png-water_print"
         title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202502171930563.png-water_print" /></p>
-<h1 id="6-模型应用部署的最后一击">6. 模型应用部署的“最后一击”</h1>
+<h2 id="6-模型应用部署的最后一击">6. 模型应用部署的“最后一击”</h2>
 <p>在模型微调完成后，需要部署成应用方便用户使用。Gradio是一个创新的Web平台，让开发者能够为他们的模型建立交互式演示界面。该平台通过提供易于使用的界面来简化模型的展示过程，使得非专业用户也能轻松地体验和利用前沿的机器学习技术。用户可以通过简单的Python代码，快速创建出交互式的Web应用界面。Gradio支持多种输入和输出选项，包括文本、图像和音频等数据类型。产品不仅支持Jupyter笔记本的嵌入，还可以通过生成的公开链接让其他用户远程互动，或者将应用托管在Hugging Face上。</p>
 <p>Gradio应用指纹：<code>icon_hash=&quot;55115683&quot;</code></p>
 <p><img
@@ -491,7 +494,7 @@
 </span></span><span class="line"><span class="cl">         <span class="p">)</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h1 id="7-总结">7. 总结</h1>
+</div><h2 id="7-总结">7. 总结</h2>
 <p>这篇文章从热度较高的DeepSeek模型本地部署入手，主要讨论了在本地部署DeepSeek模型时可能遇到的安全风险。文章通过分析推理框架部署安全到前端UI框架，从模型微调工具到应用部署，揭示了几个潜在的安全问题，希望为读者在本地化部署大模型时提供有价值的安全参考和应对策略。</p>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">

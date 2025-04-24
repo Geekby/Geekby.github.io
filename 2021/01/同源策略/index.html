@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-        <title>同源策略 - Geekby&#39;s Blog</title><meta name="Description" content="同源策略相关"><meta property="og:url" content="http://localhost:1313/2021/01/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/">
+        <title>同源策略 - Geekby&#39;s Blog</title><meta name="Description" content="同源策略相关"><meta property="og:url" content="https://www.geekby.site/2021/01/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/">
   <meta property="og:site_name" content="Geekby&#39;s Blog">
   <meta property="og:title" content="同源策略">
   <meta property="og:description" content="同源策略相关">
@@ -23,7 +23,7 @@
 <meta name="application-name" content="Geekby&#39;s Blog">
 <meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/2021/01/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/" /><link rel="prev" href="http://localhost:1313/2021/01/csrf%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" /><link rel="next" href="http://localhost:1313/2021/01/ssrf%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2021/01/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/" /><link rel="prev" href="https://www.geekby.site/2021/01/csrf%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" /><link rel="next" href="https://www.geekby.site/2021/01/ssrf%E6%BC%8F%E6%B4%9E%E7%9B%B8%E5%85%B3/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -31,13 +31,13 @@
         "inLanguage": "zh-cn",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "http:\/\/localhost:1313\/2021\/01\/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5\/"
-        },"image": ["http:\/\/localhost:1313\/logo.png"],"genre": "posts","keywords": "常用, 渗透测试","wordcount":  156 ,
-        "url": "http:\/\/localhost:1313\/2021\/01\/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5\/","datePublished": "2021-01-10T14:45:00+08:00","dateModified": "2021-01-10T14:45:00+08:00","publisher": {
+            "@id": "https:\/\/www.geekby.site\/2021\/01\/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "常用, 渗透测试","wordcount":  156 ,
+        "url": "https:\/\/www.geekby.site\/2021\/01\/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5\/","datePublished": "2021-01-10T14:45:00+08:00","dateModified": "2021-01-10T14:45:00+08:00","publisher": {
             "@type": "Organization",
             "name": "Geekby","logo": {
                     "@type": "ImageObject",
-                    "url": "http:\/\/localhost:1313\/images\/avatar.png",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
                     "width":  358 ,
                     "height":  330 
                 }},"author": {
@@ -288,7 +288,7 @@
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/2021/01/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/" data-title="同源策略"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/2021/01/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/" data-title="同源策略"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="http://localhost:1313/2021/01/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/" data-title="同源策略"><i class="fab fa-skype fa-fw"></i></a></span>
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2021/01/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/" data-title="同源策略"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2021/01/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/" data-title="同源策略"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2021/01/%E5%90%8C%E6%BA%90%E7%AD%96%E7%95%A5/" data-title="同源策略"><i class="fab fa-skype fa-fw"></i></a></span>
             </div>
         </div>
     </div>

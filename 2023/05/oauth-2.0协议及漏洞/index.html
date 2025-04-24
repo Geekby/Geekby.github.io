@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
-    <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
-        <title>OAuth 2.0协议及漏洞 - Geekby&#39;s Blog</title><meta name="Description" content="OAuth 2.0协议及漏洞"><meta property="og:url" content="http://localhost:1313/2023/05/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E/">
+        <title>OAuth 2.0协议及漏洞 - Geekby&#39;s Blog</title><meta name="Description" content="OAuth 2.0协议及漏洞"><meta property="og:url" content="https://www.geekby.site/2023/05/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E/">
   <meta property="og:site_name" content="Geekby&#39;s Blog">
   <meta property="og:title" content="OAuth 2.0协议及漏洞">
   <meta property="og:description" content="OAuth 2.0协议及漏洞">
@@ -23,7 +23,7 @@
 <meta name="application-name" content="Geekby&#39;s Blog">
 <meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://localhost:1313/2023/05/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E/" /><link rel="prev" href="http://localhost:1313/2022/05/vcenter%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/" /><link rel="next" href="http://localhost:1313/2023/05/rsac%E8%AE%AE%E9%A2%98%E8%A7%A3%E8%AF%BB-%E4%BA%91%E4%B8%8A%E8%B7%A8%E7%A7%9F%E6%88%B7%E6%BC%8F%E6%B4%9E%E6%94%BB%E5%87%BB%E9%9D%A2%E5%88%86%E6%9E%90/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2023/05/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E/" /><link rel="prev" href="https://www.geekby.site/2022/05/vcenter%E6%BC%8F%E6%B4%9E%E5%88%A9%E7%94%A8/" /><link rel="next" href="https://www.geekby.site/2023/05/rsac%E8%AE%AE%E9%A2%98%E8%A7%A3%E8%AF%BB-%E4%BA%91%E4%B8%8A%E8%B7%A8%E7%A7%9F%E6%88%B7%E6%BC%8F%E6%B4%9E%E6%94%BB%E5%87%BB%E9%9D%A2%E5%88%86%E6%9E%90/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
@@ -31,13 +31,13 @@
         "inLanguage": "zh-cn",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "http:\/\/localhost:1313\/2023\/05\/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E\/"
-        },"image": ["http:\/\/localhost:1313\/logo.png"],"genre": "posts","keywords": "云原生安全, OAuth","wordcount":  582 ,
-        "url": "http:\/\/localhost:1313\/2023\/05\/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E\/","datePublished": "2023-05-01T15:23:00+08:00","dateModified": "2023-05-01T15:23:00+08:00","publisher": {
+            "@id": "https:\/\/www.geekby.site\/2023\/05\/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "云原生安全, OAuth","wordcount":  582 ,
+        "url": "https:\/\/www.geekby.site\/2023\/05\/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E\/","datePublished": "2023-05-01T15:23:00+08:00","dateModified": "2023-05-01T15:23:00+08:00","publisher": {
             "@type": "Organization",
             "name": "Geekby","logo": {
                     "@type": "ImageObject",
-                    "url": "http:\/\/localhost:1313\/images\/avatar.png",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
                     "width":  358 ,
                     "height":  330 
                 }},"author": {
@@ -741,7 +741,7 @@
         <div class="post-info-line">
             <div class="post-info-md"></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="http://localhost:1313/2023/05/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E/" data-title="OAuth 2.0协议及漏洞"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="http://localhost:1313/2023/05/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E/" data-title="OAuth 2.0协议及漏洞"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="http://localhost:1313/2023/05/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E/" data-title="OAuth 2.0协议及漏洞"><i class="fab fa-skype fa-fw"></i></a></span>
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2023/05/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E/" data-title="OAuth 2.0协议及漏洞"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2023/05/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E/" data-title="OAuth 2.0协议及漏洞"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2023/05/oauth-2.0%E5%8D%8F%E8%AE%AE%E5%8F%8A%E6%BC%8F%E6%B4%9E/" data-title="OAuth 2.0协议及漏洞"><i class="fab fa-skype fa-fw"></i></a></span>
             </div>
         </div>
     </div>

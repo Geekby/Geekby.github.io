@@ -1,15 +1,15 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>Fastjson - 标签 - Geekby&#39;s Blog</title>
-        <link>http://localhost:1313/tags/fastjson/</link>
+        <link>https://www.geekby.site/tags/fastjson/</link>
         <description>Fastjson - 标签 - Geekby&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
-            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Sun, 09 Jun 2019 16:37:17 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/tags/fastjson/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Sun, 09 Jun 2019 16:37:17 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/fastjson/" rel="self" type="application/rss+xml" /><item>
     <title>fastjson 反序列化任意命令执行漏洞</title>
-    <link>http://localhost:1313/2019/06/fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AF%BC%E8%87%B4%E4%BB%BB%E6%84%8F%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</link>
+    <link>https://www.geekby.site/2019/06/fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AF%BC%E8%87%B4%E4%BB%BB%E6%84%8F%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</link>
     <pubDate>Sun, 09 Jun 2019 16:37:17 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://localhost:1313/2019/06/fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AF%BC%E8%87%B4%E4%BB%BB%E6%84%8F%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</guid>
+    <guid>https://www.geekby.site/2019/06/fastjson%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E5%AF%BC%E8%87%B4%E4%BB%BB%E6%84%8F%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/</guid>
     <description><![CDATA[fastjson 反序列化任意命令执行漏洞]]></description>
 </item></channel>
 </rss>

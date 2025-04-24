@@ -1,22 +1,22 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>Redis - 标签 - Geekby&#39;s Blog</title>
-        <link>http://localhost:1313/tags/redis/</link>
+        <link>https://www.geekby.site/tags/redis/</link>
         <description>Redis - 标签 - Geekby&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
-            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Mon, 25 May 2020 09:27:00 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/tags/redis/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Mon, 25 May 2020 09:27:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/redis/" rel="self" type="application/rss+xml" /><item>
     <title>Redis 在渗透测试中常见的利用方式</title>
-    <link>http://localhost:1313/2020/05/redis%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/</link>
+    <link>https://www.geekby.site/2020/05/redis%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/</link>
     <pubDate>Mon, 25 May 2020 09:27:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://localhost:1313/2020/05/redis%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/</guid>
+    <guid>https://www.geekby.site/2020/05/redis%E5%9C%A8%E6%B8%97%E9%80%8F%E6%B5%8B%E8%AF%95%E4%B8%AD%E5%B8%B8%E8%A7%81%E7%9A%84%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/</guid>
     <description><![CDATA[Redis 在渗透测试中常见的利用方式]]></description>
 </item><item>
     <title>Redis 基于主从复制的 RCE 利用方式</title>
-    <link>http://localhost:1313/2019/07/redis%E5%9F%BA%E4%BA%8E%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E7%9A%84rce%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/</link>
+    <link>https://www.geekby.site/2019/07/redis%E5%9F%BA%E4%BA%8E%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E7%9A%84rce%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/</link>
     <pubDate>Mon, 15 Jul 2019 17:24:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>http://localhost:1313/2019/07/redis%E5%9F%BA%E4%BA%8E%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E7%9A%84rce%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/</guid>
+    <guid>https://www.geekby.site/2019/07/redis%E5%9F%BA%E4%BA%8E%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6%E7%9A%84rce%E5%88%A9%E7%94%A8%E6%96%B9%E5%BC%8F/</guid>
     <description><![CDATA[Redis 基于主从复制的 RCE 利用方式]]></description>
 </item></channel>
 </rss>

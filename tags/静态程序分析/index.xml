@@ -1,22 +1,22 @@
 <rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
     <channel>
         <title>静态程序分析 - 标签 - Geekby&#39;s Blog</title>
-        <link>https://www.geekby.site/tags/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90/</link>
+        <link>http://localhost:1313/tags/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90/</link>
         <description>静态程序分析 - 标签 - Geekby&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
-            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Thu, 17 Feb 2022 10:23:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/tags/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Thu, 17 Feb 2022 10:23:00 &#43;0800</lastBuildDate><atom:link href="http://localhost:1313/tags/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90/" rel="self" type="application/rss+xml" /><item>
     <title>静态程序分析系列(二)</title>
-    <link>https://www.geekby.site/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%BA%8C/</link>
+    <link>http://localhost:1313/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%BA%8C/</link>
     <pubDate>Thu, 17 Feb 2022 10:23:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%BA%8C/</guid>
+    <guid>http://localhost:1313/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%BA%8C/</guid>
     <description><![CDATA[静态程序分析(二) - 过程间分析]]></description>
 </item><item>
     <title>静态程序分析系列(一)</title>
-    <link>https://www.geekby.site/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%B8%80/</link>
+    <link>http://localhost:1313/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%B8%80/</link>
     <pubDate>Mon, 14 Feb 2022 15:23:00 &#43;0800</pubDate>
     <author>作者</author>
-    <guid>https://www.geekby.site/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%B8%80/</guid>
+    <guid>http://localhost:1313/2022/02/%E9%9D%99%E6%80%81%E7%A8%8B%E5%BA%8F%E5%88%86%E6%9E%90%E7%B3%BB%E5%88%97%E4%B8%80/</guid>
     <description><![CDATA[静态程序分析(一) - 静态程序基础&amp;数据流分析]]></description>
 </item></channel>
 </rss>

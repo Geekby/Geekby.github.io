@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="robots" content="noodp" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1">
+        <title>GitLab DUO编程助手提示注入攻击深度剖析 - Geekby&#39;s Blog</title><meta name="Description" content="编程助手提示注入攻击"><meta property="og:url" content="https://www.geekby.site/2025/05/gitlab-duo%E7%BC%96%E7%A8%8B%E5%8A%A9%E6%89%8B%E6%8F%90%E7%A4%BA%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/">
+  <meta property="og:site_name" content="Geekby&#39;s Blog">
+  <meta property="og:title" content="GitLab DUO编程助手提示注入攻击深度剖析">
+  <meta property="og:description" content="编程助手提示注入攻击">
+  <meta property="og:locale" content="zh_cn">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2025-05-28T12:00:00+08:00">
+    <meta property="article:modified_time" content="2025-05-28T12:00:00+08:00">
+    <meta property="article:tag" content="AI安全">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="GitLab DUO编程助手提示注入攻击深度剖析">
+  <meta name="twitter:description" content="编程助手提示注入攻击">
+<meta name="application-name" content="Geekby&#39;s Blog">
+<meta name="apple-mobile-web-app-title" content="Geekby&#39;s Blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="https://www.geekby.site/2025/05/gitlab-duo%E7%BC%96%E7%A8%8B%E5%8A%A9%E6%89%8B%E6%8F%90%E7%A4%BA%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/" /><link rel="prev" href="https://www.geekby.site/2025/04/%E4%BD%A0%E4%BD%BF%E7%94%A8%E7%9A%84mcp%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E5%85%A8%E5%90%97%E8%AD%A6%E6%83%95%E6%8A%95%E6%AF%92%E6%94%BB%E5%87%BB/" /><link rel="stylesheet" href="/lib/normalize/normalize.min.css"><link rel="stylesheet" href="/css/style.min.css"><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"><link rel="stylesheet" href="/lib/animate/animate.min.css"><script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BlogPosting",
+        "headline": "GitLab DUO编程助手提示注入攻击深度剖析",
+        "inLanguage": "zh-cn",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https:\/\/www.geekby.site\/2025\/05\/gitlab-duo%E7%BC%96%E7%A8%8B%E5%8A%A9%E6%89%8B%E6%8F%90%E7%A4%BA%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90\/"
+        },"image": ["https:\/\/www.geekby.site\/logo.png"],"genre": "posts","keywords": "AI安全","wordcount":  221 ,
+        "url": "https:\/\/www.geekby.site\/2025\/05\/gitlab-duo%E7%BC%96%E7%A8%8B%E5%8A%A9%E6%89%8B%E6%8F%90%E7%A4%BA%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90\/","datePublished": "2025-05-28T12:00:00+08:00","dateModified": "2025-05-28T12:00:00+08:00","publisher": {
+            "@type": "Organization",
+            "name": "Geekby","logo": {
+                    "@type": "ImageObject",
+                    "url": "https:\/\/www.geekby.site\/images\/avatar.png",
+                    "width":  358 ,
+                    "height":  330 
+                }},"author": {
+                "@type": "Person",
+                "name": "Geekby"
+            },"description": "编程助手提示注入攻击"
+    }
+    </script></head>
+    <body header-desktop="" header-mobile=""><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+
+        <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
+    <div class="header-wrapper">
+        <div class="header-title">
+            <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+        </div>
+        <div class="menu">
+            <div class="menu-inner"><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i> 文章 </a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i> 标签 </a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i> 分类 </a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i> 关于 </a><span class="menu-item delimiter"></span><span class="menu-item search" id="search-desktop">
+                        <input type="text" placeholder="输入关键字" id="search-input-desktop">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-desktop" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-desktop" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-desktop">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </span><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                    <i class="fas fa-adjust fa-fw"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</header><header class="mobile" id="header-mobile">
+    <div class="header-container">
+        <div class="header-wrapper">
+            <div class="header-title">
+                <a href="/" title="Geekby&#39;s Blog">Geekby&#39;s Blog</a>
+            </div>
+            <div class="menu-toggle" id="menu-toggle-mobile">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+        <div class="menu" id="menu-mobile"><div class="search-wrapper">
+                    <div class="search mobile" id="search-mobile">
+                        <input type="text" placeholder="输入关键字" id="search-input-mobile">
+                        <a href="javascript:void(0);" class="search-button search-toggle" id="search-toggle-mobile" title="搜索">
+                            <i class="fas fa-search fa-fw"></i>
+                        </a>
+                        <a href="javascript:void(0);" class="search-button search-clear" id="search-clear-mobile" title="清空">
+                            <i class="fas fa-times-circle fa-fw"></i>
+                        </a>
+                        <span class="search-button search-loading" id="search-loading-mobile">
+                            <i class="fas fa-spinner fa-fw fa-spin"></i>
+                        </span>
+                    </div>
+                    <a href="javascript:void(0);" class="search-cancel" id="search-cancel-mobile">
+                        取消
+                    </a>
+                </div><a class="menu-item" href="/posts/" title="文章"><i class="fas fa-inbox"></i>文章</a><a class="menu-item" href="/tags/" title="标签"><i class="fas fa-tags"></i>标签</a><a class="menu-item" href="/categories/" title="分类"><i class="fas fa-sort-amount-up-alt"></i>分类</a><a class="menu-item" href="/about/" title="关于"><i class="far fa-address-card"></i>关于</a><a href="javascript:void(0);" class="menu-item theme-switch" title="切换主题">
+                <i class="fas fa-adjust fa-fw"></i>
+            </a></div>
+    </div>
+</header>
+<div class="search-dropdown desktop">
+    <div id="search-dropdown-desktop"></div>
+</div>
+<div class="search-dropdown mobile">
+    <div id="search-dropdown-mobile"></div>
+</div>
+<main class="main">
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">目录</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animated flipInX">GitLab DUO编程助手提示注入攻击深度剖析</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel=" author" class="author"><i class="fas fa-user-circle fa-fw"></i>Geekby</a></span>&nbsp;<span class="post-category">收录于 <a href="/categories/ai%E5%AE%89%E5%85%A8/"><i class="far fa-folder fa-fw"></i>AI安全</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw"></i>&nbsp;<time datetime="2025-05-28">2025-05-28</time>&nbsp;<i class="fas fa-pencil-alt fa-fw"></i>&nbsp;约 221 字&nbsp;
+                <i class="far fa-clock fa-fw"></i>&nbsp;预计阅读 2 分钟&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  kept="">
+                <div class="details-summary toc-title">
+                    <span>目录</span>
+                    <span><i class="details-icon fas fa-angle-right"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#1-背景">1. 背景</a></li>
+    <li><a href="#2-漏洞分析">2. 漏洞分析</a>
+      <ul>
+        <li><a href="#21-通过隐藏提示操纵-gitlab-duo">2.1. 通过隐藏提示操纵 GitLab Duo</a></li>
+        <li><a href="#22-katexbase16-和隐形文本">2.2. KaTex，Base16 和隐形文本</a></li>
+        <li><a href="#23-ai输出的结果不应该过分信任owasp-llm-top10过度依赖">2.3. AI输出的结果不应该过分信任（OWASP LLM Top10过度依赖）</a></li>
+        <li><a href="#24-html-注入将-duo-变成网络攻击向量">2.4. HTML 注入：将 Duo 变成网络攻击向量</a></li>
+        <li><a href="#25-利用-duo-访问私有代码仓">2.5. 利用 Duo 访问私有代码仓</a></li>
+      </ul>
+    </li>
+    <li><a href="#3-一些新的发现">3. 一些新的发现</a></li>
+    <li><a href="#4-总结">4. 总结</a></li>
+  </ul>
+</nav></div>
+            </div><div class="content" id="content"><h1 id="gitlab-duo编程助手提示注入攻击深度剖析">GitLab DUO编程助手提示注入攻击深度剖析</h1>
+<h2 id="1-背景">1. 背景</h2>
+<p>GitLab Duo 是一款基于 Anthropic 开发的大语言模型 Claude 构建的 AI 助手，于 2023 年 6 月推出，2024 年 4 月又新增了 Duo Chat 聊天机器人功能，让用户能够通过自然语言与之交互。这款助手可为开发者提供代码建议、代码审核、分析合并请求等功能。</p>
+<p>该AI助手存在提示词注入漏洞，攻击者可以从私有项目中窃取源代码，操纵显示给其他用户的代码建议，甚至泄露机密的、未公开的零日漏洞。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281207441.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281207441.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281207441.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281207441.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281207441.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281207441.png-water_print" /></p>
+<h2 id="2-漏洞分析">2. 漏洞分析</h2>
+<h3 id="21-通过隐藏提示操纵-gitlab-duo">2.1. 通过隐藏提示操纵 GitLab Duo</h3>
+<p>首先，GitLab Duo 会响应植入源代码中的提示：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281207133.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281207133.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281207133.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281207133.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281207133.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281207133.png-water_print" /></p>
+<p>除了源代码之外，在 GitLab 项目的不同部分嵌入隐藏指令，仍然会影响 Duo 的行为。最终得到的结果如下：</p>
+<ul>
+<li>合并请求（MR）描述和评论</li>
+<li>提交信息（Commit）</li>
+<li>问题描述和评论（Issue）</li>
+<li>源代码</li>
+</ul>
+<p>由于Duo 会分析页面的整个上下文，包括评论、描述和源代码，因此隐藏在该上下文任何位置的注入指令都会影响Duo的结果。</p>
+<h3 id="22-katexbase16-和隐形文本">2.2. KaTex，Base16 和隐形文本</h3>
+<p>为了使提示更难以被检测，尝试使用一些编码来隐藏攻击痕迹：</p>
+<ul>
+<li>Unicode 走私 → 在线工具：<a href="https://embracethered.com/blog/ascii-smuggler.html" target="_blank" rel="noopener noreffer">ASCII Smuggler</a></li>
+</ul>
+<p>这里展开讲讲Unicode Smuggler攻击方法：</p>
+<p>Unicode字符集包含了世界上几乎所有语言的字符，甚至包括一些<strong>控制字符</strong>和<strong>非打印字符</strong>，它们在不同的环境中具有不同的含义。一些Unicode字符的特性可以被攻击者用来伪装恶意指令或数据，这些指令在外表上看起来是正常的，但在目标系统中却被错误地处理或执行。</p>
+<p>Unicode Tags是一种特殊的Unicode字符，用于标识某些文本内容的语言、区域或类别。它们通常以&quot;U+&ldquo;开头，后跟一串数字，但不可见，Unicode Tags本质上是Unicode字符集中的字符。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208518.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208518.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208518.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208518.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208518.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208518.png-water_print" /></p>
+<p>在<strong>Unicode tag-based instruction smuggling攻击</strong>中，攻击者通过<strong>嵌入特殊的Unicode标签或字符</strong>（比如零宽空格（Zero Width Space，ZWSP）、方向控制字符、回车符等），使得恶意指令被隐藏在正常数据流中，从而影响模型输出结果。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208931.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208931.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208931.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208931.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208931.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208931.png-water_print" /></p>
+<p>假设我们给模型发送一段字符：&ldquo;Hello&lt;<strong>Unicode tag</strong>字符&gt;&quot;，模型存在漏洞将会回复我们：&ldquo;PWND!!!&rdquo;</p>
+<ul>
+<li>Base16 编码</li>
+<li>KaTeX 以白色文本渲染（使提示在 GitLab 网站内不可见）</li>
+</ul>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208495.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208495.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208495.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208495.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208495.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208495.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208668.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208668.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208668.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208668.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208668.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208668.png-water_print" /></p>
+<p>经过实验发现，这些隐藏的指令仍然可以被 Duo识别，并实现提示注入的效果。</p>
+<h3 id="23-ai输出的结果不应该过分信任owasp-llm-top10过度依赖">2.3. AI输出的结果不应该过分信任（OWASP LLM Top10过度依赖）</h3>
+<p>上边的攻击手法导致Duo输出的结果存在重大安全风险，比如：</p>
+<ul>
+<li>操纵 Duo 的代码建议 —— 在其推荐代码中引入恶意的 JavaScript 包。</li>
+<li>在 Duo 的响应中将恶意 URL 输出为安全的 —— 导致用户点击并进入一个伪造的登录页面。</li>
+<li>说服 Duo 将恶意的合并请求描述为安全的，误导reviewer。</li>
+</ul>
+<p>比如下面这个提示词：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208319.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208319.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208319.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208319.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208319.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208319.png-water_print" /></p>
+<p>通过Unicode Smuggler方式将攻击提示词隐藏在Commit信息中：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208924.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208924.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208924.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208924.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208924.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208924.png-water_print" /></p>
+<p>可以看到，当用户使用Duo Chat开发代码时，一个恶意JS被引入到源代码中：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208204.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208204.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208204.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208204.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208204.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281208204.png-water_print" /></p>
+<h3 id="24-html-注入将-duo-变成网络攻击向量">2.4. HTML 注入：将 Duo 变成网络攻击向量</h3>
+<p>Duo 还支持将回复格式化为 Markdown，允许使用带有自定义标签的丰富内容，如 URL：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209755.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209755.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209755.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209755.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209755.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209755.png-water_print" /></p>
+<p>经过尝试，可以创建一个提示，使 Duo 显示恶意 URL：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209634.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209634.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209634.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209634.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209634.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209634.png-water_print" /></p>
+<p>提示位于源代码中，同样适用unicode Smuggler方式拼接在代码 URL 内:</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209197.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209197.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209197.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209197.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209197.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209197.png-water_print" /></p>
+<p>在进一步的测试中发现，GitLab Duo 的响应是随着数据流输入逐步呈现的，这种特性说明 Duo 在完全了解响应结构之前，通过异步解析 Markdown ，实时解释并渲染成对话框中的 HTML。</p>
+<p>具体流式 Markdown 渲染的工作流程如下：</p>
+<ol>
+<li>接受到模型生成的部分输入 - 前端开始逐行渲染。</li>
+<li>随着内容持续输出，对结果进行过滤和结构化处理（例如，代码块、段落还是引用）。</li>
+<li>如果在代码块开始之前插入了恶意 HTML 标签，恶意HTML会被成功渲染。</li>
+</ol>
+<p>利用这种特性，攻击者已能够构造恶意的 Markdown URL 并将其显示给用户。进一步测试：如果 URL 的标签中包含原始 HTML 代码会怎样？如果 Duo 实时渲染响应，浏览器可能会在过滤之前解释该 HTML。</p>
+<p>因此，通过将原始 HTML 注入到实时渲染的内容中，攻击者可以控制页面的部分区域，如&lt;img&gt;这些标签，不受同源策略限制，会自动触发 HTTP 请求到攻击者控制的服务器。</p>
+<p>在尝试了各种提示结构后，找到了一个可以可靠触发漏洞的提示：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209532.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209532.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209532.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209532.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209532.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209532.png-water_print" /></p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209908.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209908.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209908.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209908.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209908.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209908.png-water_print" /></p>
+<p>利用这种方式，我们可以很容易的想到XSS攻击，但是最终的内容被传入 <code>DOMPurify</code> 的<code>sanitize</code>函数，这是标准库，用于防止XSS攻击，但某些 HTML 标签如<code>&lt;img&gt;</code>、<code>&lt;form&gt;</code>和<code>&lt;a&gt;</code>默认不会被移除。</p>
+<h3 id="25-利用-duo-访问私有代码仓">2.5. 利用 Duo 访问私有代码仓</h3>
+<p>进一步深入挖掘攻击链，利用上面的一些常规标签，实现更大影响。由于Duo 的权限上下文与受害用户的上下文相同，也就是说，Duo 可以看到用户能看到的一切，也包括私有代码。</p>
+<p>根据 GitLab 的文档，即使用户在浏览器中没有看到 MR 页面，也可以向 Duo 询问有关特定合并请求的信息。GitLab 的合并请求 URL 结构非常简单：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209171.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209171.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209171.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209171.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209171.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281209171.png-water_print" /></p>
+<p>例如：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210653.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210653.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210653.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210653.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210653.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210653.png-water_print" /></p>
+<p>因此，通过构建恶意提示词，指示 Duo 从私有项目中的合并请求中提取代码更改，将它们编码为 base64，将编码后的数据附加到&lt;img&gt;标签 URL 中，利用流式渲染的特性，结合img标签将结果回传给攻击者服务器。最后，将这个提示隐藏在公共项目的 MR 源代码中。</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210367.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210367.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210367.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210367.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210367.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210367.png-water_print" /></p>
+<p>攻击效果：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210742.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210742.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210742.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210742.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210742.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210742.png-water_print" /></p>
+<p><strong>整理一下完整攻击场景：窃取敏感信息（源代码或0day信息等）</strong></p>
+<ol>
+<li>攻击者在公共项目的合并请求描述中嵌入一个隐藏的提示。</li>
+<li>受害用户通过请求代码审查或合并请求分析来与 Duo 交互。</li>
+<li>Duo 处理隐藏的提示，并在响应中注入一个恶意的&lt;img&gt;标签。  </li>
+<li>浏览器向攻击者的服务器发送一个 GET 请求，其中包含以 Base64 编码的敏感源代码作为参数。</li>
+</ol>
+<h2 id="3-一些新的发现">3. 一些新的发现</h2>
+<p>笔者在进行进一步测试的时候发现，当下热门的编程助手，如Cline等客户端，也存在同样的问题，比如，这里使用的是Cline + 最新的Claude-opus-4-20250514模型，实现提示注入：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210126.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210126.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210126.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210126.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210126.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210126.png-water_print" /></p>
+<p>Cline + gpt4.1：</p>
+<p><img
+        class="lazyload"
+        src="/svg/loading.min.svg"
+        data-src="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210610.png-water_print"
+        data-srcset="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210610.png-water_print, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210610.png-water_print 1.5x, https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210610.png-water_print 2x"
+        data-sizes="auto"
+        alt="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210610.png-water_print"
+        title="https://geekby.oss-cn-beijing.aliyuncs.com/MarkDown/202505281210610.png-water_print" /></p>
+<p>一方面，后端模型应建立有效的注入攻击防御机制，针对代码或MR等信息中的抽取，需要进行过滤，另一方面，作为客户端，需构建高质量的系统提示语体系，来进一步防范提示词攻击，也是应用开发者应该考虑的关键问题。</p>
+<h2 id="4-总结">4. 总结</h2>
+<p>目前所有漏洞均已被GitLab官方修复。这类漏洞给像 GitLab Duo 这样的 AI 编程助手带来了新的安全风险：当AI被深度集成到开发工作流程中时，不仅继承了上下文，还继承了风险。通过在看似无害的项目内容中嵌入隐藏指令，就能够操纵 Duo 的行为，甚至窃取敏感信息。</p>
+<p>随着AI与传统应用的深度融合，AI 助手现在也已成为Web应用程序攻击面的组成部分。AI上下文感知功能虽然强大，但如果没有适当的防护措施，它同样容易成为重大风险点。</p>
+<p>参考：</p>
+<p><a href="https://www.legitsecurity.com/blog/remote-prompt-injection-in-gitlab-duo" target="_blank" rel="noopener noreffer">https://www.legitsecurity.com/blog/remote-prompt-injection-in-gitlab-duo</a></p>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>更新于 2025-05-28</span>
+            </div>
+            <div class="post-info-license"></div>
+        </div>
+        <div class="post-info-line">
+            <div class="post-info-md"></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="分享到 微博" data-sharer="weibo" data-url="https://www.geekby.site/2025/05/gitlab-duo%E7%BC%96%E7%A8%8B%E5%8A%A9%E6%89%8B%E6%8F%90%E7%A4%BA%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/" data-title="GitLab DUO编程助手提示注入攻击深度剖析"><i class="fab fa-weibo fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Evernote" data-sharer="evernote" data-url="https://www.geekby.site/2025/05/gitlab-duo%E7%BC%96%E7%A8%8B%E5%8A%A9%E6%89%8B%E6%8F%90%E7%A4%BA%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/" data-title="GitLab DUO编程助手提示注入攻击深度剖析"><i class="fab fa-evernote fa-fw"></i></a><a href="javascript:void(0);" title="分享到 Skype" data-sharer="skype" data-url="https://www.geekby.site/2025/05/gitlab-duo%E7%BC%96%E7%A8%8B%E5%8A%A9%E6%89%8B%E6%8F%90%E7%A4%BA%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/" data-title="GitLab DUO编程助手提示注入攻击深度剖析"><i class="fab fa-skype fa-fw"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"><i class="fas fa-tags fa-fw"></i>&nbsp;<a href="/tags/ai%E5%AE%89%E5%85%A8/">AI安全</a></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">返回</a></span>&nbsp;|&nbsp;<span><a href="/">主页</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/2025/04/%E4%BD%A0%E4%BD%BF%E7%94%A8%E7%9A%84mcp%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E5%85%A8%E5%90%97%E8%AD%A6%E6%83%95%E6%8A%95%E6%AF%92%E6%94%BB%E5%87%BB/" class="prev" rel="prev" title="你使用的MCP服务器安全吗？警惕投毒攻击"><i class="fas fa-angle-left fa-fw"></i>你使用的MCP服务器安全吗？警惕投毒攻击</a></div>
+</div>
+</article></div>
+            </main><footer class="footer">
+        <div class="footer-container"><div class="footer-line"><i class="far fa-copyright fa-fw"></i><span itemprop="copyrightYear">2019 - 2025</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">Geekby</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+        </div>
+    </footer></div>
+
+        <div id="fixed-buttons"><a href="#" id="back-to-top" class="fixed-button" title="回到顶部">
+                <i class="fas fa-arrow-up fa-fw"></i>
+            </a><a href="#" id="view-comments" class="fixed-button" title="查看评论">
+                <i class="fas fa-comment fa-fw"></i>
+            </a>
+        </div><link rel="stylesheet" href="/lib/lightgallery/lightgallery.min.css"><script type="text/javascript" src="/lib/smooth-scroll/smooth-scroll.min.js"></script><script type="text/javascript" src="/lib/autocomplete/autocomplete.min.js"></script><script type="text/javascript" src="/lib/algoliasearch/algoliasearch-lite.umd.min.js"></script><script type="text/javascript" src="/lib/lazysizes/lazysizes.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lightgallery.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-thumbnail.min.js"></script><script type="text/javascript" src="/lib/lightgallery/lg-zoom.min.js"></script><script type="text/javascript" src="/lib/clipboard/clipboard.min.js"></script><script type="text/javascript" src="/lib/sharer/sharer.min.js"></script><script type="text/javascript">window.config={"code":{"copyTitle":"复制到剪贴板","maxShownLines":100},"comment":{},"lightGallery":{"actualSize":false,"exThumbImage":"data-thumbnail","hideBarsDelay":2000,"selector":".lightgallery","speed":400,"thumbContHeight":80,"thumbWidth":80,"thumbnail":true},"search":{"algoliaAppID":"C19A58DMI2","algoliaIndex":"blog","algoliaSearchKey":"a7203b4397475a3fcf49cea4495e0987","highlightTag":"em","maxResultLength":10,"noResultsFound":"没有找到结果","snippetLength":50,"type":"algolia"}};</script><script type="text/javascript" src="/js/theme.min.js"></script></body>
+</html>

@@ -4,7 +4,14 @@
         <link>https://www.geekby.site/categories/ai%E5%AE%89%E5%85%A8/</link>
         <description>AI安全 - 分类 - Geekby&#39;s Blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-cn</language><managingEditor>admin@geekby.site (Geekby)</managingEditor>
-            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Thu, 24 Apr 2025 19:00:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/categories/ai%E5%AE%89%E5%85%A8/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>admin@geekby.site (Geekby)</webMaster><lastBuildDate>Wed, 28 May 2025 12:00:00 &#43;0800</lastBuildDate><atom:link href="https://www.geekby.site/categories/ai%E5%AE%89%E5%85%A8/" rel="self" type="application/rss+xml" /><item>
+    <title>GitLab DUO编程助手提示注入攻击深度剖析</title>
+    <link>https://www.geekby.site/2025/05/gitlab-duo%E7%BC%96%E7%A8%8B%E5%8A%A9%E6%89%8B%E6%8F%90%E7%A4%BA%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/</link>
+    <pubDate>Wed, 28 May 2025 12:00:00 &#43;0800</pubDate>
+    <author>作者</author>
+    <guid>https://www.geekby.site/2025/05/gitlab-duo%E7%BC%96%E7%A8%8B%E5%8A%A9%E6%89%8B%E6%8F%90%E7%A4%BA%E6%B3%A8%E5%85%A5%E6%94%BB%E5%87%BB%E6%B7%B1%E5%BA%A6%E5%89%96%E6%9E%90/</guid>
+    <description><![CDATA[GitLab DUO编程助手提示注入攻击深度剖析]]></description>
+</item><item>
     <title>你使用的MCP服务器安全吗？警惕投毒攻击</title>
     <link>https://www.geekby.site/2025/04/%E4%BD%A0%E4%BD%BF%E7%94%A8%E7%9A%84mcp%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E5%85%A8%E5%90%97%E8%AD%A6%E6%83%95%E6%8A%95%E6%AF%92%E6%94%BB%E5%87%BB/</link>
     <pubDate>Thu, 24 Apr 2025 19:00:00 &#43;0800</pubDate>
